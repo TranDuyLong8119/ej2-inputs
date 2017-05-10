@@ -1,0 +1,634 @@
+@include export-module('input-layout') {
+  /*! input layout */
+
+  .e-input-group {
+    display: table;
+    margin-bottom: $input-margin-bottom;
+  }
+
+  input.e-input,
+  textarea.e-input {
+    border: $input-border;
+    border-width: $input-border-width;
+    font-family: $input-font-family;
+    font-size: $input-font-size;
+    font-weight: 400;
+    height: auto;
+    line-height: 1.4;
+    margin: $zero-value;
+    margin-bottom: $input-margin-bottom;
+    outline: none;
+    padding: $input-padding;
+    width: 100%;
+  }
+
+  .e-input:focus {
+    border-width: $input-focus-border-width;
+    padding-bottom: $input-padding-bottom;
+  }
+
+  .e-input.e-small:focus {
+    border-width: $input-focus-border-width;
+    padding-bottom: $input-small-padding-bottom;
+  }
+
+  .e-input.e-bigger:focus,
+  .e-bigger .e-input:focus {
+    padding-bottom: $input-bigger-padding-bottom;
+  }
+
+  .e-input.e-small.e-bigger:focus,
+  .e-bigger .e-input.e-small:focus {
+    padding-bottom: $input-bigger-small-padding-bottom;
+  }
+
+  .e-input-group input.e-input:focus,
+  .e-input-group textarea.e-input:focus {
+    padding: $input-padding;
+  }
+
+  input.e-input.e-bigger,
+  textarea.e-input.e-bigger,
+  .e-input-group.e-bigger .e-input,
+  .e-bigger input.e-input,
+  .e-bigger textarea.e-input,
+  .e-bigger .e-input-group .e-input {
+    font-size: $input-bigger-font-size;
+    margin-bottom: $input-bigger-margin-bottom;
+    padding: $input-bigger-padding;
+  }
+
+  .e-input-group.e-bigger,
+  .e-bigger .e-input-group {
+    margin-bottom: $input-bigger-margin-bottom;
+  }
+
+  .e-input-group.e-bigger .e-input:focus,
+  .e-bigger .e-input-group .e-input:focus {
+    padding: $input-bigger-padding;
+  }
+
+  .e-input-group .e-input-group-icon,
+  .e-input-group .e-input-group-btn button {
+    border: $input-border;
+    border-width: $input-group-child-border-width;
+    flex-direction: column;
+    justify-content: center;
+    min-height: $input-child-min-height;
+    min-width: $input-child-min-width;
+    text-align: center;
+  }
+
+  .e-input-group .e-input-group-icon,
+  .e-input-group .e-input-group-btn button {
+    font-size: $input-font-size;
+    padding: $input-child-padding;
+  }
+
+  .e-input-group.e-bigger .e-input-group-icon,
+  .e-input-group.e-bigger .e-input-group-btn button,
+  .e-input-group .e-input-group-icon.e-bigger,
+  .e-input-group .e-input-group-btn.e-bigger button,
+  .e-bigger .e-input-group .e-input-group-icon,
+  .e-bigger .e-input-group .e-input-group-btn button {
+    font-size: $input-bigger-font-size;
+    min-height: $input-bigger-child-min-height;
+    min-width: $input-bigger-child-min-width;
+    padding: $input-bigger-child-padding;
+  }
+
+  .e-input[disabled],
+  .e-input-group.e-disabled,
+  .e-float-input input[disabled],
+  .e-float-input input.e-disabled,
+  .e-input-group.e-disabled span,
+  .e-input-group.e-disabled span button {
+    cursor: not-allowed;
+    filter: alpha(opacity=$input-opacity-filter);
+    opacity: $input-opacity;
+  }
+
+  .e-input[disabled],
+  .e-input-group.e-disabled,
+  .e-float-input input[disabled],
+  .e-float-input input.e-disabled {
+    border-style: $input-disable-border-type;
+  }
+
+  .e-input-group.e-disabled {
+    border-bottom-style: $input-disable-border-type;
+    border-width: $input-disable-group-border-width;
+  }
+
+  .e-input.e-rtl,
+  .e-input-group.e-rtl  {
+    direction: rtl;
+  }
+
+  .e-input.e-corner {
+    border-radius: $input-border-radius;
+  }
+
+  .e-input-group,
+  .e-input-group .e-input-group-btn,
+  .e-input-group .e-input-group-icon {
+    display: flex;
+  }
+
+  .e-input-group .e-input-group-btn button {
+    align-items: center;
+    display: flex;
+    font-family: $input-font-family;
+    font-size: $input-font-size;
+    margin: $zero-value;
+    outline: none;
+    width: inherit;
+  }
+
+  .e-input-group .e-input-group-icon:first-child {
+    border-left-width: $input-border-left-width;
+  }
+
+  .e-input-group-btn button,
+  .e-input-group .e-input-group-icon {
+    white-space: nowrap;
+  }
+
+  .e-input-group-btn:not(:last-child) button,
+  .e-input-group .e-input-group-icon:not(:last-child) {
+    border-right-width: $zero-value;
+  }
+
+  .e-input + .e-input-group-btn button,
+  .e-input + .e-input-group-icon {
+    border-left-width: $zero-value;
+  }
+
+  .e-input-group.e-corner .e-input:first-child,
+  .e-input-group.e-corner .e-input-group-btn:first-child button,
+  .e-input-group.e-corner .e-input-group-icon:first-child {
+    border-bottom-left-radius: $input-border-radius;
+    border-top-left-radius: $input-border-radius;
+  }
+
+  .e-input-group.e-corner .e-input:last-child,
+  .e-input-group.e-corner .e-input-group-btn:last-child button,
+  .e-input-group.e-corner .e-input-group-icon:last-child {
+    border-bottom-right-radius: $input-border-radius;
+    border-top-right-radius: $input-border-radius;
+  }
+
+  .e-input-group.e-rtl .e-input-group-btn:first-child button,
+  .e-input-group.e-rtl .e-input-group-icon:first-child {
+    border-left-width: $zero-value;
+    border-right-width: $input-border-left-width;
+  }
+
+  .e-input-group.e-rtl .e-input-group-btn:last-child button,
+  .e-input-group.e-rtl .e-input-group-icon:last-child {
+    border-left-width: $input-border-left-width;
+    border-right-width: $zero-value;
+  }
+
+  .e-input-group.e-rtl .e-input-group-btn:not(:last-child) button,
+  .e-input-group.e-rtl .e-input-group-icon:not(:last-child) {
+    border-left-width: $input-border-left-width;
+  }
+
+  .e-input-group.e-rtl .e-input-group-icon  + .e-input,
+  .e-input-group.e-rtl .e-input-group-btn  + .e-input {
+    border-right-width: $zero-value;
+  }
+
+  .e-input.e-small,
+  .e-input-group.e-small .e-input {
+    font-size: $input-small-font-size;
+    line-height: 1.35;
+    padding: $input-small-padding;
+   }
+
+  .e-input-group.e-small .e-input:focus {
+    padding: $input-small-padding;
+   }
+
+  .e-input.e-small.e-bigger,
+  .e-input-group.e-small.e-bigger .e-input,
+  .e-input-group.e-small .e-input.e-bigger,
+  .e-bigger .e-input.e-small,
+  .e-bigger .e-input-group.e-small .e-input,
+  .e-bigger .e-input-group.e-small .e-input {
+    font-size: $input-bigger-small-font-size;
+    padding: $input-bigger-small-padding;
+   }
+
+  .e-input-group.e-small.e-bigger .e-input:focus,
+  .e-input-group.e-small .e-input.e-bigger:focus,
+  .e-bigger .e-input-group.e-small .e-input:focus {
+    font-size: $input-bigger-small-font-size;
+    padding: $input-bigger-small-padding;
+   }
+
+  .e-input-group.e-small .e-input-group-icon,
+  .e-input-group.e-small .e-input-group-btn button {
+    font-size: $input-small-font-size;
+    min-height: $input-small-child-min-height;
+    min-width: $input-small-child-min-width;
+    padding: $input-small-child-padding;
+   }
+
+  .e-input-group.e-small.e-bigger .e-input-group-icon,
+  .e-input-group.e-small.e-bigger .e-input-group-btn button,
+  .e-input-group.e-small .e-input-group-icon.e-bigger,
+  .e-input-group.e-small .e-input-group-btn.e-bigger button,
+  .e-bigger .e-input-group.e-small .e-input-group-icon,
+  .e-bigger .e-input-group.e-small .e-input-group-btn button {
+    font-size: $input-bigger-small-font-size;
+    min-height: $input-bigger-small-child-min-height;
+    min-width: $input-bigger-small-child-min-width;
+    padding: $input-bigger-small-child-padding;
+   }
+
+  label.e-float-text {
+    font-size: 15px;
+    font-weight: 400;
+    padding-left: 2px;
+    pointer-events: none;
+    position: absolute;
+    top: -4px;
+    transform: translate3d(0, 28px, 0) scale(1);
+    transform-origin: left top;
+    transition: .25s cubic-bezier(.25, .8, .25, 1);
+    width: 100%;
+   }
+
+  .e-float-input.e-bigger label.e-float-text,
+  .e-float-input label.e-float-text.e-bigger,
+  .e-float-input input.e-bigger ~ label.e-float-text,
+  .e-bigger .e-float-input label.e-float-text {
+    font-size: 16px;
+    top: 7px;
+  }
+
+  .e-float-input.e-small label.e-float-text {
+    font-size: 13px;
+    top: -9px;
+  }
+
+  .e-float-input.e-small.e-bigger label.e-float-text,
+  .e-bigger .e-float-input.e-small label.e-float-text {
+    font-size: 14px;
+    top: 3px;
+  }
+
+  .e-float-input input:focus ~ label.e-float-text,
+  .e-float-input input:valid ~ label.e-float-text,
+  .e-float-input input[readonly] ~ label.e-label-top.e-float-text,
+  .e-float-input input[disabled] ~ label.e-label-top.e-float-text {
+    font-size: 15px;
+    top: 3px;
+    transform: translate3d(0, 6px, 0) scale(.75);
+  }
+
+  .e-float-input.e-bigger input:focus ~ label.e-float-text,
+  .e-float-input.e-bigger input:valid ~ label.e-float-text,
+  .e-float-input.e-bigger input[readonly] ~ label.e-float-text,
+  .e-float-input.e-bigger input[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input input:focus ~ label.e-float-text,
+  .e-bigger .e-float-input input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input input[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input input[disabled] ~ label.e-float-text {
+    font-size: 16px;
+    top: 8px;
+  }
+
+  .e-float-input.e-small input:focus ~ label.e-float-text,
+  .e-float-input.e-small input:valid ~ label.e-float-text,
+  .e-float-input.e-small input[readonly] ~ label.e-float-text,
+  .e-float-input.e-small input[disabled] ~ label.e-float-text {
+    font-size: 13px;
+    top: $zero-value;
+  }
+
+  .e-float-input.e-small.e-bigger input:focus ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger input:valid ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger input[readonly] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger input[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small input:focus ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small input[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small input[disabled] ~ label.e-float-text {
+    font-size: 13px;
+    top: 4px;
+  }
+
+  .e-float-input {
+    margin-bottom: 6px;
+    padding-top: 11px;
+    position: relative;
+    width: auto;
+  }
+
+  .e-float-input.e-bigger,
+  .e-bigger .e-float-input {
+    margin-bottom: 8px;
+    padding-top: 16px;
+    position: relative;
+    width: auto;
+  }
+
+  .e-float-input.e-small {
+    margin-bottom: 3px;
+    padding-top: 9px;
+  }
+
+  .e-float-input.e-small.e-bigger,
+  .e-bigger .e-float-input.e-small {
+    margin-bottom: 4px;
+    padding-top: 14px;
+  }
+
+  .e-float-input input {
+    border: $zero-value;
+    border-bottom: $one-value solid;
+    display: block;
+    font-family: $input-font-family;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 14px $zero-value 3px;
+    text-indent: 2px;
+    width: 100%;
+  }
+
+  .e-float-input.e-bigger input,
+  .e-float-input input.e-bigger,
+  .e-bigger .e-float-input input {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 22px $zero-value 2px;
+  }
+
+  .e-float-input.e-small input {
+    font-size: 13px;
+    line-height: 1.35;
+    padding: 10px $zero-value 4px;
+  }
+
+  .e-float-input.e-small.e-bigger input,
+  .e-float-input.e-small input.e-bigger,
+  .e-bigger .e-float-input.e-small input {
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 18px $zero-value 4px;
+  }
+
+  .e-float-input input:focus {
+    outline: none;
+  }
+
+  label.e-float-text {
+    font-family: $input-font-family;
+  }
+
+  .e-float-input:not(.e-input-group) .e-float-line::before,
+  .e-float-input:not(.e-input-group) .e-float-line::after {
+    bottom: 0;
+    content: '';
+    height: 2px;
+    position: absolute;
+    transition: .2s ease;
+    width: 0;
+  }
+
+  .e-float-input:not(.e-input-group) .e-float-line::before {
+    left: 50%;
+  }
+
+  .e-float-input:not(.e-input-group) .e-float-line::after {
+    right: 50%;
+  }
+
+  .e-float-input:not(.e-input-group) input:focus ~ .e-float-line::before,
+  .e-float-input:not(.e-input-group) input:focus ~ .e-float-line::after {
+    width: 50%;
+  }
+
+  .e-float-input .e-float-line {
+    display: block;
+    position: relative;
+    width: 100%;
+  }
+
+  .e-float-input.e-rtl {
+    direction: rtl;
+  }
+
+  .e-float-input.e-rtl label.e-float-text {
+    right: $zero-value;
+    transform-origin: right top;
+  }
+
+  .e-input-group.e-corner.e-rtl .e-input:first-child,
+  .e-input-group.e-corner.e-rtl .e-input-group-btn:first-child button,
+  .e-input-group.e-corner.e-rtl .e-input-group-icon:first-child {
+    border-bottom-left-radius: $zero-value;
+    border-bottom-right-radius: $input-border-radius;
+    border-top-left-radius: $zero-value;
+    border-top-right-radius: $input-border-radius;
+  }
+
+  .e-input-group.e-corner.e-rtl .e-input:last-child,
+  .e-input-group.e-corner.e-rtl .e-input-group-btn:last-child button,
+  .e-input-group.e-corner.e-rtl .e-input-group-icon:last-child {
+    border-bottom-left-radius: $input-border-radius;
+    border-bottom-right-radius: $zero-value;
+    border-top-left-radius: $input-border-radius;
+    border-top-right-radius: $zero-value;
+  }
+
+  .e-input-group.e-warning::before {
+    content: '';
+  }
+
+  .e-float-input input[disabled],
+  .e-float-input input.e-disabled {
+    background: transparent;
+    background-image: none;
+    cursor: not-allowed;
+    filter: alpha(opacity=35);
+    opacity: .35;
+  }
+
+  .e-input-group.e-corner.e-rtl input.e-input:only-child {
+    border-radius: $input-border-radius;
+  }
+
+  .e-input-group.e-success .e-input-group-icon::before,
+  .e-input-group.e-success .e-input-group-icon::after,
+  .e-input-group.e-warning .e-input-group-icon::before,
+  .e-input-group.e-warning .e-input-group-icon::after,
+  .e-input-group.e-error .e-input-group-icon::before,
+  .e-input-group.e-error .e-input-group-icon::after {
+    font-weight: 600;
+  }
+
+  .e-input-group.e-rtl .e-input:not(:first-child):focus {
+    border-right-width: $input-right-border-width;
+  }
+
+  .e-input-group input.e-input {
+    width: 100%;
+  }
+
+  .e-input-group input.e-input,
+  .e-input-group textarea.e-input {
+    border: $input-border;
+    border-width: $input-group-border-width;
+  }
+
+  .e-input-group input.e-input,
+  .e-input-group.e-bigger .e-input,
+  .e-bigger .e-input-group .e-input {
+    margin-bottom: $zero-value;
+  }
+
+  .e-input-group::before,
+  .e-input-group::after {
+    @include input-group-animation;
+  }
+
+  .e-input-group::before {
+    @include input-group-animation-left;
+  }
+
+  .e-input-group.e-input-focus::before,
+  .e-input-group.e-input-focus::after  {
+    @include input-group-animation-width;
+  }
+
+  .e-input-group::after {
+    @include input-group-animation-right;
+  }
+
+  .e-input-group {
+    position: relative;
+    width: 100%;
+  }
+
+  .e-input-group .e-input-group-btn button:hover,
+  .e-input-group .e-input-group-icon:hover,
+  .e-input-group.e-rtl.e-corner .e-input-group-btn button:hover,
+  .e-input-group.e-rtl.e-corner .e-input-group-icon:hover {
+    border-radius: $input-group-border-radius;
+  }
+
+  .e-input.e-small,
+  .e-input-group.e-small {
+    margin-bottom: $input-small-margin-bottom;
+  }
+
+  .e-input.e-small.e-bigger,
+  .e-input-group.e-small.e-bigger,
+  .e-bigger .e-input.e-small,
+  .e-bigger .e-input-group.e-small {
+    line-height: 1.35;
+    margin-bottom: $input-small-bigger-margin-bottom;
+  }
+
+  .e-input-group .e-input-group-icon,
+  .e-input-group .e-input-group-btn button {
+    margin-bottom: $input-child-margin-bottom;
+    margin-top: $input-child-margin-top;
+  }
+
+  .e-input-group.e-bigger .e-input-group-icon,
+  .e-input-group.e-bigger .e-input-group-btn button,
+  .e-input-group .e-input-group-icon.e-bigger,
+  .e-input-group .e-input-group-btn.e-bigger button,
+  .e-bigger .e-input-group .e-input-group-icon,
+  .e-bigger .e-input-group .e-input-group-btn button {
+    margin-bottom: $input-child-bigger-margin-bottom;
+    margin-top: $input-child-bigger-margin-top;
+  }
+
+  .e-input-group.e-small.e-bigger .e-input-group-icon,
+  .e-input-group.e-small.e-bigger .e-input-group-btn button,
+  .e-input-group.e-small .e-input-group-icon.e-bigger,
+  .e-input-group.e-small .e-input-group-btn.e-bigger button,
+  .e-bigger .e-input-group.e-small .e-input-group-icon,
+  .e-bigger .e-input-group.e-small .e-input-group-btn button {
+    margin-bottom: $input-child-small-bigger-margin-bottom;
+    margin-top: $input-child-small-bigger-margin-top;
+  }
+
+  .e-input-group.e-small .e-input-group-icon,
+  .e-input-group.e-small .e-input-group-btn button {
+    margin-bottom: $input-child-small-margin-bottom;
+    margin-top: $input-child-small-margin-top;
+  }
+
+  .e-input-group.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) {
+    border-style: $input-group-border-type-focus;
+    border-width: $input-group-border-width-focus;
+  }
+
+  .e-input-group {
+    border-bottom: $input-group-border;
+  }
+
+  .e-input-group,
+  .e-input-group.e-success,
+  .e-input-group.e-warning,
+  .e-input-group.e-error  {
+    border: $input-group-full-border;
+    border-width: $input-group-full-border-width;
+  }
+
+  .e-input-group.e-rtl.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) .e-input:not(:first-child):focus {
+    border-right-width: $zero-value;
+  }
+
+  .e-input-group.e-input-focus.e-corner {
+    border-radius: $input-border-radius;
+  }
+
+  .e-input-group:not(.e-success):not(.e-warning):not(.e-error).e-disabled {
+    border-style: $input-disable-border-type;
+  }
+
+  .e-float-custom-tag {
+    display: block;
+  }
+
+  .e-input-group .e-input-group-icon {
+    @include input-ripple-parent;
+  }
+
+  .e-input-group .e-input-group-icon::after {
+    @include input-ripple-style;
+ }
+
+  .e-input-group .e-input-group-icon.e-input-btn-ripple::after {
+    @include input-ripple-animation;
+  }
+
+  // sass-lint:disable no-vendor-prefixes  
+  input.e-input::-ms-clear,
+  .e-float-input input::-ms-clear {
+    display: none;
+  }
+
+  .e-float-input.e-input-group .e-float-line {
+    bottom: -1px;
+    position: absolute;
+  }
+
+  .e-float-input.e-input-group input {
+    border: $zero-value;
+  }
+
+  .e-float-input.e-input-group .e-float-line,
+  .e-float-input.e-input-group .e-float-text {
+    right: $zero-value;
+  }
+}
+
