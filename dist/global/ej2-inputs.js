@@ -1576,8 +1576,9 @@ var Browser = (function () {
                     browserInfo.name = 'msie';
                     break;
                 }
-                if (browserInfo.name === 'safari') {
-                    browserInfo.version = Browser.userAgent.match(REGX_VERSION)[2];
+                var version = Browser.userAgent.match(REGX_VERSION);
+                if (browserInfo.name === 'safari' && version) {
+                    browserInfo.version = version[2];
                 }
                 break;
             }
@@ -3295,14 +3296,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         };
         NumericTextBox.prototype.destroy = function () {
             this.unwireEvents();
-            this.hiddenInput.remove();
+            dom_1.detach(this.hiddenInput);
             if (this.showSpinButton) {
                 this.unwireSpinBtnEvents();
-                this.spinUp.remove();
-                this.spinDown.remove();
+                dom_1.detach(this.spinUp);
+                dom_1.detach(this.spinDown);
             }
             this.container.parentElement.appendChild(this.cloneElement);
-            this.container.remove();
+            dom_1.detach(this.container);
             _super.prototype.destroy.call(this);
         };
         NumericTextBox.prototype.getText = function () {
@@ -3353,8 +3354,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                             this.spinBtnCreation();
                         }
                         else {
-                            this.spinUp.remove();
-                            this.spinDown.remove();
+                            dom_1.detach(this.spinUp);
+                            dom_1.detach(this.spinDown);
                         }
                         break;
                     case 'value':

@@ -1,6 +1,6 @@
 import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
-import { createElement, attributes, addClass, removeClass, setStyleAttribute } from '@syncfusion/ej2-base/dom';
+import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';
 import { isNullOrUndefined , isUndefined, getValue , setValue, merge} from '@syncfusion/ej2-base/util';
 import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
@@ -721,14 +721,14 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
      */
     public destroy(): void {
         this.unwireEvents();
-        this.hiddenInput.remove();
+        detach(this.hiddenInput);
         if (this.showSpinButton) {
             this.unwireSpinBtnEvents();
-            this.spinUp.remove();
-            this.spinDown.remove();
+            detach(this.spinUp);
+            detach(this.spinDown);
         }
         this.container.parentElement.appendChild(this.cloneElement);
-        this.container.remove();
+        detach(this.container);
         super.destroy();
     }
 
@@ -789,8 +789,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                     if (newProp.showSpinButton) {
                         this.spinBtnCreation();
                     } else {
-                        this.spinUp.remove();
-                        this.spinDown.remove();
+                        detach(this.spinUp);
+                        detach(this.spinDown);
                     }
                     break;
                 case 'value':

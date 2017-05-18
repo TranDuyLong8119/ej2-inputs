@@ -543,14 +543,14 @@ define(["require", "exports", "@syncfusion/ej2-base", "@syncfusion/ej2-base", "@
         };
         NumericTextBox.prototype.destroy = function () {
             this.unwireEvents();
-            this.hiddenInput.remove();
+            dom_1.detach(this.hiddenInput);
             if (this.showSpinButton) {
                 this.unwireSpinBtnEvents();
-                this.spinUp.remove();
-                this.spinDown.remove();
+                dom_1.detach(this.spinUp);
+                dom_1.detach(this.spinDown);
             }
             this.container.parentElement.appendChild(this.cloneElement);
-            this.container.remove();
+            dom_1.detach(this.container);
             _super.prototype.destroy.call(this);
         };
         NumericTextBox.prototype.getText = function () {
@@ -601,8 +601,8 @@ define(["require", "exports", "@syncfusion/ej2-base", "@syncfusion/ej2-base", "@
                             this.spinBtnCreation();
                         }
                         else {
-                            this.spinUp.remove();
-                            this.spinDown.remove();
+                            dom_1.detach(this.spinUp);
+                            dom_1.detach(this.spinDown);
                         }
                         break;
                     case 'value':

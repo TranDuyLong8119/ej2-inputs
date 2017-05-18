@@ -1808,12 +1808,16 @@ define(["require", "exports", "@syncfusion/ej2-base", "@syncfusion/ej2-base/dom"
             var mouseEvent2 = document.createEvent('MouseEvents');
             ej2_base_1.L10n.load({
                 'en': {
-                    'numerictextbox': { incrementTitle: 'Increment value', decrementTitle: 'Decrement value',
-                        placeholder: 'Enter the value' }
+                    'numerictextbox': {
+                        incrementTitle: 'Increment value', decrementTitle: 'Decrement value',
+                        placeholder: 'Enter the value'
+                    }
                 },
                 'de': {
-                    'numerictextbox': { incrementTitle: 'Wert erhöhen', decrementTitle: 'Dekrementwert',
-                        placeholder: 'Geben Sie den Wert ein' }
+                    'numerictextbox': {
+                        incrementTitle: 'Wert erhöhen', decrementTitle: 'Dekrementwert',
+                        placeholder: 'Geben Sie den Wert ein'
+                    }
                 },
             });
             beforeEach(function () {
@@ -3954,12 +3958,12 @@ define(["require", "exports", "@syncfusion/ej2-base", "@syncfusion/ej2-base/dom"
                 numerictextbox = new numerictextbox_1.NumericTextBox({ value: 25, min: 10, max: 30, format: 'n2', enablePersistence: true }, ele);
             });
             afterAll(function () {
-                ele.remove();
+                dom_1.detach(ele);
             });
             it('property localStorage updated test', function () {
                 numerictextbox.destroy();
                 expect(JSON.parse(window.localStorage.getItem('numerictextboxtsNumeric')).value).toEqual(25);
-                ele.remove();
+                dom_1.detach(ele);
             });
             it('Rendering from persistance property', function () {
                 expect(numerictextbox.element.value).toEqual('25.00');
