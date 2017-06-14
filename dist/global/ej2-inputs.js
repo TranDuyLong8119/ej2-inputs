@@ -1576,9 +1576,8 @@ var Browser = (function () {
                     browserInfo.name = 'msie';
                     break;
                 }
-                var version = Browser.userAgent.match(REGX_VERSION);
-                if (browserInfo.name === 'safari' && version) {
-                    browserInfo.version = version[2];
+                if (browserInfo.name === 'safari') {
+                    browserInfo.version = Browser.userAgent.match(REGX_VERSION)[2];
                 }
                 break;
             }
@@ -2828,7 +2827,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 if (this.showSpinButton) {
                     this.spinBtnCreation();
                 }
-                this.setDimension();
+                if (!util_1.isNullOrUndefined(this.width)) {
+                    dom_1.setStyleAttribute(this.container, { 'width': util_1.formatUnit(this.width) });
+                }
+                if (!util_1.isNullOrUndefined(this.height)) {
+                    dom_1.setStyleAttribute(this.container, { 'height': util_1.formatUnit(this.height) });
+                }
                 this.changeValue(this.value);
                 this.wireEvents();
                 if (this.value !== null && !isNaN(this.value)) {
@@ -2919,10 +2923,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 'aria-label': this.l10n.getConstant('incrementTitle') });
             this.wireSpinBtnEvents();
         };
-        NumericTextBox.prototype.setDimension = function () {
-            this.setWidth(this.width);
-            this.setHeight(this.height);
-        };
         NumericTextBox.prototype.validateMinMax = function () {
             if (!(typeof (this.min) === 'number' && !isNaN(this.min))) {
                 this.setProperties({ min: -(Number.MAX_VALUE) }, true);
@@ -2966,14 +2966,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
             }
             dom_1.attributes(this.element, { 'aria-invalid': this.isValidState ? 'false' : 'true' });
         };
-        NumericTextBox.prototype.setWidth = function (width) {
-            var newWidth = width != null ? width : this.container.offsetWidth;
-            dom_1.setStyleAttribute(this.container, { 'width': newWidth });
-        };
-        NumericTextBox.prototype.setHeight = function (height) {
-            var newHeight = height != null ? height : this.container.offsetHeight;
-            dom_1.setStyleAttribute(this.container, { 'height': newHeight });
-        };
         NumericTextBox.prototype.wireEvents = function () {
             ej2_base_1.EventHandler.add(this.element, 'focus', this.focusIn, this);
             ej2_base_1.EventHandler.add(this.element, 'blur', this.focusOut, this);
@@ -2987,6 +2979,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
             ej2_base_1.EventHandler.add(this.spinDown, ej2_base_1.Browser.touchStartEvent, this.mouseDownOnSpinner, this);
             ej2_base_1.EventHandler.add(this.spinUp, ej2_base_1.Browser.touchEndEvent, this.mouseUpOnSpinner, this);
             ej2_base_1.EventHandler.add(this.spinDown, ej2_base_1.Browser.touchEndEvent, this.mouseUpOnSpinner, this);
+            ej2_base_1.EventHandler.add(this.spinUp, ej2_base_1.Browser.touchMoveEvent, this.touchMoveOnSpinner, this);
+            ej2_base_1.EventHandler.add(this.spinDown, ej2_base_1.Browser.touchMoveEvent, this.touchMoveOnSpinner, this);
         };
         NumericTextBox.prototype.unwireEvents = function () {
             ej2_base_1.EventHandler.remove(this.element, 'focus', this.focusIn);
@@ -3001,6 +2995,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
             ej2_base_1.EventHandler.remove(this.spinDown, ej2_base_1.Browser.touchStartEvent, this.mouseDownOnSpinner);
             ej2_base_1.EventHandler.remove(this.spinUp, ej2_base_1.Browser.touchEndEvent, this.mouseUpOnSpinner);
             ej2_base_1.EventHandler.remove(this.spinDown, ej2_base_1.Browser.touchEndEvent, this.mouseUpOnSpinner);
+            ej2_base_1.EventHandler.remove(this.spinUp, ej2_base_1.Browser.touchMoveEvent, this.touchMoveOnSpinner);
+            ej2_base_1.EventHandler.remove(this.spinDown, ej2_base_1.Browser.touchMoveEvent, this.touchMoveOnSpinner);
         };
         NumericTextBox.prototype.changeHandler = function (event) {
             if (!this.element.value.length) {
@@ -3255,6 +3251,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
             this.timeOut = setInterval(function () { _this.isCalled = true; _this.action(action); }, 150);
             ej2_base_1.EventHandler.add(document, 'mouseup', this.mouseUpClick, this);
         };
+        NumericTextBox.prototype.touchMoveOnSpinner = function (event) {
+            var target = document.elementFromPoint(event.clientX, event.clientY);
+            if (!(target.classList.contains(SPINICON))) {
+                clearInterval(this.timeOut);
+            }
+        };
         NumericTextBox.prototype.mouseUpOnSpinner = function (event) {
             if (!ej2_base_1.Browser.isDevice) {
                 event.preventDefault();
@@ -3319,10 +3321,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 var prop = _a[_i];
                 switch (prop) {
                     case 'width':
-                        dom_1.setStyleAttribute(this.container, { 'width': newProp.width });
+                        dom_1.setStyleAttribute(this.container, { 'width': util_1.formatUnit(newProp.width) });
                         break;
                     case 'height':
-                        dom_1.setStyleAttribute(this.container, { 'height': newProp.height });
+                        dom_1.setStyleAttribute(this.container, { 'height': util_1.formatUnit(newProp.height) });
                         break;
                     case 'cssClass':
                         input_1.Input.setCssClass(newProp.cssClass, [this.container], oldProp.cssClass);

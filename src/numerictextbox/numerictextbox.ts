@@ -1,7 +1,7 @@
 import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
 import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';
-import { isNullOrUndefined , isUndefined, getValue , setValue, merge} from '@syncfusion/ej2-base/util';
+import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge} from '@syncfusion/ej2-base/util';
 import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
 import { NumericTextBoxHelper } from './numerictextbox-builder';
@@ -244,7 +244,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         if (this.element.tagName.toLowerCase() === 'input') {
             this.createWrapper();
             if (this.showSpinButton) { this.spinBtnCreation(); }
-            this.setDimension();
+            if (!isNullOrUndefined(this.width)) { setStyleAttribute(this.container, { 'width': formatUnit(this.width) }); }
+            if (!isNullOrUndefined(this.height)) { setStyleAttribute(this.container, { 'height': formatUnit(this.height) }); }
             this.changeValue(this.value);
             this.wireEvents();
             if (this.value !== null && !isNaN(this.value)) {
@@ -333,11 +334,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.wireSpinBtnEvents();
     }
 
-    private setDimension(): void {
-        this.setWidth(this.width);
-        this.setHeight(this.height);
-    }
-
     private validateMinMax(): void {
         if (!(typeof(this.min) === 'number' && !isNaN(this.min))) {
             this.setProperties({ min: -(Number.MAX_VALUE) }, true);
@@ -385,16 +381,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         attributes(this.element, { 'aria-invalid': this.isValidState ? 'false' : 'true' });
     }
 
-    private setWidth(width: string | number): void {
-        let newWidth: string | number = width != null ? width : this.container.offsetWidth;
-        setStyleAttribute(this.container, { 'width': newWidth });
-    }
-
-    private setHeight(height: string | number): void {
-        let newHeight: string | number = height != null ? height : this.container.offsetHeight;
-        setStyleAttribute(this.container, { 'height': newHeight });
-    }
-
     private wireEvents(): void {
         EventHandler.add(this.element, 'focus', this.focusIn, this);
         EventHandler.add(this.element, 'blur', this.focusOut, this);
@@ -410,6 +396,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         EventHandler.add(this.spinDown, Browser.touchStartEvent, this.mouseDownOnSpinner, this);
         EventHandler.add(this.spinUp, Browser.touchEndEvent, this.mouseUpOnSpinner, this);
         EventHandler.add(this.spinDown, Browser.touchEndEvent, this.mouseUpOnSpinner, this);
+        EventHandler.add(this.spinUp, Browser.touchMoveEvent, this.touchMoveOnSpinner, this);
+        EventHandler.add(this.spinDown, Browser.touchMoveEvent, this.touchMoveOnSpinner, this);
     }
 
     private unwireEvents(): void {
@@ -427,6 +415,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         EventHandler.remove(this.spinDown, Browser.touchStartEvent, this.mouseDownOnSpinner);
         EventHandler.remove(this.spinUp, Browser.touchEndEvent, this.mouseUpOnSpinner);
         EventHandler.remove(this.spinDown, Browser.touchEndEvent, this.mouseUpOnSpinner);
+        EventHandler.remove(this.spinUp, Browser.touchMoveEvent, this.touchMoveOnSpinner);
+        EventHandler.remove(this.spinDown, Browser.touchMoveEvent, this.touchMoveOnSpinner);
     }
 
     private changeHandler(event: Event): void {
@@ -671,6 +661,13 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         EventHandler.add(document, 'mouseup', this.mouseUpClick, this);
     }
 
+    private touchMoveOnSpinner(event: MouseEvent): void {
+        let target: Element = document.elementFromPoint(event.clientX, event.clientY);
+        if (!(target.classList.contains(SPINICON))) {
+            clearInterval(this.timeOut);
+        }
+    }
+
     private mouseUpOnSpinner(event: MouseEvent): void {
         if (!Browser.isDevice) { event.preventDefault(); }
         if (!this.getElementData(event)) { return; }
@@ -756,10 +753,10 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         for (let prop of Object.keys(newProp)) {
             switch (prop) {
                 case 'width':
-                    setStyleAttribute(this.container, { 'width': newProp.width });
+                    setStyleAttribute(this.container, { 'width': formatUnit(newProp.width) });
                     break;
                 case 'height':
-                    setStyleAttribute(this.container, { 'height': newProp.height });
+                    setStyleAttribute(this.container, { 'height': formatUnit(newProp.height) });
                     break;
                 case 'cssClass':
                     Input.setCssClass(newProp.cssClass, [this.container], oldProp.cssClass);

@@ -324,6 +324,16 @@ describe('Numerictextbox Control', () => {
             expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("width: 400px;");
         });
 
+        it('Set the custom height to numerictextbox as integer', () => {
+            numerictextbox = new NumericTextBox({ height: 40 }, '#tsNumeric');
+            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
+        });
+
+        it('Set the custom height to numerictextbox as string', () => {
+            numerictextbox = new NumericTextBox({ height: "40" }, '#tsNumeric');
+            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
+        });
+
         it('Set the custom height to numerictextbox', () => {
             numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
@@ -2036,6 +2046,14 @@ describe('Numerictextbox Control', () => {
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
         });
 
+        it('Mousemove on the spin button', () => {            
+            numerictextbox = new NumericTextBox({ value: 20 }, '#tsNumeric');
+            let eventArgs: any = { which: 3, preventDefault: function () { }, clientX:document.getElementsByClassName("e-spin-up")[0].getBoundingClientRect().left,clientY:document.getElementsByClassName("e-spin-up")[0].getBoundingClientRect().top };
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');                    
+            numerictextbox.touchMoveOnSpinner(extend({}, {}, eventArgs));            
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
+        });
+
         it('Right click on the spin down button', () => {
             let eventArgs: any = { button: 2, preventDefault: function () { } };
             numerictextbox = new NumericTextBox({ value: 20 }, '#tsNumeric');
@@ -2275,6 +2293,22 @@ describe('Numerictextbox Control', () => {
             numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
             numerictextbox.height = '30px';
+            numerictextbox.dataBind();
+            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 30px;");
+        });
+
+        it('notify height property as integer testing', () => {
+            numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
+            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
+            numerictextbox.height = 30;
+            numerictextbox.dataBind();
+            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 30px;");
+        });
+
+        it('notify height property as string testing', () => {
+            numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
+            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
+            numerictextbox.height = '30';
             numerictextbox.dataBind();
             expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 30px;");
         });

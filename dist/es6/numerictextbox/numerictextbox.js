@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges } from '@syncfusion/ej2-base';
 import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';
-import { isNullOrUndefined, isUndefined, getValue, setValue, merge } from '@syncfusion/ej2-base/util';
+import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base/util';
 import { Internationalization, getNumericObject } from '@syncfusion/ej2-base';
 import { Input } from '../input/input';
 var ROOT = 'e-numeric';
@@ -78,7 +78,12 @@ var NumericTextBox = (function (_super) {
             if (this.showSpinButton) {
                 this.spinBtnCreation();
             }
-            this.setDimension();
+            if (!isNullOrUndefined(this.width)) {
+                setStyleAttribute(this.container, { 'width': formatUnit(this.width) });
+            }
+            if (!isNullOrUndefined(this.height)) {
+                setStyleAttribute(this.container, { 'height': formatUnit(this.height) });
+            }
             this.changeValue(this.value);
             this.wireEvents();
             if (this.value !== null && !isNaN(this.value)) {
@@ -169,10 +174,6 @@ var NumericTextBox = (function (_super) {
             'aria-label': this.l10n.getConstant('incrementTitle') });
         this.wireSpinBtnEvents();
     };
-    NumericTextBox.prototype.setDimension = function () {
-        this.setWidth(this.width);
-        this.setHeight(this.height);
-    };
     NumericTextBox.prototype.validateMinMax = function () {
         if (!(typeof (this.min) === 'number' && !isNaN(this.min))) {
             this.setProperties({ min: -(Number.MAX_VALUE) }, true);
@@ -216,14 +217,6 @@ var NumericTextBox = (function (_super) {
         }
         attributes(this.element, { 'aria-invalid': this.isValidState ? 'false' : 'true' });
     };
-    NumericTextBox.prototype.setWidth = function (width) {
-        var newWidth = width != null ? width : this.container.offsetWidth;
-        setStyleAttribute(this.container, { 'width': newWidth });
-    };
-    NumericTextBox.prototype.setHeight = function (height) {
-        var newHeight = height != null ? height : this.container.offsetHeight;
-        setStyleAttribute(this.container, { 'height': newHeight });
-    };
     NumericTextBox.prototype.wireEvents = function () {
         EventHandler.add(this.element, 'focus', this.focusIn, this);
         EventHandler.add(this.element, 'blur', this.focusOut, this);
@@ -237,6 +230,8 @@ var NumericTextBox = (function (_super) {
         EventHandler.add(this.spinDown, Browser.touchStartEvent, this.mouseDownOnSpinner, this);
         EventHandler.add(this.spinUp, Browser.touchEndEvent, this.mouseUpOnSpinner, this);
         EventHandler.add(this.spinDown, Browser.touchEndEvent, this.mouseUpOnSpinner, this);
+        EventHandler.add(this.spinUp, Browser.touchMoveEvent, this.touchMoveOnSpinner, this);
+        EventHandler.add(this.spinDown, Browser.touchMoveEvent, this.touchMoveOnSpinner, this);
     };
     NumericTextBox.prototype.unwireEvents = function () {
         EventHandler.remove(this.element, 'focus', this.focusIn);
@@ -251,6 +246,8 @@ var NumericTextBox = (function (_super) {
         EventHandler.remove(this.spinDown, Browser.touchStartEvent, this.mouseDownOnSpinner);
         EventHandler.remove(this.spinUp, Browser.touchEndEvent, this.mouseUpOnSpinner);
         EventHandler.remove(this.spinDown, Browser.touchEndEvent, this.mouseUpOnSpinner);
+        EventHandler.remove(this.spinUp, Browser.touchMoveEvent, this.touchMoveOnSpinner);
+        EventHandler.remove(this.spinDown, Browser.touchMoveEvent, this.touchMoveOnSpinner);
     };
     NumericTextBox.prototype.changeHandler = function (event) {
         if (!this.element.value.length) {
@@ -505,6 +502,12 @@ var NumericTextBox = (function (_super) {
         this.timeOut = setInterval(function () { _this.isCalled = true; _this.action(action); }, 150);
         EventHandler.add(document, 'mouseup', this.mouseUpClick, this);
     };
+    NumericTextBox.prototype.touchMoveOnSpinner = function (event) {
+        var target = document.elementFromPoint(event.clientX, event.clientY);
+        if (!(target.classList.contains(SPINICON))) {
+            clearInterval(this.timeOut);
+        }
+    };
     NumericTextBox.prototype.mouseUpOnSpinner = function (event) {
         if (!Browser.isDevice) {
             event.preventDefault();
@@ -569,10 +572,10 @@ var NumericTextBox = (function (_super) {
             var prop = _a[_i];
             switch (prop) {
                 case 'width':
-                    setStyleAttribute(this.container, { 'width': newProp.width });
+                    setStyleAttribute(this.container, { 'width': formatUnit(newProp.width) });
                     break;
                 case 'height':
-                    setStyleAttribute(this.container, { 'height': newProp.height });
+                    setStyleAttribute(this.container, { 'height': formatUnit(newProp.height) });
                     break;
                 case 'cssClass':
                     Input.setCssClass(newProp.cssClass, [this.container], oldProp.cssClass);
