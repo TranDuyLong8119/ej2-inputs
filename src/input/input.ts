@@ -8,6 +8,10 @@ const CLASSNAMES: ClassNames = {
     FLOATINPUT: 'e-float-input',
     FLOATLINE: 'e-float-line',
     FLOATTEXT: 'e-float-text',
+    CLEARICON: 'e-clear-icon',
+    CLEARICONHIDE: 'e-clear-icon-hide',
+    LABELTOP: 'e-label-top',
+    LABELBOTTOM: 'e-label-bottom',
     INPUTCUSTOMTAG: 'e-input-custom-tag',
     FLOATCUSTOMTAG: 'e-float-custom-tag'
 };
@@ -15,6 +19,12 @@ const CLASSNAMES: ClassNames = {
  * Base for Input creation through util methods.
  */
 export namespace Input {
+    let privateInputObj: InputObject = {
+        container: null,
+        buttons: [],
+        clearButton: null
+    };
+
    /**
     * Create a wrapper to input element with multiple span elements and set the basic properties to input based components.
     * ```
@@ -23,27 +33,9 @@ export namespace Input {
     * @param args
     */
     export function createInput(args: InputArgs): InputObject {
-        /**
-         * Return object of createInput method.
-         */
-        let inputObject: InputObject = {
-          container: null,
-          buttons: []
-         };
+        let inputObject: InputObject = { container: null, buttons: [], clearButton: null };
         if (isNullOrUndefined(args.isFloat) || !args.isFloat) {
          inputObject.container = createInputContainer(args, CLASSNAMES.INPUTGROUP, CLASSNAMES.INPUTCUSTOMTAG, 'span');
-         args.element.addEventListener('focus', function() : void {
-          let parent: HTMLElement = <HTMLElement>(this.parentNode);
-          if (parent.classList.contains('e-input-group')) {
-           parent.classList.add('e-input-focus');
-          }
-         });
-         args.element.addEventListener('blur', function() : void {
-          let parent: HTMLElement = <HTMLElement>(this.parentNode);
-          if (parent.classList.contains('e-input-group')) {
-           parent.classList.remove('e-input-focus');
-          }
-        });
          args.element.parentNode.insertBefore(inputObject.container, args.element);
          addClass([args.element], CLASSNAMES.INPUT);
          inputObject.container.appendChild(args.element);
@@ -52,14 +44,17 @@ export namespace Input {
            let floatLinelement: HTMLElement;
            let floatLabelElement: HTMLElement;
            args.element.addEventListener('focus', function() : void {
-            let parent: HTMLElement = <HTMLElement>(this.parentNode);
-            parent.getElementsByClassName('e-float-text')[0].classList.add('e-label-top');
+            let parent: HTMLElement = getParentNode(this);
+            let label: HTMLElement = <HTMLElement> parent.getElementsByClassName('e-float-text')[0];
+            addClass ([label], CLASSNAMES.LABELTOP);
+            if (label.classList.contains(CLASSNAMES.LABELBOTTOM)) { removeClass([label], CLASSNAMES.LABELBOTTOM); }
            });
            args.element.addEventListener('blur', function() : void {
-           let parent: HTMLElement = <HTMLElement>(this.parentNode);
+           let parent: HTMLElement = getParentNode(this);
            if (parent.getElementsByTagName('input')[0].value === '') {
-              parent.getElementsByClassName('e-float-text')[0].classList.remove('e-label-top');
-            }
+               let label: HTMLElement = <HTMLElement> parent.getElementsByClassName('e-float-text')[0];
+               removeClass ([label], CLASSNAMES.LABELTOP);
+               addClass([label], CLASSNAMES.LABELBOTTOM); }
            });
            inputObject.container = createInputContainer(args, CLASSNAMES.FLOATINPUT, CLASSNAMES.FLOATCUSTOMTAG, 'div');
            args.element.parentNode.insertBefore(inputObject.container, args.element);
@@ -67,9 +62,7 @@ export namespace Input {
            floatLinelement = createElement('span', { className: CLASSNAMES.FLOATLINE });
            floatLabelElement = createElement('label', { className: CLASSNAMES.FLOATTEXT });
            if (!isNullOrUndefined(args.element.id) && args.element.id !== '') {
-             let labelId: string;
-             labelId = 'label_' + args.element.id;
-             floatLabelElement.id =  labelId.replace(/ /g, '_');
+             floatLabelElement.id =  'label_' + args.element.id.replace(/ /g, '_');
              attributes(args.element, { 'aria-labelledby': floatLabelElement.id});
            }
            if (!isNullOrUndefined(args.element.placeholder) && args.element.placeholder !== '') {
@@ -83,6 +76,31 @@ export namespace Input {
            inputObject.container.appendChild(args.element);
            inputObject.container.appendChild(floatLinelement);
            inputObject.container.appendChild(floatLabelElement);
+           updateLabelState(args.element.value, floatLabelElement);
+           args.element.addEventListener('input', (event: KeyboardEvent) => {
+             updateLabelState(args.element.value, floatLabelElement);
+           });
+           args.element.addEventListener('blur', (event: FocusEvent) => {
+             updateLabelState(args.element.value, floatLabelElement);
+           });
+        }
+        args.element.addEventListener('focus', function() : void {
+          let parent: HTMLElement = getParentNode(this);
+          if (parent.classList.contains('e-input-group')) {
+           parent.classList.add('e-input-focus');
+          }
+        });
+        args.element.addEventListener('blur', function() : void {
+          let parent: HTMLElement = getParentNode(this);
+          if (parent.classList.contains('e-input-group')) {
+           parent.classList.remove('e-input-focus');
+          }
+        });
+        if (!isNullOrUndefined(args.properties) && !isNullOrUndefined(args.properties.showClearButton) && args.properties.showClearButton) {
+            createClearButton(args.element, inputObject.container);
+            if (inputObject.container.classList.contains(CLASSNAMES.FLOATINPUT)) {
+                addClass([inputObject.container], CLASSNAMES.INPUTGROUP);
+            }
         }
         if (!isNullOrUndefined(args.buttons)) {
             for (let i: number = 0; i < args.buttons.length; i++) {
@@ -110,8 +128,67 @@ export namespace Input {
                 }
             }
           }
+        privateInputObj = inputObject;
         return inputObject;
     }
+
+    function updateIconState(value: string | number, button: HTMLElement): void {
+        if (value) {
+            removeClass([button], CLASSNAMES.CLEARICONHIDE);
+        } else {
+            addClass([button], CLASSNAMES.CLEARICONHIDE);
+        }
+    }
+
+    function updateLabelState(value: string | number, label: HTMLElement): void {
+      if (value) {
+        addClass([label], CLASSNAMES.LABELTOP);
+        if (label.classList.contains(CLASSNAMES.LABELBOTTOM)) { removeClass([label], CLASSNAMES.LABELBOTTOM); }
+      } else {
+        if (label.classList.contains(CLASSNAMES.LABELTOP)) { removeClass([label], CLASSNAMES.LABELTOP); }
+        addClass([label], CLASSNAMES.LABELBOTTOM);
+      }
+    }
+
+    function getParentNode(element: HTMLInputElement | HTMLElement): HTMLElement {
+      let parentNode: HTMLElement = <HTMLElement>element.parentNode;
+      return parentNode;
+    }
+
+   /**
+    * To create clear button.
+    */
+    function createClearButton(element: HTMLInputElement, container: HTMLElement ): void {
+        let button: HTMLElement = <HTMLElement>createElement('span', { className: CLASSNAMES.CLEARICON });
+        container.appendChild(button);
+        if (!isNullOrUndefined(privateInputObj.container) &&
+        privateInputObj.container.classList.contains(CLASSNAMES.FLOATINPUT)) {
+            addClass([privateInputObj.container], CLASSNAMES.INPUTGROUP);
+        }
+        updateIconState(element.value, button);
+        wireClearBtnEvents(element, button);
+    }
+
+    function wireClearBtnEvents(element: HTMLInputElement, button: HTMLElement): void {
+      button.addEventListener('click', (event: MouseEvent) => {
+        if (!(element.classList.contains(CLASSNAMES.DISABLE) || element.readOnly)) {
+          event.preventDefault();
+          if (element !== document.activeElement) { element.focus(); }
+          element.value = '';
+          addClass([button], CLASSNAMES.CLEARICONHIDE);
+        }
+      });
+      element.addEventListener('input', (event: KeyboardEvent ) => {
+        updateIconState(element.value, button);
+      });
+      element.addEventListener('focus', (event: FocusEvent) => {
+        updateIconState(element.value, button);
+      });
+      element.addEventListener('blur', (event: FocusEvent) => {
+        updateIconState(element.value, button);
+      });
+    }
+
    /**
     * To create input box contianer.
     */
@@ -152,7 +229,7 @@ export namespace Input {
     */
     export function setPlaceholder(placeholder: string, element: HTMLInputElement): void {
         let parentElement: HTMLElement;
-        parentElement = <HTMLElement>element.parentNode;
+        parentElement = getParentNode(element);
         if (parentElement.classList.contains(CLASSNAMES.FLOATINPUT)) {
          if (!isNullOrUndefined(placeholder) && placeholder !== '') {
            parentElement.getElementsByClassName(CLASSNAMES.FLOATTEXT)[0].textContent = placeholder;
@@ -233,7 +310,7 @@ export namespace Input {
     export function removeAttributes(attrs: { [key: string]: string }, element: HTMLInputElement | HTMLElement): void {
         for (let key of Object.keys(attrs)) {
             let parentElement: HTMLElement;
-            parentElement = <HTMLElement>element.parentNode;
+            parentElement = getParentNode(element);
             if (key === 'disabled') {
              element.classList.remove(CLASSNAMES.DISABLE);
             }
@@ -260,7 +337,7 @@ export namespace Input {
     export function addAttributes(attrs: { [key: string]: string }, element: HTMLInputElement | HTMLElement): void {
       for (let key of Object.keys(attrs)) {
             let parentElement: HTMLElement;
-            parentElement = <HTMLElement>element.parentNode;
+            parentElement = getParentNode(element);
             if (key === 'disabled') {
                 element.classList.add(CLASSNAMES.DISABLE);
             }
@@ -309,12 +386,17 @@ interface ClassNames {
     FLOATINPUT: string;
     FLOATLINE: string;
     FLOATTEXT: string;
+    CLEARICON: string;
+    CLEARICONHIDE: string;
+    LABELTOP: string;
+    LABELBOTTOM: string;
     INPUTCUSTOMTAG: string;
     FLOATCUSTOMTAG: string;
 }
 export interface InputObject {
     container?: HTMLElement;
     buttons?: HTMLElement[];
+    clearButton?: HTMLElement;
 }
 /**
  * Arguments to create input element for input text boxes utility.These properties are optional.
@@ -360,6 +442,7 @@ export interface InputArgs {
         cssClass?: string;
         enableRtl?: boolean;
         enabled?: boolean;
+        showClearButton?: boolean;
     };
 }
 /**
@@ -386,6 +469,10 @@ export interface IInput {
      *  Sets the enable rtl value to input.
      */
     enableRtl: boolean;
+    /**
+     *  Specifies whether to display the Clear button in the input.
+     */
+    showClearButton?: boolean;
     /**
      *  Sets the change event mapping function to input.
      */

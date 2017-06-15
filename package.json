@@ -1,6 +1,6 @@
 {
 	"name": "@syncfusion/ej2-inputs",
-	"version": "1.0.0",
+	"version": "1.3.0",
 	"description": "Syncfusion TypeScript TextBoxes",
 	"author": "Syncfusion Inc.",
 	"license": "SEE LICENSE IN license",
@@ -10,7 +10,6 @@
 	},
 	"devDependencies": {
 		"@types/chai": "^3.4.28",
-		"@types/es6-promise": "0.0.28",
 		"@types/jasmine": "^2.2.29",
 		"@types/jasmine-ajax": "^3.1.27",
 		"@types/requirejs": "^2.1.26",
@@ -33,6 +32,34 @@
 		"nedb": "^1.8.0",
 		"phantomjs-prebuilt": "^2.1.14",
 		"simple-odata-server": "^0.3.1"
+	},
+	"keywords": [
+		"ej2",
+		"syncfusion",
+		"ej2-inputs",
+		"input",
+		"input box",
+		"textbox",
+		"form control",
+		"textbox html",
+		"text area",
+		"essential js 2 textbox",
+		"floating input",
+		"floating label",
+		"ej2-numeric",
+		"numeric",
+		"spinner",
+		"numeric textbox",
+		"percent textbox",
+		"currency textbox",
+		"spin buttons",
+		"numeric updown",
+		"number formatting",
+		"number input"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/syncfusion/ej2-inputs.git"
 	},
 	"scripts": {
 		"build": "gulp build",

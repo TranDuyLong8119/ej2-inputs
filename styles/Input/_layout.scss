@@ -283,7 +283,8 @@
   .e-float-input input:focus ~ label.e-float-text,
   .e-float-input input:valid ~ label.e-float-text,
   .e-float-input input[readonly] ~ label.e-label-top.e-float-text,
-  .e-float-input input[disabled] ~ label.e-label-top.e-float-text {
+  .e-float-input input[disabled] ~ label.e-label-top.e-float-text,
+  .e-float-input input label.e-float-text.e-label-top {
     font-size: 15px;
     top: 3px;
     transform: translate3d(0, 6px, 0) scale(.75);
@@ -347,41 +348,71 @@
     padding-top: 14px;
   }
 
-  .e-float-input input {
+  .e-float-input input,
+  .e-float-input textarea {
     border: $zero-value;
     border-bottom: $one-value solid;
     display: block;
     font-family: $input-font-family;
     font-size: 14px;
     font-weight: 400;
+    width: 100%;
+  }
+
+  .e-float-input input {
     padding: 14px $zero-value 3px;
     text-indent: 2px;
-    width: 100%;
   }
 
   .e-float-input.e-bigger input,
   .e-float-input input.e-bigger,
-  .e-bigger .e-float-input input {
+  .e-bigger .e-float-input input,
+  .e-float-input.e-bigger textarea,
+  .e-float-input textarea.e-bigger,
+  .e-bigger .e-float-input textarea {
     font-size: 14px;
     line-height: 1.5;
     padding: 22px $zero-value 2px;
   }
 
-  .e-float-input.e-small input {
+  .e-float-input.e-bigger textarea,
+  .e-float-input textarea.e-bigger,
+  .e-bigger .e-float-input textarea {
+    padding: 4px $zero-value 2px;
+  }
+
+  .e-float-input.e-small input,
+  .e-float-input.e-small textarea {
     font-size: 13px;
     line-height: 1.35;
     padding: 10px $zero-value 4px;
   }
 
+  .e-float-input.e-small textarea,
+  .e-float-input textarea.e-small,
+  .e-small .e-float-input textarea {
+    padding: $zero-value;
+  }
+
   .e-float-input.e-small.e-bigger input,
   .e-float-input.e-small input.e-bigger,
-  .e-bigger .e-float-input.e-small input {
+  .e-bigger .e-float-input.e-small input,
+  .e-float-input.e-small.e-bigger textarea,
+  .e-float-input.e-small textarea.e-bigger,
+  .e-bigger .e-float-input.e-small textarea {
     font-size: 14px;
     line-height: 1.4;
     padding: 18px $zero-value 4px;
   }
 
-  .e-float-input input:focus {
+  .e-float-input.e-small.e-bigger textarea,
+  .e-float-input.e-small textarea.e-bigger,
+  .e-bigger .e-float-input.e-small textarea {
+    padding: 4px $zero-value 2px;
+  }
+
+  .e-float-input input:focus,
+  .e-float-input textarea:focus {
     outline: none;
   }
 
@@ -476,6 +507,7 @@
   }
 
   .e-input-group input.e-input {
+    min-width: 0;
     width: 100%;
   }
 
@@ -622,7 +654,8 @@
     position: absolute;
   }
 
-  .e-float-input.e-input-group input {
+  .e-float-input.e-input-group input,
+  .e-float-input.e-input-group textarea {
     border: $zero-value;
   }
 
@@ -630,5 +663,178 @@
   .e-float-input.e-input-group .e-float-text {
     right: $zero-value;
   }
-}
 
+  // Clear-icon support
+
+  .e-float-input .e-clear-icon,
+  .e-input-group .e-clear-icon {
+    background: transparent;
+    border: 0;
+    color: $input-clear-icon-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    outline: none;
+    padding: $zero-value 8px 2px;
+    text-align: center;
+  }
+
+  .e-float-input .e-clear-icon:before,
+  .e-input-group .e-clear-icon:before {
+    font-size: $input-clear-icon;
+    padding: $zero-value;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .e-float-input.e-small.e-bigger .e-clear-icon,
+  .e-input-group.e-small.e-bigger .e-clear-icon,
+  .e-small .e-input-group.e-bigger input ~ .e-clear-icon,
+  .e-bigger .e-input-group.e-small input ~ .e-clear-icon,
+  .e-small .e-float-input.e-bigger input ~ .e-clear-icon,
+  .e-bigger .e-float-input.e-small input ~ .e-clear-icon {
+    padding-bottom: $zero-value;
+  }
+
+  .e-float-input.e-small .e-clear-icon:before,
+  .e-input-group.e-small .e-clear-icon:before,
+  .e-float-input input.e-small ~ .e-clear-icon:before,
+  .e-small .e-float-input .e-clear-icon:before,
+  .e-small .e-input-group .e-clear-icon:before {
+    font-size: $input-small-clear-icon;
+  }
+
+  .e-float-input.e-bigger .e-clear-icon:before,
+  .e-input-group.e-bigger .e-clear-icon:before,
+  .e-float-input input.e-bigger ~ .e-clear-icon:before,
+  .e-bigger .e-float-input .e-clear-icon:before,
+  .e-bigger .e-input-group .e-clear-icon:before {
+    font-size: $input-bigger-clear-icon;
+  }
+
+  .e-float-input.e-small.e-bigger .e-clear-icon:before,
+  .e-input-group.e-small.e-bigger .e-clear-icon:before,
+  .e-small .e-input-group.e-bigger input ~ .e-clear-icon:before,
+  .e-bigger .e-input-group.e-small input ~ .e-clear-icon:before,
+  .e-small .e-float-input.e-bigger input ~ .e-clear-icon:before,
+  .e-bigger .e-float-input.e-small input ~ .e-clear-icon:before {
+    font-size: $input-bigger-clear-icon;
+  }
+
+  .e-input:not(:valid) ~ .e-clear-icon,
+  .e-float-input input:not(:valid) ~ .e-clear-icon,
+  .e-float-input.e-input-group input:not(:valid) ~ .e-clear-icon {
+    display: none;
+  }
+
+  .e-clear-icon.e-clear-icon-hide {
+    display: none;
+  }
+
+  // To resolve FireFox red selected box issue.
+  .e-input:not(:valid),
+  .e-input:valid,
+  .e-float-input input:not(:valid),
+  .e-float-input input:valid,
+  .e-input-group input:not(:valid),
+  .e-input-group input:valid,
+  .e-float-input textarea:not(:valid),
+  .e-float-input textarea:valid,
+  .e-input-group textarea:not(:valid),
+  .e-input-group textarea:valid {
+    box-shadow: none;
+  }
+
+  // Left side icon with floating label issue
+  .e-float-input .e-float-input-in-wrap {
+    width: 100%;
+  }
+
+  .e-float-input .e-float-input-in-wrap label.e-float-text {
+    padding-left: 3px;
+    right: auto;
+  }
+
+  // Double border issue while adding floating input with class .e-input
+  .e-float-input input.e-input,
+  .e-float-input.e-bigger .e-input,
+  .e-bigger .e-float-input .e-input {
+    margin-bottom: $zero-value;
+  }
+
+  .e-float-input label.e-float-text.e-label-bottom {
+    transform: translate3d(0, 28px, 0) scale(1);
+  }
+
+  // textarea floating label support.
+
+  .e-float-input textarea:focus ~ label.e-float-text,
+  .e-float-input textarea:valid ~ label.e-float-text,
+  .e-float-input textarea[readonly] ~ label.e-label-top.e-float-text,
+  .e-float-input textarea[disabled] ~ label.e-label-top.e-float-text,
+  .e-float-input textarea label.e-float-text.e-label-top {
+    font-size: 15px;
+    top: -18px;
+    transform: translate3d(0, 6px, 0) scale(.75);
+  }
+
+  .e-float-input.e-bigger textarea:focus ~ label.e-float-text,
+  .e-float-input.e-bigger textarea:valid ~ label.e-float-text,
+  .e-float-input.e-bigger textarea[readonly] ~ label.e-float-text,
+  .e-float-input.e-bigger textarea[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input textarea:focus ~ label.e-float-text,
+  .e-bigger .e-float-input textarea:valid ~ label.e-float-text,
+  .e-bigger .e-float-input textarea[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input textarea[disabled] ~ label.e-float-text {
+    font-size: 16px;
+    top: -16px;
+  }
+
+  .e-float-input.e-small textarea:focus ~ label.e-float-text,
+  .e-float-input.e-small textarea:valid ~ label.e-float-text,
+  .e-float-input.e-small textarea[readonly] ~ label.e-float-text,
+  .e-float-input.e-small textarea[disabled] ~ label.e-float-text {
+    font-size: 13px;
+    top: -16px;
+  }
+
+  .e-float-input.e-small.e-bigger textarea:focus ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger textarea:valid ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger textarea[readonly] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger textarea[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small textarea:focus ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small textarea:valid ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small textarea[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small textarea[disabled] ~ label.e-float-text {
+    font-size: 13px;
+    top: -13px;
+  }
+
+  // Floating label on the top of the textarea
+  .e-float-input textarea ~ .e-float-text {
+    top: -16px;
+  }
+
+  .e-float-input.e-bigger textarea ~ label.e-float-text,
+  .e-float-input textarea ~ label.e-float-text.e-bigger,
+  .e-float-input textarea.e-bigger ~ label.e-float-text,
+  .e-bigger .e-float-input textarea ~ label.e-float-text {
+    font-size: 16px;
+    top: -9px;
+  }
+
+  .e-float-input.e-small textarea ~ label.e-float-text,
+  .e-float-input textarea ~ label.e-float-text.e-small,
+  .e-float-input textarea.e-small ~ label.e-float-text,
+  .e-small .e-float-input textarea ~ label.e-float-text {
+    font-size: 13px;
+    top: -18px;
+  }
+
+  .e-float-input.e-small.e-bigger textarea ~ label.e-float-text,
+  .e-small .e-float-input.e-bigger textarea ~ label.e-float-text
+  .e-bigger .e-float-input.e-small textarea ~ label.e-float-text {
+    font-size: 14px;
+    top: -12px;
+  }
+}

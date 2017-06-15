@@ -3,10 +3,16 @@
 
   input.e-input,
   textarea.e-input,
-  .e-float-input input {
+  .e-float-input input,
+  .e-float-input textarea {
     background: $input-bg-color;
     border-color: $input-border-color;
     color: $input-font-color;
+  }
+
+  .e-input-group,
+  .e-float-input {
+    background: $input-bg-color;
   }
 
   .e-input-group .e-input-group-icon {
@@ -66,39 +72,56 @@
     border-color: $input-error-color;
   }
 
-  .e-input-group.e-success .e-input-group-icon,
-  .e-input-group.e-success .e-input-group-btn button,
-  .e-input-group.e-success {
-    color: $input-success-color;
-  }
-
-  .e-input-group.e-warning .e-input-group-icon,
-  .e-input-group.e-warning .e-input-group-btn button,
-  .e-input-group.e-warning {
-    color: $input-warning-color;
-  }
-
-  .e-input-group.e-error .e-input-group-icon,
-  .e-input-group.e-error .e-input-group-btn button,
-  .e-input-group.e-error {
-    color: $input-error-color;
-  }
-
   label.e-float-text {
     color: $input-header-font-color;
   }
 
-  .e-float-input input:focus ~ label.e-float-text {
+  .e-float-input input:focus ~ label.e-float-text,
+  .e-float-input textarea:focus ~ label.e-float-text {
     color: $input-active-accent-color;
   }
 
-  .e-float-input input {
+  .e-float-input.e-error label.e-float-text,
+  .e-float-input.e-error input:focus ~ label.e-float-text,
+  .e-float-input.e-error textarea:focus ~ label.e-float-text {
+    color: $input-error-color;
+  }
+
+  .e-float-input input,
+  .e-float-input textarea {
     border-bottom-color: $input-border-color;
+  }
+
+  .e-float-input.e-success input {
+    border-bottom-color: $input-success-color;
+  }
+
+  .e-float-input.e-warning input {
+    border-bottom-color: $input-warning-color;
+  }
+
+  .e-float-input.e-error input {
+    border-bottom-color: $input-error-color;
   }
 
   .e-float-input:not(.e-input-group) .e-float-line::before,
   .e-float-input:not(.e-input-group) .e-float-line::after {
     background: $input-active-accent-color;
+  }
+
+  .e-float-input.e-success:not(.e-input-group) .e-float-line::before,
+  .e-float-input.e-success:not(.e-input-group) .e-float-line::after {
+    background: $input-success-color;
+  }
+
+  .e-float-input.e-warning:not(.e-input-group) .e-float-line::before,
+  .e-float-input.e-warning:not(.e-input-group) .e-float-line::after {
+    background: $input-warning-color;
+  }
+
+  .e-float-input.e-error:not(.e-input-group) .e-float-line::before,
+  .e-float-input.e-error:not(.e-input-group) .e-float-line::after {
+    background: $input-error-color;
   }
 
   .e-input-group:not(.e-disabled) .e-input-group-btn:active button,
@@ -228,6 +251,12 @@
 
   .e-input-group.e-error {
     border-bottom-color: $input-group-error-color;
+  }
+
+  // Double border issue while adding floating input with class .e-input
+  .e-float-input.e-input-focus .e-input:focus {
+    border-bottom-color: transparent;
+    border-top-color: transparent;
   }
 
 }

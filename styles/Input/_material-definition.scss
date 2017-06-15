@@ -2,6 +2,7 @@ $input-border-radius: $zero-value;
 $input-group-child-border-width: $zero-value;
 $input-padding: 10px $zero-value 2px;
 $input-padding-bottom: 1px;
+$input-clear-icon: 18px;
 $input-bigger-padding: 19px $zero-value 2px;
 $input-bigger-padding-bottom: 1px;
 $input-child-padding: $zero-value 5px;
@@ -16,6 +17,8 @@ $input-small-margin-bottom: 3px;
 $input-small-bigger-margin-bottom: 5px;
 $input-small-padding: 7px $zero-value 2px;
 $input-small-padding-bottom: 1px;
+$input-small-clear-icon: 18px;
+$input-bigger-clear-icon: 24px;
 $input-bigger-small-padding: 14px $zero-value 1px;
 $input-bigger-small-padding-bottom: $zero-value;
 $input-bigger-small-child-padding: $zero-value 5px;
@@ -31,6 +34,7 @@ $input-focus-border-width: $zero-value $zero-value 2px $zero-value;
 $input-border-color: rgba($grey-black, .12);
 $input-font-color: rgba($grey-light-font, .87);
 $input-button-font-color: rgba($grey-black, .54);
+$input-clear-icon-color: rgba($grey-black, .38);
 $input-error-color: $error-font;
 $input-accent: $accent;
 $input-placeholder: rgba($grey-light-font, .38);
@@ -121,7 +125,7 @@ $input-right-border-width: $zero-value;
   width: 50%;
 }
 @mixin input-ripple-animation {
-  animation: e-input-ripple .75s linear;
+  animation: e-input-ripple .45s linear;
 }
 @keyframes e-input-ripple {
   100% {

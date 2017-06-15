@@ -945,10 +945,335 @@ describe('Input Groups - Enable/Disable', () => {
               });
             });
         it('Check aria labelledby', () => {
-            expect((inputObj.container.children[2].id === 'label_inputpopup') && ( element.getAttribute('aria-labelledby') === 'label_inputpopup')).toBe(true);
+            expect(((<HTMLElement>inputObj.container).children[2].id === 'label_inputpopup') && ( element.getAttribute('aria-labelledby') === 'label_inputpopup')).toBe(true);
         });
         afterAll(() => {
             element.remove();
         });
     });
+
+    describe('Render the empty textbox with clear icon support', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: ''} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Render the textbox value as 12345 with clear icon support', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+     describe('Trying to clear the disabled input value using clear icon ', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true,
+                  enabled: false
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Trying to clear the readonly input value using clear icon ', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true,
+                  readonly: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+   describe('Render the textbox value as empty space with clear icon support', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '   ' }});
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    // Floating input 
+
+    describe('Render the empty textbox with clear icon support', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: ''} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 isFloat:true,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Render the textbox value as 12345 with clear icon support', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 isFloat:true,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+     describe('Trying to clear the disabled input value using clear icon ', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 isFloat:true,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true,
+                  enabled: false
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Trying to clear the readonly input value using clear icon ', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 isFloat:true,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true,
+                  readonly: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+   describe('Render the textbox value as empty space with clear icon support', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        let inputEvent: KeyboardEvent = document.createEvent('KeyboardEvent');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '   ' }});
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 isFloat:true,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+        });
+        it('Click on the clear icon', () => {
+            let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
+            clickEvent.initEvent ("click", true, true);
+            btn.dispatchEvent (clickEvent);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '');
+        });
+
+         it('Input event for code coverage', () => {
+            let input = <HTMLInputElement> document.getElementById('inputclear');
+            input.value = '22344';
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("input", false, true);
+            document.getElementById('inputclear').dispatchEvent(evt);
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '22344');
+        });
+
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
 });
