@@ -1,4 +1,4 @@
-import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge} from '@syncfusion/ej2-base/util';import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';import { NumericTextBoxHelper } from './numerictextbox-builder';import { Input, InputObject } from '../input/input';
+import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge} from '@syncfusion/ej2-base/util';import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';import { NumericTextBoxHelper } from './numerictextbox-builder';import { Input, InputObject, FloatLabelType } from '../input/input';
 import {ChangeEventArgs} from "./numerictextbox";
 import {ComponentModel} from '@syncfusion/ej2-base';
 
@@ -57,6 +57,9 @@ export interface NumericTextBoxModel extends ComponentModel{
 
     /**
      * Specifies whether the decimals length should be restricted during typing.     * @default false     */    validateDecimalOnType?: boolean;
+
+    /**
+     * Specifies a value that indicates floating label functionality.     * Specifies how the floating label works.     * Possible values are:     * * Never - Never floats the label in the numeric textbox when the placeholder is available.     * * Always -  The floating label will always float above the numeric textbox.     * * Auto - The floating label will float above the numeric textbox after focusing or entering a value in the numeric textbox.     */    floatLabelType?: FloatLabelType;
 
     /**
      * Specifies the callback function for create event and it triggers after the numeric textbox control is created successfully.     * @event     */    created?: EmitType<Object>;

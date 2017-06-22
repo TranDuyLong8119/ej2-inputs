@@ -1,5 +1,6 @@
 import{NumericTextBox} from "./numerictextbox";
 
+import{ FloatLabelType} from "../input/input";
 
 export interface NumericTextBoxHelper {
 	new(id: string | HTMLElement): BuilderProperties
@@ -45,6 +46,15 @@ Possible values are the ISO 4217 currency codes, such as 'USD' for the US dollar
 	* Specifies a value that indicates whether the numeric textbox control is enabled or not.
 	*/
 	enabled(value:boolean): BuilderProperties;
+	/**
+	* Specifies a value that indicates floating label functionality.
+Specifies how the floating label works.
+Possible values are:
+* Never - Never floats the label in the numeric textbox when the placeholder is available.
+* Always -  The floating label will always float above the numeric textbox.
+* Auto - The floating label will float above the numeric textbox after focusing or entering a value in the numeric textbox.
+	*/
+	floatLabelType(value:FloatLabelType): BuilderProperties;
 	/**
 	* Specifies the number format that indicates the display format for the value of the numeric textbox.
 	*/

@@ -15,6 +15,12 @@ const CLASSNAMES: ClassNames = {
     INPUTCUSTOMTAG: 'e-input-custom-tag',
     FLOATCUSTOMTAG: 'e-float-custom-tag'
 };
+
+/**
+ * Defines floating label type of the input and decides how the label should float on the input.
+ */
+export type FloatLabelType = 'Never' | 'Always' | 'Auto';
+
 /**
  * Base for Input creation through util methods.
  */
@@ -28,13 +34,13 @@ export namespace Input {
    /**
     * Create a wrapper to input element with multiple span elements and set the basic properties to input based components.
     * ```
-    * E.g : Input.createInput({ element: element, isFloat: true, properties: { placeholder: 'Search' } });
+    * E.g : Input.createInput({ element: element, floatLabelType : "Auto", properties: { placeholder: 'Search' } });
     * ```
     * @param args
     */
     export function createInput(args: InputArgs): InputObject {
         let inputObject: InputObject = { container: null, buttons: [], clearButton: null };
-        if (isNullOrUndefined(args.isFloat) || !args.isFloat) {
+        if (isNullOrUndefined(args.floatLabelType ) || args.floatLabelType === 'Never' ) {
          inputObject.container = createInputContainer(args, CLASSNAMES.INPUTGROUP, CLASSNAMES.INPUTCUSTOMTAG, 'span');
          args.element.parentNode.insertBefore(inputObject.container, args.element);
          addClass([args.element], CLASSNAMES.INPUT);
@@ -43,19 +49,20 @@ export namespace Input {
            let inputElement: HTMLElement;
            let floatLinelement: HTMLElement;
            let floatLabelElement: HTMLElement;
-           args.element.addEventListener('focus', function() : void {
-            let parent: HTMLElement = getParentNode(this);
-            let label: HTMLElement = <HTMLElement> parent.getElementsByClassName('e-float-text')[0];
-            addClass ([label], CLASSNAMES.LABELTOP);
-            if (label.classList.contains(CLASSNAMES.LABELBOTTOM)) { removeClass([label], CLASSNAMES.LABELBOTTOM); }
-           });
-           args.element.addEventListener('blur', function() : void {
-           let parent: HTMLElement = getParentNode(this);
-           if (parent.getElementsByTagName('input')[0].value === '') {
+           if (args.floatLabelType === 'Auto') {
+             args.element.addEventListener('focus', function() : void {
+               let label: HTMLElement = <HTMLElement> getParentNode(this).getElementsByClassName('e-float-text')[0];
+               addClass ([label], CLASSNAMES.LABELTOP);
+               if (label.classList.contains(CLASSNAMES.LABELBOTTOM)) { removeClass([label], CLASSNAMES.LABELBOTTOM); }
+             });
+             args.element.addEventListener('blur', function() : void {
+               let parent: HTMLElement = getParentNode(this);
+               if (parent.getElementsByTagName('input')[0].value === '') {
                let label: HTMLElement = <HTMLElement> parent.getElementsByClassName('e-float-text')[0];
-               removeClass ([label], CLASSNAMES.LABELTOP);
+               if (label.classList.contains(CLASSNAMES.LABELTOP)) { removeClass([label], CLASSNAMES.LABELTOP); }
                addClass([label], CLASSNAMES.LABELBOTTOM); }
-           });
+             });
+           }
            inputObject.container = createInputContainer(args, CLASSNAMES.FLOATINPUT, CLASSNAMES.FLOATCUSTOMTAG, 'div');
            args.element.parentNode.insertBefore(inputObject.container, args.element);
            attributes(args.element, { 'required': 'true' });
@@ -77,12 +84,20 @@ export namespace Input {
            inputObject.container.appendChild(floatLinelement);
            inputObject.container.appendChild(floatLabelElement);
            updateLabelState(args.element.value, floatLabelElement);
-           args.element.addEventListener('input', (event: KeyboardEvent) => {
-             updateLabelState(args.element.value, floatLabelElement);
-           });
-           args.element.addEventListener('blur', (event: FocusEvent) => {
-             updateLabelState(args.element.value, floatLabelElement);
-           });
+           if (args.floatLabelType === 'Always') {
+             if (floatLabelElement.classList.contains(CLASSNAMES.LABELBOTTOM)) {
+               removeClass([floatLabelElement], CLASSNAMES.LABELBOTTOM);
+             }
+             addClass([floatLabelElement], CLASSNAMES.LABELTOP);
+           }
+           if (args.floatLabelType === 'Auto') {
+             args.element.addEventListener('input', (event: KeyboardEvent) => {
+               updateLabelState(args.element.value, floatLabelElement);
+             });
+             args.element.addEventListener('blur', (event: FocusEvent) => {
+               updateLabelState(args.element.value, floatLabelElement);
+             });
+           }
         }
         args.element.addEventListener('focus', function() : void {
           let parent: HTMLElement = getParentNode(this);
@@ -107,29 +122,34 @@ export namespace Input {
                 inputObject.buttons.push(appendSpan(args.buttons[i], inputObject.container));
             }
          }
-        if (!isNullOrUndefined(args.properties)) {
-            for (let prop of Object.keys(args.properties)) {
-                switch (prop) {
-                    case 'cssClass':
-                        setCssClass(args.properties.cssClass, [inputObject.container]);
-                        break;
-                    case 'enabled':
-                        setEnabled(args.properties.enabled, args.element);
-                        break;
-                    case 'enableRtl':
-                        setEnableRtl(args.properties.enableRtl, [inputObject.container]);
-                        break;
-                    case 'placeholder':
-                        setPlaceholder(args.properties.placeholder, args.element);
-                        break;
-                    case 'readonly':
-                        setReadonly(args.properties.readonly, args.element);
-                        break;
-                }
-            }
-          }
+        inputObject = setPropertyValue(args, inputObject);
         privateInputObj = inputObject;
         return inputObject;
+    }
+
+    function setPropertyValue(args: InputArgs, inputObject: InputObject): InputObject {
+      if (!isNullOrUndefined(args.properties)) {
+        for (let prop of Object.keys(args.properties)) {
+          switch (prop) {
+            case 'cssClass':
+              setCssClass(args.properties.cssClass, [inputObject.container]);
+              break;
+            case 'enabled':
+              setEnabled(args.properties.enabled, args.element);
+              break;
+            case 'enableRtl':
+              setEnableRtl(args.properties.enableRtl, [inputObject.container]);
+              break;
+            case 'placeholder':
+              setPlaceholder(args.properties.placeholder, args.element);
+              break;
+            case 'readonly':
+              setReadonly(args.properties.readonly, args.element);
+              break;
+          }
+        }
+      }
+      return inputObject;
     }
 
     function updateIconState(value: string | number, button: HTMLElement): void {
@@ -425,11 +445,15 @@ export interface InputArgs {
     customTag?: string;
    /**
     * ```
-    * E.g : Input.createInput({ element: element, isFloat: true });
+    * E.g : Input.createInput({ element: element, floatLabelType : "Always" });
     * ```
-    * Sets to enable input with floating label feature.
+    * Specifies how the floating label works.
+    * Possible values are:
+    * * Never - Never float the label in the input when the placeholder is available.
+    * * Always - The floating label will always float above the input.
+    * * Auto - The floating label will float above the input after focusing or entering a value in the input.
     */
-    isFloat?: boolean;
+    floatLabelType ?: FloatLabelType;
    /**
     * ```
     * E.g : Input.createInput({ element: element, properties: { readonly: true, placeholder: 'Search here' } });
@@ -460,7 +484,7 @@ export interface IInput {
     /**
      *  Sets the enabled value to input.
      */
-    enabled: boolean;
+    enabled?: boolean;
     /**
      *  Sets the readonly value to input.
      */
@@ -473,6 +497,14 @@ export interface IInput {
      *  Specifies whether to display the Clear button in the input.
      */
     showClearButton?: boolean;
+    /**
+     * Specifies how the floating label works.
+     * Possible values are:
+     * * Never - Never float the label in the input when the placeholder is available.
+     * * Always - The floating label will always float above the input.
+     * * Auto - The floating label will float above the input after focusing or entering a value in the input.
+     */
+    floatLabelType?: FloatLabelType;
     /**
      *  Sets the change event mapping function to input.
      */

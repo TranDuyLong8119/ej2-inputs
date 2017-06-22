@@ -282,6 +282,7 @@
 
   .e-float-input input:focus ~ label.e-float-text,
   .e-float-input input:valid ~ label.e-float-text,
+  .e-float-input input ~ label.e-label-top.e-float-text,
   .e-float-input input[readonly] ~ label.e-label-top.e-float-text,
   .e-float-input input[disabled] ~ label.e-label-top.e-float-text,
   .e-float-input input label.e-float-text.e-label-top {
@@ -292,10 +293,12 @@
 
   .e-float-input.e-bigger input:focus ~ label.e-float-text,
   .e-float-input.e-bigger input:valid ~ label.e-float-text,
+  .e-float-input.e-bigger input ~ label.e-label-top.e-float-text,
   .e-float-input.e-bigger input[readonly] ~ label.e-float-text,
   .e-float-input.e-bigger input[disabled] ~ label.e-float-text,
   .e-bigger .e-float-input input:focus ~ label.e-float-text,
   .e-bigger .e-float-input input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input input ~ label.e-label-top.e-float-text,
   .e-bigger .e-float-input input[readonly] ~ label.e-float-text,
   .e-bigger .e-float-input input[disabled] ~ label.e-float-text {
     font-size: 16px;
@@ -304,6 +307,8 @@
 
   .e-float-input.e-small input:focus ~ label.e-float-text,
   .e-float-input.e-small input:valid ~ label.e-float-text,
+  .e-float-input.e-small input ~ label.e-label-top.e-float-text,
+  .e-small .e-float-input input ~ label.e-label-top.e-float-text,
   .e-float-input.e-small input[readonly] ~ label.e-float-text,
   .e-float-input.e-small input[disabled] ~ label.e-float-text {
     font-size: 13px;
@@ -312,10 +317,12 @@
 
   .e-float-input.e-small.e-bigger input:focus ~ label.e-float-text,
   .e-float-input.e-small.e-bigger input:valid ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger input ~ label.e-label-top.e-float-text,
   .e-float-input.e-small.e-bigger input[readonly] ~ label.e-float-text,
   .e-float-input.e-small.e-bigger input[disabled] ~ label.e-float-text,
   .e-bigger .e-float-input.e-small input:focus ~ label.e-float-text,
   .e-bigger .e-float-input.e-small input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small input ~ label.e-label-top.e-float-text,
   .e-bigger .e-float-input.e-small input[readonly] ~ label.e-float-text,
   .e-bigger .e-float-input.e-small input[disabled] ~ label.e-float-text {
     font-size: 13px;
@@ -679,8 +686,8 @@
     text-align: center;
   }
 
-  .e-float-input .e-clear-icon:before,
-  .e-input-group .e-clear-icon:before {
+  .e-float-input .e-clear-icon::before,
+  .e-input-group .e-clear-icon::before {
     font-size: $input-clear-icon;
     padding: $zero-value;
     text-align: center;
@@ -696,28 +703,28 @@
     padding-bottom: $zero-value;
   }
 
-  .e-float-input.e-small .e-clear-icon:before,
-  .e-input-group.e-small .e-clear-icon:before,
-  .e-float-input input.e-small ~ .e-clear-icon:before,
-  .e-small .e-float-input .e-clear-icon:before,
-  .e-small .e-input-group .e-clear-icon:before {
+  .e-float-input.e-small .e-clear-icon::before,
+  .e-input-group.e-small .e-clear-icon::before,
+  .e-float-input input.e-small ~ .e-clear-icon::before,
+  .e-small .e-float-input .e-clear-icon::before,
+  .e-small .e-input-group .e-clear-icon::before {
     font-size: $input-small-clear-icon;
   }
 
-  .e-float-input.e-bigger .e-clear-icon:before,
-  .e-input-group.e-bigger .e-clear-icon:before,
-  .e-float-input input.e-bigger ~ .e-clear-icon:before,
-  .e-bigger .e-float-input .e-clear-icon:before,
-  .e-bigger .e-input-group .e-clear-icon:before {
+  .e-float-input.e-bigger .e-clear-icon::before,
+  .e-input-group.e-bigger .e-clear-icon::before,
+  .e-float-input input.e-bigger ~ .e-clear-icon::before,
+  .e-bigger .e-float-input .e-clear-icon::before,
+  .e-bigger .e-input-group .e-clear-icon::before {
     font-size: $input-bigger-clear-icon;
   }
 
-  .e-float-input.e-small.e-bigger .e-clear-icon:before,
-  .e-input-group.e-small.e-bigger .e-clear-icon:before,
-  .e-small .e-input-group.e-bigger input ~ .e-clear-icon:before,
-  .e-bigger .e-input-group.e-small input ~ .e-clear-icon:before,
-  .e-small .e-float-input.e-bigger input ~ .e-clear-icon:before,
-  .e-bigger .e-float-input.e-small input ~ .e-clear-icon:before {
+  .e-float-input.e-small.e-bigger .e-clear-icon::before,
+  .e-input-group.e-small.e-bigger .e-clear-icon::before,
+  .e-small .e-input-group.e-bigger input ~ .e-clear-icon::before,
+  .e-bigger .e-input-group.e-small input ~ .e-clear-icon::before,
+  .e-small .e-float-input.e-bigger input ~ .e-clear-icon::before,
+  .e-bigger .e-float-input.e-small input ~ .e-clear-icon::before {
     font-size: $input-bigger-clear-icon;
   }
 

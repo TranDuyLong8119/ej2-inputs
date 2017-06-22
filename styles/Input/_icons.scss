@@ -5,13 +5,13 @@
   }
 
   .e-float-input {
-    .e-clear-icon:before {
+    .e-clear-icon::before {
       @include clear-icon;
     }
   }
 
   .e-input-group {
-    .e-clear-icon:before {
+    .e-clear-icon::before {
       @include clear-icon;
     }
   }

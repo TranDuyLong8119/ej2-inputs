@@ -32,7 +32,7 @@ describe('Numerictextbox Control', () => {
         it('Control rendering test with other (EJ-NUMERICTEXTBOX) than input element', () => {
             let divElement: HTMLElement = createElement('EJ-NUMERICTEXTBOX', { id: 'divElement' });
             document.body.appendChild(divElement);
-            numerictextbox1 = new NumericTextBox();
+            numerictextbox1 = new NumericTextBox({floatLabelType:'Never'});
             numerictextbox1.appendTo('#divElement');
             expect(document.getElementById('divElement').classList.contains('e-input')).toEqual(true);
         });
@@ -276,7 +276,7 @@ describe('Numerictextbox Control', () => {
         });
 
         it('Disable the numeric textbox control', () => {
-            numerictextbox = new NumericTextBox({ enabled: false }, '#tsNumeric');
+            numerictextbox = new NumericTextBox({ enabled: false,floatLabelType:'Never' }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').getAttribute('aria-disabled')).toEqual('true');
@@ -340,7 +340,7 @@ describe('Numerictextbox Control', () => {
         });
 
         it('Set the watermarkText to numerictextbox', () => {
-            numerictextbox = new NumericTextBox({ placeholder: 'Enter the numeric value' }, '#tsNumeric');
+            numerictextbox = new NumericTextBox({ placeholder: 'Enter the numeric value',floatLabelType:'Never' }, '#tsNumeric');
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).getAttribute("placeholder")).toEqual('Enter the numeric value');
         });
 
@@ -692,7 +692,7 @@ describe('Numerictextbox Control', () => {
         it('Add the html attribute (disabled) in the input element', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { disabled: 'disabled' } });
             document.body.appendChild(ele);
-            numerictextbox = new NumericTextBox({}, ele);
+            numerictextbox = new NumericTextBox({floatLabelType:'Never'}, ele);
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').getAttribute('aria-disabled')).toEqual('true');
@@ -701,23 +701,23 @@ describe('Numerictextbox Control', () => {
         it('Add the html attribute (disabled) and also set the enabled API in the input element', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { disabled: 'disabled' } });
             document.body.appendChild(ele);
-            numerictextbox = new NumericTextBox({ enabled: false }, ele);
+            numerictextbox = new NumericTextBox({ enabled: false,floatLabelType:'Never' }, ele);
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').getAttribute('aria-disabled')).toEqual('true');
         });
 
         it('Add the html attribute (disabled) value as true in the input element', () => {
-            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { disabled: 'true' } });
+            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { disabled: 'true'} });
             document.body.appendChild(ele);
-            numerictextbox = new NumericTextBox({}, ele);
+            numerictextbox = new NumericTextBox({floatLabelType:'Never'}, ele);
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').getAttribute('aria-disabled')).toEqual('true');
         });
 
         it('Add the html attribute (disabled) value as false in the input element', () => {
-            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { disabled: 'false' } });
+            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { disabled: 'false',floatLabelType:'Never' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({}, ele);
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(false);
@@ -2046,11 +2046,11 @@ describe('Numerictextbox Control', () => {
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
         });
 
-        it('Mousemove on the spin button', () => {            
+        it('Mousemove on the spin button', () => {
             numerictextbox = new NumericTextBox({ value: 20 }, '#tsNumeric');
-            let eventArgs: any = { which: 3, preventDefault: function () { }, clientX:document.getElementsByClassName("e-spin-up")[0].getBoundingClientRect().left,clientY:document.getElementsByClassName("e-spin-up")[0].getBoundingClientRect().top };
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');                    
-            numerictextbox.touchMoveOnSpinner(extend({}, {}, eventArgs));            
+            let eventArgs: any = { which: 3, preventDefault: function () { }, clientX: document.getElementsByClassName("e-spin-up")[0].getBoundingClientRect().left, clientY: document.getElementsByClassName("e-spin-up")[0].getBoundingClientRect().top };
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
+            numerictextbox.touchMoveOnSpinner(extend({}, {}, eventArgs));
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
         });
 
@@ -2128,7 +2128,7 @@ describe('Numerictextbox Control', () => {
             document.body.innerHTML = '';
         });
         it('notify enabled property change testing', () => {
-            numerictextbox = new NumericTextBox({ enabled: false }, '#tsNumeric');
+            numerictextbox = new NumericTextBox({ enabled: false,floatLabelType:'Never' }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(true);
             expect(document.getElementById('tsNumeric').getAttribute('aria-disabled')).toEqual('true');
@@ -2139,7 +2139,7 @@ describe('Numerictextbox Control', () => {
         });
 
         it('notify enabled property change testing', () => {
-            numerictextbox = new NumericTextBox({ enabled: true }, '#tsNumeric');
+            numerictextbox = new NumericTextBox({ enabled: true,floatLabelType:'Never' }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(false);
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(false);
             numerictextbox.enabled = false;
@@ -2206,7 +2206,7 @@ describe('Numerictextbox Control', () => {
         });
 
         it('notify watermarkText property change testing', () => {
-            numerictextbox = new NumericTextBox({ placeholder: 'Enter the numeric value' }, '#tsNumeric');
+            numerictextbox = new NumericTextBox({ placeholder: 'Enter the numeric value',floatLabelType:'Never' }, '#tsNumeric');
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).getAttribute("placeholder")).toEqual('Enter the numeric value');
             numerictextbox.placeholder = 'Enter the number';
             numerictextbox.dataBind();
@@ -4395,8 +4395,8 @@ describe('Numerictextbox Control', () => {
         });
 
         it('Trying to focus the disabled the numeric textbox control', () => {
-            numerictextbox = new NumericTextBox({ enabled: false }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);
+            numerictextbox = new NumericTextBox({ enabled: false,floatLabelType:'Never' }, '#tsNumeric');
+            expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-disabled')).toEqual(true);            
             expect(document.getElementById('tsNumeric').classList.contains('e-disabled')).toEqual(true);
             document.getElementById("tsNumeric").focus();
             expect(document.getElementById('tsNumeric').getAttribute('aria-disabled')).toEqual('true');
@@ -4535,6 +4535,28 @@ describe('Numerictextbox Control', () => {
                 expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$20.00');
             }, 300);
             jasmine.clock().tick(301);
+        });
+
+        it('floating label-functionality:Auto', () => {
+            numerictextbox = new NumericTextBox({ min: 10, max: 30, format: 'c2',floatLabelType:'Auto',placeholder:'Enter the numeric value' }, '#tsNumeric');            
+            numerictextbox.focusIn();                        
+            setInterval(function () {
+                expect(document.querySelector('.e-float-input').children[3].classList.contains('e-label-top')).toEqual(true);
+            }, 300);
+            numerictextbox.focusOut();            
+            setInterval(function () {
+                expect(document.querySelector('.e-float-input').children[3].classList.contains('e-label-bottom')).toEqual(true);
+            }, 300);
+        });
+
+        it('floating label-functionality:Always', () => {
+            numerictextbox = new NumericTextBox({ min: 10, max: 30, format: 'c2',floatLabelType:'Always',placeholder:'Enter the numeric value' }, '#tsNumeric');                        
+            expect(document.querySelector('.e-float-input').children[3].classList.contains('e-label-top')).toEqual(true);                        
+        });
+
+        it('floating label-functionality:Never', () => {
+            numerictextbox = new NumericTextBox({ min: 10, max: 30, format: 'c2',floatLabelType:'Never',placeholder:'Enter the numeric value' }, '#tsNumeric');                                                                  
+            expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-float-input')).toEqual(false);            
         });
 
         it('Remove the existing value and focus out the control', () => {

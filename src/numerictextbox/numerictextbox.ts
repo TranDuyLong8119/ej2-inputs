@@ -5,7 +5,7 @@ import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge} 
 import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
 import { NumericTextBoxHelper } from './numerictextbox-builder';
-import { Input, InputObject } from '../input/input';
+import { Input, InputObject, FloatLabelType } from '../input/input';
 
 const ROOT: string = 'e-numeric';
 const SPINICON: string = 'e-input-group-icon';
@@ -177,6 +177,17 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     public validateDecimalOnType: boolean;
 
     /**
+     * Specifies a value that indicates floating label functionality.
+     * Specifies how the floating label works.
+     * Possible values are:
+     * * Never - Never floats the label in the numeric textbox when the placeholder is available.
+     * * Always -  The floating label will always float above the numeric textbox.
+     * * Auto - The floating label will float above the numeric textbox after focusing or entering a value in the numeric textbox.
+     */
+    @Property('Auto')
+    public floatLabelType: FloatLabelType;
+
+    /**
      * Specifies the callback function for create event and it triggers after the numeric textbox control is created successfully.
      * @event
      */
@@ -304,6 +315,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         let inputObj: InputObject = Input.createInput({
             element: this.element,
             customTag: this.angularTagName,
+            floatLabelType: this.floatLabelType,
             properties: {
                 readonly: this.readonly,
                 placeholder: this.placeholder,

@@ -201,7 +201,7 @@ describe('Input', () => {
             document.body.appendChild(element);
             inputObj = Input.createInput({
                 element: element,
-                isFloat: true,
+                floatLabelType: "Auto",
                 properties: {
                  placeholder: 'Read float group',
                  readonly: true,
@@ -401,7 +401,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Search Float',
                 }
@@ -432,7 +432,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   readonly: true,
                   placeholder: 'Search Float',
@@ -455,7 +455,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Through property',
                 }
@@ -477,7 +477,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
             });
             it('placeholder label for floating input through input element', () => {
@@ -495,7 +495,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   cssClass: 'e-custom-class',
                   placeholder: 'Through Input element',
@@ -517,7 +517,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Input element',
                   enabled: false
@@ -542,7 +542,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Input element',
                   enableRtl: true
@@ -557,6 +557,38 @@ describe('FloatInput', () => {
             });
         });
     });
+    describe('floatLabelType value as Always', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement;
+            element = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: {  value: 'Floating text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 floatLabelType: "Always",
+                 properties: {
+                  placeholder: 'Search Float',
+                }
+          });
+            });
+            it('class name of container element', () => {
+                expect(inputObj.container.classList.contains('e-float-input')).toBe(true);
+            });
+            it('class and tag names of child nodes', () => {
+                expect((inputObj.container.childNodes[0].nodeName === 'INPUT')).toBe(true);
+                expect((inputObj.container.childNodes[1].nodeName === 'SPAN') &&
+                 ((<HTMLElement>inputObj.container.childNodes[1]).classList.contains('e-float-line'))).toBe(true);
+                expect((inputObj.container.childNodes[2].nodeName === 'LABEL') &&
+                 ((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-float-text'))).toBe(true);
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+            });
+            it('Dom size - Child nodes length', () => {
+                expect((inputObj.container.childNodes.length === 3)).toBe(true);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
     describe('appendButton', () => {
         let inputObj: InputObject;
         let element: HTMLInputElement;
@@ -565,7 +597,7 @@ describe('FloatInput', () => {
             document.body.appendChild(element);
             inputObj = Input.createInput({
               element: element,
-              isFloat: true,
+              floatLabelType: "Auto",
               properties: {
                 placeholder: 'Input element',
                 }
@@ -593,7 +625,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
                 Input.setPlaceholder('Float placeholder', element);
             });
@@ -621,7 +653,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
                 Input.setCssClass('e-custom-class', [element]);
                 Input.setCssClass('e-customparent-class', [inputObj.container]);
@@ -647,7 +679,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
                 Input.setReadonly(true, element);
             });
@@ -670,7 +702,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
                 Input.setEnableRtl(true, [inputObj.container]);
             });
@@ -693,7 +725,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
                 Input.setEnabled(false, element);
             });
@@ -724,7 +756,7 @@ describe('FloatInput', () => {
                 attributes(element, disabledAttrs);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
               });
             });
             it('remove the disabled attribute in input element', () => {
@@ -744,7 +776,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   enabled: false
                 }
@@ -767,7 +799,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Remove placeholder'
                 }
@@ -789,7 +821,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Attribute id'
                 }
@@ -811,7 +843,7 @@ describe('FloatInput', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true
+                 floatLabelType: "Auto"
               });
             });
             it('Add Placeholder', () => {
@@ -915,7 +947,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  customTag: 'ej2-custom-floatinput',
                  properties: {
                   placeholder: 'Custom Tag Float'
@@ -938,7 +970,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat: true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Custom Tag Float'
                  }
@@ -1115,7 +1147,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat:true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Clear button',
                   showClearButton: true
@@ -1140,7 +1172,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat:true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Clear button',
                   showClearButton: true
@@ -1173,7 +1205,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat:true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Clear button',
                   showClearButton: true,
@@ -1207,7 +1239,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat:true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Clear button',
                   showClearButton: true,
@@ -1242,7 +1274,7 @@ describe('Input Groups - Enable/Disable', () => {
                 document.body.appendChild(element);
                 inputObj = Input.createInput({
                  element: element,
-                 isFloat:true,
+                 floatLabelType: "Auto",
                  properties: {
                   placeholder: 'Clear button',
                   showClearButton: true
