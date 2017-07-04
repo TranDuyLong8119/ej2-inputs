@@ -282,6 +282,7 @@
 
   .e-float-input input:focus ~ label.e-float-text,
   .e-float-input input:valid ~ label.e-float-text,
+  .e-float-input input ~ label.e-label-top.e-float-text,
   .e-float-input input[readonly] ~ label.e-label-top.e-float-text,
   .e-float-input input[disabled] ~ label.e-label-top.e-float-text,
   .e-float-input input label.e-float-text.e-label-top {
@@ -292,10 +293,12 @@
 
   .e-float-input.e-bigger input:focus ~ label.e-float-text,
   .e-float-input.e-bigger input:valid ~ label.e-float-text,
+  .e-float-input.e-bigger input ~ label.e-label-top.e-float-text,
   .e-float-input.e-bigger input[readonly] ~ label.e-float-text,
   .e-float-input.e-bigger input[disabled] ~ label.e-float-text,
   .e-bigger .e-float-input input:focus ~ label.e-float-text,
   .e-bigger .e-float-input input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input input ~ label.e-label-top.e-float-text,
   .e-bigger .e-float-input input[readonly] ~ label.e-float-text,
   .e-bigger .e-float-input input[disabled] ~ label.e-float-text {
     font-size: 16px;
@@ -304,6 +307,8 @@
 
   .e-float-input.e-small input:focus ~ label.e-float-text,
   .e-float-input.e-small input:valid ~ label.e-float-text,
+  .e-float-input.e-small input ~ label.e-label-top.e-float-text,
+  .e-small .e-float-input input ~ label.e-label-top.e-float-text,
   .e-float-input.e-small input[readonly] ~ label.e-float-text,
   .e-float-input.e-small input[disabled] ~ label.e-float-text {
     font-size: 13px;
@@ -312,10 +317,12 @@
 
   .e-float-input.e-small.e-bigger input:focus ~ label.e-float-text,
   .e-float-input.e-small.e-bigger input:valid ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger input ~ label.e-label-top.e-float-text,
   .e-float-input.e-small.e-bigger input[readonly] ~ label.e-float-text,
   .e-float-input.e-small.e-bigger input[disabled] ~ label.e-float-text,
   .e-bigger .e-float-input.e-small input:focus ~ label.e-float-text,
   .e-bigger .e-float-input.e-small input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small input ~ label.e-label-top.e-float-text,
   .e-bigger .e-float-input.e-small input[readonly] ~ label.e-float-text,
   .e-bigger .e-float-input.e-small input[disabled] ~ label.e-float-text {
     font-size: 13px;
@@ -669,18 +676,19 @@
   .e-float-input .e-clear-icon,
   .e-input-group .e-clear-icon {
     background: transparent;
-    border: 0;
+    border: $zero-value;
     color: $input-clear-icon-color;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: $input-clear-icon-position;
+    min-width: 24px;
     outline: none;
-    padding: $zero-value 8px 2px;
+    padding: $input-clear-icon-padding;
     text-align: center;
   }
 
-  .e-float-input .e-clear-icon:before,
-  .e-input-group .e-clear-icon:before {
+  .e-float-input .e-clear-icon::before,
+  .e-input-group .e-clear-icon::before {
     font-size: $input-clear-icon;
     padding: $zero-value;
     text-align: center;
@@ -696,29 +704,29 @@
     padding-bottom: $zero-value;
   }
 
-  .e-float-input.e-small .e-clear-icon:before,
-  .e-input-group.e-small .e-clear-icon:before,
-  .e-float-input input.e-small ~ .e-clear-icon:before,
-  .e-small .e-float-input .e-clear-icon:before,
-  .e-small .e-input-group .e-clear-icon:before {
+  .e-float-input.e-small .e-clear-icon::before,
+  .e-input-group.e-small .e-clear-icon::before,
+  .e-float-input input.e-small ~ .e-clear-icon::before,
+  .e-small .e-float-input .e-clear-icon::before,
+  .e-small .e-input-group .e-clear-icon::before {
     font-size: $input-small-clear-icon;
   }
 
-  .e-float-input.e-bigger .e-clear-icon:before,
-  .e-input-group.e-bigger .e-clear-icon:before,
-  .e-float-input input.e-bigger ~ .e-clear-icon:before,
-  .e-bigger .e-float-input .e-clear-icon:before,
-  .e-bigger .e-input-group .e-clear-icon:before {
+  .e-float-input.e-bigger .e-clear-icon::before,
+  .e-input-group.e-bigger .e-clear-icon::before,
+  .e-float-input input.e-bigger ~ .e-clear-icon::before,
+  .e-bigger .e-float-input .e-clear-icon::before,
+  .e-bigger .e-input-group .e-clear-icon::before {
     font-size: $input-bigger-clear-icon;
   }
 
-  .e-float-input.e-small.e-bigger .e-clear-icon:before,
-  .e-input-group.e-small.e-bigger .e-clear-icon:before,
-  .e-small .e-input-group.e-bigger input ~ .e-clear-icon:before,
-  .e-bigger .e-input-group.e-small input ~ .e-clear-icon:before,
-  .e-small .e-float-input.e-bigger input ~ .e-clear-icon:before,
-  .e-bigger .e-float-input.e-small input ~ .e-clear-icon:before {
-    font-size: $input-bigger-clear-icon;
+  .e-float-input.e-small.e-bigger .e-clear-icon::before,
+  .e-input-group.e-small.e-bigger .e-clear-icon::before,
+  .e-small .e-input-group.e-bigger input ~ .e-clear-icon::before,
+  .e-bigger .e-input-group.e-small input ~ .e-clear-icon::before,
+  .e-small .e-float-input.e-bigger input ~ .e-clear-icon::before,
+  .e-bigger .e-float-input.e-small input ~ .e-clear-icon::before {
+    font-size: $input-bigger-small-clear-icon;
   }
 
   .e-input:not(:valid) ~ .e-clear-icon,
@@ -729,6 +737,40 @@
 
   .e-clear-icon.e-clear-icon-hide {
     display: none;
+  }
+
+  .e-input-group .e-clear-icon {
+    margin-bottom: $input-clear-icon-margin-bottom;
+    margin-top: $input-clear-icon-margin-top;
+    min-height: $input-clear-icon-min-height;
+    min-width: $input-clear-icon-min-width;
+  }
+
+  .e-input-group.e-bigger .e-clear-icon,
+  .e-input-group .e-clear-icon.e-bigger,
+  .e-bigger .e-input-group .e-clear-icon {
+    margin-bottom: $input-clear-icon-bigger-margin-bottom;
+    margin-top: $input-clear-icon-bigger-margin-top;
+    min-height: $input-bigger-clear-icon-min-height;
+    min-width: $input-bigger-clear-icon-min-width;
+  }
+
+  .e-input-group.e-small.e-bigger .e-clear-icon,
+  .e-input-group.e-small .e-clear-icon.e-bigger,
+  .e-bigger .e-input-group.e-small .e-clear-icon {
+    margin-bottom: $input-clear-icon-small-bigger-margin-bottom;
+    margin-top: $input-clear-icon-small-bigger-margin-top;
+    min-height: $input-bigger-small-clear-icon-min-height;
+    min-width: $input-bigger-small-clear-icon-min-width;
+  }
+
+  .e-input-group.e-small .e-clear-icon,
+  .e-input-group .e-clear-icon.e-small,
+  .e-small .e-input-group .e-clear-icon {
+    margin-bottom: $input-clear-icon-small-margin-bottom;
+    margin-top: $input-clear-icon-small-margin-top;
+    min-height: $input-small-clear-icon-min-height;
+    min-width: $input-small-clear-icon-min-width;
   }
 
   // To resolve FireFox red selected box issue.
