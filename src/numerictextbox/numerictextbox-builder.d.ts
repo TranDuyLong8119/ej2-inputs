@@ -65,7 +65,7 @@ Possible values are:
 	height(value:number|string): BuilderProperties;
 	isDestroyed(value:boolean): BuilderProperties;
 	/**
-	* Overrides the global culture and localization value for this component.
+	* Overrides the global culture and localization value for this component. Default Global culture is 'en-US'
 	*/
 	locale(value:string): BuilderProperties;
 	/**
