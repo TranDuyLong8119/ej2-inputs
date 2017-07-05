@@ -1,4 +1,4 @@
-# [Unreleased]
+# 1.0.10-preview (2017-07-05)
 ## Numeric TextBox
 ### New Features
 -	Provided floating label support for Numeric TextBox.
