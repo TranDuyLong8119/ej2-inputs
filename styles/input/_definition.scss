@@ -1,3 +1,5 @@
+$skin-name: 'default';
+$input-text-indent: 10px;
 $input-font-size: 14px;
 $input-bigger-font-size: 14px;
 $input-small-font-size: 13px;
@@ -6,12 +8,20 @@ $input-border-radius: 4px;
 $zero-value: 0;
 $one-value: 1px;
 $input-group-child-border-width: $one-value;
-$input-clear-icon: 18px;
-$input-small-clear-icon: 18px;
-$input-bigger-clear-icon: 24px;
+$input-clear-icon: 12px;
+$input-bigger-clear-icon: 14px;
+$input-small-clear-icon: 10px;
+$input-bigger-small-clear-icon: 12px;
+$input-clear-icon-padding: $zero-value;
+$input-clear-icon-position: center;
 $input-padding: 8px;
+$float-input-padding: $zero-value;
+$float-label-padding: 10px;
+$float-input-wrap-padding-top: $zero-value;
 $input-padding-bottom: 8px;
 $input-bigger-padding: 14px;
+$float-input-bigger-padding: $zero-value;
+$float-input-bigger-wrap-padding-top: $zero-value;
 $input-bigger-padding-bottom: 14px;
 $input-bigger-margin-bottom: $zero-value;
 $input-child-padding: 8px;
@@ -19,15 +29,25 @@ $input-bigger-child-padding: 14px;
 $input-margin-bottom: $zero-value;
 $input-small-margin-bottom: $zero-value;
 $input-small-bigger-margin-bottom: $zero-value;
+$input-margin-top: 10px;
+$input-bigger-margin-top: 10px;
+$input-small-margin-top: 8px;
+$input-small-bigger-margin-top: 8px;
 $input-small-padding: 6px;
+$float-input-small-padding: $zero-value;
+$float-input-small-wrap-padding-top: $zero-value;
 $input-small-padding-bottom: 6px;
 $input-bigger-small-padding: 11px;
+$float-input-bigger-small-padding: $zero-value;
+$float-input-bigger-small-wrap-padding-top: $zero-value;
 $input-small-child-padding: 6px;
 $input-bigger-small-child-padding: 11px;
 $input-bigger-small-padding-bottom: 11px;
 $input-font-family: $font-family;
 $input-border: $border-size $border-type;
+$float-input-border: $zero-value $border-type;
 $input-border-width: $one-value;
+$float-input-border-width: 1px;
 $input-focus-border-width: $one-value;
 $input-bg-color: $content-bg-color;
 $input-border-color: $content-border-color;
@@ -42,6 +62,7 @@ $input-success-color: $success-font-color;
 $input-warning-color: $warning-font-color;
 $input-error-color: $error-font-color;
 $input-disable-bg-color: $zero-value;
+$input-disable-font-color: $zero-value;
 $input-active-bg-color: $active-bg-color;
 $input-active-font-color: $active-font-color;
 $input-press-font-color: $active-font-color;
@@ -52,6 +73,8 @@ $input-placeholder: $header-border-color;
 $input-active-border-color: $active-bg-color;
 $input-group-active-border-color: $active-bg-color;
 $input-disable-border-type: $border-type;
+$input-disable-border-color: $zero-value;
+$input-disabled-group-bg-color: $zero-value;
 $input-border-left-width: $one-value;
 $input-group-active-border: $active-bg-color;
 $input-group-border: $zero-value;
@@ -70,6 +93,7 @@ $input-opacity-filter: 60;
 $input-group-border-width-focus: $one-value;
 $input-group-border-type-focus: $border-type;
 $input-group-border-color-focus: $active-bg-color;
+$input-group-border-color-hover: $zero-value;
 $input-group-border-right-focus: transparent $input-border-color transparent transparent;
 $input-group-border-left-focus: transparent transparent transparent $input-border-color;
 $input-group-full-border: $border-size $border-type;
@@ -79,7 +103,30 @@ $input-group-success-color: transparent;
 $input-group-warning-color: transparent;
 $input-group-error-color: transparent;
 $input-valid-border-bottom-width: $one-value;
+$input-group-pressed-color: $active-font-color;
+$input-select-font-color: $active-font-color;
 $input-right-border-width: $one-value;
+$float-label-font-size: 14px;
+$float-label-bigger-font-size: 15px;
+$float-label-small-font-size: 13px;
+$float-label-bigger-small-font-size: 14px;
+$input-border-size: 2px;
+$input-normal-height: 32px - $input-border-size;
+$input-bigger-height: 40px - $input-border-size;
+$input-small-height: 26px - $input-border-size;
+$input-bigger-small-height: 36px - $input-border-size;
+$input-full-height: 100%;
+$textarea-normal-height: auto;
+$textarea-bigger-height: auto;
+$textarea-small-height: auto;
+$textarea-bigger-small-height: auto;
+$textarea-full-height: 100%;
+$input-group-disabled-color: $zero-value;
+$input-group-hovered-color: $zero-value;
+$input-icon-font-size: 17px;
+$input-bigger-icon-font-size: 17px;
+$input-small-icon-font-size: 14px;
+$input-bigger-small-icon-font-size: 15px;
 $input-bigger-small-child-min-height: $zero-value;
 $input-small-child-min-height: $zero-value;
 $input-child-min-height: $zero-value;
@@ -111,6 +158,26 @@ $input-bigger-small-clear-icon-min-width: 24px;
 $input-small-clear-icon-min-height: 18px;
 $input-small-clear-icon-min-width: 18px;
 $input-bigger-small-clear-icon: 12px;
+$input-child-btn-padding: $zero-value 5px;
+$input-bigger-child-btn-padding: $zero-value 5px;
+$input-small-child-btn-padding: $zero-value 5px;
+$input-bigger-small-child-btn-padding: $zero-value 5px;
+@mixin input-sizing {
+  content: '';
+}
+@mixin input-height ($height) {
+  content: '';
+}
+@mixin input-state-color ($color) {
+  content: '';
+}
+@mixin input-selection {
+  content: '';
+}
+// sass-lint:disable no-vendor-prefixes  
+@mixin float-label-alignment {
+  content: '';
+}
 @mixin input-group-animation {
   content: '';
 }

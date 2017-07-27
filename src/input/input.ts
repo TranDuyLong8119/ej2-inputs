@@ -1,4 +1,4 @@
-import { createElement, attributes, addClass, removeClass } from '@syncfusion/ej2-base/dom';
+import { createElement, attributes, addClass, removeClass, detach, classList, closest } from '@syncfusion/ej2-base/dom';
 import { isNullOrUndefined } from '@syncfusion/ej2-base/util';
 const CLASSNAMES: ClassNames = {
     RTL: 'e-rtl',
@@ -12,6 +12,7 @@ const CLASSNAMES: ClassNames = {
     CLEARICONHIDE: 'e-clear-icon-hide',
     LABELTOP: 'e-label-top',
     LABELBOTTOM: 'e-label-bottom',
+    NOFLOATLABEL: 'e-no-float-label',
     INPUTCUSTOMTAG: 'e-input-custom-tag',
     FLOATCUSTOMTAG: 'e-float-custom-tag'
 };
@@ -46,58 +47,7 @@ export namespace Input {
          addClass([args.element], CLASSNAMES.INPUT);
          inputObject.container.appendChild(args.element);
         } else {
-           let inputElement: HTMLElement;
-           let floatLinelement: HTMLElement;
-           let floatLabelElement: HTMLElement;
-           if (args.floatLabelType === 'Auto') {
-             args.element.addEventListener('focus', function() : void {
-               let label: HTMLElement = <HTMLElement> getParentNode(this).getElementsByClassName('e-float-text')[0];
-               addClass ([label], CLASSNAMES.LABELTOP);
-               if (label.classList.contains(CLASSNAMES.LABELBOTTOM)) { removeClass([label], CLASSNAMES.LABELBOTTOM); }
-             });
-             args.element.addEventListener('blur', function() : void {
-               let parent: HTMLElement = getParentNode(this);
-               if (parent.getElementsByTagName('input')[0].value === '') {
-               let label: HTMLElement = <HTMLElement> parent.getElementsByClassName('e-float-text')[0];
-               if (label.classList.contains(CLASSNAMES.LABELTOP)) { removeClass([label], CLASSNAMES.LABELTOP); }
-               addClass([label], CLASSNAMES.LABELBOTTOM); }
-             });
-           }
-           inputObject.container = createInputContainer(args, CLASSNAMES.FLOATINPUT, CLASSNAMES.FLOATCUSTOMTAG, 'div');
-           args.element.parentNode.insertBefore(inputObject.container, args.element);
-           attributes(args.element, { 'required': 'true' });
-           floatLinelement = createElement('span', { className: CLASSNAMES.FLOATLINE });
-           floatLabelElement = createElement('label', { className: CLASSNAMES.FLOATTEXT });
-           if (!isNullOrUndefined(args.element.id) && args.element.id !== '') {
-             floatLabelElement.id =  'label_' + args.element.id.replace(/ /g, '_');
-             attributes(args.element, { 'aria-labelledby': floatLabelElement.id});
-           }
-           if (!isNullOrUndefined(args.element.placeholder) && args.element.placeholder !== '') {
-            floatLabelElement.innerHTML = args.element.placeholder;
-            args.element.removeAttribute('placeholder');
-           }
-           if (!isNullOrUndefined(args.properties) && !isNullOrUndefined(args.properties.placeholder) &&
-           args.properties.placeholder !== '') {
-            floatLabelElement.innerHTML = args.properties.placeholder;
-           }
-           inputObject.container.appendChild(args.element);
-           inputObject.container.appendChild(floatLinelement);
-           inputObject.container.appendChild(floatLabelElement);
-           updateLabelState(args.element.value, floatLabelElement);
-           if (args.floatLabelType === 'Always') {
-             if (floatLabelElement.classList.contains(CLASSNAMES.LABELBOTTOM)) {
-               removeClass([floatLabelElement], CLASSNAMES.LABELBOTTOM);
-             }
-             addClass([floatLabelElement], CLASSNAMES.LABELTOP);
-           }
-           if (args.floatLabelType === 'Auto') {
-             args.element.addEventListener('input', (event: KeyboardEvent) => {
-               updateLabelState(args.element.value, floatLabelElement);
-             });
-             args.element.addEventListener('blur', (event: FocusEvent) => {
-               updateLabelState(args.element.value, floatLabelElement);
-             });
-           }
+            createFloatingInput(args, inputObject);
         }
         args.element.addEventListener('focus', function() : void {
           let parent: HTMLElement = getParentNode(this);
@@ -112,7 +62,7 @@ export namespace Input {
           }
         });
         if (!isNullOrUndefined(args.properties) && !isNullOrUndefined(args.properties.showClearButton) && args.properties.showClearButton) {
-            createClearButton(args.element, inputObject.container);
+            inputObject.clearButton = createClearButton(args.element, inputObject.container);
             if (inputObject.container.classList.contains(CLASSNAMES.FLOATINPUT)) {
                 addClass([inputObject.container], CLASSNAMES.INPUTGROUP);
             }
@@ -127,6 +77,80 @@ export namespace Input {
         return inputObject;
     }
 
+    function _focusFn (): void {
+      let label: HTMLElement = <HTMLElement> getParentNode(this).getElementsByClassName('e-float-text')[0];
+      addClass ([label], CLASSNAMES.LABELTOP);
+      if (label.classList.contains(CLASSNAMES.LABELBOTTOM)) { removeClass([label], CLASSNAMES.LABELBOTTOM); }
+    }
+
+    function _blurFn (): void {
+      let parent: HTMLElement = getParentNode(this);
+      if (parent.getElementsByTagName('input')[0].value === '') {
+        let label: HTMLElement = <HTMLElement> parent.getElementsByClassName('e-float-text')[0];
+        if (label.classList.contains(CLASSNAMES.LABELTOP)) { removeClass([label], CLASSNAMES.LABELTOP); }
+        addClass([label], CLASSNAMES.LABELBOTTOM); }
+    }
+
+    function wireFloatingEvents(element: HTMLInputElement): void {
+      element.addEventListener('focus', _focusFn);
+      element.addEventListener('blur', _blurFn);
+    }
+    function unwireFloatingEvents(element: HTMLElement): void {
+      element.removeEventListener('focus', _focusFn);
+      element.removeEventListener('blur', _blurFn);
+    }
+    function createFloatingInput(args: InputArgs, inputObject: InputObject): void {
+        let inputElement: HTMLElement;
+        let floatLinelement: HTMLElement;
+        let floatLabelElement: HTMLElement;
+        if (args.floatLabelType === 'Auto') {
+            wireFloatingEvents(args.element);
+        }
+        if (isNullOrUndefined(inputObject.container)) {
+            inputObject.container = createInputContainer(args, CLASSNAMES.FLOATINPUT, CLASSNAMES.FLOATCUSTOMTAG, 'div');
+            args.element.parentNode.insertBefore(inputObject.container, args.element);
+        } else {
+            if (!isNullOrUndefined(args.customTag)) {
+              inputObject.container.classList.add(CLASSNAMES.FLOATCUSTOMTAG); }
+            inputObject.container.classList.add(CLASSNAMES.FLOATINPUT);
+        }
+        attributes(args.element, { 'required': '' });
+        floatLinelement = createElement('span', { className: CLASSNAMES.FLOATLINE });
+        floatLabelElement = createElement('label', { className: CLASSNAMES.FLOATTEXT });
+        if (!isNullOrUndefined(args.element.id) && args.element.id !== '') {
+            floatLabelElement.id = 'label_' + args.element.id.replace(/ /g, '_');
+            attributes(args.element, { 'aria-labelledby': floatLabelElement.id });
+        }
+        if (!isNullOrUndefined(args.element.placeholder) && args.element.placeholder !== '') {
+            floatLabelElement.innerHTML = args.element.placeholder;
+            args.element.removeAttribute('placeholder');
+        }
+        if (!isNullOrUndefined(args.properties) && !isNullOrUndefined(args.properties.placeholder) &&
+            args.properties.placeholder !== '') {
+            floatLabelElement.innerHTML = args.properties.placeholder;
+        }
+        if (!floatLabelElement.innerHTML) {
+            inputObject.container.classList.add(CLASSNAMES.NOFLOATLABEL);
+        }
+        inputObject.container.appendChild(args.element);
+        inputObject.container.appendChild(floatLinelement);
+        inputObject.container.appendChild(floatLabelElement);
+        updateLabelState(args.element.value, floatLabelElement);
+        if (args.floatLabelType === 'Always') {
+            if (floatLabelElement.classList.contains(CLASSNAMES.LABELBOTTOM)) {
+                removeClass([floatLabelElement], CLASSNAMES.LABELBOTTOM);
+            }
+            addClass([floatLabelElement], CLASSNAMES.LABELTOP);
+        }
+        if (args.floatLabelType === 'Auto') {
+            args.element.addEventListener('input', (event: KeyboardEvent) => {
+                updateLabelState(args.element.value, floatLabelElement);
+            });
+            args.element.addEventListener('blur', (event: FocusEvent) => {
+                updateLabelState(args.element.value, floatLabelElement);
+            });
+        }
+    }
     function setPropertyValue(args: InputArgs, inputObject: InputObject): InputObject {
       if (!isNullOrUndefined(args.properties)) {
         for (let prop of Object.keys(args.properties)) {
@@ -178,7 +202,7 @@ export namespace Input {
    /**
     * To create clear button.
     */
-    function createClearButton(element: HTMLInputElement, container: HTMLElement ): void {
+    function createClearButton(element: HTMLInputElement, container: HTMLElement ): HTMLElement {
         let button: HTMLElement = <HTMLElement>createElement('span', { className: CLASSNAMES.CLEARICON });
         container.appendChild(button);
         if (!isNullOrUndefined(privateInputObj.container) &&
@@ -187,6 +211,7 @@ export namespace Input {
         }
         updateIconState(element.value, button);
         wireClearBtnEvents(element, button);
+        return button;
     }
 
     function wireClearBtnEvents(element: HTMLInputElement, button: HTMLElement): void {
@@ -253,7 +278,11 @@ export namespace Input {
         if (parentElement.classList.contains(CLASSNAMES.FLOATINPUT)) {
          if (!isNullOrUndefined(placeholder) && placeholder !== '') {
            parentElement.getElementsByClassName(CLASSNAMES.FLOATTEXT)[0].textContent = placeholder;
-          }
+           parentElement.classList.remove(CLASSNAMES.NOFLOATLABEL);
+         } else {
+           parentElement.classList.add(CLASSNAMES.NOFLOATLABEL);
+           parentElement.getElementsByClassName(CLASSNAMES.FLOATTEXT)[0].textContent = '';
+         }
         } else {
          if (!isNullOrUndefined(placeholder) && placeholder !== '') {
             attributes(element, { 'placeholder': placeholder, 'aria-placeholder':  placeholder});
@@ -371,6 +400,40 @@ export namespace Input {
             }
       }
     }
+    export function removeFloating(input: InputObject): void {
+      let container: HTMLElement = input.container;
+      if (!isNullOrUndefined(container) && container.classList.contains(CLASSNAMES.FLOATINPUT)) {
+        let inputEle: HTMLElement = container.querySelector('input') as HTMLElement;
+        detach(container.querySelector('.' + CLASSNAMES.FLOATLINE));
+        detach(container.querySelector('.' + CLASSNAMES.FLOATTEXT));
+        classList(container, [CLASSNAMES.INPUTGROUP], [CLASSNAMES.FLOATINPUT]);
+        unwireFloatingEvents(inputEle);
+        inputEle.classList.add(CLASSNAMES.INPUT);
+        inputEle.removeAttribute('required');
+     }
+    }
+
+    export function addFloating(input: HTMLInputElement, type: FloatLabelType, placeholder: string): void {
+      let args: InputArgs = {element: input, floatLabelType: type , properties : {placeholder : placeholder } };
+      let container: HTMLElement = <HTMLElement>closest(input, '.' + CLASSNAMES.INPUTGROUP);
+      let iconEle: HTMLElement = <HTMLElement>container.querySelector('.e-input-group-icon');
+      let inputObj: InputObject = { container: container};
+      createFloatingInput(args, inputObj);
+      if (isNullOrUndefined(iconEle)) {
+          iconEle = container.querySelector('.e-input-group-btn')  as HTMLElement; }
+      if (isNullOrUndefined(iconEle)) {
+         iconEle = container.querySelector('.e-clear-icon') as HTMLElement; }
+      if (isNullOrUndefined(iconEle)) {
+          container.classList.remove(CLASSNAMES.INPUTGROUP);
+        } else {
+         let floatLine: HTMLElement = <HTMLElement>container.querySelector('.' + CLASSNAMES.FLOATLINE);
+         let floatText: HTMLElement = <HTMLElement>container.querySelector('.' + CLASSNAMES.FLOATTEXT);
+         container.insertBefore(input, iconEle);
+         container.insertBefore(floatLine, iconEle);
+         container.insertBefore(floatText, iconEle);
+        }
+    }
+
    /**
     * Creates a new span element with the given icons added and append it in container element.
     * ```
@@ -410,6 +473,7 @@ interface ClassNames {
     CLEARICONHIDE: string;
     LABELTOP: string;
     LABELBOTTOM: string;
+    NOFLOATLABEL: string;
     INPUTCUSTOMTAG: string;
     FLOATCUSTOMTAG: string;
 }

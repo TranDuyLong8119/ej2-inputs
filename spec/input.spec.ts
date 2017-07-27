@@ -388,6 +388,111 @@ describe('Input', () => {
                 element.remove();
             });
         });
+        describe('Remove and Add Floating feature', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement;
+            element = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: {  value: 'Floating text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 floatLabelType: "Auto",
+                 properties: {
+                  placeholder: 'Search Float',
+                }
+          });
+            });
+            it('Remove and add Floating', () => {
+                let container: HTMLElement = inputObj.container;
+                expect(container.childElementCount).toBe(3);
+                Input.removeFloating(inputObj);
+                expect(container.childElementCount).toBe(1);
+                Input.addFloating(element, 'Auto', 'Search Float');
+                expect(container.childElementCount).toBe(3);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('Remove floating without float sets', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement;
+            element = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: {  value: 'Floating text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+          });
+            });
+            it('Remove and add Floating', () => {
+                let container: HTMLElement = inputObj.container;
+                expect(container.childElementCount).toBe(1);
+                Input.removeFloating(inputObj);
+                expect(container.childElementCount).toBe(1);
+                Input.addFloating(element, 'Auto', 'Search Float');
+                expect(container.childElementCount).toBe(3);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('Remove floating with group-iocns', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement;
+            element = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: {  value: 'Floating text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 floatLabelType: "Auto",
+                 properties: {
+                  placeholder: 'Search Float',
+                }
+          });
+            Input.appendSpan('e-input-group-icon e-input-down', inputObj.container);
+            });
+            it('Remove and add Floating', () => {
+                let container: HTMLElement = inputObj.container;
+                expect(container.childElementCount).toBe(4);
+                Input.removeFloating(inputObj);
+                expect(container.childElementCount).toBe(2);
+                Input.addFloating(element, 'Auto', 'Search Float');
+                expect(container.childElementCount).toBe(4);
+                debugger;
+                expect(container.lastElementChild.classList.contains('e-input-down')).toBe(true);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('Remove and Add Floating feature with Clear Iocn', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement;
+            element = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: {  value: 'Floating text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 floatLabelType: "Auto",
+                 properties: {
+                  placeholder: 'Search Float',
+                  showClearButton: true
+                }
+          });
+            });
+            it('Remove and add Floating', () => {
+                let container: HTMLElement = inputObj.container;
+                expect(container.childElementCount).toBe(4);
+                Input.removeFloating(inputObj);
+                expect(container.childElementCount).toBe(2);
+                Input.addFloating(element, 'Auto', 'Search Float');
+                expect(container.childElementCount).toBe(4);
+                debugger;
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
     });
 });
 

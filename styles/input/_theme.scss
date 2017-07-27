@@ -15,14 +15,20 @@
     background: $input-bg-color;
   }
 
+  input.e-input:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]):not(:focus),
+  textarea.e-input:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]),
+  .e-input-group:hover:not(.e-success):not(.e-warning):not(.e-error),
+  .e-float-input:hover:not(.e-success):not(.e-warning):not(.e-error),
+  .e-float-input:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:not([disabled]) {
+    @if $skin-name == 'fabric' {
+      border-color: $input-group-border-color-hover;
+    }
+  }
+
   .e-input-group .e-input-group-icon {
     background: $input-bg-color;
     border-color: $input-border-color;
     color: $input-button-font-color;
-  }
-
-  .e-input[disabled] {
-    background: $input-disable-bg-color;
   }
 
   .e-input[readonly] {
@@ -35,9 +41,30 @@
     color: $input-button-font-color;
   }
 
-  .e-input-group .e-input-group-btn button:hover,
-  .e-input-group .e-input-group-icon:hover {
+  .e-input-group.e-disabled .e-input-group-icon,
+  .e-input-group.e-disabled .e-input-group-btn button {
+    color: $input-group-disabled-color;
+  }
+
+  .e-input[disabled],
+  .e-input-group.e-disabled,
+  .e-float-input input[disabled],
+  .e-float-input.e-disabled {
+    background: $input-disable-bg-color;
+    border-color: $input-disable-border-color;
+    color: $input-disable-font-color;
+  }
+
+  .e-input-group.e-disabled .e-input-group-icon,
+  .e-input-group.e-disabled .e-input-group-btn button {
+    background: $input-disabled-group-bg-color;
+    border-color: $input-disable-border-color;
+  }
+
+  .e-input-group:not(.e-disabled) .e-input-group-btn button:hover,
+  .e-input-group:not(.e-disabled) .e-input-group-icon:hover {
     background: $input-hover-bg-color;
+    color: $input-group-hovered-color;
   }
 
   .e-input-group.e-disabled .e-input-group-btn button:hover,
@@ -78,7 +105,9 @@
 
   .e-float-input input:focus ~ label.e-float-text,
   .e-float-input textarea:focus ~ label.e-float-text {
-    color: $input-active-accent-color;
+    @if $skin-name == 'material' {
+      color: $input-active-accent-color;
+    }
   }
 
   .e-float-input.e-error label.e-float-text,
@@ -93,52 +122,59 @@
   }
 
   .e-float-input.e-success input {
-    border-bottom-color: $input-success-color;
+    @include input-state-color ($input-success-color);
   }
 
   .e-float-input.e-warning input {
-    border-bottom-color: $input-warning-color;
+    @include input-state-color ($input-warning-color);
   }
 
   .e-float-input.e-error input {
-    border-bottom-color: $input-error-color;
+    @include input-state-color ($input-error-color);
   }
 
   .e-float-input:not(.e-input-group) .e-float-line::before,
   .e-float-input:not(.e-input-group) .e-float-line::after {
-    background: $input-active-accent-color;
+    @if $skin-name == 'material' {
+      background: $input-active-accent-color;
+    }
   }
 
   .e-float-input.e-success:not(.e-input-group) .e-float-line::before,
   .e-float-input.e-success:not(.e-input-group) .e-float-line::after {
-    background: $input-success-color;
+    @if $skin-name == 'material' {
+      background: $input-success-color;
+    }
   }
 
   .e-float-input.e-warning:not(.e-input-group) .e-float-line::before,
   .e-float-input.e-warning:not(.e-input-group) .e-float-line::after {
-    background: $input-warning-color;
+    @if $skin-name == 'material' {
+      background: $input-warning-color;
+    }
   }
 
   .e-float-input.e-error:not(.e-input-group) .e-float-line::before,
   .e-float-input.e-error:not(.e-input-group) .e-float-line::after {
-    background: $input-error-color;
+    @if $skin-name == 'material' {
+      background: $input-error-color;
+    }
   }
 
   .e-input-group:not(.e-disabled) .e-input-group-btn:active button,
   .e-input-group:not(.e-disabled) .e-input-group-icon:active {
     background: $input-group-pressed-bg;
-    color: $input-press-font-color;
+    color: $input-group-pressed-color;
   }
 
   input.e-input::selection,
   textarea.e-input::selection,
   .e-float-input input::selection {
-    background: $input-accent;
-    color: $input-active-font-color;
+    @include input-selection;
   }
 
-  // sass-lint:disable no-vendor-prefixes  
-  input.e-input::-webkit-input-placeholder {
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input:-moz-placeholder {
     color: $input-placeholder;
   }
 
@@ -147,13 +183,38 @@
     color: $input-placeholder;
   }
 
-  // sass-lint:disable no-vendor-prefixes  
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input:-moz-placeholder {
+    color: $input-placeholder;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
   input.e-input::-moz-placeholder {
     color: $input-placeholder;
   }
 
-  // sass-lint:disable no-vendor-prefixes  
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input::-moz-placeholder {
+    color: $input-placeholder;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
   input.e-input:-ms-input-placeholder {
+    color: $input-placeholder;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input:-ms-input-placeholder {
+    color: $input-placeholder;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input::-webkit-input-placeholder {
+    color: $input-placeholder;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input::-webkit-input-placeholder {
     color: $input-placeholder;
   }
 
@@ -181,9 +242,11 @@
     border-color: $input-border-color;
   }
 
-  .e-input:focus {
+  .e-input:focus:not(.e-success):not(.e-warning):not(.e-error),
+  .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:focus,
+  .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) textarea:focus {
     border-color: $input-active-border-color;
-   }
+  }
 
   .e-input-group:not(.e-success):not(.e-warning):not(.e-error) input.e-input:focus {
     border-color: $input-group-active-border-color;
@@ -226,6 +289,16 @@
     border-color: $input-group-full-border-color;
   }
 
+  .e-input-group:active:not(.e-success):not(.e-warning):not(.e-error) {
+    @if $skin-name == 'fabric' {
+      border-color: $input-active-border-color;
+    }
+  }
+
+  .e-input-group.e-disabled:not(.e-success):not(.e-warning):not(.e-error) {
+    border-color: $input-disable-border-color;
+  }
+
   .e-input-group {
     border-bottom-color: $input-border-color;
    }
@@ -242,15 +315,15 @@
   }
 
   .e-input-group.e-success {
-    border-bottom-color: $input-group-success-color;
+    @include input-state-color ($input-group-success-color);
   }
 
   .e-input-group.e-warning {
-    border-bottom-color: $input-group-warning-color;
+    @include input-state-color ($input-group-warning-color);
   }
 
   .e-input-group.e-error {
-    border-bottom-color: $input-group-error-color;
+    @include input-state-color ($input-group-error-color);
   }
 
   // Double border issue while adding floating input with class .e-input
@@ -259,4 +332,106 @@
     border-top-color: transparent;
   }
 
+  .e-float-input:not(.e-error) input:focus ~ label.e-float-text,
+  .e-float-input:not(.e-error) input:valid ~ label.e-float-text,
+  .e-float-input:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-float-input:not(.e-error) input[readonly] ~ label.e-label-top.e-float-text,
+  .e-float-input:not(.e-error) input[disabled] ~ label.e-label-top.e-float-text,
+  .e-float-input:not(.e-error) input label.e-float-text.e-label-top,
+  .e-float-input.e-bigger:not(.e-error) input:focus ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) input:valid ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) input[readonly] ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) input:focus ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) input[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) input[disabled] ~ label.e-float-text {
+    @if $skin-name == 'fabric' {
+      color: $input-font-color;
+    }
+  }
+
+  .e-float-input.e-small:not(.e-error) input:focus ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) input:valid ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-small .e-float-input:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-float-input.e-small:not(.e-error) input[readonly] ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) input:focus ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) input:valid ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) input[readonly] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) input:focus ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) input:valid ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) input ~ label.e-label-top.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) input[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) input[disabled] ~ label.e-float-text {
+    @if $skin-name == 'fabric' {
+      color: $input-font-color;
+    }
+  }
+
+  .e-float-input:not(.e-error) textarea:focus ~ label.e-float-text,
+  .e-float-input:not(.e-error) textarea:valid ~ label.e-float-text,
+  .e-float-input:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-float-input:not(.e-error) textarea[readonly] ~ label.e-label-top.e-float-text,
+  .e-float-input:not(.e-error) textarea[disabled] ~ label.e-label-top.e-float-text,
+  .e-float-input:not(.e-error) textarea label.e-float-text.e-label-top,
+  .e-float-input.e-bigger:not(.e-error) textarea:focus ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) textarea:valid ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) textarea[readonly] ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) textarea[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) textarea:focus ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) textarea:valid ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) textarea[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) textarea[disabled] ~ label.e-float-text {
+    @if $skin-name == 'fabric' {
+      color: $input-font-color;
+    }
+  }
+
+  .e-float-input.e-small:not(.e-error) textarea:focus ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) textarea:valid ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-small .e-float-input:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-float-input.e-small:not(.e-error) textarea[readonly] ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) textarea[disabled] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) textarea:focus ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) textarea:valid ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) textarea[readonly] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) textarea[disabled] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) textarea:focus ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) textarea:valid ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) textarea ~ label.e-label-top.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) textarea[readonly] ~ label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) textarea[disabled] ~ label.e-float-text {
+    @if $skin-name == 'fabric' {
+      color: $input-font-color;
+    }
+  }
+
+  .e-float-input.e-input-group.e-disabled .e-float-text,
+  .e-float-input.e-input-group.e-disabled .e-float-text.e-label-top,
+  .e-float-input input[disabled] ~ label.e-float-text,
+  .e-float-input input[disabled] ~ label.e-label-top.e-float-text,
+  .e-float-input.e-disabled label.e-float-text,
+  .e-float-input.e-disabled label.e-float-text.e-label-top,
+  .e-float-input:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-float-input:not(.e-error) input[disabled] ~ label.e-label-top.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-float-input.e-bigger:not(.e-error) input[disabled] ~ label.e-float-text.e-label-top,
+  .e-float-input.e-small:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-float-input.e-small:not(.e-error) input[disabled] ~ label.e-float-text.e-label-top,
+  .e-float-input.e-small.e-bigger:not(.e-error) input[disabled] ~ label.e-float-text,
+  .e-float-input.e-small.e-bigger:not(.e-error) input[disabled] ~ label.e-float-text.e-label-top {
+    @if $skin-name == 'fabric' {
+      color: $input-disable-font-color;
+    }
+  }
 }
