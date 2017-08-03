@@ -1,4 +1,4 @@
-import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge} from '@syncfusion/ej2-base/util';import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';import { NumericTextBoxHelper } from './numerictextbox-builder';import { Input, InputObject, FloatLabelType } from '../input/input';
+import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';import { isNullOrUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base/util';import { Internationalization, NumberFormatOptions, getNumericObject } from '@syncfusion/ej2-base';import { NumericTextBoxHelper } from './numerictextbox-builder';import { Input, InputObject, FloatLabelType } from '../input/input';
 import {ChangeEventArgs} from "./numerictextbox";
 import {ComponentModel} from '@syncfusion/ej2-base';
 
@@ -8,10 +8,10 @@ import {ComponentModel} from '@syncfusion/ej2-base';
 export interface NumericTextBoxModel extends ComponentModel{
 
     /**
-     * Specifies the root CSS class name to be added in the text boxes which allow you to customize the appearance.     * @default null     */    cssClass?: string;
+     * Gets or Sets the CSS classes to root element of the NumericTextBox which helps to customize the     * complete UI styles.     * @default null     */    cssClass?: string;
 
     /**
-     * Specifies the value of the numeric textbox.     * @default null     */    value?: number;
+     * Sets the value of the NumericTextBox.     * @default null     */    value?: number;
 
     /**
      * Specifies a minimum value that is allowed a user can enter.     * @default null     */    min?: number;
@@ -20,54 +20,57 @@ export interface NumericTextBoxModel extends ComponentModel{
      * Specifies a maximum value that is allowed a user can enter.     * @default null     */    max?: number;
 
     /**
-     * Specifies the incremental or decremental step size for the numeric textbox.     * @default 1     */    step?: number;
+     * Specifies the incremental or decremental step size for the NumericTextBox.     * @default 1     */    step?: number;
 
     /**
-     * Specifies the width of the numeric textbox.     * @default null     */    width?: number | string;
+     * Specifies the width of the NumericTextBox.     * @default null     */    width?: number | string;
 
     /**
-     * Specifies the height of the numeric textbox.     * @default null     */    height?: number | string;
+     * Specifies the height of the NumericTextBox.     * @default null     */    height?: number | string;
 
     /**
-     * The hint displayed by the numeric textbox when it is empty.     * @default null     */    placeholder?: string;
+     * Gets or sets the string shown as a hint/placeholder when the NumericTextBox is empty.     * It acts as a label and floats above the NumericTextBox based on the     * <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox     * /api-numericTextBox.html#floatlabeltype-string" target="_blank">floatLabelType.</a></b>     * @default null     */    placeholder?: string;
 
     /**
-     * Specifies whether the up and down spin buttons should be displayed in numeric textbox.     * @default true     */    showSpinButton?: boolean;
+     * Specifies whether the up and down spin buttons should be displayed in NumericTextBox.     * @default true     */    showSpinButton?: boolean;
 
     /**
-     * Toggles the readonly state of the numeric textbox. When the numeric is readonly, it does not allow user interactions.     * @default false     */    readonly?: boolean;
+     * Sets a value that enables or disables the readonly state on the NumericTextBox. If it is true,      * NumericTextBox will not allow your input.     * @default false     */    readonly?: boolean;
 
     /**
-     * Specifies a value that indicates whether the numeric textbox control is enabled or not.     * @default true     */    enabled?: boolean;
+     * Sets a value that enables or disables the NumericTextBox control.     * @default true     */    enabled?: boolean;
 
     /**
-     * Specifies the right to left direction to numeric textbox.     * @default false     */    enableRtl?: boolean;
+     * Sets a value that enables or disables the RTL mode on the NumericTextBox. If it is true,      * NumericTextBox will display the content in the right to left direction.     * @default false     */    enableRtl?: boolean;
 
     /**
-     * Specifies the number format that indicates the display format for the value of the numeric textbox.     * @default 'n2'     */    format?: string;
+     * Sets a value that enables or disables the persisting state of the NumericTextBox after reloading the page.     * @default false     */    enablePersistence?: boolean;
 
     /**
-     * Specifies the number precision applied to the textbox value when the numeric textbox is focused.     * @default null     */    decimals?: number;
+     * Specifies the number format that indicates the display format for the value of the NumericTextBox.     * @default 'n2'     */    format?: string;
+
+    /**
+     * Specifies the number precision applied to the textbox value when the NumericTextBox is focused.     * @default null     */    decimals?: number;
 
     /**
      * Specifies the currency code to use in currency formatting.     * Possible values are the ISO 4217 currency codes, such as 'USD' for the US dollar,'EUR' for the euro.     * @default null     */    currency?: string;
 
     /**
-     * Specifies a value that indicates whether the numeric textbox control allows the value for the specified range.     * If it is false, it allows the value outside of the range, but it highlights the textbox with error class.     * Otherwise it is internally changed to the correct appropriate value.     * @default true     */    strictMode?: boolean;
+     * Specifies a value that indicates whether the NumericTextBox control allows the value for the specified range.     * * If it is true, the input value will be restricted between the min and max range.     * The typed value gets modified to fit the range on focused out state.     * ```html     * <input type='text' id="numeric"/>     * ```     * ```typescript     * <script>     *   var numericObj = new NumericTextBox({ min: 10, max: 20, value: 15 });     *   numericObj.appendTo("#numeric");     * </script>     * ```     * * Else, it allows any value even out of range value,     * At that time of wrong value entered, the error class will be added to the component to highlight the error.     * ```html     * <input type='text' id="numeric"/>     * ```     * ```typescript     * <script>     *   var numericObj = new NumericTextBox({ strictMode: false, min: 10, max: 20, value: 15 });     *   numericObj.appendTo("#numeric");     * </script>     * ```     * @default true     */    strictMode?: boolean;
 
     /**
      * Specifies whether the decimals length should be restricted during typing.     * @default false     */    validateDecimalOnType?: boolean;
 
     /**
-     * Specifies a value that indicates floating label functionality.     * Specifies how the floating label works.     * Possible values are:     * * Never - Never floats the label in the numeric textbox when the placeholder is available.     * * Always -  The floating label will always float above the numeric textbox.     * * Auto - The floating label will float above the numeric textbox after focusing or entering a value in the numeric textbox.     */    floatLabelType?: FloatLabelType;
+     * Sets the type of floating label which enables or disables the floating label in the NumericTextBox.     * The <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox/     * api-numericTextBox.html#placeholder-string" target="_blank">placeholder</a></b> value acts as a label     * and floats above the NumericTextBox based on the below values.     * Possible values are:     * * Never - Never floats the label in the NumericTextBox when the placeholder is available.     * * Always - The floating label always floats above the NumericTextBox.     * * Auto - The floating label floats above the NumericTextBox after focusing it or when enters the value in it.     * @default Auto     */    floatLabelType?: FloatLabelType;
 
     /**
-     * Specifies the callback function for create event and it triggers after the numeric textbox control is created successfully.     * @event     */    created?: EmitType<Object>;
+     * Triggers when the NumericTextBox component is created.     * @event     */    created?: EmitType<Object>;
 
     /**
-     * Specifies the callback function for destroy event and it triggers when the numeric textbox control is destroyed successfully.     * @event     */    destroyed?: EmitType<Object>;
+     * Triggers when the NumericTextBox component is destroyed.     * @event     */    destroyed?: EmitType<Object>;
 
     /**
-     * Specifies the callback function for change event and it triggers after the textbox value is changed.     * @event     */    change?: EmitType<ChangeEventArgs>;
+     * Triggers when the value of the NumericTextBox changes.     * @event     */    change?: EmitType<ChangeEventArgs>;
 
 }

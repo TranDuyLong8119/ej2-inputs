@@ -1,26 +1,28 @@
 import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
 import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';
-import { isNullOrUndefined, isUndefined, getValue, formatUnit, setValue, merge} from '@syncfusion/ej2-base/util';
-import { Internationalization , NumberFormatOptions, getNumericObject} from '@syncfusion/ej2-base';
+import { isNullOrUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base/util';
+import { Internationalization, NumberFormatOptions, getNumericObject } from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
 import { NumericTextBoxHelper } from './numerictextbox-builder';
 import { Input, InputObject, FloatLabelType } from '../input/input';
 
 const ROOT: string = 'e-numeric';
 const SPINICON: string = 'e-input-group-icon';
-const SPINUP : string = 'e-spin-up';
-const SPINDOWN : string = 'e-spin-down';
-const ERROR : string = 'e-error';
+const SPINUP: string = 'e-spin-up';
+const SPINDOWN: string = 'e-spin-down';
+const ERROR: string = 'e-error';
 const INCREMENT: string = 'increment';
 const DECREMENT: string = 'decrement';
-const INTREGEXP : RegExp = new RegExp('/^(-)?(\d*)$/');
-const DECIMALSEPARATOR : string = '.';
+const INTREGEXP: RegExp = new RegExp('/^(-)?(\d*)$/');
+const DECIMALSEPARATOR: string = '.';
 
 /**
  * Represents the NumericTextBox component that allows the user to enter only numeric values.
  * ```html
  * <input type='text' id="numeric"/>
+ * ```
+ * ```typescript
  * <script>
  *   var numericObj = new NumericTextBox({ value: 10 });
  *   numericObj.appendTo("#numeric");
@@ -41,28 +43,30 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private prevValue: number;
     private isValidState: boolean;
     private isFocused: boolean;
+    private isPrevFocused: boolean = false;
     private instance: Internationalization;
     private cultureInfo: NumberFormatOptions;
     private inputStyle: string;
     private inputName: string;
-    private decimalSeparator : string = '.';
+    private decimalSeparator: string = '.';
     private angularTagName: string;
-    private intRegExp : RegExp = new RegExp('/^(-)?(\d*)$/');
-    private l10n: L10n ;
+    private intRegExp: RegExp = new RegExp('/^(-)?(\d*)$/');
+    private l10n: L10n;
     private isCalled: boolean = false;
     private changeEventArgs: ChangeEventArgs;
 
     /*NumericTextBox Options */
 
     /**
-     * Specifies the root CSS class name to be added in the text boxes which allow you to customize the appearance.
+     * Gets or Sets the CSS classes to root element of the NumericTextBox which helps to customize the
+     * complete UI styles.
      * @default null
      */
     @Property('')
     public cssClass: string;
 
     /**
-     * Specifies the value of the numeric textbox.
+     * Sets the value of the NumericTextBox.
      * @default null
      */
     @Property(null)
@@ -83,70 +87,82 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     public max: number;
 
     /**
-     * Specifies the incremental or decremental step size for the numeric textbox.
+     * Specifies the incremental or decremental step size for the NumericTextBox.
      * @default 1
      */
     @Property(1)
     public step: number;
 
     /**
-     * Specifies the width of the numeric textbox.
+     * Specifies the width of the NumericTextBox.
      * @default null
      */
     @Property(null)
     public width: number | string;
 
     /**
-     * Specifies the height of the numeric textbox.
+     * Specifies the height of the NumericTextBox.
      * @default null
      */
     @Property(null)
     public height: number | string;
 
     /**
-     * The hint displayed by the numeric textbox when it is empty.
+     * Gets or sets the string shown as a hint/placeholder when the NumericTextBox is empty.
+     * It acts as a label and floats above the NumericTextBox based on the
+     * <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox
+     * /api-numericTextBox.html#floatlabeltype-string" target="_blank">floatLabelType.</a></b>
      * @default null
      */
     @Property(null)
     public placeholder: string;
 
     /**
-     * Specifies whether the up and down spin buttons should be displayed in numeric textbox.
+     * Specifies whether the up and down spin buttons should be displayed in NumericTextBox.
      * @default true
      */
     @Property(true)
     public showSpinButton: boolean;
 
     /**
-     * Toggles the readonly state of the numeric textbox. When the numeric is readonly, it does not allow user interactions.
+     * Sets a value that enables or disables the readonly state on the NumericTextBox. If it is true, 
+     * NumericTextBox will not allow your input.
      * @default false
      */
     @Property(false)
     public readonly: boolean;
 
     /**
-     * Specifies a value that indicates whether the numeric textbox control is enabled or not.
+     * Sets a value that enables or disables the NumericTextBox control.
      * @default true
      */
     @Property(true)
     public enabled: boolean;
 
     /**
-     * Specifies the right to left direction to numeric textbox.
+     * Sets a value that enables or disables the RTL mode on the NumericTextBox. If it is true, 
+     * NumericTextBox will display the content in the right to left direction.
      * @default false
      */
     @Property(false)
     public enableRtl: boolean;
 
     /**
-     * Specifies the number format that indicates the display format for the value of the numeric textbox.
+     * Sets a value that enables or disables the persisting state of the NumericTextBox after reloading the page.
+     * @default false
+     */
+    @Property(false)
+    public enablePersistence: boolean;
+
+    /**
+     * Specifies the number format that indicates the display format for the value of the NumericTextBox.
      * @default 'n2'
      */
     @Property('n2')
     public format: string;
 
     /**
-     * Specifies the number precision applied to the textbox value when the numeric textbox is focused.
+     * Specifies the number precision applied to the textbox value when the NumericTextBox is focused.
      * @default null
      */
     @Property(null)
@@ -161,9 +177,29 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     public currency: string;
 
     /**
-     * Specifies a value that indicates whether the numeric textbox control allows the value for the specified range.
-     * If it is false, it allows the value outside of the range, but it highlights the textbox with error class.
-     * Otherwise it is internally changed to the correct appropriate value.
+     * Specifies a value that indicates whether the NumericTextBox control allows the value for the specified range.
+     * * If it is true, the input value will be restricted between the min and max range.
+     * The typed value gets modified to fit the range on focused out state.
+     * ```html
+     * <input type='text' id="numeric"/>
+     * ```
+     * ```typescript
+     * <script>
+     *   var numericObj = new NumericTextBox({ min: 10, max: 20, value: 15 });
+     *   numericObj.appendTo("#numeric");
+     * </script>
+     * ```
+     * * Else, it allows any value even out of range value,
+     * At that time of wrong value entered, the error class will be added to the component to highlight the error.
+     * ```html
+     * <input type='text' id="numeric"/>
+     * ```
+     * ```typescript
+     * <script>
+     *   var numericObj = new NumericTextBox({ strictMode: false, min: 10, max: 20, value: 15 });
+     *   numericObj.appendTo("#numeric");
+     * </script>
+     * ```
      * @default true
      */
     @Property(true)
@@ -177,43 +213,46 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     public validateDecimalOnType: boolean;
 
     /**
-     * Specifies a value that indicates floating label functionality.
-     * Specifies how the floating label works.
+     * Sets the type of floating label which enables or disables the floating label in the NumericTextBox.
+     * The <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox/
+     * api-numericTextBox.html#placeholder-string" target="_blank">placeholder</a></b> value acts as a label
+     * and floats above the NumericTextBox based on the below values.
      * Possible values are:
-     * * Never - Never floats the label in the numeric textbox when the placeholder is available.
-     * * Always -  The floating label will always float above the numeric textbox.
-     * * Auto - The floating label will float above the numeric textbox after focusing or entering a value in the numeric textbox.
+     * * Never - Never floats the label in the NumericTextBox when the placeholder is available.
+     * * Always - The floating label always floats above the NumericTextBox.
+     * * Auto - The floating label floats above the NumericTextBox after focusing it or when enters the value in it.
+     * @default Auto
      */
     @Property('Auto')
     public floatLabelType: FloatLabelType;
 
     /**
-     * Specifies the callback function for create event and it triggers after the numeric textbox control is created successfully.
+     * Triggers when the NumericTextBox component is created.
      * @event
      */
     @Event()
     public created: EmitType<Object>;
 
     /**
-     * Specifies the callback function for destroy event and it triggers when the numeric textbox control is destroyed successfully.
+     * Triggers when the NumericTextBox component is destroyed.
      * @event
      */
     @Event()
     public destroyed: EmitType<Object>;
 
     /**
-     * Specifies the callback function for change event and it triggers after the textbox value is changed.
+     * Triggers when the value of the NumericTextBox changes.
      * @event
      */
     @Event()
     public change: EmitType<ChangeEventArgs>;
 
-    constructor(options?: NumericTextBoxModel, element?: string |  HTMLInputElement) {
+    constructor(options?: NumericTextBoxModel, element?: string | HTMLInputElement) {
         super(options, <HTMLInputElement | string>element);
     }
 
     protected preRender(): void {
-        let ejInstance: Object = getValue ('ej2_instances', this.element);
+        let ejInstance: Object = getValue('ej2_instances', this.element);
         this.cloneElement = <HTMLElement>this.element.cloneNode(true);
         this.angularTagName = null;
         if (this.element.tagName === 'EJ-NUMERICTEXTBOX') {
@@ -231,7 +270,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
         attributes(this.element, { 'role': 'spinbutton', 'tabindex': '0', 'autocomplete': 'off', 'aria-live': 'assertive' });
         let localeText: object = { incrementTitle: 'Increment value', decrementTitle: 'Decrement value', placeholder: '' };
-        this.l10n = new L10n('numerictextbox', localeText , this.locale);
+        this.l10n = new L10n('numerictextbox', localeText, this.locale);
         this.isValidState = true;
         this.inputStyle = null;
         this.inputName = null;
@@ -260,45 +299,47 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             this.changeValue(this.value);
             this.wireEvents();
             if (this.value !== null && !isNaN(this.value)) {
-              if (this.decimals) {
-                this.setProperties({ value: this.roundNumber(this.value, this.decimals) }, true);
-              }
+                if (this.decimals) {
+                    this.setProperties({ value: this.roundNumber(this.value, this.decimals) }, true);
+                }
             }
         }
     }
 
-    private checkAttributes() : void {
-        let attributes : string []  = ['value', 'min', 'max', 'step', 'disabled', 'readonly', 'style', 'name'];
+    private checkAttributes(): void {
+        let attributes: string[] = ['value', 'min', 'max', 'step', 'disabled', 'readonly', 'style', 'name'];
         for (let prop of attributes) {
             if (!isNullOrUndefined(this.element.getAttribute(prop))) {
                 switch (prop) {
-                case 'disabled':
-                    let enabled: boolean  = this.element.getAttribute(prop) === 'disabled' ||
+                    case 'disabled':
+                        let enabled: boolean = this.element.getAttribute(prop) === 'disabled' ||
                             this.element.getAttribute(prop) === 'true' ? false : true;
-                    this.setProperties({ enabled: enabled }, true);
-                    break;
-                case 'readonly':
-                    let readonly: boolean = this.element.getAttribute(prop) === 'readonly'
+                        this.setProperties({ enabled: enabled }, true);
+                        break;
+                    case 'readonly':
+                        let readonly: boolean = this.element.getAttribute(prop) === 'readonly'
                             || this.element.getAttribute(prop) === 'true' ? true : false;
-                    this.setProperties({ readonly: readonly }, true);
-                    break;
-                case 'style':
-                    this.inputStyle = this.element.getAttribute(prop);
-                    break;
-                case 'name':
-                    this.inputName = this.element.getAttribute(prop);
-                    break;
-                default :
-                    let value : number = this.instance.getNumberParser({ format : 'n'}) (this.element.getAttribute(prop));
-                    if ((value !== null && !isNaN(value)) || (prop === 'value')) { this.setProperties(setValue(prop, value, {}), true); }
-                    break;
+                        this.setProperties({ readonly: readonly }, true);
+                        break;
+                    case 'style':
+                        this.inputStyle = this.element.getAttribute(prop);
+                        break;
+                    case 'name':
+                        this.inputName = this.element.getAttribute(prop);
+                        break;
+                    default:
+                        let value: number = this.instance.getNumberParser({ format: 'n' })(this.element.getAttribute(prop));
+                        if ((value !== null && !isNaN(value)) || (prop === 'value')) {
+                            this.setProperties(setValue(prop, value, {}), true);
+                        }
+                        break;
                 }
             }
         }
     }
 
     private updatePlaceholder(): void {
-        this.setProperties({ placeholder: this.l10n.getConstant ('placeholder') }, true);
+        this.setProperties({ placeholder: this.l10n.getConstant('placeholder') }, true);
     }
 
     private initCultureFunc(): void {
@@ -307,7 +348,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     private initCultureInfo(): void {
         this.cultureInfo.format = this.format;
-        if ( getValue('currency', this) !== null) { setValue( 'currency', this.currency, this.cultureInfo); }
+        if (getValue('currency', this) !== null) { setValue('currency', this.currency, this.cultureInfo); }
     }
 
     /* Wrapper creation */
@@ -330,7 +371,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.hiddenInput = <HTMLInputElement>(createElement('input', { attrs: { type: 'hidden' } }));
         this.inputName = this.inputName !== null ? this.inputName : this.element.id;
         this.element.removeAttribute('name');
-        if (!isUndefined(this.inputName)) { attributes(this.hiddenInput, { 'name': this.inputName }); }
+        attributes(this.hiddenInput, { 'name': this.inputName });
         this.container.insertBefore(this.hiddenInput, this.element);
         if (this.inputStyle !== null) { attributes(this.container, { 'style': this.inputStyle }); }
     }
@@ -338,57 +379,61 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     /* Spinner creation */
     private spinBtnCreation(): void {
         this.spinDown = Input.appendSpan(SPINICON + ' ' + SPINDOWN, this.container);
-        attributes(this.spinDown, { 'title':  this.l10n.getConstant ('decrementTitle'),
-        'aria-label': this.l10n.getConstant ('decrementTitle') });
+        attributes(this.spinDown, {
+            'title': this.l10n.getConstant('decrementTitle'),
+            'aria-label': this.l10n.getConstant('decrementTitle')
+        });
         this.spinUp = Input.appendSpan(SPINICON + ' ' + SPINUP, this.container);
-        attributes(this.spinUp, { 'title':  this.l10n.getConstant ('incrementTitle'),
-        'aria-label': this.l10n.getConstant ('incrementTitle') });
+        attributes(this.spinUp, {
+            'title': this.l10n.getConstant('incrementTitle'),
+            'aria-label': this.l10n.getConstant('incrementTitle')
+        });
         this.wireSpinBtnEvents();
     }
 
     private validateMinMax(): void {
-        if (!(typeof(this.min) === 'number' && !isNaN(this.min))) {
+        if (!(typeof (this.min) === 'number' && !isNaN(this.min))) {
             this.setProperties({ min: -(Number.MAX_VALUE) }, true);
         }
-        if (!(typeof(this.max) === 'number' && !isNaN(this.max))) {
+        if (!(typeof (this.max) === 'number' && !isNaN(this.max))) {
             this.setProperties({ max: Number.MAX_VALUE }, true);
         }
         if (this.decimals !== null) {
-          if (this.min !== -(Number.MAX_VALUE)) {
-            this.setProperties({ min: this.instance.getNumberParser({format: 'n'})(this.formattedValue(this.decimals, this.min))}, true);
-          }
-          if (this.max !== (Number.MAX_VALUE)) {
-            this.setProperties({ max: this.instance.getNumberParser({format: 'n'})(this.formattedValue(this.decimals, this.max))}, true);
-          }
+            if (this.min !== -(Number.MAX_VALUE)) {
+            this.setProperties({ min: this.instance.getNumberParser({ format: 'n' })(this.formattedValue(this.decimals, this.min)) }, true);
+            }
+            if (this.max !== (Number.MAX_VALUE)) {
+            this.setProperties({ max: this.instance.getNumberParser({ format: 'n' })(this.formattedValue(this.decimals, this.max)) }, true);
+            }
         }
         this.setProperties({ min: this.min > this.max ? this.max : this.min }, true);
         attributes(this.element, { 'aria-valuemin': this.min.toString(), 'aria-valuemax': this.max.toString() });
     }
 
     private formattedValue(decimals: number, value: number): string {
-      return this.instance.getNumberFormat({
-      maximumFractionDigits: decimals,
-      minimumFractionDigits: decimals, useGrouping: false
-      })(value);
+        return this.instance.getNumberFormat({
+            maximumFractionDigits: decimals,
+            minimumFractionDigits: decimals, useGrouping: false
+        })(value);
     }
 
     private validateStep(): void {
-      if (this.decimals !== null) {
-        this.setProperties({ step: this.instance.getNumberParser({format: 'n'})(this.formattedValue(this.decimals, this.step))}, true);
-      }
+        if (this.decimals !== null) {
+        this.setProperties({ step: this.instance.getNumberParser({ format: 'n' })(this.formattedValue(this.decimals, this.step)) }, true);
+        }
     }
 
     private action(operation: string): void {
-        let value : number = this.isFocused ? this.instance.getNumberParser({format: 'n'})(this.element.value) : this.value;
+        let value: number = this.isFocused ? this.instance.getNumberParser({ format: 'n' })(this.element.value) : this.value;
         this.changeValue(this.performAction(value, this.step, operation));
         this.raiseChangeEvent();
     }
 
     private checkErrorClass(): void {
         if (this.isValidState) {
-            removeClass([this.container] , ERROR);
+            removeClass([this.container], ERROR);
         } else {
-            addClass([this.container] , ERROR);
+            addClass([this.container], ERROR);
         }
         attributes(this.element, { 'aria-invalid': this.isValidState ? 'false' : 'true' });
     }
@@ -433,16 +478,16 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     private changeHandler(event: Event): void {
         if (!this.element.value.length) {
-            this.setProperties({ value : null }, true);
+            this.setProperties({ value: null }, true);
         }
-        let parsedInput: number = this.instance.getNumberParser({format: 'n'})(this.element.value);
-        this.updateValue (parsedInput, event);
-     }
+        let parsedInput: number = this.instance.getNumberParser({ format: 'n' })(this.element.value);
+        this.updateValue(parsedInput, event);
+    }
 
-    private raiseChangeEvent(event ?: Event) : void {
+    private raiseChangeEvent(event?: Event): void {
         if (this.prevValue !== this.value) {
             let eventArgs: Object = {};
-            this.changeEventArgs =  { value: this.value, previousValue : this.prevValue };
+            this.changeEventArgs = { value: this.value, previousValue: this.prevValue };
             if (event) { this.changeEventArgs.event = event; }
             merge(eventArgs, this.changeEventArgs);
             this.prevValue = this.value;
@@ -450,16 +495,16 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
     }
 
-    private pasteHandler (): void {
-      let beforeUpdate: string = this.element.value;
-      setTimeout(() => {
-        if (!this.numericRegex().test(this.element.value)) {
-          this.element.value = beforeUpdate;
-        }
-      });
+    private pasteHandler(): void {
+        let beforeUpdate: string = this.element.value;
+        setTimeout(() => {
+            if (!this.numericRegex().test(this.element.value)) {
+                this.element.value = beforeUpdate;
+            }
+        });
     }
 
-    private keyDownHandler (event: KeyboardEvent) : void {
+    private keyDownHandler(event: KeyboardEvent): void {
         switch (event.keyCode) {
             case 38:
                 event.preventDefault();
@@ -473,7 +518,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
     };
 
-    private performAction (value: number, step: number, operation: string): number {
+    private performAction(value: number, step: number, operation: string): number {
         if (value === null || isNaN(value)) {
             value = 0;
         }
@@ -482,7 +527,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         return this.strictMode ? this.trimValue(updatedValue) : updatedValue;
     };
 
-    private correctRounding (value: number, step: number, result: number): number {
+    private correctRounding(value: number, step: number, result: number): number {
         let floatExp: RegExp = new RegExp('[,.](.*)');
         let valueText: string = value.toString();
         let stepText: string = step.toString();
@@ -497,13 +542,13 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         return result;
     };
 
-    private roundValue (result: number, precision : number): number {
+    private roundValue(result: number, precision: number): number {
         precision = precision || 0;
         let divide: number = Math.pow(10, precision);
-        return result *= divide, result = Math.round(result) / divide ;
+        return result *= divide, result = Math.round(result) / divide;
     };
 
-    private updateValue (value: number, event? : Event) : void {
+    private updateValue(value: number, event?: Event): void {
         if (value !== null && !isNaN(value)) {
             if (this.decimals) {
                 value = this.roundNumber(value, this.decimals);
@@ -513,37 +558,37 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.raiseChangeEvent(event);
     }
 
-    private changeValue (value: number): void {
+    private changeValue(value: number): void {
         if (!(value || value === 0)) {
             value = null;
-            this.setProperties({ value : value }, true);
+            this.setProperties({ value: value }, true);
         } else {
-          let numberOfDecimals: number;
-          let decimalPart: string = value.toString().split('.')[1];
-          numberOfDecimals = !decimalPart || !decimalPart.length ? 0 : decimalPart.length;
-          if (this.decimals !== null) {
-            numberOfDecimals = numberOfDecimals < this.decimals ? numberOfDecimals : this.decimals;
-          }
-          this.setProperties({ value : this.roundNumber(value, numberOfDecimals) }, true);
+            let numberOfDecimals: number;
+            let decimalPart: string = value.toString().split('.')[1];
+            numberOfDecimals = !decimalPart || !decimalPart.length ? 0 : decimalPart.length;
+            if (this.decimals !== null) {
+                numberOfDecimals = numberOfDecimals < this.decimals ? numberOfDecimals : this.decimals;
+            }
+            this.setProperties({ value: this.roundNumber(value, numberOfDecimals) }, true);
         }
         this.modifyText();
         if (!this.strictMode) { this.validateState(); }
     };
 
-    private modifyText (): void {
+    private modifyText(): void {
         if (this.value || this.value === 0) {
-          let value: string = this.formatNumber();
-          this.element.value = this.isFocused ? value : this.instance.getNumberFormat(this.cultureInfo)(this.value);
-          attributes(this.element, { 'aria-valuenow': value });
-          this.hiddenInput.value = value;
+            let value: string = this.formatNumber();
+            this.element.value = this.isFocused ? value : this.instance.getNumberFormat(this.cultureInfo)(this.value);
+            attributes(this.element, { 'aria-valuenow': value });
+            this.hiddenInput.value = value;
         } else {
-          this.element.value = '';
-          this.element.removeAttribute('aria-valuenow');
-          this.hiddenInput.value = null;
+            this.element.value = '';
+            this.element.removeAttribute('aria-valuenow');
+            this.hiddenInput.value = null;
         }
     };
 
-    private validateState (): void {
+    private validateState(): void {
         this.isValidState = true;
         if (this.value || this.value === 0) {
             this.isValidState = !(this.value > this.max || this.value < this.min);
@@ -551,7 +596,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.checkErrorClass();
     }
 
-    private formatNumber () : string {
+    private formatNumber(): string {
         let numberOfDecimals: number;
         let currentValue: number = this.value;
         let decimalPart: string = currentValue.toString().split('.')[1];
@@ -565,7 +610,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         })(this.value);
     };
 
-    private trimValue (value: number): number {
+    private trimValue(value: number): number {
         if (value > this.max) {
             return this.max;
         }
@@ -574,12 +619,12 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
         return value;
     };
-    private roundNumber (value: number, precision: number): number {
-        let result : number = value;
+    private roundNumber(value: number, precision: number): number {
+        let result: number = value;
         let decimals: number = precision || 0;
         let result1: string[] = result.toString().split('e');
         result = Math.round(Number(result1[0] + 'e' + (result1[1] ? (Number(result1[1]) + decimals) : decimals)));
-        let result2: string [] = result.toString().split('e');
+        let result2: string[] = result.toString().split('e');
         result = Number(result2[0] + 'e' + (result2[1] ? (Number(result2[1]) - decimals) : -decimals));
         return Number(result.toFixed(decimals));
     };
@@ -588,7 +633,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         return false;
     }
 
-    private keyPressHandler (event: KeyboardEvent): boolean {
+    private keyPressHandler(event: KeyboardEvent): boolean {
         if (event.which === 0 || event.metaKey || event.ctrlKey || event.keyCode === 8 || event.keyCode === 13) { return true; }
         let currentChar: string = String.fromCharCode(event.which);
         let text: string = this.element.value;
@@ -602,7 +647,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
     };
 
-    private numericRegex (): RegExp {
+    private numericRegex(): RegExp {
         let numericObject: Object = getNumericObject(this.locale);
         let decimalSeparator: string = getValue('decimal', numericObject);
         let fractionRule: string = '*';
@@ -621,8 +666,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     private mouseWheel(event: MouseWheelEvent): void {
         event.preventDefault();
-        let delta : number;
-        let rawEvent : WheelEvent = event;
+        let delta: number;
+        let rawEvent: WheelEvent = event;
         if (rawEvent.wheelDelta) {
             delta = rawEvent.wheelDelta / 120;
         } else if (rawEvent.detail) {
@@ -636,38 +681,58 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.cancelEvent(event);
     }
 
-     private focusIn (event: FocusEvent): void {
+    private focusIn(event: FocusEvent): void {
         if (!this.enabled || this.readonly) { return; }
         this.isFocused = true;
-        removeClass([this.container] , ERROR);
+        removeClass([this.container], ERROR);
         this.prevValue = this.value;
         if ((this.value || this.value === 0)) {
             let formatValue: string = this.formatNumber();
             this.element.value = formatValue;
-            this.element.setSelectionRange(formatValue.length, formatValue.length);
+            if (!this.isPrevFocused) {
+                this.element.setSelectionRange(0, formatValue.length);
+            }
         }
         if (!Browser.isDevice) {
-        EventHandler.add(this.element, 'mousewheel DOMMouseScroll', this.mouseWheel, this);
+            EventHandler.add(this.element, 'mousewheel DOMMouseScroll', this.mouseWheel, this);
         }
     };
 
-    private focusOut (event: FocusEvent): void {
-        this.isFocused = false;
-        if (!this.element.value.length) {
-            this.setProperties({ value : null }, true);
-        }
-        let parsedInput: number = this.instance.getNumberParser({format: 'n'})(this.element.value);
-        this.updateValue (parsedInput);
-        if (!Browser.isDevice) {
-        EventHandler.remove(this.element, 'mousewheel DOMMouseScroll', this.mouseWheel);
+    private focusOut(event: FocusEvent): void {
+        if (this.isPrevFocused) {
+            event.preventDefault();
+            if (Browser.isDevice) {
+                let value: string = this.element.value;
+                this.element.focus();
+                this.isPrevFocused = false;
+                let ele: HTMLInputElement = this.element;
+                setTimeout(
+                    () => {
+                        ele.value = value;
+                    },
+                    200);
+            }
+        } else {
+            this.isFocused = false;
+            if (!this.element.value.length) {
+                this.setProperties({ value: null }, true);
+            }
+            let parsedInput: number = this.instance.getNumberParser({ format: 'n' })(this.element.value);
+            this.updateValue(parsedInput);
+            if (!Browser.isDevice) {
+                EventHandler.remove(this.element, 'mousewheel DOMMouseScroll', this.mouseWheel);
+            }
         }
     };
 
     private mouseDownOnSpinner(event: MouseEvent): void {
+        if (this.isFocused) {
+            this.isPrevFocused = true;
+        }
         if (!this.getElementData(event)) { return; }
         let result: boolean = this.getElementData(event);
-        let target: HTMLElement = <HTMLElement> event.currentTarget;
-        let action : string  = (target.classList.contains(SPINUP)) ? INCREMENT : DECREMENT;
+        let target: HTMLElement = <HTMLElement>event.currentTarget;
+        let action: string = (target.classList.contains(SPINUP)) ? INCREMENT : DECREMENT;
         EventHandler.add(target, 'mouseleave', this.mouseUpClick, this);
         this.timeOut = setInterval(() => { this.isCalled = true; this.action(action); }, 150);
         EventHandler.add(document, 'mouseup', this.mouseUpClick, this);
@@ -681,10 +746,16 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     private mouseUpOnSpinner(event: MouseEvent): void {
+        if (this.isPrevFocused) {
+            this.element.focus();
+            if (!Browser.isDevice) {
+                this.isPrevFocused = false;
+            }
+        }
         if (!Browser.isDevice) { event.preventDefault(); }
         if (!this.getElementData(event)) { return; }
-        let target: HTMLElement = <HTMLElement> event.currentTarget;
-        let action : string  = (target.classList.contains(SPINUP)) ? INCREMENT : DECREMENT;
+        let target: HTMLElement = <HTMLElement>event.currentTarget;
+        let action: string = (target.classList.contains(SPINUP)) ? INCREMENT : DECREMENT;
         EventHandler.remove(target, 'mouseleave', this.mouseUpClick);
         if (!this.isCalled) { this.action(action); }
         this.isCalled = false;
@@ -693,7 +764,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     private getElementData(event: MouseEvent): boolean {
         if ((event.which && event.which === 3) || (event.button && event.button === 2)
-        || !this.enabled || this.readonly) {
+            || !this.enabled || this.readonly) {
             return false;
         }
         clearInterval(this.timeOut);
@@ -709,16 +780,16 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     /**
-     * Increment the numeric textbox value with specified step value.
-     * @param  {number} step - Specifies the value used to increment the numeric textbox value.
+     * Increments the NumericTextBox value with the specified step value.
+     * @param  {number} step - Specifies the value used to increment the NumericTextBox value.
      * if its not given then numeric value will be incremented based on the step property value.
      */
     public increment(step: number = this.step): void {
         this.changeValue(this.performAction(this.value, step, INCREMENT));
     }
     /**
-     * Decrement the numeric textbox value with specified step value.
-     * @param  {number} step - Specifies the value used to decrement the numeric textbox value.
+     * Decrements the NumericTextBox value with specified step value.
+     * @param  {number} step - Specifies the value used to decrement the NumericTextBox value.
      * if its not given then numeric value will be decremented based on the step property value.
      */
     public decrement(step: number = this.step): void {
@@ -726,7 +797,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     /**
-     * To destroy the Numeric textbox widget.
+     * Prepares the NumericTextBox for safe removal from the DOM. 
+     * Detaches all event handlers, attributes, and classes to avoid memory leaks. 
+     * > This method does not remove the NumericTextBox input element from the DOM.
+     * @method destroy
+     * @return {void}
      */
     public destroy(): void {
         this.unwireEvents();
@@ -742,14 +817,14 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     /**
-     * Returns the numeric textbox value.
+     * Returns the value of NumericTextBox with the format applied to the NumericTextBox.
      */
     public getText(): string {
         return this.element.value;
     }
 
     /**
-     * Get the properties and its values that has been maintained in the persisted state.
+     * Gets the properties to be maintained in the persisted state.
      * @return {string}
      */
     public getPersistData(): string {
@@ -757,7 +832,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         return this.addOnPersist(keyEntity);
     }
     /**
-     * Called internally if any of the property value is changed.
+     * Calls internally if any of the property value is changed.
      * @private
      */
     public onPropertyChanged(newProp: NumericTextBoxModel, oldProp: NumericTextBoxModel): void {
@@ -807,7 +882,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                     break;
                 case 'min':
                 case 'max':
-                    setValue( prop, getValue(prop, newProp), this);
+                    setValue(prop, getValue(prop, newProp), this);
                     this.validateMinMax();
                     this.updateValue(this.value);
                     break;
@@ -824,11 +899,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                     this.updateValue(this.value);
                     break;
                 case 'currency':
-                    setValue( prop, getValue(prop, newProp), this.cultureInfo);
+                    setValue(prop, getValue(prop, newProp), this.cultureInfo);
                     this.updateValue(this.value);
                     break;
                 case 'format':
-                    setValue( prop, getValue(prop, newProp), this);
+                    setValue(prop, getValue(prop, newProp), this);
                     this.initCultureInfo();
                     this.updateValue(this.value);
                     break;
@@ -840,7 +915,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     /**
-     * Get component name
+     * Gets the component name
      * @private
      */
     public getModuleName(): string {
@@ -849,11 +924,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 }
 
 export interface ChangeEventArgs extends BaseEventArgs {
-    /** returns the entered value of the numeric textbox. */
+    /** Returns the entered value of the NumericTextBox. */
     value?: number;
-    /** returns the previously entered value of the numeric textbox. */
+    /** Returns the previously entered value of the NumericTextBox. */
     previousValue?: number;
-    /** returns the event parameters from numeric textbox. */
+    /** Returns the event parameters from NumericTextBox. */
     event?: Event;
 }
 

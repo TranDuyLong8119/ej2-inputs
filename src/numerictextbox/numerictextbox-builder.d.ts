@@ -10,19 +10,20 @@ export interface NumericTextBoxHelper {
 export interface  BuilderProperties {
 	create(): NumericTextBox
 	/**
-	* Specifies the callback function for change event and it triggers after the textbox value is changed.
+	* Triggers when the value of the NumericTextBox changes.
 	*/
 	change(value:Function): BuilderProperties;
 	/**
-	* Specifies the callback function for create event and it triggers after the numeric textbox control is created successfully.
+	* Triggers when the NumericTextBox component is created.
 	*/
 	created(value:Function): BuilderProperties;
 	/**
-	* Specifies the callback function for destroy event and it triggers when the numeric textbox control is destroyed successfully.
+	* Triggers when the NumericTextBox component is destroyed.
 	*/
 	destroyed(value:Function): BuilderProperties;
 	/**
-	* Specifies the root CSS class name to be added in the text boxes which allow you to customize the appearance.
+	* Gets or Sets the CSS classes to root element of the NumericTextBox which helps to customize the
+complete UI styles.
 	*/
 	cssClass(value:string): BuilderProperties;
 	/**
@@ -31,36 +32,39 @@ Possible values are the ISO 4217 currency codes, such as 'USD' for the US dollar
 	*/
 	currency(value:string): BuilderProperties;
 	/**
-	* Specifies the number precision applied to the textbox value when the numeric textbox is focused.
+	* Specifies the number precision applied to the textbox value when the NumericTextBox is focused.
 	*/
 	decimals(value:number): BuilderProperties;
 	/**
-	* Enable or disable persisting component's state between page reloads.
+	* Sets a value that enables or disables the persisting state of the NumericTextBox after reloading the page.
 	*/
 	enablePersistence(value:boolean): BuilderProperties;
 	/**
-	* Specifies the right to left direction to numeric textbox.
+	* Sets a value that enables or disables the RTL mode on the NumericTextBox. If it is true,
+NumericTextBox will display the content in the right to left direction.
 	*/
 	enableRtl(value:boolean): BuilderProperties;
 	/**
-	* Specifies a value that indicates whether the numeric textbox control is enabled or not.
+	* Sets a value that enables or disables the NumericTextBox control.
 	*/
 	enabled(value:boolean): BuilderProperties;
 	/**
-	* Specifies a value that indicates floating label functionality.
-Specifies how the floating label works.
+	* Sets the type of floating label which enables or disables the floating label in the NumericTextBox.
+The <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox/
+api-numericTextBox.html#placeholder-string" target="_blank">placeholder</a></b> value acts as a label
+and floats above the NumericTextBox based on the below values.
 Possible values are:
-* Never - Never floats the label in the numeric textbox when the placeholder is available.
-* Always -  The floating label will always float above the numeric textbox.
-* Auto - The floating label will float above the numeric textbox after focusing or entering a value in the numeric textbox.
+* Never - Never floats the label in the NumericTextBox when the placeholder is available.
+* Always - The floating label always floats above the NumericTextBox.
+* Auto - The floating label floats above the NumericTextBox after focusing it or when enters the value in it.
 	*/
 	floatLabelType(value:FloatLabelType): BuilderProperties;
 	/**
-	* Specifies the number format that indicates the display format for the value of the numeric textbox.
+	* Specifies the number format that indicates the display format for the value of the NumericTextBox.
 	*/
 	format(value:string): BuilderProperties;
 	/**
-	* Specifies the height of the numeric textbox.
+	* Specifies the height of the NumericTextBox.
 	*/
 	height(value:number|string): BuilderProperties;
 	isDestroyed(value:boolean): BuilderProperties;
@@ -77,25 +81,49 @@ Possible values are:
 	*/
 	min(value:number): BuilderProperties;
 	/**
-	* The hint displayed by the numeric textbox when it is empty.
+	* Gets or sets the string shown as a hint/placeholder when the NumericTextBox is empty.
+It acts as a label and floats above the NumericTextBox based on the
+<b><a href="http://ej2.syncfusion.com/documentation/numerictextbox
+/api-numericTextBox.html#floatlabeltype-string" target="_blank">floatLabelType.</a></b>
 	*/
 	placeholder(value:string): BuilderProperties;
 	/**
-	* Toggles the readonly state of the numeric textbox. When the numeric is readonly, it does not allow user interactions.
+	* Sets a value that enables or disables the readonly state on the NumericTextBox. If it is true,
+NumericTextBox will not allow your input.
 	*/
 	readonly(value:boolean): BuilderProperties;
 	/**
-	* Specifies whether the up and down spin buttons should be displayed in numeric textbox.
+	* Specifies whether the up and down spin buttons should be displayed in NumericTextBox.
 	*/
 	showSpinButton(value:boolean): BuilderProperties;
 	/**
-	* Specifies the incremental or decremental step size for the numeric textbox.
+	* Specifies the incremental or decremental step size for the NumericTextBox.
 	*/
 	step(value:number): BuilderProperties;
 	/**
-	* Specifies a value that indicates whether the numeric textbox control allows the value for the specified range.
-If it is false, it allows the value outside of the range, but it highlights the textbox with error class.
-Otherwise it is internally changed to the correct appropriate value.
+	* Specifies a value that indicates whether the NumericTextBox control allows the value for the specified range.
+* If it is true, the input value will be restricted between the min and max range.
+The typed value gets modified to fit the range on focused out state.
+```html
+<input type='text' id="numeric"/>
+```
+```typescript
+<script>
+  var numericObj = new NumericTextBox({ min: 10, max: 20, value: 15 });
+  numericObj.appendTo("#numeric");
+</script>
+```
+* Else, it allows any value even out of range value,
+At that time of wrong value entered, the error class will be added to the component to highlight the error.
+```html
+<input type='text' id="numeric"/>
+```
+```typescript
+<script>
+  var numericObj = new NumericTextBox({ strictMode: false, min: 10, max: 20, value: 15 });
+  numericObj.appendTo("#numeric");
+</script>
+```
 	*/
 	strictMode(value:boolean): BuilderProperties;
 	/**
@@ -103,11 +131,11 @@ Otherwise it is internally changed to the correct appropriate value.
 	*/
 	validateDecimalOnType(value:boolean): BuilderProperties;
 	/**
-	* Specifies the value of the numeric textbox.
+	* Sets the value of the NumericTextBox.
 	*/
 	value(value:number): BuilderProperties;
 	/**
-	* Specifies the width of the numeric textbox.
+	* Specifies the width of the NumericTextBox.
 	*/
 	width(value:number|string): BuilderProperties;
 }
