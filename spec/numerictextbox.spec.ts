@@ -3,8 +3,8 @@
  */
 
 import { EventHandler, KeyboardEvents, Internationalization, NumberFormatOptions, Ajax, cldrData, loadCldr, L10n, Browser } from '@syncfusion/ej2-base';
-import { createElement, detach } from '@syncfusion/ej2-base/dom';
-import { extend } from '@syncfusion/ej2-base/util';
+import { createElement, detach } from '@syncfusion/ej2-base';
+import { extend } from '@syncfusion/ej2-base';
 import { NumericTextBox } from '../src/numerictextbox/numerictextbox';
 
 describe('Numerictextbox Control', () => {

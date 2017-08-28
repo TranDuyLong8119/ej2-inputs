@@ -1,5 +1,5 @@
 /**
  * NumericTextBox all modules
  */
-export * from './numerictextbox';
-export * from './input';
+export * from './numerictextbox/index';
+export * from './input/index';

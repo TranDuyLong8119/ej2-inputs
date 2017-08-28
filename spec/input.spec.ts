@@ -1,8 +1,8 @@
 /**
  * Floating Input through Utility
  */
-import { createElement, attributes } from '@syncfusion/ej2-base/dom';
-import { isNullOrUndefined } from '@syncfusion/ej2-base/util';
+import { createElement, attributes } from '@syncfusion/ej2-base';
+import { isNullOrUndefined } from '@syncfusion/ej2-base';
 import { Input, InputObject } from '../src/input/input';
 
 describe('Input', () => {

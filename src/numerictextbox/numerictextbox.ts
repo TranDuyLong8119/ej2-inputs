@@ -1,7 +1,7 @@
 import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
-import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base/dom';
-import { isNullOrUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base/util';
+import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';
+import { isNullOrUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base';
 import { Internationalization, NumberFormatOptions, getNumericObject } from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
 import { NumericTextBoxHelper } from './numerictextbox-builder';
