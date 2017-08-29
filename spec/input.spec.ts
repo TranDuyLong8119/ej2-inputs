@@ -1129,7 +1129,7 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
@@ -1162,14 +1162,14 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
             clickEvent.initEvent ("click", true, true);
             btn.dispatchEvent (clickEvent);
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
             expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
         });
         afterAll(() => {
@@ -1195,14 +1195,14 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
             clickEvent.initEvent ("click", true, true);
             btn.dispatchEvent (clickEvent);
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
             expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
         });
         afterAll(() => {
@@ -1227,7 +1227,7 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
@@ -1286,7 +1286,7 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
@@ -1320,14 +1320,14 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
             clickEvent.initEvent ("click", true, true);
             btn.dispatchEvent (clickEvent);
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
             expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
         });
         afterAll(() => {
@@ -1354,14 +1354,14 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
             clickEvent.initEvent ("click", true, true);
             btn.dispatchEvent (clickEvent);
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
             expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
         });
         afterAll(() => {
@@ -1388,7 +1388,7 @@ describe('Input Groups - Enable/Disable', () => {
             });
         it('Ensure whether clear icon element rendered and shown intial with value', () => {
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
-            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
         });
         it('Click on the clear icon', () => {
             let btn = document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon");
@@ -1412,5 +1412,112 @@ describe('Input Groups - Enable/Disable', () => {
             element.remove();
         });
     });
+    describe('Render Floating label input with Custom tag', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                floatLabelType: "Always",
+                customTag: 'ej2-custominput'
+            });
+        });
+        it('Check custom tag name', () => {
+            expect((inputObj.container.classList.contains('e-float-custom-tag'))).toBe(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+    describe('Render Floating label type as always ', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputclear2', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                floatLabelType: "Always"
+            });
+        });
+        it('Ensure whether the float above of the input', () => {
+          expect((inputObj.container.getElementsByClassName('e-float-text')[0].classList.contains('e-label-top'))).toBe(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+    describe('Show clear icon after updating the input value dynamically', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputclear1', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                properties: {
+                  showClearButton: true
+                }
+            });
+        });
+        it('Ensure whether enabeled the clear icon after updating the input value dynamically', () => {
+            element.focus();
+            expect((inputObj.container.classList.contains('e-input-focus'))).toBe(true);
+            element.value = "Content";
+            expect(document.getElementById('inputclear1').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+    describe('Show clear icon after updating the float input value dynamically', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputclear2', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                floatLabelType: "Auto",
+                properties: {
+                  showClearButton: true
+                }
+            });
+        });
+        it('Ensure whether enabeled the clear icon after updating the float input value dynamically', () => {
+            element.focus();
+            expect((inputObj.container.classList.contains('e-input-focus'))).toBe(true);
+            element.value = "Content";
+            expect(document.getElementById('inputclear2').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
 
+     describe('Readonly state with floating input', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputclear2', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                floatLabelType: "Auto",
+                properties: {
+                  showClearButton: true
+                }
+            });
+        });
+        it('Float the label above of the input when value is present inside the textbox', () => {
+            element.value = "Content";
+            Input.setReadonly(true, element, "Auto");
+            expect((inputObj.container.getElementsByClassName('e-float-text')[0].classList.contains('e-label-top'))).toBe(true);
+        });
+        it('Should not float the label above of the input when textbox has no value', () => {
+            element.value = "";
+            Input.setReadonly(false, element, "Auto");
+            expect((inputObj.container.getElementsByClassName('e-float-text')[0].classList.contains('e-label-bottom'))).toBe(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
 });

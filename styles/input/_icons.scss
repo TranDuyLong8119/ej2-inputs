@@ -1,6 +1,6 @@
 @include export-module('input-icons') {
   @mixin clear-icon {
-    content: '\e932';
+    content: $input-clear-icon-font;
     font-family: 'e-icons';
   }
 

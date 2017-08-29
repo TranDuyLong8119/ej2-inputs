@@ -1,5 +1,4 @@
-import { createElement, attributes, addClass, removeClass, detach, classList, closest } from '@syncfusion/ej2-base';
-import { isNullOrUndefined } from '@syncfusion/ej2-base';
+import { createElement, attributes, addClass, removeClass, detach, classList, closest, isNullOrUndefined } from '@syncfusion/ej2-base';
 const CLASSNAMES: ClassNames = {
     RTL: 'e-rtl',
     DISABLE: 'e-disabled',
@@ -71,7 +70,7 @@ export namespace Input {
             for (let i: number = 0; i < args.buttons.length; i++) {
                 inputObject.buttons.push(appendSpan(args.buttons[i], inputObject.container));
             }
-         }
+        }
         inputObject = setPropertyValue(args, inputObject);
         privateInputObj = inputObject;
         return inputObject;
@@ -114,7 +113,7 @@ export namespace Input {
               inputObject.container.classList.add(CLASSNAMES.FLOATCUSTOMTAG); }
             inputObject.container.classList.add(CLASSNAMES.FLOATINPUT);
         }
-        attributes(args.element, { 'required': '' });
+        attributes(args.element, { 'required': 'true' });
         floatLinelement = createElement('span', { className: CLASSNAMES.FLOATLINE });
         floatLabelElement = createElement('label', { className: CLASSNAMES.FLOATTEXT });
         if (!isNullOrUndefined(args.element.id) && args.element.id !== '') {
@@ -203,13 +202,14 @@ export namespace Input {
     * To create clear button.
     */
     function createClearButton(element: HTMLInputElement, container: HTMLElement ): HTMLElement {
+        attributes(element, { 'required': '' });
         let button: HTMLElement = <HTMLElement>createElement('span', { className: CLASSNAMES.CLEARICON });
         container.appendChild(button);
         if (!isNullOrUndefined(privateInputObj.container) &&
         privateInputObj.container.classList.contains(CLASSNAMES.FLOATINPUT)) {
             addClass([privateInputObj.container], CLASSNAMES.INPUTGROUP);
         }
-        updateIconState(element.value, button);
+        addClass([button], CLASSNAMES.CLEARICONHIDE);
         wireClearBtnEvents(element, button);
         return button;
     }
@@ -230,8 +230,16 @@ export namespace Input {
         updateIconState(element.value, button);
       });
       element.addEventListener('blur', (event: FocusEvent) => {
-        updateIconState(element.value, button);
+        setTimeout (() => { addClass([button], CLASSNAMES.CLEARICONHIDE); }, 200);
       });
+    }
+
+    function validateLabel(element: HTMLInputElement, floatLabelType: string) : void {
+        let parent: HTMLElement = getParentNode(element);
+        if (parent.classList.contains(CLASSNAMES.FLOATINPUT) && floatLabelType === 'Auto') {
+            let label: HTMLElement = <HTMLElement> getParentNode(element).getElementsByClassName('e-float-text')[0];
+            updateLabelState(element.value, label);
+        }
     }
 
    /**
@@ -302,11 +310,14 @@ export namespace Input {
     * @param element
     * - The element which is need to enable read only.
     */
-    export function setReadonly(isReadonly: boolean, element: HTMLInputElement): void {
+    export function setReadonly(isReadonly: boolean, element: HTMLInputElement, floatLabelType ?: string): void {
         if (isReadonly) {
             attributes(element, { readonly: '' });
         } else {
             element.removeAttribute('readonly');
+        }
+        if (!isNullOrUndefined(floatLabelType)) {
+          validateLabel(element, floatLabelType);
         }
     }
    /**
@@ -336,7 +347,7 @@ export namespace Input {
     * @param element
     * - Element to be enabled or disabled.
     */
-    export function setEnabled(isEnable: boolean, element: HTMLInputElement): void {
+    export function setEnabled(isEnable: boolean, element: HTMLInputElement, floatLabelType ?: string ): void {
         let disabledAttrs: { [key: string]: string } = { 'disabled': 'disabled', 'aria-disabled': 'true' };
         if (isEnable) {
             element.classList.remove(CLASSNAMES.DISABLE);
@@ -344,6 +355,9 @@ export namespace Input {
         } else {
             element.classList.add(CLASSNAMES.DISABLE);
             addAttributes(disabledAttrs, element);
+        }
+        if (!isNullOrUndefined(floatLabelType)) {
+          validateLabel(element, floatLabelType);
         }
     }
    /**
@@ -404,25 +418,28 @@ export namespace Input {
       let container: HTMLElement = input.container;
       if (!isNullOrUndefined(container) && container.classList.contains(CLASSNAMES.FLOATINPUT)) {
         let inputEle: HTMLElement = container.querySelector('input') as HTMLElement;
+        let placeholder: string = container.querySelector('.' + CLASSNAMES.FLOATTEXT).textContent;
+        let clearButton: boolean = container.querySelector('.e-clear-icon') !== null;
         detach(container.querySelector('.' + CLASSNAMES.FLOATLINE));
         detach(container.querySelector('.' + CLASSNAMES.FLOATTEXT));
         classList(container, [CLASSNAMES.INPUTGROUP], [CLASSNAMES.FLOATINPUT]);
         unwireFloatingEvents(inputEle);
+        attributes(inputEle, { 'placeholder': placeholder });
         inputEle.classList.add(CLASSNAMES.INPUT);
-        inputEle.removeAttribute('required');
+        if (!clearButton) { inputEle.removeAttribute('required'); }
      }
     }
 
     export function addFloating(input: HTMLInputElement, type: FloatLabelType, placeholder: string): void {
-      let args: InputArgs = {element: input, floatLabelType: type , properties : {placeholder : placeholder } };
       let container: HTMLElement = <HTMLElement>closest(input, '.' + CLASSNAMES.INPUTGROUP);
-      let iconEle: HTMLElement = <HTMLElement>container.querySelector('.e-input-group-icon');
+      if (type !== 'Never') {
+      let args: InputArgs = {element: input, floatLabelType: type , properties : {placeholder : placeholder } };
+      let iconEle: HTMLElement = <HTMLElement>container.querySelector('.e-clear-icon');
       let inputObj: InputObject = { container: container};
+      input.classList.remove(CLASSNAMES.INPUT);
       createFloatingInput(args, inputObj);
       if (isNullOrUndefined(iconEle)) {
-          iconEle = container.querySelector('.e-input-group-btn')  as HTMLElement; }
-      if (isNullOrUndefined(iconEle)) {
-         iconEle = container.querySelector('.e-clear-icon') as HTMLElement; }
+         iconEle = container.querySelector('.e-input-group-icon') as HTMLElement; }
       if (isNullOrUndefined(iconEle)) {
           container.classList.remove(CLASSNAMES.INPUTGROUP);
         } else {
@@ -432,6 +449,7 @@ export namespace Input {
          container.insertBefore(floatLine, iconEle);
          container.insertBefore(floatText, iconEle);
         }
+      }
     }
 
    /**
@@ -450,7 +468,9 @@ export namespace Input {
           container.classList.add(CLASSNAMES.INPUTGROUP);
         }
         button.addEventListener('mousedown', function() : void {
-         this.classList.add('e-input-btn-ripple');
+          if (!container.classList.contains('e-disabled') && !container.querySelector('input').readOnly ) {
+            this.classList.add('e-input-btn-ripple');
+          }
         });
         button.addEventListener('mouseup', function() : void {
          let ele: HTMLElement = this;
