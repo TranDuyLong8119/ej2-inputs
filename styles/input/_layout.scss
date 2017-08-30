@@ -724,7 +724,8 @@
     transform-origin: right top;
   }
 
-  .e-float-input.e-rtl label.e-float-text {
+  .e-float-input.e-rtl label.e-float-text,
+  .e-rtl .e-float-input label.e-float-text {
     padding-right: $float-label-padding;
   }
 
@@ -1200,28 +1201,44 @@
   .e-input-group textarea.e-input,
   .e-input-group textarea,
   .e-float-input textarea.e-input,
-  .e-float-input textarea {
+  .e-float-input textarea,
+  .e-input-group textarea.e-input:focus,
+  .e-float-input textarea:focus {
     padding-left: $input-text-indent;
+    text-indent: 0;
   }
 
   textarea.e-input.e-rtl,
   .e-input-group.e-rtl textarea.e-input,
-  .e-float-input.e-rtl textarea.e-input,
-  .e-rtl .e-input-group textarea.e-input,
-  .e-rtl .e-float-input textarea.e-input,
-  .e-input-group.e-rtl textarea,
   .e-float-input.e-rtl textarea,
-  .e-rtl .e-input-group textarea,
-  .e-rtl .e-float-input textarea {
+  .e-rtl .e-input-group textarea.e-input,
+  .e-rtl .e-float-input textarea,
+  .e-input-group.e-rtl textarea.e-input,
+  .e-float-input.e-rtl textarea,
+  .e-rtl .e-input-group textarea.e-input,
+  .e-rtl .e-float-input textarea,
+  .e-input-group.e-rtl textarea.e-input:focus,
+  .e-float-input.e-rtl textarea:focus,
+  .e-rtl .e-input-group textarea.e-input:focus,
+  .e-rtl .e-float-input textarea:focus {
     padding-right: $input-text-indent;
+    text-indent: 0;
   }
 
   textarea.e-input.e-small,
   .e-small textarea.e-input,
+  .e-input-group.e-small textarea.e-input,
   .e-float-input.e-small textarea,
   .e-float-input textarea.e-small,
-  .e-small .e-float-input textarea {
-    padding-left: $input-bigger-text-indent;
+  .e-input-group textarea.e-input.e-small,
+  .e-small .e-float-input textarea,
+  .e-small .e-input-group textarea.e-input,
+  .e-input-group.e-small textarea.e-input:focus,
+  .e-float-input.e-small textarea:focus,
+  .e-small .e-input-group textarea.e-input:focus,
+  .e-small .e-float-input textarea:focus {
+    padding-left: $input-text-indent;
+    text-indent: 0;
   }
 
   .e-rtl textarea.e-input.e-small,
@@ -1229,20 +1246,39 @@
   .e-small.e-rtl textarea.e-input,
   .e-small textarea.e-input.e-rtl,
   .e-float-input.e-small.e-rtl textarea,
+  .e-input-group.e-small.e-rtl textarea.e-input,
   .e-rtl .e-float-input.e-small textarea,
+  .e-rtl .e-input-group.e-small textarea.e-input,
   .e-float-input.e-rtl textarea.e-small,
+  .e-input-group.e-rtl textarea.e-input.e-small,
   .e-rtl .e-float-input textarea.e-small,
+  .e-rtl .e-input-group textarea.e-input.e-small,
   .e-small .e-float-input.e-rtl textarea,
-  .e-small.e-rtl .e-float-input textarea {
-    padding-right: $input-bigger-text-indent;
+  .e-small .e-input-group.e-rtl textarea.e-input,
+  .e-small.e-rtl .e-float-input textarea,
+  .e-small.e-rtl .e-input-group textarea.e-input,
+  .e-small.e-rtl .e-input-group textarea.e-input:focus,
+  .e-small.e-rtl .e-float-input textarea:focus,
+  .e-small .e-input-group.e-rtl textarea.e-input:focus,
+  .e-small .e-float-input.e-rtl textarea:focus {
+    padding-right: $input-text-indent;
+    text-indent: 0;
   }
 
   textarea.e-input.e-bigger,
   .e-bigger textarea.e-input,
+  .e-input-group.e-bigger textarea.e-input,
   .e-float-input.e-bigger textarea,
   .e-float-input textarea.e-bigger,
-  .e-bigger .e-float-input textarea {
+  .e-input-group textarea.e-input.e-bigger,
+  .e-bigger .e-float-input textarea,
+  .e-bigger .e-input-group textarea.e-input,
+  .e-input-group.e-bigger textarea.e-input:focus,
+  .e-float-input.e-bigger textarea:focus,
+  .e-bigger .e-input-group textarea.e-input:focus,
+  .e-bigger .e-float-input textarea:focus {
     padding-left: $input-bigger-text-indent;
+    text-indent: 0;
   }
 
   .e-rtl textarea.e-input.e-bigger,
@@ -1250,14 +1286,24 @@
   .e-bigger.e-rtl textarea.e-input,
   .e-bigger textarea.e-input.e-rtl,
   .e-float-input.e-bigger.e-rtl textarea,
+  .e-input-group.e-bigger.e-rtl textarea.e-input,
   .e-rtl .e-float-input.e-bigger textarea,
+  .e-rtl .e-input-group.e-bigger textarea.e-input,
   .e-float-input.e-rtl textarea.e-bigger,
+  .e-input-group.e-rtl textarea.e-input.e-bigger,
   .e-rtl .e-float-input textarea.e-bigger,
+  .e-rtl .e-input-group textarea.e-input.e-bigger,
   .e-bigger .e-float-input.e-rtl textarea,
-  .e-bigger.e-rtl .e-float-input textarea {
+  .e-bigger .e-input-group.e-rtl textarea.e-input,
+  .e-bigger.e-rtl .e-float-input textarea,
+  .e-bigger.e-rtl .e-input-group textarea.e-input,
+  .e-bigger.e-rtl .e-input-group textarea.e-input:focus,
+  .e-bigger.e-rtl .e-float-input textarea:focus,
+  .e-bigger .e-input-group.e-rtl textarea.e-input:focus,
+  .e-bigger .e-float-input.e-rtl textarea:focus {
     padding-right: $input-bigger-text-indent;
+    text-indent: 0;
   }
-
 
   .e-input.e-small.e-bigger,
   .e-input-group.e-small.e-bigger .e-input,
@@ -1270,31 +1316,51 @@
     text-indent: $input-bigger-text-indent;
   }
 
+  .e-bigger textarea.e-input.e-small,
   .e-input-group.e-small.e-bigger textarea.e-input,
   .e-input-group.e-small textarea.e-input.e-bigger,
-  .e-bigger textarea.e-input.e-small,
   .e-bigger .e-input-group.e-small textarea.e-input,
   .e-float-input.e-small.e-bigger textarea,
   .e-float-input.e-small textarea.e-bigger,
-  .e-bigger .e-float-input.e-small textarea {
+  .e-bigger .e-float-input.e-small textarea,
+  .e-bigger .e-input-group.e-small textarea.e-input:focus,
+  .e-bigger .e-float-input.e-small textarea:focus,
+  .e-small .e-input-group.e-bigger textarea.e-input:focus,
+  .e-small .e-float-input.e-bigger textarea:focus,
+  .e-input-group.e-bigger.e-small textarea.e-input:focus,
+  .e-float-input.e-bigger.e-small textarea:focus {
     padding-left: $input-bigger-text-indent;
+    text-indent: 0;
   }
 
+  .e-bigger textarea.e-input.e-small.e-rtl,
   .e-input-group.e-small.e-bigger.e-rtl textarea.e-input,
   .e-input-group.e-small.e-rtl textarea.e-input.e-bigger,
-  .e-bigger textarea.e-input.e-small.e-rtl,
   .e-bigger .e-input-group.e-small.e-rtl textarea.e-input,
   .e-float-input.e-small.e-bigger.e-rtl textarea,
   .e-float-input.e-small.e-rtl textarea.e-bigger,
   .e-bigger .e-float-input.e-small.e-rtl textarea,
+  .e-bigger.e-rtl textarea.e-input.e-small,
   .e-rtl .e-input-group.e-small.e-bigger textarea.e-input,
   .e-rtl .e-input-group.e-small textarea.e-input.e-bigger,
-  .e-bigger.e-rtl textarea.e-input.e-small,
   .e-bigger.e-rtl .e-input-group.e-small textarea.e-input,
   .e-rtl .e-float-input.e-small.e-bigger textarea,
   .e-rtl .e-float-input.e-small textarea.e-bigger,
-  .e-bigger.e-rtl .e-float-input.e-small textarea {
+  .e-bigger.e-rtl .e-float-input.e-small textarea,
+  .e-bigger .e-input-group.e-small.e-rtl textarea.e-input:focus,
+  .e-bigger .e-float-input.e-small.e-rtl textarea:focus,
+  .e-small .e-input-group.e-bigger.e-rtl textarea.e-input:focus,
+  .e-small .e-float-input.e-bigger.e-rtl textarea:focus,
+  .e-input-group.e-bigger.e-small.e-rtl textarea.e-input:focus,
+  .e-float-input.e-bigger.e-small.e-rtl textarea:focus,
+  .e-bigger.e-rtl .e-input-group.e-small textarea.e-input:focus,
+  .e-bigger.e-rtl .e-float-input.e-small textarea:focus,
+  .e-small.e-rtl .e-input-group.e-bigger textarea.e-input:focus,
+  .e-small.e-rtl .e-float-input.e-bigger textarea:focus,
+  .e-rtl .e-input-group.e-bigger.e-small textarea.e-input:focus,
+  .e-rtl .e-float-input.e-bigger.e-small textarea:focus {
     padding-right: $input-bigger-text-indent;
+    text-indent: 0;
   }
 
 
