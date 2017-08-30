@@ -866,53 +866,53 @@
   }
 
   .e-input-group .e-input-group-icon {
+    margin-bottom: $input-child-margin-bottom;
     margin-right: $input-child-margin-right;
-    padding-bottom: $input-child-padding-bottom;
-    padding-top: $input-child-padding-top;
+    margin-top: $input-child-margin-top;
   }
 
   .e-float-input.e-input-group .e-input-group-icon {
-    padding-top: $float-input-child-padding-top;
+    margin-top: $float-input-child-margin-top;
   }
 
   .e-input-group.e-bigger .e-input-group-icon,
   .e-input-group .e-input-group-icon.e-bigger,
   .e-bigger .e-input-group .e-input-group-icon {
+    margin-bottom: $input-child-bigger-margin-bottom;
     margin-right: $input-child-bigger-margin-right;
-    padding-bottom: $input-child-bigger-padding-bottom;
-    padding-top: $input-child-bigger-padding-top;
+    margin-top: $input-child-bigger-margin-top;
   }
 
   .e-float-input.e-input-group.e-bigger .e-input-group-icon,
   .e-float-input.e-input-group .e-input-group-icon.e-bigger,
   .e-bigger .e-float-input.e-input-group .e-input-group-icon {
-    padding-top: $float-input-child-bigger-padding-top;
+    margin-top: $float-input-child-bigger-margin-top;
   }
 
   .e-input-group.e-small.e-bigger .e-input-group-icon,
   .e-input-group.e-small .e-input-group-icon.e-bigger,
   .e-bigger .e-input-group.e-small .e-input-group-icon {
+    margin-bottom: $input-child-small-bigger-margin-bottom;
     margin-right: $input-child-small-bigger-margin-right;
-    padding-bottom: $input-child-small-bigger-padding-bottom;
-    padding-top: $input-child-small-bigger-padding-top;
+    margin-top: $input-child-small-bigger-margin-top;
   }
 
   .e-float-input.e-input-group.e-small.e-bigger .e-input-group-icon,
   .e-float-input.e-input-group.e-small .e-input-group-icon.e-bigger,
   .e-bigger .e-float-input.e-input-group.e-small .e-input-group-icon {
-    padding-top: $float-input-child-small-bigger-padding-top;
+    margin-top: $float-input-child-small-bigger-margin-top;
   }
 
   .e-input-group.e-small .e-input-group-icon,
   .e-small .e-input-group .e-input-group-icon {
+    margin-bottom: $input-child-small-margin-bottom;
     margin-right: $input-child-small-margin-right;
-    padding-bottom: $input-child-small-padding-bottom;
-    padding-top: $input-child-small-padding-top;
+    margin-top: $input-child-small-margin-top;
   }
 
   .e-float-input.e-input-group.e-small .e-input-group-icon,
   .e-small .e-float-input.e-input-group .e-input-group-icon {
-    padding-top: $float-input-child-small-padding-top;
+    margin-top: $float-input-child-small-margin-top;
   }
 
   .e-input-group .e-input-group-icon:last-child,
