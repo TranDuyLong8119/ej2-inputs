@@ -326,21 +326,6 @@ describe('Numerictextbox Control', () => {
             expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("width: 400px;");
         });
 
-        it('Set the custom height to numerictextbox as integer', () => {
-            numerictextbox = new NumericTextBox({ height: 40 }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
-        });
-
-        it('Set the custom height to numerictextbox as string', () => {
-            numerictextbox = new NumericTextBox({ height: "40" }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
-        });
-
-        it('Set the custom height to numerictextbox', () => {
-            numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
-        });
-
         it('Set the watermarkText to numerictextbox', () => {
             numerictextbox = new NumericTextBox({ placeholder: 'Enter the numeric value', floatLabelType: 'Never' }, '#tsNumeric');
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).getAttribute("placeholder")).toEqual('Enter the numeric value');
@@ -2301,30 +2286,6 @@ describe('Numerictextbox Control', () => {
             numerictextbox.width = '300px';
             numerictextbox.dataBind();
             expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("width: 300px;");
-        });
-
-        it('notify height property change testing', () => {
-            numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
-            numerictextbox.height = '30px';
-            numerictextbox.dataBind();
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 30px;");
-        });
-
-        it('notify height property as integer testing', () => {
-            numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
-            numerictextbox.height = 30;
-            numerictextbox.dataBind();
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 30px;");
-        });
-
-        it('notify height property as string testing', () => {
-            numerictextbox = new NumericTextBox({ height: "40px" }, '#tsNumeric');
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 40px;");
-            numerictextbox.height = '30';
-            numerictextbox.dataBind();
-            expect(document.getElementById('tsNumeric').parentElement.getAttribute("style")).toEqual("height: 30px;");
         });
 
         it('Set the format as percent dynamically', () => {

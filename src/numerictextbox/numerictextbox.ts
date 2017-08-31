@@ -101,13 +101,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     public width: number | string;
 
     /**
-     * Specifies the height of the NumericTextBox.
-     * @default null
-     */
-    @Property(null)
-    public height: number | string;
-
-    /**
      * Gets or sets the string shown as a hint/placeholder when the NumericTextBox is empty.
      * It acts as a label and floats above the NumericTextBox based on the
      * <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox
@@ -295,7 +288,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             this.createWrapper();
             if (this.showSpinButton) { this.spinBtnCreation(); }
             if (!isNullOrUndefined(this.width)) { setStyleAttribute(this.container, { 'width': formatUnit(this.width) }); }
-            if (!isNullOrUndefined(this.height)) { setStyleAttribute(this.container, { 'height': formatUnit(this.height) }); }
             this.changeValue(this.value);
             this.wireEvents();
             if (this.value !== null && !isNaN(this.value)) {
@@ -728,6 +720,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private mouseDownOnSpinner(event: MouseEvent): void {
         if (this.isFocused) {
             this.isPrevFocused = true;
+            event.preventDefault();
         }
         if (!this.getElementData(event)) { return; }
         let result: boolean = this.getElementData(event);
@@ -841,9 +834,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             switch (prop) {
                 case 'width':
                     setStyleAttribute(this.container, { 'width': formatUnit(newProp.width) });
-                    break;
-                case 'height':
-                    setStyleAttribute(this.container, { 'height': formatUnit(newProp.height) });
                     break;
                 case 'cssClass':
                     Input.setCssClass(newProp.cssClass, [this.container], oldProp.cssClass);

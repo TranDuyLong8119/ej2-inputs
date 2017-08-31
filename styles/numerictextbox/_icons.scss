@@ -1,11 +1,11 @@
 @include export-module('numerictextbox-icons') {
   /*! component icons */
   .e-input-group-icon.e-spin-up:before {
-    content: '\e834';
+    content: $numeric-spin-up-icon;
   }
 
   .e-input-group-icon.e-spin-down:before {
-    content: '\e83d';
+    content: $numeric-spin-down-icon;
   }
 
   .e-input-group-icon.e-spin-up:before,

@@ -45,12 +45,6 @@ export interface NumericTextBoxModel extends ComponentModel{
     width?: number | string;
 
     /**
-     * Specifies the height of the NumericTextBox.
-     * @default null
-     */
-    height?: number | string;
-
-    /**
      * Gets or sets the string shown as a hint/placeholder when the NumericTextBox is empty.
      * It acts as a label and floats above the NumericTextBox based on the
      * <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox

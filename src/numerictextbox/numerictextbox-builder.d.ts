@@ -63,10 +63,6 @@ Possible values are:
 	* Specifies the number format that indicates the display format for the value of the NumericTextBox.
 	*/
 	format(value:string): BuilderProperties;
-	/**
-	* Specifies the height of the NumericTextBox.
-	*/
-	height(value:number|string): BuilderProperties;
 	isDestroyed(value:boolean): BuilderProperties;
 	/**
 	* Overrides the global culture and localization value for this component. Default Global culture is 'en-US'
