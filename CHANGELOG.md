@@ -6,6 +6,30 @@
 ### Bug Fixes
 * Removed height property from the NumericTextBox.
 
+## TextBox
+
+### Breaking Changes
+
+* Clear icon will be visible when focus with value only in Input TextBox.
+
+* The icon’s color does not update with validation state colors.
+
+* The input element structure has modified to render an icon on left side of the input.
+
+* Removed the input with button support.
+
+### New Features
+
+* We have enhanced the Input Material theme by improved structural changes to meet the Material standard.
+
+### Bug Fixes
+
+* Enabled clear icon when update the TextBox value dynamically.
+
+* Issue with floating label and input value get collapsed when make input as a read-only was fixed.
+
+* Placeholder does not set to the input after removing floating label support dynamically issue was fixed.
+
 ## 1.0.11-preview (2017-08-03)
 
 ## TextBox
