@@ -6,6 +6,8 @@
 ### Bug Fixes
 * Removed height property from the NumericTextBox.
 
+* Rollup bundling issue fixed.
+
 ## TextBox
 
 ### Breaking Changes
