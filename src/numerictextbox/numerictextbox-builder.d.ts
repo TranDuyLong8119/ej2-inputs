@@ -50,8 +50,7 @@ NumericTextBox will display the content in the right to left direction.
 	enabled(value:boolean): BuilderProperties;
 	/**
 	* Sets the type of floating label which enables or disables the floating label in the NumericTextBox.
-The <b><a href="http://ej2.syncfusion.com/documentation/numerictextbox/
-api-numericTextBox.html#placeholder-string" target="_blank">placeholder</a></b> value acts as a label
+The <b><a href="#placeholder-string" target="_blank">placeholder</a></b> acts as a label
 and floats above the NumericTextBox based on the below values.
 Possible values are:
 * Never - Never floats the label in the NumericTextBox when the placeholder is available.
@@ -79,8 +78,7 @@ Possible values are:
 	/**
 	* Gets or sets the string shown as a hint/placeholder when the NumericTextBox is empty.
 It acts as a label and floats above the NumericTextBox based on the
-<b><a href="http://ej2.syncfusion.com/documentation/numerictextbox
-/api-numericTextBox.html#floatlabeltype-string" target="_blank">floatLabelType.</a></b>
+<b><a href="#floatlabeltype-string" target="_blank">floatLabelType.</a></b>
 	*/
 	placeholder(value:string): BuilderProperties;
 	/**

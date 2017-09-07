@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## NumericTextBox
+### Breaking Changes
+
+* Modified 'floatLabelType' property default value as 'Never'.
+
 ## 1.0.14-preview (2017-08-31)
 
 ## NumericTextBox
