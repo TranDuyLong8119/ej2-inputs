@@ -506,6 +506,10 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                 break;
             default: break;
         }
+        if (!this.element.value.length) {
+            this.setProperties({ value: null }, true);
+            this.updateValue(this.instance.getNumberParser({ format: 'n' })(this.element.value));
+        }
     };
 
     private performAction(value: number, step: number, operation: string): number {
