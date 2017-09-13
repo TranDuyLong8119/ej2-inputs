@@ -3,6 +3,7 @@
 
   .e-input-group {
     display: table;
+    line-height: 1.4;
     margin-bottom: $input-margin-bottom;
   }
 
@@ -14,7 +15,7 @@
     font-size: $input-font-size;
     font-weight: 400;
     height: auto;
-    line-height: 1.4;
+    line-height: inherit;
     margin: $zero-value;
     margin-bottom: $input-margin-bottom;
     outline: none;
@@ -81,7 +82,7 @@
   .e-bigger textarea.e-input,
   .e-bigger .e-input-group .e-input {
     font-size: $input-bigger-font-size;
-    line-height: 1.5;
+    line-height: inherit;
     margin-bottom: $input-bigger-margin-bottom;
     padding: $input-bigger-padding;
   }
@@ -242,7 +243,10 @@
     border-radius: $input-border-radius;
   }
 
-  .e-input-group,
+  .e-input-group {
+    display: inline-flex;
+  }
+
   .e-input-group .e-input-group-icon {
     display: flex;
   }
@@ -296,7 +300,7 @@
   .e-input.e-small,
   .e-input-group.e-small .e-input {
     font-size: $input-small-font-size;
-    line-height: normal;
+    line-height: inherit;
     padding: $input-small-padding;
   }
 
@@ -343,7 +347,7 @@
     padding-left: $float-label-padding;
     pointer-events: none;
     position: absolute;
-    top: -12px;
+    top: -11px;
     transform: translate3d(0, 16px, 0) scale(1);
     transform-origin: left top;
     transition: .25s cubic-bezier(.25, .8, .25, 1);
@@ -360,7 +364,7 @@
   .e-bigger .e-float-input label.e-float-text {
     font-size: $float-placeholder-bigger-font-size;
     @if $skin-name == 'material' {
-      top: -5px;
+      top: -8px;
     }
   }
 
@@ -375,7 +379,7 @@
   .e-bigger .e-float-input.e-small label.e-float-text {
     font-size: $float-placeholder-bigger-small-font-size;
     @if $skin-name == 'material' {
-      top: -12px;
+      top: -10px;
     }
   }
 
@@ -390,20 +394,21 @@
   .e-float-input .e-input-in-wrap input.e-bigger ~ label.e-float-text,
   .e-bigger .e-float-input .e-input-in-wrap label.e-float-text {
     @if $skin-name == 'material' {
-      top: -6px;
+      top: -8px;
     }
   }
 
-  .e-float-input.e-small .e-input-in-wrap label.e-float-text {
+  .e-float-input.e-small .e-input-in-wrap label.e-float-text,
+  .e-small .e-float-input .e-input-in-wrap label.e-float-text {
     @if $skin-name == 'material' {
-      top: -11px;
+      top: -10px;
     }
   }
 
   .e-float-input.e-small.e-bigger .e-input-in-wrap label.e-float-text,
   .e-bigger .e-float-input.e-small .e-input-in-wrap label.e-float-text {
     @if $skin-name == 'material' {
-      top: -12px;
+      top: -10px;
     }
   }
 
@@ -581,24 +586,27 @@
   }
 
   .e-float-input {
+    line-height: 1.4;
     margin-bottom: $input-margin-bottom;
     margin-top: $input-margin-top;
     padding-top: $float-input-wrap-padding-top;
     position: relative;
-    width: auto;
+    width: 100%;
   }
 
   .e-float-input.e-bigger,
   .e-bigger .e-float-input {
+    line-height: 1.5;
     margin-bottom: $input-bigger-margin-bottom;
     margin-top: $input-bigger-margin-top;
     padding-top: $float-input-bigger-wrap-padding-top;
     position: relative;
-    width: auto;
+    width: 100%;
   }
 
   .e-float-input.e-small,
   .e-small .e-float-input {
+    line-height: 1.35;
     margin-bottom: $input-small-margin-bottom;
     margin-top: $input-small-margin-top;
     padding-top: $float-input-small-wrap-padding-top;
@@ -608,9 +616,24 @@
   .e-bigger.e-small .e-float-input.e-small,
   .e-bigger .e-float-input.e-small,
   .e-small .e-float-input.e-bigger {
+    line-height: 1.4;
     margin-bottom: $input-small-bigger-margin-bottom;
     margin-top: $input-small-bigger-margin-top;
     padding-top: $float-input-bigger-small-wrap-padding-top;
+  }
+
+  .e-input-group.e-bigger,
+  .e-bigger .e-input-group {
+    line-height: 1.5;
+  }
+
+  .e-input-group.e-small,
+  .e-small .e-input-group,
+  .e-input-group.e-small.e-bigger,
+  .e-bigger.e-small .e-input-group.e-small,
+  .e-bigger .e-input-group.e-small,
+  .e-small .e-input-group.e-bigger {
+    line-height: normal;
   }
 
   .e-float-input.e-no-float-label,
@@ -653,14 +676,14 @@
   .e-float-input textarea.e-bigger,
   .e-bigger .e-float-input textarea {
     font-size: $input-bigger-font-size;
-    line-height: 1.5;
+    line-height: inherit;
     padding: $float-input-bigger-padding;
   }
 
   .e-float-input.e-small input,
   .e-float-input.e-small textarea {
     font-size: $input-small-font-size;
-    line-height: 1.35;
+    line-height: inherit;
     padding: $float-input-small-padding;
   }
 
@@ -671,7 +694,7 @@
   .e-float-input.e-small textarea.e-bigger,
   .e-bigger .e-float-input.e-small textarea {
     font-size: $input-bigger-small-font-size;
-    line-height: 1.4;
+    line-height: inherit;
     padding: $float-input-bigger-small-padding;
   }
 
@@ -861,7 +884,7 @@
   .e-input-group.e-small.e-bigger,
   .e-bigger .e-input.e-small,
   .e-bigger .e-input-group.e-small {
-    line-height: 1.35;
+    line-height: inherit;
     margin-bottom: $input-small-bigger-margin-bottom;
   }
 
@@ -1015,7 +1038,7 @@
   }
 
   .e-float-custom-tag.e-input-group {
-    display: flex;
+    display: inline-flex;
   }
 
   .e-input-group .e-input-group-icon {

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## TextBox
+
+### Bug Fixes
+
+* TextBox alignment issue with grid inline editing is fixed.
+
 ## 1.0.16-preview (2017-09-08)
 
 ## NumericTextBox
