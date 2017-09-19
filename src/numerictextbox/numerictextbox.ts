@@ -489,7 +489,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         let beforeUpdate: string = this.element.value;
         setTimeout(() => {
             if (!this.numericRegex().test(this.element.value)) {
-                this.element.value = beforeUpdate;
+                this.setElementValue(beforeUpdate);
             }
         });
     }
@@ -572,15 +572,19 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private modifyText(): void {
         if (this.value || this.value === 0) {
             let value: string = this.formatNumber();
-            this.element.value = this.isFocused ? value : this.instance.getNumberFormat(this.cultureInfo)(this.value);
+            let elementValue: string = this.isFocused ? value : this.instance.getNumberFormat(this.cultureInfo)(this.value);
+            this.setElementValue(elementValue);
             attributes(this.element, { 'aria-valuenow': value });
             this.hiddenInput.value = value;
         } else {
-            this.element.value = '';
+            this.setElementValue('');
             this.element.removeAttribute('aria-valuenow');
             this.hiddenInput.value = null;
         }
     };
+    private setElementValue(val: string, element ? : HTMLInputElement): void {
+        Input.setValue(val, (element ? element : this.element), this.floatLabelType);
+    }
 
     private validateState(): void {
         this.isValidState = true;
@@ -682,7 +686,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.prevValue = this.value;
         if ((this.value || this.value === 0)) {
             let formatValue: string = this.formatNumber();
-            this.element.value = formatValue;
+            this.setElementValue(formatValue);
             if (!this.isPrevFocused) {
                 this.element.setSelectionRange(0, formatValue.length);
             }
@@ -702,7 +706,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                 let ele: HTMLInputElement = this.element;
                 setTimeout(
                     () => {
-                        ele.value = value;
+                        this.setElementValue(value, ele);
                     },
                     200);
             }

@@ -10,6 +10,12 @@
 
 * Now, The TextBox overflowed content displayed in ellipsis format.
 
+## NumericTextBox
+
+### Bug Fixes
+ 
+ * The required attribute has been removed from the NumericTextBox, to avoid default browser validation tooltip.
+
 ## 1.0.17-preview (2017-09-14)
 
 ## TextBox
