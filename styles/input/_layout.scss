@@ -24,6 +24,22 @@
     width: 100%;
   }
 
+  input.e-input,
+  .e-input-group input.e-input,
+  .e-input-group input,
+  .e-float-input input,
+  .e-float-input.e-input-group input,
+  input.e-input:focus,
+  .e-input-group input.e-input:focus,
+  .e-input-group input:focus,
+  .e-float-input input:focus,
+  .e-float-input.e-input-group input:focus {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
   .e-input:focus {
     border-width: $input-focus-border-width;
     padding-bottom: $input-padding-bottom;
@@ -344,31 +360,54 @@
   label.e-float-text {
     font-size: $float-placeholder-font-size;
     font-weight: 400;
+    left: 0;
+    overflow: hidden;
     padding-left: $float-label-padding;
     pointer-events: none;
     position: absolute;
+    text-overflow: ellipsis;
     top: -11px;
     transform: translate3d(0, 16px, 0) scale(1);
     transform-origin: left top;
     transition: .25s cubic-bezier(.25, .8, .25, 1);
+    white-space: nowrap;
     width: 100%;
    }
 
-  label.e-float-text {
+  label.e-float-text,
+  .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
+    top: -11px;
+  }
+
+  label.e-float-text,
+  .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger.e-small .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     @include float-label-alignment;
-   }
+  }
 
   .e-float-input.e-bigger label.e-float-text,
   .e-float-input label.e-float-text.e-bigger,
   .e-float-input input.e-bigger ~ label.e-float-text,
-  .e-bigger .e-float-input label.e-float-text {
+  .e-bigger .e-float-input label.e-float-text,
+  .e-float-input.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom  {
     font-size: $float-placeholder-bigger-font-size;
     @if $skin-name == 'material' {
       top: -8px;
     }
   }
 
-  .e-float-input.e-small label.e-float-text {
+  .e-float-input.e-small label.e-float-text,
+  .e-float-input.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom  {
     font-size: $float-placeholder-small-font-size;
     @if $skin-name == 'material' {
       top: -11px;
@@ -376,14 +415,20 @@
   }
 
   .e-float-input.e-small.e-bigger label.e-float-text,
-  .e-bigger .e-float-input.e-small label.e-float-text {
+  .e-bigger .e-float-input.e-small label.e-float-text,
+  .e-bigger .e-float-input.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger.e-small .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     font-size: $float-placeholder-bigger-small-font-size;
     @if $skin-name == 'material' {
       top: -10px;
     }
   }
 
-  .e-float-input .e-input-in-wrap label.e-float-text {
+  .e-float-input .e-input-in-wrap label.e-float-text,
+  .e-float-input .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     @if $skin-name == 'material' {
       top: -11px;
     }
@@ -392,21 +437,29 @@
   .e-float-input.e-bigger .e-input-in-wrap label.e-float-text,
   .e-float-input .e-input-in-wrap label.e-float-text.e-bigger,
   .e-float-input .e-input-in-wrap input.e-bigger ~ label.e-float-text,
-  .e-bigger .e-float-input .e-input-in-wrap label.e-float-text {
+  .e-bigger .e-float-input .e-input-in-wrap label.e-float-text,
+  .e-float-input.e-bigger .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom  {
     @if $skin-name == 'material' {
       top: -8px;
     }
   }
 
   .e-float-input.e-small .e-input-in-wrap label.e-float-text,
-  .e-small .e-float-input .e-input-in-wrap label.e-float-text {
+  .e-small .e-float-input .e-input-in-wrap label.e-float-text,
+  .e-float-input.e-small .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     @if $skin-name == 'material' {
       top: -10px;
     }
   }
 
   .e-float-input.e-small.e-bigger .e-input-in-wrap label.e-float-text,
-  .e-bigger .e-float-input.e-small .e-input-in-wrap label.e-float-text {
+  .e-bigger .e-float-input.e-small .e-input-in-wrap label.e-float-text,
+  .e-bigger .e-float-input.e-small .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input.e-bigger .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger.e-small .e-float-input .e-input-in-wrap input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     @if $skin-name == 'material' {
       top: -10px;
     }
@@ -807,10 +860,19 @@
     margin-bottom: $zero-value;
   }
 
-  .e-input-group:not(.e-float-icon-left)::before,
-  .e-input-group:not(.e-float-icon-left)::after,
-  .e-input-group.e-float-icon-left .e-input-in-wrap::before,
-  .e-input-group.e-float-icon-left .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input)::before,
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input)::after,
+  .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::before,
+  .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-animation;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+  .e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-animation;
     }
@@ -823,8 +885,15 @@
     }
   }
 
-  .e-input-group:not(.e-float-icon-left)::before,
-  .e-input-group.e-float-icon-left .e-input-in-wrap::before {
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input)::before,
+  .e-input-group.e-float-icon-left .e-input-in-wrap:not(.e-float-input)::before {
+    @if $skin-name == 'material' {
+      @include input-group-animation-left;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before {
     @if $skin-name == 'material' {
       @include input-group-animation-left;
     }
@@ -836,10 +905,19 @@
     }
   }
 
-  .e-input-group:not(.e-float-icon-left).e-input-focus::before,
-  .e-input-group:not(.e-float-icon-left).e-input-focus::after,
-  .e-input-group.e-float-icon-left.e-input-focus .e-input-in-wrap::before,
-  .e-input-group.e-float-icon-left.e-input-focus .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input).e-input-focus::before,
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input).e-input-focus::after,
+  .e-input-group.e-float-icon-left:not(.e-float-input).e-input-focus .e-input-in-wrap::before,
+  .e-input-group.e-float-icon-left:not(.e-float-input).e-input-focus .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-animation-width;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-input-focus .e-float-line::before,
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-input-focus .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left.e-input-focus .e-input-in-wrap .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left.e-input-focus .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-animation-width;
     }
@@ -852,8 +930,15 @@
     }
   }
 
-  .e-input-group:not(.e-float-icon-left)::after,
-  .e-input-group.e-float-icon-left .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input)::after,
+  .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-animation-right;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-animation-right;
     }
@@ -1456,7 +1541,7 @@
     display: none;
   }
 
-  .e-input-group:not(.e-input-focus):not(.e-static-clear) .e-clear-icon.e-clear-icon-hide {
+  .e-input-group .e-clear-icon.e-clear-icon-hide {
     display: none;
   }
 
@@ -1594,7 +1679,8 @@
     margin-bottom: $zero-value;
   }
 
-  .e-float-input label.e-float-text.e-label-bottom {
+  .e-float-input label.e-float-text.e-label-bottom,
+  .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     @if $skin-name == 'material' {
       transform: translate3d(0, 16px, 0) scale(1);
     }

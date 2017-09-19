@@ -86,7 +86,14 @@
     border-color: $input-error-color;
   }
 
-  label.e-float-text {
+  label.e-float-text,
+  .e-float-input:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-small:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-small.e-bigger:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input.e-small:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     color: $input-header-font-color;
   }
 
@@ -197,10 +204,19 @@
     color: $input-placeholder;
   }
 
-  .e-input-group:not(.e-float-icon-left)::before,
-  .e-input-group:not(.e-float-icon-left)::after,
-  .e-input-group.e-float-icon-left .e-input-in-wrap::before,
-  .e-input-group.e-float-icon-left .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input)::before,
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input)::after,
+  .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::before,
+  .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-animation-bg;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+  .e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-animation-bg;
     }
@@ -213,10 +229,19 @@
     }
   }
 
-  .e-input-group:not(.e-float-icon-left).e-success::before,
-  .e-input-group:not(.e-float-icon-left).e-success::after,
-  .e-input-group.e-float-icon-left.e-success .e-input-in-wrap::before,
-  .e-input-group.e-float-icon-left.e-success .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input).e-success::before,
+  .e-input-group:not(.e-float-icon-left):not(.e-float-input).e-success::after,
+  .e-input-group.e-float-icon-left.e-success:not(.e-float-input) .e-input-in-wrap::before,
+  .e-input-group.e-float-icon-left.e-success:not(.e-float-input) .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-success-animation-bg;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-success .e-float-line::before,
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-success .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left.e-success .e-input-in-wrap .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left.e-success .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-success-animation-bg;
     }
@@ -229,10 +254,19 @@
     }
   }
 
-  .e-input-group:not(.e-float-icon-left).e-warning::before,
-  .e-input-group:not(.e-float-icon-left).e-warning::after,
-  .e-input-group.e-float-icon-left.e-warning .e-input-in-wrap::before,
-  .e-input-group.e-float-icon-left.e-warning .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left).e-warning:not(.e-float-input)::before,
+  .e-input-group:not(.e-float-icon-left).e-warning:not(.e-float-input)::after,
+  .e-input-group.e-float-icon-left.e-warning:not(.e-float-input) .e-input-in-wrap::before,
+  .e-input-group.e-float-icon-left.e-warning:not(.e-float-input) .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-warning-animation-bg;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-warning .e-float-line::before,
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-warning .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left.e-warning .e-input-in-wrap .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left.e-warning .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-warning-animation-bg;
     }
@@ -245,10 +279,19 @@
     }
   }
 
-  .e-input-group:not(.e-float-icon-left).e-error::before,
-  .e-input-group:not(.e-float-icon-left).e-error::after,
-  .e-input-group.e-float-icon-left.e-error .e-input-in-wrap::before,
-  .e-input-group.e-float-icon-left.e-error .e-input-in-wrap::after {
+  .e-input-group:not(.e-float-icon-left).e-error:not(.e-float-input)::before,
+  .e-input-group:not(.e-float-icon-left).e-error:not(.e-float-input)::after,
+  .e-input-group.e-float-icon-left.e-error:not(.e-float-input) .e-input-in-wrap::before,
+  .e-input-group.e-float-icon-left.e-error:not(.e-float-input) .e-input-in-wrap::after {
+    @if $skin-name == 'material' {
+      @include input-group-error-animation-bg;
+    }
+  }
+
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-error .e-float-line::before,
+  .e-float-input.e-input-group:not(.e-float-icon-left).e-error .e-float-line::after,
+  .e-float-input.e-input-group.e-float-icon-left.e-error .e-input-in-wrap .e-float-line::before,
+  .e-float-input.e-input-group.e-float-icon-left.e-error .e-input-in-wrap .e-float-line::after {
     @if $skin-name == 'material' {
       @include input-group-error-animation-bg;
     }

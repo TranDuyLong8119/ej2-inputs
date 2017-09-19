@@ -113,7 +113,6 @@ export namespace Input {
               inputObject.container.classList.add(CLASSNAMES.FLOATCUSTOMTAG); }
             inputObject.container.classList.add(CLASSNAMES.FLOATINPUT);
         }
-        attributes(args.element, { 'required': 'true' });
         floatLinelement = createElement('span', { className: CLASSNAMES.FLOATLINE });
         floatLabelElement = createElement('label', { className: CLASSNAMES.FLOATTEXT });
         if (!isNullOrUndefined(args.element.id) && args.element.id !== '') {
@@ -202,7 +201,6 @@ export namespace Input {
     * To create clear button.
     */
     function createClearButton(element: HTMLInputElement, container: HTMLElement ): HTMLElement {
-        attributes(element, { 'required': '' });
         let button: HTMLElement = <HTMLElement>createElement('span', { className: CLASSNAMES.CLEARICON });
         container.appendChild(button);
         if (!isNullOrUndefined(privateInputObj.container) &&
@@ -255,6 +253,34 @@ export namespace Input {
          }
         return container;
     }
+
+   /**
+    * Sets the value to the input element.
+    * ```
+    * E.g : Input.setValue('content', element, "Auto", true );
+    * ```
+    * @param value - Specify the value of the input element.
+    * @param element - The element on which the specified value is updated.
+    * @param floatLabelType - Specify the float label type of the input element.
+    * @param clearButton - Boolean value to specify whether the clear icon is enabled / disabled on the input.
+    */
+
+    export function setValue(value: string, element: HTMLInputElement, floatLabelType ?: string, clearButton?: boolean): void {
+        element.value = value;
+        if ((!isNullOrUndefined(floatLabelType)) && floatLabelType === 'Auto') {
+            validateLabel(element, floatLabelType);
+        }
+        if (!isNullOrUndefined(clearButton) && clearButton ) {
+            let parentElement: HTMLElement = <HTMLElement> getParentNode(element);
+            let button: HTMLElement = <HTMLElement> parentElement.getElementsByClassName(CLASSNAMES.CLEARICON)[0];
+            if (element.value && parentElement.classList.contains('e-input-focus')) {
+                removeClass([button], CLASSNAMES.CLEARICONHIDE);
+            } else {
+                addClass([button], CLASSNAMES.CLEARICONHIDE);
+            }
+        }
+    }
+
    /**
     * Sets the single or multiple cssClass to wrapper of input element.
     * ```
@@ -433,7 +459,9 @@ export namespace Input {
     export function addFloating(input: HTMLInputElement, type: FloatLabelType, placeholder: string): void {
       let container: HTMLElement = <HTMLElement>closest(input, '.' + CLASSNAMES.INPUTGROUP);
       if (type !== 'Never') {
-      let args: InputArgs = {element: input, floatLabelType: type , properties : {placeholder : placeholder } };
+      let customTag: string = container.tagName;
+      customTag = customTag !== 'DIV' && customTag !== 'SPAN' ? customTag : null;
+      let args: InputArgs = {element: input, floatLabelType: type , customTag: customTag, properties : {placeholder : placeholder } };
       let iconEle: HTMLElement = <HTMLElement>container.querySelector('.e-clear-icon');
       let inputObj: InputObject = { container: container};
       input.classList.remove(CLASSNAMES.INPUT);

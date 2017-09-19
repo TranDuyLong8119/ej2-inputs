@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## TextBox
+
+### Bug Fixes
+
+* The required attribute displays browser validation tooltip when over on the input issue was fixed.
+
+* Now, The TextBox overflowed content displayed in ellipsis format.
+
 ## 1.0.17-preview (2017-09-14)
 
 ## TextBox

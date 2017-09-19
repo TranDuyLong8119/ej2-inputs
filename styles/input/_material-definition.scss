@@ -53,7 +53,7 @@ $input-bigger-small-child-min-width: 18px;
 $input-small-child-padding: $zero-value;
 $input-small-child-min-height: 16px;
 $input-small-child-min-width: 16px;
-$input-font-family: 'Roboto', Segoe UI;
+$input-font-family: 'Roboto', 'Segoe UI', 'GeezaPro', 'DejaVu Serif';
 $input-border: $zero-value $border-type;
 $float-input-border: $zero-value $border-type;
 $input-border-width: $zero-value $zero-value $one-value $zero-value;
@@ -205,14 +205,16 @@ $input-clear-icon-font: '\e932';
 @mixin float-label-alignment {
   content: '';
 }
+
+// sass-lint:disable no-vendor-prefixes
 @mixin input-group-animation {
-  bottom: -2px;
+  -moz-transition: .2s cubic-bezier(.4, 0, .4, 1);
+  bottom: 0;
   content: '';
   height: 2px;
   position: absolute;
   transition: .2s cubic-bezier(.4, 0, .4, 1);
   width: 0;
-  z-index: 10;
 }
 @mixin input-group-animation-left {
   left: 50%;

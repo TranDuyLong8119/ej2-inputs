@@ -60,7 +60,7 @@ $input-bigger-small-child-min-width: 34px;
 $input-small-child-padding: $zero-value;
 $input-small-child-min-height: 24px;
 $input-small-child-min-width: 24px;
-$input-font-family: Segoe UI;
+$input-font-family: 'Segoe UI', 'GeezaPro', 'DejaVu Serif';
 $input-border: $zero-value $border-type;
 $float-input-border: $zero-value $border-type;
 $input-border-width: 1px;
@@ -211,9 +211,11 @@ $input-clear-icon-font: '\e953';
   -ms-transform: translate(-0%, -50%);
   -o-transform: translate(-0%, -50%);
   -webkit-transform: translate(-0%, -50%);
+  box-sizing: border-box;
   left: 0%;
   top: 50%;
   transform: translate(-0%, -50%);
+  width: 100%;
 }
 @mixin input-group-animation {
   content: '';

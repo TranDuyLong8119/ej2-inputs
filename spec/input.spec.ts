@@ -1,8 +1,7 @@
 /**
  * Floating Input through Utility
  */
-import { createElement, attributes } from '@syncfusion/ej2-base';
-import { isNullOrUndefined } from '@syncfusion/ej2-base';
+import { createElement, attributes , isNullOrUndefined} from '@syncfusion/ej2-base';
 import { Input, InputObject } from '../src/input/input';
 
 describe('Input', () => {
@@ -272,6 +271,24 @@ describe('Input', () => {
             element.remove();
         });
     });
+    describe('Render Floating Input box with Custom tag', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                floatLabelType: "Auto",
+                customTag: 'ej2-custominput'
+            });
+        });
+        it('Check custom tag name', () => {
+            expect((inputObj.container.tagName === 'EJ2-CUSTOMINPUT')).toBe(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
     describe('Dynamic update the properties', () => {
         describe('setPlaceholder', () => {
             let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
@@ -373,6 +390,117 @@ describe('Input', () => {
                 element.remove();
             });
         });
+
+        describe('SetValue method with floating input', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                    element: element,
+                    floatLabelType: "Auto",
+                    properties: {
+                      placeholder: 'Float Input',
+                      showClearButton: false
+                    }
+                });
+            });
+            it('set value dynamically to the input', () => {
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(false);
+                Input.setValue("Hello",element,"Auto",false);
+                expect(element.value).toEqual("Hello");
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+                Input.setValue("",element,"Auto",false);
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(false);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('SetValue method with Always floating input', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                    element: element,
+                    floatLabelType: "Always",
+                    properties: {
+                      placeholder: 'Float Input',
+                      showClearButton: false
+                    }
+                });
+            });
+
+            it('set value dynamically to the float always type input', () => {
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+                Input.setValue("Hello",element,"Always",false);
+                expect(element.value).toEqual("Hello");
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+                Input.setValue("",element,"Always",false);
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('SetValue method with clear input', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                    element: element,
+                    floatLabelType: "Auto",
+                    properties: {
+                      placeholder: 'Float Input',
+                      showClearButton: true
+                    }
+                });
+            });
+            it('set value dynamically to the input', () => {
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(false);
+                Input.setValue("Hello",element,"Auto",true);
+                expect(element.value).toEqual("Hello");
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+                Input.setValue("",element,"Auto",true);
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(false);
+                inputObj.container.classList.add('e-input-focus');
+                Input.setValue("Hello",element,"Auto",true);
+                expect(document.getElementById('inputpopup').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(false);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('SetValue method with Always float with clear input', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                    element: element,
+                    floatLabelType: "Always",
+                    properties: {
+                      placeholder: 'Float Input',
+                      showClearButton: true
+                    }
+                });
+            });
+
+            it('set value dynamically to the float always type input', () => {
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+                Input.setValue("Hello",element,"Always",true);
+                expect(element.value).toEqual("Hello");
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+                Input.setValue("",element,"Always",true);
+                expect((<HTMLElement>inputObj.container.childNodes[2]).classList.contains('e-label-top')).toBe(true);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+
         describe('removeAttributes', () => {
             let disabledAttrs: { [key: string]: string } = { 'disabled': 'disabled' };
             let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
@@ -383,6 +511,29 @@ describe('Input', () => {
             it('remove the disabled attribute in input element', () => {
                 Input.removeAttributes({ 'disabled': 'disabled', 'aria-disabled': 'true' }, element);
                 expect(element.hasAttribute('disabled')).toBe(false);
+            });
+            afterAll(() => {
+                element.remove();
+            });
+        });
+        describe('Remove and Add Floating feature with custom tag', () => {
+            let inputObj: InputObject;
+            let element: HTMLInputElement;
+            element = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: {  value: 'Floating text' } });
+            beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 customTag: "ej2-custom-tag",
+                 properties: {
+                  placeholder: 'Search Float',
+                }
+          });
+            });
+            it('add Floating', () => {
+                let container: HTMLElement = inputObj.container;
+                Input.addFloating(element, 'Auto', 'Search Float');
+                expect(container.childElementCount).toBe(3);
             });
             afterAll(() => {
                 element.remove();
@@ -458,7 +609,6 @@ describe('Input', () => {
                 expect(container.childElementCount).toBe(2);
                 Input.addFloating(element, 'Auto', 'Search Float');
                 expect(container.childElementCount).toBe(4);
-                debugger;
                 expect(container.lastElementChild.classList.contains('e-input-down')).toBe(true);
             });
             afterAll(() => {
@@ -487,7 +637,6 @@ describe('Input', () => {
                 expect(container.childElementCount).toBe(2);
                 Input.addFloating(element, 'Auto', 'Search Float');
                 expect(container.childElementCount).toBe(4);
-                debugger;
             });
             afterAll(() => {
                 element.remove();
@@ -1515,6 +1664,34 @@ describe('Input Groups - Enable/Disable', () => {
             element.value = "";
             Input.setReadonly(false, element, "Auto");
             expect((inputObj.container.getElementsByClassName('e-float-text')[0].classList.contains('e-label-bottom'))).toBe(true);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Disabled state with floating input', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputclear2', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                floatLabelType: "Auto",
+                properties: {
+                  showClearButton: true
+                }
+            });
+        });
+        it('Enable the input when value is present inside the textbox', () => {
+            element.value = "Content";
+            Input.setEnabled(true, element, "Auto");
+            expect((inputObj.container.classList.contains('e-disabled'))).toBe(false);
+        });
+        it('Disable input when textbox has no value', () => {
+            element.value = "";
+            Input.setEnabled(false, element, "Auto");
+            expect((inputObj.container.classList.contains('e-disabled'))).toBe(true);
         });
         afterAll(() => {
             element.remove();
