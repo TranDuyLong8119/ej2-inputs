@@ -8,33 +8,54 @@ import { FormValidator, ErrorOption } from '../../src/form-validator/form-valida
  */
 
 // input elements initialization
-let inputElement1: string = '<div>'
-    + createElement('input', { attrs: { id: 'required', type: 'text', name: 'input1' } }).outerHTML + '</div>';
-let inputElement2: string = '<div>' + createElement('input', { attrs: { id: 'mail', type: 'text', name: 'input2' } }).outerHTML + '</div>';
-let messageElement: string = '<div><input type=\'text\' required=\'true\' name=\'input5\' data-required-message=\'this is required field\' /></div>';
-let rangeLengthElement: string = '<div>' + createElement('input', { attrs: { rangeLength: '[2,5]', name: 'input6' } }).outerHTML + '</div>';
-let rangeElement: string = '<div>' + createElement('input', { attrs: { range: '[5,10]', name: 'input7' } }).outerHTML + '</div>';
-let minElement: string = '<div>' + createElement('input', { attrs: { min: '5', name: 'input8' } }).outerHTML + '</div>';
-let maxElement: string = '<div>' + createElement('input', { attrs: { max: '5', name: 'input9' } }).outerHTML + '</div>';
-let minLengthElement: string = '<div>' + createElement('input', { attrs: { minLength: '5', name: 'input10' } }).outerHTML + '</div>';
-let maxLengthElement: string = '<div>' + createElement('input', { attrs: { maxLength: '5', name: 'input11' } }).outerHTML + '</div>';
-let mailElement: string = '<div>' + createElement('input', { attrs: { type: 'email', name: 'input12' } }).outerHTML + '</div>';
-let urlElement: string = '<div>' + createElement('input', { attrs: { type: 'url', name: 'input13' } }).outerHTML + '</div>';
-let dateElement: string = '<div>' + createElement('input', { attrs: { type: 'date', name: 'input14' } }).outerHTML + '</div>';
-let numberElement: string = '<div>' + createElement('input', { attrs: { type: 'number', name: 'input15' } }).outerHTML + '</div>';
-let digitsElement: string = '<div>' + createElement('input', { attrs: { type: 'digits', name: 'input16' } }).outerHTML + '</div>';
-let regexElement: string = '<div>' + createElement('input', { attrs: { regex: '^[0-5]*$', name: 'input17' } }).outerHTML + '</div>';
-let dateIsoElement: string = '<div>' + createElement('input', { attrs: { type: 'dateIso', name: 'input18' } }).outerHTML + '</div>';
-let check: string = '<div><input type=\'checkbox\' id=\'check\' name=\'input3\' /></div>';
-let radio: string = '<div><input type=\'radio\' id=\'radio\' name=\'input4\' /></div>';
+let inputElement1: string = "<div>"
+    + createElement("input", { attrs: { id: "required", type: "text", name: "input1" } }).outerHTML + "</div>";
+let inputElement2: string = "<div>" + createElement("input", { attrs: { id: "mail", type: "text", name: "input2" } }).outerHTML + "</div>";
+let check: string = "<div><input type=\"checkbox\" id=\"check\" name=\"input3\" /></div>";
+let radio: string = "<div><input type=\"radio\" id=\"radio\" name=\"input4\" /></div>";
 // tslint:disable-next-line:max-line-length
-let intSelect: string = '<div><select name=\'select\' id=\'select\'><option value=\'\'>Year</option><option value=\'1\'>1990</option></select></div>';
-let submit: string = '<div><input type=\'submit\' id=\'submit\' name=\'submit\' value=\'Submit\' /></div>';
+let intSelect: string = "<div><select name=\"select\" id=\"select\"><option value=\"\">Year</option><option value=\"1\">1990</option></select></div>";
+let submit: string = "<div><input type=\"submit\" id=\"submit\" name=\"submit\" value=\"Submit\" /></div>";
+
+// html5 input elements
+let messageElement: string = "<div><input type=\"text\" required=\"true\" name=\"messageElement\" data-required-message=\"this is required field\" /></div>";
+let rangeLengthElement: string = "<div>" + createElement("input", { attrs: { rangeLength: "[2,5]", name: "rangeLengthElement" } }).outerHTML + "</div>";
+let rangeElement: string = "<div>" + createElement("input", { attrs: { range: "[5,10]", name: "rangeElement" } }).outerHTML + "</div>";
+let minElement: string = "<div>" + createElement("input", { attrs: { min: "5", name: "minElement" } }).outerHTML + "</div>";
+let maxElement: string = "<div>" + createElement("input", { attrs: { max: "5", name: "maxElement" } }).outerHTML + "</div>";
+let minLengthElement: string = "<div>" + createElement("input", { attrs: { minLength: "5", name: "minLengthElement" } }).outerHTML + "</div>";
+let maxLengthElement: string = "<div>" + createElement("input", { attrs: { maxLength: "5", name: "maxLengthElement" } }).outerHTML + "</div>";
+let mailElement: string = "<div>" + createElement("input", { attrs: { type: "email", name: "mailElement" } }).outerHTML + "</div>";
+let urlElement: string = "<div>" + createElement("input", { attrs: { type: "url", name: "urlElement" } }).outerHTML + "</div>";
+let dateElement: string = "<div>" + createElement("input", { attrs: { type: "date", name: "dateElement" } }).outerHTML + "</div>";
+let numberElement: string = "<div>" + createElement("input", { attrs: { type: "number", name: "numberElement" } }).outerHTML + "</div>";
+let regexElement: string = "<div>" + createElement("input", { attrs: { regex: "^[0-5]*$", name: "regexElement" } }).outerHTML + "</div>";
+let dateIsoElement: string = "<div>" + createElement("input", { attrs: { type: "dateIso", name: "dateIsoElement" } }).outerHTML + "</div>";
+let digitsElement: string = "<div><input type=\"text\" name=\"digitsElement\" data-validation=\"digits\" /></div>";
+let dataValidation: string = "<div><input type=\"text\" name=\"datavalidation\" data-validation=\"number\" /></div>";
+let compareToElement: string = "<div><input type=\"text\" name=\"compareTo\" id=\"compareToElement\" /></div>";
+let comparableElement: string = "<div><input type=\"text\" name=\"comparable\" id=\"comparableElement\" equalto=\"compareToElement\" /></div>";
+
+// annotation input elements
+let annotationCompareTo: string = "<div><input type=\"text\" name=\"annotationCompareTo\" id=\"annotationCompareTo\" /></div>";
+let annotationComparable: string = "<div><input type=\"text\" name=\"annotaionComparable\" data-val=\"true\" data-val-equalto-other=\"annotationCompareTo\" /></div>";
+let annotationCredit: string = "<div><input type=\"text\" name=\"annotationCredit\" data-val=\"true\" data-val-creditcard=\"Please Enter valid Creditcard number\" /></div>";
+let annotationMinLength: string = "<div><input type=\"text\" name=\"annotationMinLength\" data-val=\"true\" data-val-minlength-min=\"5\" /></div>";
+let annotationMaxLength: string = "<div><input type=\"text\" name=\"annotationMaxLength\" data-val=\"true\" data-val-maxlength-max=\"5\" /></div>";
+let annotationRange: string = "<div><input type=\"text\" name=\"annotationRange\" data-val=\"true\" data-val-range-min=\"5\" data-val-range-max=\"10\" data-val-range=\"please enter number between 5 to 10\"/></div>";
+let annotationPhone: string = "<div><input type=\"text\" name=\"annotationPhone\" data-val=\"true\" data-val-phone=\"Enter valid phone number\"</div>";
+let annotationRegex: string = "<div><input type=\"text\" name=\"annotationRegex\" data-val=\"true\" data-val-regex-pattern=\"^[a-zA-Z]+$\" /></div>";
+let annotationRequired: string = "<div><input type=\"text\" name=\"annotationRequired\" data-val=\"true\" data-val-required=\"this is required field\" /></div>";
+let errorContainer: string = "<div><input type=\"text\" name=\"errorContainer\" data-val=\"true\" data-val-required=\"this is required field\" data-msg-containerid=\"errDiv\" /><div id=\"errDiv\"></div></div>";
+let mvcErrorContainer: string = "<div><input type=\"text\" id=\"input\" name=\"mvcErrorContainer\" data-val=\"true\" data-val-required=\"this is required field\" /><span data-valmsg-for=\"input\"></span></div>";
 
 // form elements initialization
 let formElement: HTMLFormElement = <HTMLFormElement>createElement('form', { id: 'formId', innerHTML: inputElement1 });
 let inputTypeElement: HTMLFormElement = <HTMLFormElement>createElement('form', { id: 'formId1', innerHTML: inputElement1 + inputElement2 + check + radio + intSelect + submit });
-let html5RulesElements: HTMLFormElement = <HTMLFormElement>createElement('form', { id: 'formId2', innerHTML: messageElement + mailElement + rangeLengthElement + minElement + maxElement + minLengthElement + maxLengthElement + rangeElement + urlElement + dateElement + numberElement + digitsElement + regexElement + dateIsoElement });
+let html5Elements: HTMLFormElement = <HTMLFormElement>createElement('form', {
+    id: 'formId2', innerHTML: messageElement + mailElement + rangeLengthElement + minElement + maxElement + minLengthElement + maxLengthElement + rangeElement + urlElement + dateElement + numberElement + digitsElement + regexElement + dateIsoElement + dataValidation + errorContainer + mvcErrorContainer
+});
+let annotationElements: HTMLFormElement = <HTMLFormElement>createElement('form', { id: 'formId1', innerHTML: annotationCredit + annotationMinLength + annotationMaxLength + annotationRange + annotationPhone + annotationRegex + annotationComparable + annotationCompareTo + annotationRequired + compareToElement + comparableElement + annotationCompareTo + annotationComparable });
 
 // form object initialization
 let formObj: FormValidator;
@@ -1359,193 +1380,254 @@ describe('FormValidator # ', () => {
 
     describe('Html5 rules validation # ', () => {
         beforeAll(() => {
-            formObj = new FormValidator(html5RulesElements);
+            formObj = new FormValidator(html5Elements);
         });
 
         describe('Html5 type validation # ', () => {
             it('testing for email without value # ', () => {
-                expect(formObj.validate('input12')).toEqual(true);
+                expect(formObj.validate('mailElement')).toEqual(true);
             });
 
             it('testing for invalid email # ', () => {
-                setInputValue(formObj, 'input12', '@a.com');
-                expect(formObj.validate('input12')).toEqual(false);
+                setInputValue(formObj, 'mailElement', '@a.com');
+                expect(formObj.validate('mailElement')).toEqual(false);
             });
 
             it('testing for valid email # ', () => {
-                setInputValue(formObj, 'input12', 'abc@sample.com');
-                expect(formObj.validate('input12')).toEqual(true);
+                setInputValue(formObj, 'mailElement', 'abc@sample.com');
+                expect(formObj.validate('mailElement')).toEqual(true);
             });
 
             it('testing for url without value # ', () => {
-                expect(formObj.validate('input13')).toEqual(true);
+                expect(formObj.validate('urlElement')).toEqual(true);
             });
 
             it('testing for invalid url # ', () => {
-                setInputValue(formObj, 'input13', 'www//:http.com');
-                expect(formObj.validate('input13')).toEqual(false);
+                setInputValue(formObj, 'urlElement', 'www//:http.com');
+                expect(formObj.validate('urlElement')).toEqual(false);
             });
 
             it('testing for valid url # ', () => {
-                setInputValue(formObj, 'input13', 'http://www.sample.com');
-                expect(formObj.validate('input13')).toEqual(true);
+                setInputValue(formObj, 'urlElement', 'http://www.sample.com');
+                expect(formObj.validate('urlElement')).toEqual(true);
             });
 
             it('testing for date without value # ', () => {
-                expect(formObj.validate('input14')).toEqual(true);
+                expect(formObj.validate('dateElement')).toEqual(true);
             });
 
             it('testing for invalid date # ', () => {
-                setInputValue(formObj, 'input14', '9095');
-                formObj.validate('input14');
-                let errorElement: HTMLElement = <HTMLElement>formObj.getInputElement('input14').nextSibling;
+                setInputValue(formObj, 'dateElement', '9095');
+                formObj.validate('dateElement');
+                let errorElement: HTMLElement = <HTMLElement>formObj.getInputElement('dateElement').nextSibling;
                 expect(errorElement.classList.contains('e-error')).toEqual(true);
             });
 
             it('testing for valid date # ', () => {
-                setInputValue(formObj, 'input14', '01/13/2000');
-                expect(formObj.validate('input14')).toEqual(true);
+                setInputValue(formObj, 'dateElement', '01/13/2000');
+                expect(formObj.validate('dateElement')).toEqual(true);
             });
 
             it('testing for number without value # ', () => {
-                expect(formObj.validate('input15')).toEqual(true);
+                expect(formObj.validate('numberElement')).toEqual(true);
             });
 
             it('testing for invalid number # ', () => {
-                setInputValue(formObj, 'input15', '12fds');
-                formObj.validate('input15');
-                let errorElement: HTMLElement = <HTMLElement>formObj.getInputElement('input14').nextSibling;
+                setInputValue(formObj, 'numberElement', '12fds');
+                formObj.validate('numberElement');
+                let errorElement: HTMLElement = <HTMLElement>formObj.getInputElement('dateElement').nextSibling;
                 expect(errorElement.classList.contains('e-error')).toEqual(true);
 
             });
 
             it('testing for valid number # ', () => {
-                setInputValue(formObj, 'input15', '123');
-                expect(formObj.validate('input15')).toEqual(true);
+                setInputValue(formObj, 'numberElement', '123');
+                expect(formObj.validate('numberElement')).toEqual(true);
             });
 
             it('testing for digits without value # ', () => {
-                expect(formObj.validate('input16')).toEqual(true);
+                expect(formObj.validate('digitsElement')).toEqual(true);
             });
 
             it('testing for valid digits # ', () => {
-                setInputValue(formObj, 'input16', '123');
-                expect(formObj.validate('input16')).toEqual(true);
+                setInputValue(formObj, 'digitsElement', '123');
+                expect(formObj.validate('digitsElement')).toEqual(true);
             });
 
             it('testing for invalid digits # ', () => {
-                setInputValue(formObj, 'input16', '123qwe');
-                formObj.validate('input16');
-                let errorElement: HTMLElement = <HTMLElement>formObj.getInputElement('input14').nextSibling;
+                setInputValue(formObj, 'digitsElement', '123qwe');
+                formObj.validate('digitsElement');
+                let errorElement: HTMLElement = <HTMLElement>formObj.getInputElement('dateElement').nextSibling;
                 expect(errorElement.classList.contains('e-error')).toEqual(true);
             });
         });
 
         describe('Html5 array format attributes validation # ', () => {
             it('testing for invalid rangeLength # ', () => {
-                setInputValue(formObj, 'input6', '1');
-                expect(formObj.validate('input6')).toEqual(false);
+                setInputValue(formObj, 'rangeLengthElement', '1');
+                expect(formObj.validate('rangeLengthElement')).toEqual(false);
             });
 
             it('testing for valid rangeLength-case 1 # ', () => {
-                setInputValue(formObj, 'input6', '123');
-                expect(formObj.validate('input6')).toEqual(true);
+                setInputValue(formObj, 'rangeLengthElement', '123');
+                expect(formObj.validate('rangeLengthElement')).toEqual(true);
             });
 
             it('testing for valid rangeLength-case 2 # ', () => {
-                setInputValue(formObj, 'input6', '123ab');
-                expect(formObj.validate('input6')).toEqual(true);
+                setInputValue(formObj, 'rangeLengthElement', '123ab');
+                expect(formObj.validate('rangeLengthElement')).toEqual(true);
             });
 
             it('testing for invalid range-case-1 # ', () => {
-                setInputValue(formObj, 'input7', '4');
-                expect(formObj.validate('input7')).toEqual(false);
+                setInputValue(formObj, 'rangeElement', '4');
+                expect(formObj.validate('rangeElement')).toEqual(false);
             });
 
             it('testing for invalid range-case 2 # ', () => {
-                setInputValue(formObj, 'input7', '11');
-                expect(formObj.validate('input7')).toEqual(false);
+                setInputValue(formObj, 'rangeElement', '11');
+                expect(formObj.validate('rangeElement')).toEqual(false);
             });
 
             it('testing for valid range-case 1 # ', () => {
-                setInputValue(formObj, 'input7', '6');
-                expect(formObj.validate('input7')).toEqual(true);
+                setInputValue(formObj, 'rangeElement', '6');
+                expect(formObj.validate('rangeElement')).toEqual(true);
             });
             it('testing for valid range-case 2 # ', () => {
-                setInputValue(formObj, 'input7', '8');
-                expect(formObj.validate('input7')).toEqual(true);
+                setInputValue(formObj, 'rangeElement', '8');
+                expect(formObj.validate('rangeElement')).toEqual(true);
             });
         });
 
         describe('Html5 default attribute validation # ', () => {
             it('testing for invalid min value # ', () => {
-                setInputValue(formObj, 'input8', '4');
-                expect(formObj.validate('input8')).toEqual(false);
+                setInputValue(formObj, 'minElement', '4');
+                expect(formObj.validate('minElement')).toEqual(false);
             });
 
             it('testing for valid min value-case 1 # ', () => {
-                setInputValue(formObj, 'input8', '5');
-                expect(formObj.validate('input8')).toEqual(true);
+                setInputValue(formObj, 'minElement', '5');
+                expect(formObj.validate('minElement')).toEqual(true);
             });
 
             it('testing for valid min value-case 2 # ', () => {
-                setInputValue(formObj, 'input8', '6');
-                expect(formObj.validate('input8')).toEqual(true);
+                setInputValue(formObj, 'minElement', '6');
+                expect(formObj.validate('minElement')).toEqual(true);
             });
 
             it('testing for invalid max value # ', () => {
-                setInputValue(formObj, 'input9', '6');
-                expect(formObj.validate('input9')).toEqual(false);
+                setInputValue(formObj, 'maxElement', '6');
+                expect(formObj.validate('maxElement')).toEqual(false);
             });
 
             it('testing for valid max value-case 1 # ', () => {
-                setInputValue(formObj, 'input9', '5');
-                expect(formObj.validate('input9')).toEqual(true);
+                setInputValue(formObj, 'maxElement', '5');
+                expect(formObj.validate('maxElement')).toEqual(true);
             });
 
             it('testing for valid max value-case 2 # ', () => {
-                setInputValue(formObj, 'input9', '4');
-                expect(formObj.validate('input9')).toEqual(true);
+                setInputValue(formObj, 'maxElement', '4');
+                expect(formObj.validate('maxElement')).toEqual(true);
             });
 
             it('testing for invalid minLength value # ', () => {
-                setInputValue(formObj, 'input10', '1234');
-                expect(formObj.validate('input10')).toEqual(false);
+                setInputValue(formObj, 'minLengthElement', '1234');
+                expect(formObj.validate('minLengthElement')).toEqual(false);
             });
 
             it('testing for valid minLength value-case 1 # ', () => {
-                setInputValue(formObj, 'input10', '12345');
-                expect(formObj.validate('input10')).toEqual(true);
+                setInputValue(formObj, 'minLengthElement', '12345');
+                expect(formObj.validate('minLengthElement')).toEqual(true);
             });
 
             it('testing for valid minLength value-case 2 # ', () => {
-                setInputValue(formObj, 'input10', '12-abc');
-                expect(formObj.validate('input10')).toEqual(true);
+                setInputValue(formObj, 'minLengthElement', '12-abc');
+                expect(formObj.validate('minLengthElement')).toEqual(true);
             });
 
             it('testing for invalid maxLength value # ', () => {
-                setInputValue(formObj, 'input11', '123456');
-                expect(formObj.validate('input11')).toEqual(false);
+                setInputValue(formObj, 'maxLengthElement', '123456');
+                expect(formObj.validate('maxLengthElement')).toEqual(false);
             });
 
             it('testing for valid maxLength value-case 1 # ', () => {
-                setInputValue(formObj, 'input11', '1234');
-                expect(formObj.validate('input11')).toEqual(true);
+                setInputValue(formObj, 'maxLengthElement', '1234');
+                expect(formObj.validate('maxLengthElement')).toEqual(true);
             });
 
             it('testing for valid maxLength value-case 2 # ', () => {
-                setInputValue(formObj, 'input11', '12-ab');
-                expect(formObj.validate('input11')).toEqual(true);
+                setInputValue(formObj, 'maxLengthElement', '12-ab');
+                expect(formObj.validate('maxLengthElement')).toEqual(true);
             });
 
             it('testing for invalid regex value-case 2 # ', () => {
-                setInputValue(formObj, 'input17', '12ab');
-                expect(formObj.validate('input17')).toEqual(false);
+                setInputValue(formObj, 'regexElement', '12ab');
+                expect(formObj.validate('regexElement')).toEqual(false);
             });
 
             it('testing for valid regex value-case 2 # ', () => {
-                setInputValue(formObj, 'input17', '123');
-                expect(formObj.validate('input17')).toEqual(true);
+                setInputValue(formObj, 'regexElement', '123');
+                expect(formObj.validate('regexElement')).toEqual(true);
+            });
+        });
+
+        describe('data-validation attribute validation # ', () => {
+            it('testing for valid number-case 1 #', () => {
+                setInputValue(formObj, 'datavalidation', '1');
+                expect(formObj.validate('datavalidation')).toEqual(true);
+            });
+
+            it('testing for valid number-case 2 #', () => {
+                setInputValue(formObj, 'datavalidation', '112');
+                expect(formObj.validate('datavalidation')).toEqual(true);
+            });
+
+            it('testing for valid number-case 3 #', () => {
+                setInputValue(formObj, 'datavalidation', '123.23');
+                expect(formObj.validate('datavalidation')).toEqual(true);
+            });
+
+            it('testing for valid number-case 4 #', () => {
+                setInputValue(formObj, 'datavalidation', '-123.23');
+                expect(formObj.validate('datavalidation')).toEqual(true);
+            });
+
+            it('testing for invalid number-case 1 #', () => {
+                setInputValue(formObj, 'datavalidation', '123ab');
+                expect(formObj.validate('datavalidation')).toEqual(false);
+            });
+
+            it('testing for invalid number-case 2 #', () => {
+                setInputValue(formObj, 'datavalidation', 'abc');
+                expect(formObj.validate('datavalidation')).toEqual(false);
+            });
+
+            it('testing for invalid number-case 3 #', () => {
+                setInputValue(formObj, 'datavalidation', '123-abc');
+                expect(formObj.validate('datavalidation')).toEqual(false);
+            });
+
+            it('testing for invalid number-case 4 #', () => {
+                setInputValue(formObj, 'datavalidation', '-123-3');
+                expect(formObj.validate('datavalidation')).toEqual(false);
+            });
+
+        });
+
+        describe('compare attribute validation # ', () => {
+            beforeAll(() => {
+                formObj = new FormValidator(annotationElements);
+            });
+
+            it('getting value for comparable element-case 1 #', () => {
+                setInputValue(formObj, 'compareTo', '111');
+                setInputValue(formObj, 'comparable', '111');
+                expect(formObj.validate('comparable')).toEqual(true);
+            });
+
+            it('getting value for comparable element-case 2 #', () => {
+                setInputValue(formObj, 'compareTo', '123456');
+                setInputValue(formObj, 'comparable', '12345');
+                expect(formObj.validate('comparable')).toEqual(false);
             });
         });
 
@@ -1553,6 +1635,143 @@ describe('FormValidator # ', () => {
             formObj.destroy();
         });
     });
+
+    describe('data-annotation validation # ', () => {
+        beforeAll(() => {
+            formObj = new FormValidator(annotationElements);
+        });
+        it('valid minlength validation-case 1 # ', () => {
+            setInputValue(formObj, 'annotationMinLength', 'abcde');
+            expect(formObj.validate('annotationMinLength')).toEqual(true);
+        });
+
+        it('valid minlength validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationMinLength', 'abcde343245');
+            expect(formObj.validate('annotationMinLength')).toEqual(true);
+        });
+
+        it('invalid minlength validation # ', () => {
+            setInputValue(formObj, 'annotationMinLength', '4');
+            expect(formObj.validate('annotationMinLength')).toEqual(false);
+        });
+
+        it('valid maxlength validation # ', () => {
+            setInputValue(formObj, 'annotationMaxLength', '5er');
+            expect(formObj.validate('annotationMaxLength')).toEqual(true);
+        });
+
+        it('invalid maxlength validation # ', () => {
+            setInputValue(formObj, 'annotationMaxLength', '6rwrerwr');
+            expect(formObj.validate('annotationMaxLength')).toEqual(false);
+        });
+
+        it('valid range validation-case 1 # ', () => {
+            setInputValue(formObj, 'annotationRange', '5');
+            expect(formObj.validate('annotationRange')).toEqual(true);
+        });
+
+        it('valid range validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationRange', '7');
+            expect(formObj.validate('annotationRange')).toEqual(true);
+        });
+
+        it('valid range validation-case 3 # ', () => {
+            setInputValue(formObj, 'annotationRange', '10');
+            expect(formObj.validate('annotationRange')).toEqual(true);
+        });
+
+        it('invalid range validation-case 1 # ', () => {
+            setInputValue(formObj, 'annotationRange', '4');
+            expect(formObj.validate('annotationRange')).toEqual(false);
+        });
+
+        it('invalid range validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationRange', '11');
+            expect(formObj.validate('annotationRange')).toEqual(false);
+        });
+
+        it('valid regex validation # ', () => {
+            setInputValue(formObj, 'annotationRegex', 'abc');
+            expect(formObj.validate('annotationRegex')).toEqual(true);
+        });
+
+        it('invalid regex validation-case 1 # ', () => {
+            setInputValue(formObj, 'annotationRegex', '11');
+            expect(formObj.validate('annotationRegex')).toEqual(false);
+        });
+
+        it('invalid regex validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationRegex', '11abc');
+            expect(formObj.validate('annotationRegex')).toEqual(false);
+        });
+
+        it('valid phone validation-case 1 # ', () => {
+            setInputValue(formObj, 'annotationPhone', '9837684652');
+            expect(formObj.validate('annotationPhone')).toEqual(true);
+        });
+
+        it('valid phone validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationPhone', '044234234');
+            expect(formObj.validate('annotationPhone')).toEqual(true);
+
+        });
+
+        it('valid phone validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationPhone', '+14155552671');
+            expect(formObj.validate('annotationPhone')).toEqual(true);
+        });
+
+        it('invalid phone validation-case 1 # ', () => {
+            setInputValue(formObj, 'annotationPhone', '988362');
+            expect(formObj.validate('annotationPhone')).toEqual(false);
+        });
+
+        it('invalid phone validation-case 2 # ', () => {
+            setInputValue(formObj, 'annotationPhone', '044234988878870');
+            expect(formObj.validate('annotationPhone')).toEqual(false);
+        });
+
+        it('invalid creditcard validation # ', () => {
+            setInputValue(formObj, 'annotationCredit', '0442349');
+            expect(formObj.validate('annotationCredit')).toEqual(false);
+        });
+
+        it('valid creditcard validation # ', () => {
+            setInputValue(formObj, 'annotationCredit', '5647645364577657');
+            expect(formObj.validate('annotationCredit')).toEqual(true);
+        });
+
+        it('annotation comparable element #', () => {
+            setInputValue(formObj, 'annotationCompareTo', '111');
+            setInputValue(formObj, 'annotaionComparable', '111');
+            expect(formObj.validate('annotaionComparable')).toEqual(true);
+        });
+
+        it('annotation comparable element #', () => {
+            setInputValue(formObj, 'annotationCompareTo', '123456');
+            setInputValue(formObj, 'annotaionComparable', '12345');
+            expect(formObj.validate('annotaionComparable')).toEqual(false);
+        });
+
+        describe('annotation messages # ', () => {
+            let formObj: any
+            beforeAll(() => {
+                formObj = new FormValidator(annotationElements);
+            });
+            it('valid required field validation # ', () => {
+                expect(formObj.rules.annotationRequired.required[0]).toEqual('this is required field');
+            });
+
+            afterAll(function () {
+                formObj.destroy();
+            });
+        });
+
+        afterAll(function () {
+            formObj.destroy();
+        });
+    });
+
 
     describe('errorOption # ', () => {
         beforeEach(() => {
@@ -1955,7 +2174,7 @@ describe('FormValidator # ', () => {
 
 
         it('check validationComplete with status as failure # ', (done) => {
-            let onValidationComplete: (args: Object) => void = (args: any) => {
+            let onValidationComplete: (args: any) => void = (args: any) => {
                 expect(args['status']).toEqual('failure');
                 expect(args['errorElement']).not.toEqual(undefined);
                 done();
@@ -1974,7 +2193,7 @@ describe('FormValidator # ', () => {
             let validComplete: FormValidator = new FormValidator(validElement);
             validElement.getElementsByTagName('input')[0].value = 'testing';
             validComplete.rules = options.rules;
-            let onValidationComplete: (args: Object) => void = (args: any) => {
+            let onValidationComplete: (args: any) => void = (args: any) => {
                 expect(args['status']).toEqual('success');
                 expect(args['errorElement']).toEqual(undefined);
                 done();
@@ -2032,14 +2251,36 @@ describe('FormValidator # ', () => {
         });
     });
 
-    describe('custom messages for html5 rules # ', () => {
-        let formInstance: FormValidator
+    describe('append error message into div # ', () => {
+        let formObj: FormValidator
         beforeAll(() => {
-            formInstance = new FormValidator(html5RulesElements);
+            formObj = new FormValidator(html5Elements);
+        });
+
+        it('append message # ', () => {
+            setInputValue(formObj, 'errorContainer', '');
+            expect(formObj.validate('errorContainer')).toEqual(false);
+        });
+
+        it('append message in mvc # ', () => {
+            setInputValue(formObj, 'mvcErrorContainer', '');
+            expect(formObj.validate('mvcErrorContainer')).toEqual(false);
+        });
+
+
+        afterAll(() => {
+            formObj.destroy();
+        });
+    });
+
+    describe('custom messages for html5 rules # ', () => {
+        let formInstance: any
+        beforeAll(() => {
+            formInstance = new FormValidator(html5Elements);
         });
 
         it('match with rules message # ', () => {
-            expect((formInstance.rules as any).input5.required[1]).toEqual('this is required field');
+            expect(formInstance.rules.messageElement.required[1]).toEqual('this is required field');
         });
 
         afterAll(() => {

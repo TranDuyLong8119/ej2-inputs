@@ -11,6 +11,8 @@ const VALIDATE_EMAIL: RegExp = new RegExp('^[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.
 const VALIDATE_URL: RegExp = new RegExp('^((ftp|http|https):\/\/)?www\.([A-z]{2,})\.([A-z]{2,})$');
 const VALIDATE_DATE_ISO: RegExp = new RegExp('^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$');
 const VALIDATE_DIGITS: RegExp = new RegExp('^[0-9]*$');
+const VALIDATE_PHONE: RegExp = new RegExp('^[+]?[0-9]{9,13}$');
+const VALIDATE_CREDITCARD: RegExp = new RegExp('^\\d{13,16}$');
 
 /**
  * ErrorOption values
@@ -197,12 +199,16 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         let rules: string[] = Object.keys(this.rules);
         if (selected && rules.length) {
             this.validateRules(selected);
+            //filter the selected element it don't have any valid input element
+            return rules.indexOf(selected) !== -1 && this.errorRules.filter((data: ErrorRule) => {
+                return data.name === selected;
+            }).length === 0;
         } else {
             for (let name of rules) {
                 this.validateRules(name);
             }
+            return this.errorRules.length === 0;
         }
-        return this.errorRules.length === 0;
     }
 
     /**
@@ -262,6 +268,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         url: 'Please enter a valid URL.',
         date: 'Please enter a valid date.',
         dateIso: 'Please enter a valid date ( ISO ).',
+        creditcard: 'Please enter valid card number',
         number: 'Please enter a valid number.',
         digits: 'Please enter only digits.',
         maxLength: 'Please enter no more than {0} characters.',
@@ -271,8 +278,9 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         max: 'Please enter a value less than or equal to {0}.',
         min: 'Please enter a value greater than or equal to {0}.',
         regex: 'Please enter a correct value.',
-        tel: 'Please enter a valid 10 digit mobile number.',
+        tel: 'Please enter a valid phone number.',
         pattern: 'Please enter a correct pattern value.',
+        equalTo: 'Please enter the valid match text',
     };
 
     /**
@@ -305,10 +313,12 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
     }
 
     private createHTML5Rules(): void {
+        let defRules: string[] = ['required', 'regex', 'rangeLength', 'maxLength', 'minLength', 'dateIso', 'digits', 'pattern',
+            'data-val-required', 'type', 'data-validation', 'min', 'max', 'range', 'equalTo', 'data-val-minlength-min',
+            'data-val-equalto-other', 'data-val-maxlength-max', 'data-val-range-min', 'data-val-regex-pattern', 'data-val-length-max',
+            'data-val-creditcard', 'data-val-phone'];
+        let acceptedTypes: string[] = ['email', 'url', 'date', 'number', 'tel'];
         for (let input of (this.inputElements)) {
-            let defRules: string[] = ['regex', 'required', 'rangeLength', 'maxLength', 'minLength', 'digits',
-                'dateIso', 'pattern', 'type', 'min', 'max', 'range'];
-            let acceptedTypes: string[] = ['email', 'url', 'date', 'number', 'digits'];
             // Default attribute rules 
             let allRule: { [key: string]: Object } = {};
             for (let rule of defRules) {
@@ -316,6 +326,10 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
                     switch (rule) {
                         case 'required':
                             this.defRule(input, allRule, rule, input.required);
+                            break;
+                        case 'data-validation':
+                            rule = input.getAttribute(rule);
+                            this.defRule(input, allRule, rule, true);
                             break;
                         case 'type':
                             if (acceptedTypes.indexOf(input.type) !== -1) {
@@ -326,8 +340,16 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
                         case 'range':
                             this.defRule(input, allRule, rule, JSON.parse(input.getAttribute(rule)));
                             break;
+                        case 'equalTo':
+                            let id: string = input.getAttribute(rule);
+                            this.defRule(input, allRule, rule, id);
+                            break;
                         default:
-                            this.defRule(input, allRule, rule, input.getAttribute(rule));
+                            if (input.getAttribute('data-val') === 'true') {
+                                this.annotationRule(input, allRule, rule, input.getAttribute(rule));
+                            } else {
+                                this.defRule(input, allRule, rule, input.getAttribute(rule));
+                            }
                     }
                 }
             }
@@ -338,10 +360,54 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         }
     }
 
+    private annotationRule(input: HTMLInputElement, ruleCon: { [key: string]: Object }, ruleName: string, value: Object): void {
+        let annotationRule: string[] = ruleName.split('-');
+        let rulesList: string[] = ['required', 'creditcard', 'phone', 'maxlength', 'minlength', 'range', 'regex', 'equalto'];
+        let ruleFirstName: string = annotationRule[annotationRule.length - 1];
+        let ruleSecondName: string = annotationRule[annotationRule.length - 2];
+        if (rulesList.indexOf(ruleFirstName) !== -1) {
+            switch (ruleFirstName) {
+                case 'required':
+                    this.defRule(input, ruleCon, 'required', value);
+                    break;
+                case 'creditcard':
+                    this.defRule(input, ruleCon, 'creditcard', value);
+                    break;
+                case 'phone':
+                    this.defRule(input, ruleCon, 'tel', value);
+                    break;
+            }
+        } else if (rulesList.indexOf(ruleSecondName) !== -1) {
+            switch (ruleSecondName) {
+                case 'maxlength':
+                    this.defRule(input, ruleCon, 'maxLength', value);
+                    break;
+                case 'minlength':
+                    this.defRule(input, ruleCon, 'minLength', value);
+                    break;
+                case 'range':
+                    let minvalue: string = input.getAttribute('data-val-range-min');
+                    let maxvalue: string = input.getAttribute('data-val-range-max');
+                    this.defRule(input, ruleCon, 'range', [minvalue, maxvalue]);
+                    break;
+                case 'equalto':
+                    let id: string[] = input.getAttribute(ruleName).split('.');
+                    this.defRule(input, ruleCon, 'equalTo', id[id.length - 1]);
+                    break;
+                case 'regex':
+                    this.defRule(input, ruleCon, 'regex', value);
+                    break;
+            }
+        }
+    }
+
     private defRule(input: HTMLInputElement, ruleCon: { [key: string]: Object }, ruleName: string, value: Object): void {
         let message: string = input.getAttribute('data-' + ruleName + '-message');
+        let annotationMessage: string = input.getAttribute('data-val-' + ruleName);
         if (message) {
             value = [value, message];
+        } else if (annotationMessage) {
+            value = [value, annotationMessage];
         }
         ruleCon[ruleName] = value;
     }
@@ -452,7 +518,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
                 this.inputElement.setAttribute('aria-invalid', 'true');
                 this.inputElement.setAttribute('aria-describedby', this.inputElement.id + '-info');
                 if (!this.infoElement) {
-                    this.createErrorElement(name, errorRule.message);
+                    this.createErrorElement(name, errorRule.message, this.inputElement);
                 } else {
                     this.showMessage(errorRule);
                 }
@@ -479,7 +545,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         let params: Object = this.rules[name][rule];
         let param: Object = (params instanceof Array && typeof params[1] === 'string') ? params[0] : params;
         let currentRule: { [key: string]: Object } = <IKeyValue>this.rules[name][rule];
-        let args: ValidArgs = { value: this.inputElement.value, param: param, element: this.inputElement };
+        let args: ValidArgs = { value: this.inputElement.value, param: param, element: this.inputElement, formElement: this.element };
         this.trigger('validationBegin', args);
         if (currentRule && typeof currentRule[0] === 'function') {
             let fn: () => boolean = <() => boolean>currentRule[0];
@@ -506,7 +572,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
     }
 
     // Create error element based on name and error message
-    private createErrorElement(name: string, message: string): void {
+    private createErrorElement(name: string, message: string, input: HTMLInputElement): void {
         let errorElement: HTMLElement = createElement(this.errorElement, {
             className: this.errorClass,
             innerHTML: message,
@@ -519,8 +585,17 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
             errorElement = createElement(this.errorContainer, { className: this.errorClass, innerHTML: errorElement.outerHTML });
         }
         errorElement.id = this.inputElement.name + '-info';
-        // Call custom placement function if customPlacement is not null
-        if (this.customPlacement != null) {
+
+        // Append error message into MVC error message element
+        if (this.element.querySelector('[data-valmsg-for="' + input.id + '"]')) {
+            this.element.querySelector('[data-valmsg-for="' + input.id + '"]').appendChild(errorElement);
+        } else if (input.hasAttribute('data-msg-containerid') === true) {
+            // Append error message into custom div element
+            let containerId: string = input.getAttribute('data-msg-containerid');
+            let divElement: Element = input.parentElement.querySelector('#' + containerId);
+            divElement.appendChild(errorElement);
+        } else if (this.customPlacement != null) {
+            // Call custom placement function if customPlacement is not null
             this.customPlacement.call(this, this.inputElement, errorElement);
         } else {
             this.inputElement.parentNode.insertBefore(errorElement, this.inputElement.nextSibling);
@@ -591,6 +666,12 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         dateIso: (option: ValidArgs): boolean => {
             return VALIDATE_DATE_ISO.test(option.value);
         },
+        tel: (option: ValidArgs): boolean => {
+            return VALIDATE_PHONE.test(option.value);
+        },
+        creditcard: (option: ValidArgs): boolean => {
+            return VALIDATE_CREDITCARD.test(option.value);
+        },
         number: (option: ValidArgs): boolean => {
             return !isNaN(Number(option.value)) && option.value.indexOf(' ') === -1;
         },
@@ -633,6 +714,11 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         regex: (option: ValidArgs): boolean => {
             return new RegExp(<string>option.param).test(option.value);
         },
+        equalTo: (option: ValidArgs): boolean => {
+            let compareTo: HTMLInputElement = <HTMLInputElement>option.formElement.querySelector('#' + option.param);
+            option.param = compareTo.value;
+            return option.param === option.value;
+        },
     };
 
     // Return boolean result if the input have chekcable or submit types
@@ -650,6 +736,7 @@ interface ValidArgs {
     value: string;
     param?: Object;
     element?: HTMLElement;
+    formElement?: HTMLFormElement;
 }
 
 interface ErrorRule {
