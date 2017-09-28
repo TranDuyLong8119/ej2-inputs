@@ -10,6 +10,10 @@
 
 ## TextBox
 
+### New Features
+
+* Bootstrap theme support is provided for textboxes.
+
 ### Bug Fixes
 
 * Issue with icon alignment in the TextBox was fixed.
