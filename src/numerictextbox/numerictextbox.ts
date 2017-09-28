@@ -796,9 +796,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     /**
-     * Prepares the NumericTextBox for safe removal from the DOM. 
-     * Detaches all event handlers, attributes, and classes to avoid memory leaks. 
-     * > This method does not remove the NumericTextBox input element from the DOM.
+     * Removes the component from the DOM and detaches all its related event handlers.
+     * Also it maintains the initial input element from the DOM.
      * @method destroy
      * @return {void}
      */
