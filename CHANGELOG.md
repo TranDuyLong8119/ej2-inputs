@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## FormValidator
+
+### New Features
+* MVC Data Annotation Support added.
+* HTML 5 Message Container support.
+
+
 ## 1.0.18-preview (2017-09-20)
 
 ## TextBox
