@@ -53,7 +53,7 @@
   }
 
   .e-input-group:not(.e-disabled) .e-input-group-icon:hover {
-    @if $skin-name == 'fabric' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       background: $input-hover-bg-color;
     }
     color: $input-group-hovered-color;
@@ -148,9 +148,14 @@
     }
   }
 
+  // sass-lint:disable no-vendor-prefixes 
   .e-input-group:not(.e-disabled) .e-input-group-icon:active {
     background: $input-group-pressed-bg;
     color: $input-group-pressed-color;
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-icon-shadow;
+      box-shadow: $input-icon-shadow;
+    }
   }
 
   input.e-input::selection,
@@ -341,10 +346,52 @@
     border-color: $input-border-color;
   }
 
+  // sass-lint:disable no-vendor-prefixes
   .e-input:focus:not(.e-success):not(.e-warning):not(.e-error),
   .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:focus,
   .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) textarea:focus {
     border-color: $input-active-border-color;
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-border-shadow;
+      box-shadow: $input-border-shadow;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input:focus:not(.e-success):not(.e-warning).e-error,
+  .e-float-input:not(.e-success):not(.e-warning).e-error:not(.e-input-group) input:focus,
+  .e-float-input:not(.e-success):not(.e-warning).e-error:not(.e-input-group) textarea:focus {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-error-border-shadow;
+      box-shadow: $input-error-border-shadow;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input:focus:not(.e-error):not(.e-warning).e-success,
+  .e-float-input:not(.e-error):not(.e-warning).e-success:not(.e-input-group) input:focus,
+  .e-float-input:not(.e-error):not(.e-warning).e-success:not(.e-input-group) textarea:focus {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-success-border-shadow;
+      box-shadow: $input-success-border-shadow;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input:focus:not(.e-success):not(.e-error).e-warning,
+  .e-float-input:not(.e-success):not(.e-error).e-warning:not(.e-input-group) input:focus,
+  .e-float-input:not(.e-success):not(.e-error).e-warning:not(.e-input-group) textarea:focus {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-warning-border-shadow;
+      box-shadow: $input-warning-border-shadow;
+    }
+  }
+
+  .e-input-group:not(.e-float-input):not(.e-float-icon-left) .e-input:focus:not(.e-success):not(.e-warning):not(.e-error),
+  .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap .e-input:focus:not(.e-success):not(.e-warning):not(.e-error) {
+    @if $skin-name == 'bootstrap' {
+      box-shadow: none;
+    }
   }
 
   .e-input-group:not(.e-success):not(.e-warning):not(.e-error) input.e-input:focus {
@@ -357,9 +404,38 @@
     }
   }
 
+  // sass-lint:disable no-vendor-prefixes 
   .e-input-group.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) {
     @if $skin-name != 'material' {
       border-color: $input-group-border-color-focus;
+    }
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-border-shadow;
+      box-shadow: $input-border-shadow;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes 
+  .e-input-group.e-input-focus:not(.e-success):not(.e-warning).e-error {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-error-border-shadow;
+      box-shadow: $input-error-border-shadow;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes 
+  .e-input-group.e-input-focus:not(.e-error):not(.e-warning).e-success {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-success-border-shadow;
+      box-shadow: $input-success-border-shadow;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes 
+  .e-input-group.e-input-focus:not(.e-success):not(.e-error).e-warning {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-warning-border-shadow;
+      box-shadow: $input-warning-border-shadow;
     }
   }
 
@@ -369,7 +445,9 @@
 
   .e-input-group.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) .e-input:first-child:focus,
   .e-input-group.e-input-focus.e-rtl:not(.e-success):not(.e-warning):not(.e-error) span:last-child.e-input-group-icon {
-    border-color: $input-group-border-right-focus;
+    @if $skin-name != 'bootstrap' {
+      border-color: $input-group-border-right-focus;
+    }
   }
 
   .e-input-group.e-input-focus.e-rtl:not(.e-success):not(.e-warning):not(.e-error) span.e-input-group-icon,
@@ -377,13 +455,17 @@
   .e-input-focus.e-rtl:not(.e-success):not(.e-warning):not(.e-error) .e-input:first-child:focus,
   .e-input-focus:not(.e-success):not(.e-warning):not(.e-error) .e-input:last-child:focus,
   .e-input-group.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) span.e-input-group-icon {
-    border-color:  $input-group-border-left-focus;
+    @if $skin-name != 'bootstrap' {
+      border-color:  $input-group-border-left-focus;
+    }
    }
 
   .e-input-group.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) span:first-child.e-input-group-icon,
   .e-input-group.e-input-focus.e-rtl:not(.e-success):not(.e-warning):not(.e-error) .e-input:last-child:focus,
   .e-input-group.e-input-focus:not(.e-success):not(.e-warning):not(.e-error) span:first-child.e-input-group-icon {
-    border-color: transparent;
+    @if $skin-name != 'bootstrap' {
+      border-color: transparent;
+    }
    }
 
   .e-input-group:not(.e-success):not(.e-warning):not(.e-error):not(.e-float-icon-left),
@@ -400,14 +482,40 @@
     }
   }
 
-  .e-input-group:active:not(.e-success):not(.e-warning):not(.e-error) {
-    @if $skin-name == 'fabric' {
+  // sass-lint:disable no-vendor-prefixes 
+  .e-input-group:not(.e-disabled):active:not(.e-success):not(.e-warning):not(.e-error) {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       border-color: $input-active-border-color;
+    }
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-border-shadow;
+      box-shadow: $input-border-shadow;
+    }
+  }
+
+  .e-input-group:not(.e-disabled):active:not(.e-success):not(.e-warning).e-error {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-error-border-shadow;
+      box-shadow: $input-error-border-shadow;
+    }
+  }
+
+  .e-input-group:not(.e-disabled):active:not(.e-error):not(.e-warning).e-success {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-success-border-shadow;
+      box-shadow: $input-success-border-shadow;
+    }
+  }
+
+  .e-input-group:not(.e-disabled):active:not(.e-success):not(.e-error).e-warning {
+    @if $skin-name == 'bootstrap' {
+      -webkit-box-shadow: $input-warning-border-shadow;
+      box-shadow: $input-warning-border-shadow;
     }
   }
 
   .e-input-group.e-disabled:not(.e-success):not(.e-warning):not(.e-error) {
-    @if $skin-name == 'fabric' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       border-color: $input-disable-border-color;
     }
   }
@@ -476,6 +584,13 @@
   .e-float-input .e-clear-icon,
   .e-input-group .e-clear-icon {
     color: $input-clear-icon-color;
+  }
+
+  .e-float-input:not(.e-disabled) .e-clear-icon:hover,
+  .e-input-group:not(.e-disabled) .e-clear-icon:hover {
+    @if $skin-name == 'bootstrap' {
+      color: $input-clear-icon-hover-color;
+    }
   }
 
   .e-float-input.e-disabled .e-clear-icon,
@@ -607,7 +722,7 @@
 
   input.e-input:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]):not(:focus),
   textarea.e-input:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]) {
-    @if $skin-name == 'fabric' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       border-color: $input-group-border-color-hover;
     }
   }
@@ -627,7 +742,7 @@
   .e-float-input:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled),
   .e-float-input:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]),
   .e-float-input:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) textarea:not([disabled]) {
-    @if $skin-name != 'material' {
+    @if $skin-name != 'material' and $skin-name != 'bootstrap'  {
       border-color: $input-group-border-color-hover;
     }
   }
@@ -653,7 +768,7 @@
   .e-input-group:active:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled),
   .e-float-input:active:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled),
   .e-float-input:active:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]) {
-    @if $skin-name == 'fabric' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       border-color: $input-active-border-color;
     }
   }

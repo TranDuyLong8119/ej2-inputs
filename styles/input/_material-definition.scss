@@ -118,7 +118,9 @@ $input-group-pressed-color: rgba($grey-black, .54);
 $input-select-font-color: $grey-dark-font;
 $input-right-border-width: $zero-value;
 $input-text-indent: $zero-value;
+$input-small-text-indent: $zero-value;
 $input-bigger-text-indent: $zero-value;
+$input-small-bigger-text-indent: $zero-value;
 $input-disable-font-color: rgba($grey-light-font, .42);
 $float-label-font-color: rgba($grey-light-font, .54);
 $float-label-disbale-font-color: $input-disable-font-color;
@@ -135,6 +137,10 @@ $input-normal-height: 32px - $input-border-size;
 $input-bigger-height: 40px - $input-border-size;
 $input-small-height: 26px - $input-border-size;
 $input-bigger-small-height: 36px - $input-border-size;
+$float-input-normal-height: 32px;
+$float-input-bigger-height: 40px;
+$float-input-small-height: 26px;
+$float-input-bigger-small-height: 36px;
 $input-full-height: 100%;
 $textarea-normal-height: auto;
 $textarea-bigger-height: auto;
@@ -190,7 +196,7 @@ $input-icon-inner-height: 10px;
 $input-clear-icon-font: '\e932';
 
 @mixin input-sizing {
-  content: '';
+  box-sizing: content-box;
 }
 @mixin input-height ($height) {
   content: '';

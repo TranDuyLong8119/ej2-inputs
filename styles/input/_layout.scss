@@ -39,6 +39,15 @@
     white-space: nowrap;
   }
 
+  input.e-input,
+  .e-input-group input.e-input,
+  .e-input-group input,
+  .e-float-input input,
+  .e-float-input.e-input-group input,
+  .e-input-group,
+  .e-float-input {
+    border-radius: $input-border-radius;
+  }
 
   .e-input:focus {
     border-width: $input-focus-border-width;
@@ -117,14 +126,94 @@
     align-items: center;
     border: $input-border;
     border-width: $input-group-child-border-width;
+    box-sizing: content-box;
     cursor: pointer;
     flex-direction: column;
     font-size: $input-icon-font-size;
     justify-content: center;
+    line-height: 1;
     min-height: $input-child-min-height;
     min-width: $input-child-min-width;
     padding: $input-child-padding;
     text-align: center;
+    @if $skin-name == 'bootstrap' {
+      border: 1px solid;
+      border-bottom: $zero-value;
+      border-collapse: collapse;
+      border-top: $zero-value;
+    }
+  }
+
+  .e-input-group .e-input-group-icon:last-child {
+    @if $skin-name == 'bootstrap' {
+      border-right-width: $zero-value;
+    }
+  }
+
+
+  .e-input-group .e-input-group-icon + .e-input-group-icon {
+    @if $skin-name == 'bootstrap' {
+      border-left-width: $zero-value;
+    }
+  }
+
+  .e-input-group .e-input-group-icon:first-child {
+    @if $skin-name == 'bootstrap' {
+      border-left-width: $zero-value;
+    }
+  }
+
+  .e-input-group.e-rtl .e-input-group-icon:last-child {
+    @if $skin-name == 'bootstrap' {
+      border-left-width: $zero-value;
+      border-right-width: 1px;
+    }
+  }
+
+  .e-input-group.e-rtl .e-input-group-icon:first-child {
+    @if $skin-name == 'bootstrap' {
+      border-left-width: 1px;
+      border-right-width: $zero-value;
+    }
+  }
+
+  .e-input-group.e-rtl .e-input-group-icon + .e-input-group-icon {
+    @if $skin-name == 'bootstrap' {
+      border-left-width: 1px;
+      border-right-width: $zero-value;
+    }
+  }
+
+  .e-input-group .e-input-group-icon:last-child {
+    @if $skin-name == 'bootstrap' {
+      border-bottom-right-radius: $input-group-icon-border-radius;
+      border-top-right-radius: $input-group-icon-border-radius;
+    }
+  }
+
+  .e-input-group .e-input-group-icon:first-child {
+    @if $skin-name == 'bootstrap' {
+      border-bottom-left-radius: $input-group-icon-border-radius;
+      border-top-left-radius: $input-group-icon-border-radius;
+    }
+  }
+
+  .e-input-group.e-rtl .e-input-group-icon:last-child {
+    @if $skin-name == 'bootstrap' {
+      border-bottom-left-radius: $input-group-icon-border-radius;
+      border-bottom-right-radius: $zero-value;
+      border-top-left-radius: $input-group-icon-border-radius;
+      border-top-right-radius: $zero-value;
+    }
+  }
+
+  .e-input-group.e-rtl .e-input-group-icon:first-child {
+    @if $skin-name == 'bootstrap' {
+      border-bottom-left-radius: $zero-value;
+      border-bottom-right-radius: $input-group-icon-border-radius;
+      border-top-left-radius: $zero-value;
+      border-top-right-radius: $input-group-icon-border-radius;
+    }
   }
 
   .e-input-group.e-float-icon-left >.e-input-group-icon,
@@ -268,7 +357,9 @@
   }
 
   .e-input-group .e-input-group-icon:first-child {
-    border-left-width: $input-border-left-width;
+    @if $skin-name != 'bootstrap' {
+      border-left-width: $input-border-left-width;
+    }
   }
 
   .e-input-group .e-input-group-icon {
@@ -276,11 +367,15 @@
   }
 
   .e-input-group .e-input-group-icon:not(:last-child) {
-    border-right-width: $zero-value;
+    @if $skin-name != 'bootstrap' {
+      border-right-width: $zero-value;
+    }
   }
 
   .e-input + .e-input-group-icon {
-    border-left-width: $zero-value;
+    @if $skin-name != 'bootstrap' {
+      border-left-width: $zero-value;
+    }
   }
 
   .e-input-group.e-corner .e-input:first-child,
@@ -296,21 +391,29 @@
   }
 
   .e-input-group.e-rtl .e-input-group-icon:first-child {
-    border-left-width: $zero-value;
-    border-right-width: $input-border-left-width;
+    @if $skin-name != 'bootstrap' {
+      border-left-width: $zero-value;
+      border-right-width: $input-border-left-width;
+    }
   }
 
   .e-input-group.e-rtl .e-input-group-icon:last-child {
-    border-left-width: $input-border-left-width;
-    border-right-width: $zero-value;
+    @if $skin-name != 'bootstrap' {
+      border-left-width: $input-border-left-width;
+      border-right-width: $zero-value;
+    }
   }
 
   .e-input-group.e-rtl .e-input-group-icon:not(:last-child) {
-    border-left-width: $input-border-left-width;
+    @if $skin-name != 'bootstrap' {
+      border-left-width: $input-border-left-width;
+    }
   }
 
   .e-input-group.e-rtl .e-input-group-icon  + .e-input {
-    border-right-width: $zero-value;
+    @if $skin-name != 'bootstrap' {
+      border-right-width: $zero-value;
+    }
   }
 
   .e-input.e-small,
@@ -357,7 +460,8 @@
     padding: $input-bigger-small-child-padding;
   }
 
-  label.e-float-text {
+  label.e-float-text,
+  .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     font-size: $float-placeholder-font-size;
     font-weight: 400;
     left: 0;
@@ -370,6 +474,7 @@
     transform: translate3d(0, 16px, 0) scale(1);
     transform-origin: left top;
     transition: .25s cubic-bezier(.25, .8, .25, 1);
+    user-select: none;
     white-space: nowrap;
     width: 100%;
    }
@@ -480,6 +585,10 @@
       padding-right: 0;
       transform: translate3d(-10px, -43px, 0) scale(1);
     }
+    @else if $skin-name == 'bootstrap' {
+      padding-right: 0;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
   }
 
   .e-float-input.e-bigger input:focus ~ label.e-float-text,
@@ -500,6 +609,10 @@
     @else if $skin-name == 'fabric' {
       padding-right: 0;
       transform: translate3d(-10px, -43px, 0) scale(1);
+    }
+    @else if $skin-name == 'bootstrap' {
+      padding-right: 0;
+      transform: translate3d(-10px, -39px, 0) scale(1);
     }
   }
 
@@ -528,6 +641,10 @@
       padding-right: 0;
       transform: translate3d(-10px, -43px, 0) scale(1);
     }
+    @else if $skin-name == 'bootstrap' {
+      padding-right: 0;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
   }
 
   .e-float-input .e-input-in-wrap input:focus ~ label.e-float-text,
@@ -555,7 +672,7 @@
     @if $skin-name == 'material' {
       top: -9px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       padding-right: 0;
       top: 14px;
     }
@@ -586,7 +703,7 @@
     @if $skin-name == 'material' {
       top: -8px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       padding-right: 0;
       top: 17px;
     }
@@ -617,7 +734,7 @@
     @if $skin-name == 'material' {
       top: -10px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       padding-right: 0;
       top: 16px;
     }
@@ -758,6 +875,30 @@
 
   label.e-float-text {
     font-family: $input-font-family;
+  }
+
+  .e-float-input input:valid ~ label.e-float-text,
+  .e-float-input input:focus ~ label.e-float-text,
+  .e-float-input input:valid ~ label.e-float-text.e-label-top,
+  .e-float-input input ~ label.e-float-text.e-label-top,
+  .e-float-input .e-input-in-wrap input:valid ~ label.e-float-text,
+  .e-float-input .e-input-in-wrap input:valid ~ label.e-float-text.e-label-top,
+  .e-float-input .e-input-in-wrap input ~ label.e-float-text.e-label-top {
+    @if $skin-name == 'bootstrap' {
+      font-weight: bold;
+    }
+    user-select: text;
+  }
+
+  label.e-float-text,
+  .e-float-input:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-small:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-small.e-bigger:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input.e-small:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
+    font-weight: 400;
   }
 
   .e-float-input:not(.e-input-group) .e-float-line::before,
@@ -957,7 +1098,9 @@
 
   .e-input-group .e-input-group-icon:hover,
   .e-input-group.e-rtl.e-corner .e-input-group-icon:hover {
-    border-radius: $input-group-border-radius;
+    @if $skin-name != 'bootstrap' {
+      border-radius: $input-group-border-radius;
+    }
   }
 
   .e-input.e-small,
@@ -1203,11 +1346,61 @@
     font-size: $input-bigger-small-font-size;
   }
 
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input:-moz-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input:-moz-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input:-moz-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input::-moz-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input::-moz-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input:-ms-input-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input:-ms-input-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  input.e-input::-webkit-input-placeholder {
+    user-select: none;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  textarea.e-input::-webkit-input-placeholder {
+    user-select: none;
+  }
+
   input.e-input,
   .e-input-group input,
   .e-float-input input {
     @include input-sizing;
     @include input-height ($input-normal-height);
+  }
+
+  .e-float-input:not(.e-input-group) input {
+    @include input-sizing;
+    @include input-height ($float-input-normal-height);
   }
 
   input.e-input.e-bigger,
@@ -1223,6 +1416,14 @@
     @include input-height ($input-bigger-height);
   }
 
+  .e-float-input.e-bigger:not(.e-input-group) input,
+  .e-float-input.e-bigger:not(.e-input-group) input.e-input,
+  .e-bigger .e-float-input:not(.e-input-group) input,
+  .e-bigger .e-float-input:not(.e-input-group) input.e-input {
+    @include input-sizing;
+    @include input-height ($float-input-bigger-height);
+  }
+
   input.e-input.e-small,
   .e-input-group.e-small input,
   .e-input-group.e-small input.e-input,
@@ -1236,6 +1437,14 @@
     @include input-height ($input-small-height);
   }
 
+  .e-float-input.e-small:not(.e-input-group) input,
+  .e-float-input.e-small:not(.e-input-group) input.e-input,
+  .e-small .e-float-input:not(.e-input-group) input,
+  .e-small .e-float-input:not(.e-input-group) input.e-input {
+    @include input-sizing;
+    @include input-height ($float-input-small-height);
+  }
+
   input.e-input.e-small.e-bigger,
   .e-input-group.e-bigger.e-small input,
   .e-input-group.e-bigger.e-small input.e-input,
@@ -1247,6 +1456,14 @@
   .e-bigger.e-small .e-float-input input.e-input {
     @include input-sizing;
     @include input-height ($input-bigger-small-height);
+  }
+
+  .e-float-input.e-bigger.e-small:not(.e-input-group) input,
+  .e-float-input.e-bigger.e-small:not(.e-input-group) input.e-input,
+  .e-bigger.e-small .e-float-input:not(.e-input-group) input,
+  .e-bigger.e-small .e-float-input:not(.e-input-group) input.e-input {
+    @include input-sizing;
+    @include input-height ($float-input-bigger-small-height);
   }
 
   textarea.e-input,
@@ -1305,6 +1522,27 @@
     text-indent: $input-bigger-text-indent;
   }
 
+  input.e-input.e-small,
+  .e-input-group.e-small .e-input,
+  .e-small input.e-input,
+  .e-small .e-input-group .e-input,
+  .e-float-input.e-small input,
+  .e-float-input input.e-small,
+  .e-small .e-float-input input {
+    text-indent: $input-small-text-indent;
+  }
+
+  input.e-input,
+  .e-input-group input.e-input,
+  .e-input-group input,
+  .e-float-input input.e-input,
+  .e-float-input input,
+  .e-input-group input.e-input:focus,
+  .e-float-input input:focus {
+    padding-left: $input-text-indent;
+    text-indent: 0;
+  }
+
   textarea.e-input,
   .e-input-group textarea.e-input,
   .e-input-group textarea,
@@ -1313,6 +1551,24 @@
   .e-input-group textarea.e-input:focus,
   .e-float-input textarea:focus {
     padding-left: $input-text-indent;
+    text-indent: 0;
+  }
+
+  input.e-input.e-rtl,
+  .e-input-group.e-rtl input.e-input,
+  .e-float-input.e-rtl input,
+  .e-rtl .e-input-group input.e-input,
+  .e-rtl .e-float-input input,
+  .e-input-group.e-rtl input.e-input,
+  .e-float-input.e-rtl input,
+  .e-rtl .e-input-group input.e-input,
+  .e-rtl .e-float-input input,
+  .e-input-group.e-rtl input.e-input:focus,
+  .e-float-input.e-rtl input:focus,
+  .e-rtl .e-input-group input.e-input:focus,
+  .e-rtl .e-float-input input:focus {
+    padding-left: 0;
+    padding-right: $input-text-indent;
     text-indent: 0;
   }
 
@@ -1333,6 +1589,22 @@
     text-indent: 0;
   }
 
+  input.e-input.e-small,
+  .e-small input.e-input,
+  .e-input-group.e-small input.e-input,
+  .e-float-input.e-small input,
+  .e-float-input input.e-small,
+  .e-input-group input.e-input.e-small,
+  .e-small .e-float-input input,
+  .e-small .e-input-group input.e-input,
+  .e-input-group.e-small input.e-input:focus,
+  .e-float-input.e-small input:focus,
+  .e-small .e-input-group input.e-input:focus,
+  .e-small .e-float-input input:focus {
+    padding-left: $input-small-text-indent;
+    text-indent: 0;
+  }
+
   textarea.e-input.e-small,
   .e-small textarea.e-input,
   .e-input-group.e-small textarea.e-input,
@@ -1345,7 +1617,32 @@
   .e-float-input.e-small textarea:focus,
   .e-small .e-input-group textarea.e-input:focus,
   .e-small .e-float-input textarea:focus {
-    padding-left: $input-text-indent;
+    padding-left: $input-small-text-indent;
+    text-indent: 0;
+  }
+
+  .e-rtl input.e-input.e-small,
+  input.e-input.e-small.e-rtl,
+  .e-small.e-rtl input.e-input,
+  .e-small input.e-input.e-rtl,
+  .e-float-input.e-small.e-rtl input,
+  .e-input-group.e-small.e-rtl input.e-input,
+  .e-rtl .e-float-input.e-small input,
+  .e-rtl .e-input-group.e-small input.e-input,
+  .e-float-input.e-rtl input.e-small,
+  .e-input-group.e-rtl input.e-input.e-small,
+  .e-rtl .e-float-input input.e-small,
+  .e-rtl .e-input-group input.e-input.e-small,
+  .e-small .e-float-input.e-rtl input,
+  .e-small .e-input-group.e-rtl input.e-input,
+  .e-small.e-rtl .e-float-input input,
+  .e-small.e-rtl .e-input-group input.e-input,
+  .e-small.e-rtl .e-input-group input.e-input:focus,
+  .e-small.e-rtl .e-float-input input:focus,
+  .e-small .e-input-group.e-rtl input.e-input:focus,
+  .e-small .e-float-input.e-rtl input:focus {
+    padding-left: 0;
+    padding-right: $input-small-text-indent;
     text-indent: 0;
   }
 
@@ -1369,9 +1666,51 @@
   .e-small.e-rtl .e-float-input textarea:focus,
   .e-small .e-input-group.e-rtl textarea.e-input:focus,
   .e-small .e-float-input.e-rtl textarea:focus {
-    padding-right: $input-text-indent;
+    padding-right: $input-small-text-indent;
     text-indent: 0;
   }
+
+  input.e-input.e-bigger,
+  .e-bigger input.e-input,
+  .e-input-group.e-bigger input.e-input,
+  .e-float-input.e-bigger input,
+  .e-float-input input.e-bigger,
+  .e-input-group input.e-input.e-bigger,
+  .e-bigger .e-float-input input,
+  .e-bigger .e-input-group input.e-input,
+  .e-input-group.e-bigger input.e-input:focus,
+  .e-float-input.e-bigger input:focus,
+  .e-bigger .e-input-group input.e-input:focus,
+  .e-bigger .e-float-input input:focus {
+    padding-left: $input-bigger-text-indent;
+    text-indent: 0;
+  }
+
+  .e-rtl input.e-input.e-bigger,
+  input.e-input.e-bigger.e-rtl,
+  .e-bigger.e-rtl input.e-input,
+  .e-bigger input.e-input.e-rtl,
+  .e-float-input.e-bigger.e-rtl input,
+  .e-input-group.e-bigger.e-rtl input.e-input,
+  .e-rtl .e-float-input.e-bigger input,
+  .e-rtl .e-input-group.e-bigger input.e-input,
+  .e-float-input.e-rtl input.e-bigger,
+  .e-input-group.e-rtl input.e-input.e-bigger,
+  .e-rtl .e-float-input input.e-bigger,
+  .e-rtl .e-input-group input.e-input.e-bigger,
+  .e-bigger .e-float-input.e-rtl input,
+  .e-bigger .e-input-group.e-rtl input.e-input,
+  .e-bigger.e-rtl .e-float-input input,
+  .e-bigger.e-rtl .e-input-group input.e-input,
+  .e-bigger.e-rtl .e-input-group input.e-input:focus,
+  .e-bigger.e-rtl .e-float-input input:focus,
+  .e-bigger .e-input-group.e-rtl input.e-input:focus,
+  .e-bigger .e-float-input.e-rtl input:focus {
+    padding-left: 0;
+    padding-right: $input-bigger-text-indent;
+    text-indent: 0;
+  }
+
 
   textarea.e-input.e-bigger,
   .e-bigger textarea.e-input,
@@ -1413,15 +1752,52 @@
     text-indent: 0;
   }
 
-  .e-input.e-small.e-bigger,
-  .e-input-group.e-small.e-bigger .e-input,
-  .e-input-group.e-small .e-input.e-bigger,
-  .e-bigger .e-input.e-small,
-  .e-bigger .e-input-group.e-small .e-input,
+  .e-bigger input.e-input.e-small,
+  .e-input-group.e-small.e-bigger input.e-input,
+  .e-input-group.e-small input.e-input.e-bigger,
+  .e-bigger .e-input-group.e-small input.e-input,
   .e-float-input.e-small.e-bigger input,
   .e-float-input.e-small input.e-bigger,
-  .e-bigger .e-float-input.e-small input {
-    text-indent: $input-bigger-text-indent;
+  .e-bigger .e-float-input.e-small input,
+  .e-bigger .e-input-group.e-small input.e-input:focus,
+  .e-bigger .e-float-input.e-small input:focus,
+  .e-small .e-input-group.e-bigger input.e-input:focus,
+  .e-small .e-float-input.e-bigger input:focus,
+  .e-input-group.e-bigger.e-small input.e-input:focus,
+  .e-float-input.e-bigger.e-small input:focus {
+    padding-left: $input-small-bigger-text-indent;
+    text-indent: 0;
+  }
+
+  .e-bigger input.e-input.e-small.e-rtl,
+  .e-input-group.e-small.e-bigger.e-rtl input.e-input,
+  .e-input-group.e-small.e-rtl input.e-input.e-bigger,
+  .e-bigger .e-input-group.e-small.e-rtl input.e-input,
+  .e-float-input.e-small.e-bigger.e-rtl input,
+  .e-float-input.e-small.e-rtl input.e-bigger,
+  .e-bigger .e-float-input.e-small.e-rtl input,
+  .e-bigger.e-rtl input.e-input.e-small,
+  .e-rtl .e-input-group.e-small.e-bigger input.e-input,
+  .e-rtl .e-input-group.e-small input.e-input.e-bigger,
+  .e-bigger.e-rtl .e-input-group.e-small input.e-input,
+  .e-rtl .e-float-input.e-small.e-bigger input,
+  .e-rtl .e-float-input.e-small input.e-bigger,
+  .e-bigger.e-rtl .e-float-input.e-small input,
+  .e-bigger .e-input-group.e-small.e-rtl input.e-input:focus,
+  .e-bigger .e-float-input.e-small.e-rtl input:focus,
+  .e-small .e-input-group.e-bigger.e-rtl input.e-input:focus,
+  .e-small .e-float-input.e-bigger.e-rtl input:focus,
+  .e-input-group.e-bigger.e-small.e-rtl input.e-input:focus,
+  .e-float-input.e-bigger.e-small.e-rtl input:focus,
+  .e-bigger.e-rtl .e-input-group.e-small input.e-input:focus,
+  .e-bigger.e-rtl .e-float-input.e-small input:focus,
+  .e-small.e-rtl .e-input-group.e-bigger input.e-input:focus,
+  .e-small.e-rtl .e-float-input.e-bigger input:focus,
+  .e-rtl .e-input-group.e-bigger.e-small input.e-input:focus,
+  .e-rtl .e-float-input.e-bigger.e-small input:focus {
+    padding-left: 0;
+    padding-right: $input-small-bigger-text-indent;
+    text-indent: 0;
   }
 
   .e-bigger textarea.e-input.e-small,
@@ -1437,7 +1813,7 @@
   .e-small .e-float-input.e-bigger textarea:focus,
   .e-input-group.e-bigger.e-small textarea.e-input:focus,
   .e-float-input.e-bigger.e-small textarea:focus {
-    padding-left: $input-bigger-text-indent;
+    padding-left: $input-small-bigger-text-indent;
     text-indent: 0;
   }
 
@@ -1467,7 +1843,7 @@
   .e-small.e-rtl .e-float-input.e-bigger textarea:focus,
   .e-rtl .e-input-group.e-bigger.e-small textarea.e-input:focus,
   .e-rtl .e-float-input.e-bigger.e-small textarea:focus {
-    padding-right: $input-bigger-text-indent;
+    padding-right: $input-small-bigger-text-indent;
     text-indent: 0;
   }
 
@@ -1481,6 +1857,7 @@
     display: flex;
     flex-direction: column;
     justify-content: $input-clear-icon-position;
+    line-height: 1;
     min-width: 24px;
     outline: none;
     padding: $input-clear-icon-padding;
@@ -1628,7 +2005,7 @@
   .e-input-group .e-input-in-wrap,
   .e-float-input .e-input-in-wrap {
     width: 100%;
-    @if $skin-name == 'fabric' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       display: flex;
       position: relative;
     }
@@ -1636,7 +2013,7 @@
 
   .e-float-input .e-input-in-wrap label.e-float-text {
     right: 0;
-    @if $skin-name == 'fabric' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       overflow: hidden;
       text-overflow: ellipsis;
       vertical-align: middle;
@@ -1702,6 +2079,10 @@
       top: 15px;
       transform: translate3d(-10px, -43px, 0) scale(1);
     }
+    @else if $skin-name == 'bootstrap' {
+      padding-right: 0;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
   }
 
   .e-float-input.e-bigger textarea:focus ~ label.e-float-text,
@@ -1716,7 +2097,7 @@
     @if $skin-name == 'material' {
       top: -20px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 14px;
     }
   }
@@ -1729,7 +2110,7 @@
     @if $skin-name == 'material' {
       top: -21px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 16px;
     }
   }
@@ -1746,7 +2127,7 @@
     @if $skin-name == 'material' {
       top: -20px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 16px;
     }
   }
@@ -1756,7 +2137,7 @@
     @if $skin-name == 'material' {
       top: -14px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 11px;
     }
   }
@@ -1769,7 +2150,7 @@
     @if $skin-name == 'material' {
       top: -10px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 14px;
     }
   }
@@ -1782,7 +2163,7 @@
     @if $skin-name == 'material' {
       top: -16px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 9px;
     }
   }
@@ -1794,7 +2175,7 @@
     @if $skin-name == 'material' {
       top: -11px;
     }
-    @else if $skin-name == 'fabric' {
+    @else if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       top: 13px;
     }
   }

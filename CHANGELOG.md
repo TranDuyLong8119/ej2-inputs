@@ -8,6 +8,17 @@
 * MVC Data Annotation Support added.
 * HTML 5 Message Container support.
 
+## TextBox
+
+### Bug Fixes
+
+* Issue with icon alignment in the TextBox was fixed.
+
+* Removed the placeholder selection in the TextBox.
+
+* In Edge browser, Input placeholder and cursor position mismatch issue was fixed.
+
+* The TextBox gets jumping when it has value issue was fixed.
 
 ## 1.0.18-preview (2017-09-20)
 
