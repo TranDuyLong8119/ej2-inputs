@@ -1,0 +1,23 @@
+@include export-module('maskedtextbox-layout') {
+  /*! maskedtextbox layout */
+  .e-widget.e-mask {
+    .e-maskedtextbox {
+      font-family: $mask-font-family;
+      font-size: $mask-font-size;
+    }
+  }
+
+  .e-bigger {
+    .e-widget.e-mask {
+      .e-maskedtextbox {
+        font-size: $mask-bigger-font-size;
+     }
+    }
+  }
+
+  .e-widget.e-mask.e-bigger {
+    .e-maskedtextbox {
+      font-size: $mask-bigger-font-size;
+     }
+    }
+}
