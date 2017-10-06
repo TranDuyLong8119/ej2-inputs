@@ -50,6 +50,7 @@
 		"spinner",
 		"numeric textbox",
 		"percent textbox",
+		"masked textbox",
 		"currency textbox",
 		"spin buttons",
 		"numeric updown",
