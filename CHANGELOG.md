@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## MaskedTextBox
+
+* Custom mask support
+
+* Regular expression support
+
+* Prompt character support
+
 ## 1.0.19-preview (2017-09-28)
 
 ## FormValidator
