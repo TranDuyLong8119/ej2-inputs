@@ -489,8 +489,12 @@ function maskInputKeyUpHandler(event: KeyboardEvent): void {
                     let oldVal: string = collec.value.substring(startIndex - addedValues, startIndex);
                     collec = this.redoCollec[0];
                     val = val.trim();
-                    if (oldVal !== val && collec.value.substring(startIndex - addedValues, startIndex) !== val) {
-                        validateValue.call(this, val, event.ctrlKey, event);
+                    let isSpace : boolean = Browser.isAndroid && val === '';
+                    if (!isSpace && oldVal !== val && collec.value.substring(startIndex - addedValues, startIndex) !== val) {
+                       validateValue.call(this, val, event.ctrlKey, event);
+                    } else if (isSpace) {
+                        preventUnsupportedValues.call(
+                            this, event, startIndex - 1, this.element.selectionEnd - 1, val, event.ctrlKey, false);
                     }
                 } else {
                     oldEventVal = this.promptMask;
