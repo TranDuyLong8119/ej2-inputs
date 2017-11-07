@@ -48,6 +48,7 @@ export interface MaskedTextBoxModel extends ComponentModel{
 
     /**
      * Sets a value that enables or disables the persisting state of the MaskedTextBox after reloading the page.
+     * If enabled, the 'value' state will be persisted.
      * @default false
      */
     enablePersistence?: boolean;
