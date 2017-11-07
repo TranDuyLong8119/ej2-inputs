@@ -79,7 +79,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     enableRtl?: boolean;
 
     /**
-     * Sets a value that enables or disables the persisting state of the NumericTextBox after reloading the page.
+     * Enable or disable persisting NumericTextBox state between page reloads. If enabled, the `value` state will be persisted.
      * @default false
      */
     enablePersistence?: boolean;
@@ -142,9 +142,9 @@ export interface NumericTextBoxModel extends ComponentModel{
      * The <b><a href="#placeholder-string" target="_blank">placeholder</a></b> acts as a label
      * and floats above the NumericTextBox based on the below values.
      * Possible values are:
-     * * Never - Never floats the label in the NumericTextBox when the placeholder is available.
-     * * Always - The floating label always floats above the NumericTextBox.
-     * * Auto - The floating label floats above the NumericTextBox after focusing it or when enters the value in it.
+     * * `Never` - Never floats the label in the NumericTextBox when the placeholder is available.
+     * * `Always` - The floating label always floats above the NumericTextBox.
+     * * `Auto` - The floating label floats above the NumericTextBox after focusing it or when enters the value in it.
      * @default Never
      */
     floatLabelType?: FloatLabelType;
