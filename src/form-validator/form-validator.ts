@@ -425,6 +425,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
             }
         }
         EventHandler.add(this.element, 'submit', this.submitHandler, this);
+        EventHandler.add(this.element, 'reset', this.resetHandler, this);
     }
 
     // UnWire events to the form elements
@@ -433,6 +434,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
             EventHandler.clearEvents(input);
         }
         EventHandler.remove(this.element, 'submit', this.submitHandler);
+        EventHandler.remove(this.element, 'reset', this.resetHandler);
     }
 
     // Handle input element focusout event
@@ -493,6 +495,11 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         } else {
             this.allowSubmit = false;
         }
+    }
+
+    // Handle form reset
+    private resetHandler(): void {
+        this.reset();
     }
 
     // Validate each rule based on input element name

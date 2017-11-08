@@ -405,6 +405,12 @@ describe('FormValidator # ', () => {
             expect(formObj.getInputElement('input1').classList.contains(formObj.errorClass)).toEqual(true);
         });
 
+        it('testing formelement reset # ', () => {
+            expect(formObj.getInputElement('input1').classList.contains(formObj.errorClass)).toEqual(true);
+            (<any>formObj).resetHandler();
+            expect(formObj.getInputElement('input1').classList.contains(formObj.errorClass)).toEqual(false);
+        });
+
         it('testing input value after form reset # ', () => {
             formObj.reset();
             let value: string = formObj.getInputElement('input1').value;
