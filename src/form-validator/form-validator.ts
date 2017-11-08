@@ -599,7 +599,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
         } else if (input.hasAttribute('data-msg-containerid') === true) {
             // Append error message into custom div element
             let containerId: string = input.getAttribute('data-msg-containerid');
-            let divElement: Element = input.parentElement.querySelector('#' + containerId);
+            let divElement: Element = this.element.querySelector('#' + containerId);
             divElement.appendChild(errorElement);
         } else if (this.customPlacement != null) {
             // Call custom placement function if customPlacement is not null
