@@ -16,7 +16,7 @@ The TextBox is an input element that allows to get input from the user. It allow
 
 ### NumericTextBox
 
-The **NumericTextBox** is used to get the number inputs from the user. The input values can be incremented or decremented by a predefined step value.
+The **NumericTextBox** is used to get the number inputs from the user. The input values can be incremented or decremented by a predefined step value. The available key features are
 
 - **Range Validation** - allows to set the minimum and maximum range of values in the NumericTextBox.
 
@@ -34,7 +34,7 @@ The **NumericTextBox** is used to get the number inputs from the user. The input
 
 ### MaskedTextBox
 
-The **MaskedTextBox** allows the user to enter the valid input only based on the provided mask.
+The **MaskedTextBox** allows the user to enter the valid input only based on the provided mask. The available key features are
 
 - **Custom Characters** - allows you to use your own characters as the mask elements.
 
