@@ -889,6 +889,18 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                 case 'locale':
                     this.initCultureFunc();
                     this.l10n.setLocale(this.locale);
+                    if (!isNullOrUndefined(this.spinDown)) {
+                        attributes(this.spinDown, {
+                            'title': this.l10n.getConstant('decrementTitle'),
+                            'aria-label': this.l10n.getConstant('decrementTitle')
+                        });
+                    }
+                    if (!isNullOrUndefined(this.spinUp)) {
+                        attributes(this.spinUp, {
+                            'title': this.l10n.getConstant('incrementTitle'),
+                            'aria-label': this.l10n.getConstant('incrementTitle')
+                        });
+                    }
                     this.updatePlaceholder();
                     Input.setPlaceholder(this.placeholder, this.element);
                     this.updateValue(this.value);
