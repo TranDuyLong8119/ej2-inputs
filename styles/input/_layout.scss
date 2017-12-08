@@ -1403,6 +1403,18 @@
     @include input-height ($float-input-normal-height);
   }
 
+  .e-control input.e-input,
+  .e-control .e-input-group input,
+  .e-control .e-input-group input.e-input,
+  .e-control .e-float-input input,
+  .e-control.e-input-group input,
+  .e-control.e-input-group input.e-input,
+  .e-control.e-float-input input {
+    @if $skin-name == 'material' {
+      @include input-sizing;
+    }
+  }
+
   input.e-input.e-bigger,
   .e-input-group.e-bigger input,
   .e-input-group.e-bigger input.e-input,
@@ -1752,6 +1764,7 @@
     text-indent: 0;
   }
 
+  input.e-input.e-bigger.e-small,
   .e-bigger input.e-input.e-small,
   .e-input-group.e-small.e-bigger input.e-input,
   .e-input-group.e-small input.e-input.e-bigger,
@@ -1800,6 +1813,7 @@
     text-indent: 0;
   }
 
+  textarea.e-input.e-bigger.e-small,
   .e-bigger textarea.e-input.e-small,
   .e-input-group.e-small.e-bigger textarea.e-input,
   .e-input-group.e-small textarea.e-input.e-bigger,
@@ -1915,11 +1929,11 @@
   .e-input-group input.e-input:not(:valid) ~ .e-clear-icon,
   .e-float-input input:not(:valid) ~ .e-clear-icon,
   .e-float-input.e-input-group input:not(:valid) ~ .e-clear-icon {
-    display: none;
+    visibility: hidden;
   }
 
   .e-input-group .e-clear-icon.e-clear-icon-hide {
-    display: none;
+    visibility: hidden;
   }
 
   .e-input-group .e-clear-icon {

@@ -216,21 +216,8 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
      * @return {void}
      */
     public reset(): void {
-        this.errorRules = [];
-        this.validated = [];
         this.element.reset();
-        let elements: HTMLElement[] = selectAll(this.selectQuery, this.element);
-        for (let element of elements) {
-            let input: HTMLInputElement = <HTMLInputElement>element;
-            input.removeAttribute('aria-invalid');
-            input.classList.remove(this.errorClass);
-            if (input.name.length > 0) {
-                this.getInputElement(input.name);
-                this.getErrorElement(input.name);
-                this.hideMessage(input.name);
-            }
-            input.classList.remove(this.validClass);
-        }
+        this.clearForm();
     }
 
     /**
@@ -309,6 +296,23 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
             this.wireEvents();
         } else {
             return undefined;
+        }
+    }
+
+    private clearForm(): void {
+        this.errorRules = [];
+        this.validated = [];
+        let elements: HTMLElement[] = selectAll(this.selectQuery, this.element);
+        for (let element of elements) {
+            let input: HTMLInputElement = <HTMLInputElement>element;
+            input.removeAttribute('aria-invalid');
+            input.classList.remove(this.errorClass);
+            if (input.name.length > 0) {
+                this.getInputElement(input.name);
+                this.getErrorElement(input.name);
+                this.hideMessage(input.name);
+            }
+            input.classList.remove(this.validClass);
         }
     }
 
@@ -499,7 +503,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
 
     // Handle form reset
     private resetHandler(): void {
-        this.reset();
+        this.clearForm();
     }
 
     // Validate each rule based on input element name

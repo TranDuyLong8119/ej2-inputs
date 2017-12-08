@@ -435,6 +435,32 @@ describe('FormValidator # ', () => {
         });
     });
 
+    describe('recursive error in ie # ', () => {
+        beforeAll(() => {
+            formObj1 = new FormValidator(formElement, { rules: { 'input1': { required: true, email: true } } });
+        });
+
+        it('testing input value after clear form # ', () => {
+            setInputValue(formObj1, 'input1', '1234');
+            formObj1.validate('input1');
+            formObj1.reset();
+            let value: string = formObj1.getInputElement('input1').value;
+            expect(value).toEqual('');
+        });
+
+        it('testing form element input value after clear form # ', () => {
+            setInputValue(formObj1, 'input1', '1234');
+            formObj1.validate('input1');
+            formObj1.element.reset();
+            let value: string = formObj1.getInputElement('input1').value;
+            expect(value).toEqual('');
+        });
+
+        afterAll(function () {
+            formObj1.destroy();
+        });
+    });
+
     describe('getInputElement method # ', () => {
         beforeAll(() => {
             formObj = new FormValidator(formElement, { rules: { 'input1': { required: true } } });
