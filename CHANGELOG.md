@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Common
+
+#### New Features
+
+- Added typing file for ES5 global scripts (dist/global/index.d.ts)
+
+#### Breaking Changes
+
+- Modified the module bundle file name for ES6 bundling
+
 ## 15.4.21-preview (2017-12-08)
 
 ### FormValidator
