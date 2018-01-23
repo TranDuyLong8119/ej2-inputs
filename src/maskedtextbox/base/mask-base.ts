@@ -507,7 +507,8 @@ function maskInputKeyUpHandler(event: KeyboardEvent): void {
             removeMaskError.call(this);
         }
         let val: string = strippedValue.call(this, this.element);
-        if (!((this.element.selectionStart === 0) && (this.promptMask === this.element.value) && val === '')) {
+        if (!((this.element.selectionStart === 0) && (this.promptMask === this.element.value) && val === '')
+            || (val === '' && this.value !== val)) {
             this.prevValue = val;
             this.value = val;
         }

@@ -161,10 +161,12 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
      * @return {void}
      */
     public addRules(name: string, rules: Object): void {
-        if (this.rules.hasOwnProperty(name)) {
-            extend(this.rules[name], rules, {});
-        } else {
-            this.rules[name] = <IKeyValue>rules;
+        if (name) {
+            if (this.rules.hasOwnProperty(name)) {
+                extend(this.rules[name], rules, {});
+            } else {
+                this.rules[name] = <IKeyValue>rules;
+            }
         }
     }
 

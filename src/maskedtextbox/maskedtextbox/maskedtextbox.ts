@@ -5,7 +5,7 @@ import { regularExpressions, createMask, applyMask, wireEvents, unwireEvents, un
 import { setMaskValue, MaskUndo, setElementValue } from '../base/index';
 import { MaskedTextBoxModel } from './maskedtextbox-model';
 
-const ROOT: string = 'e-widget e-mask';
+const ROOT: string = 'e-widget e-control-wrapper e-mask';
 const INPUT: string = 'e-input';
 
 /**

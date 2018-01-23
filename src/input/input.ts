@@ -203,9 +203,9 @@ export namespace Input {
     function createClearButton(element: HTMLInputElement, container: HTMLElement ): HTMLElement {
         let button: HTMLElement = <HTMLElement>createElement('span', { className: CLASSNAMES.CLEARICON });
         container.appendChild(button);
-        if (!isNullOrUndefined(privateInputObj.container) &&
-        privateInputObj.container.classList.contains(CLASSNAMES.FLOATINPUT)) {
-            addClass([privateInputObj.container], CLASSNAMES.INPUTGROUP);
+        if (!isNullOrUndefined(container) &&
+        container.classList.contains(CLASSNAMES.FLOATINPUT)) {
+            addClass([container], CLASSNAMES.INPUTGROUP);
         }
         addClass([button], CLASSNAMES.CLEARICONHIDE);
         wireClearBtnEvents(element, button);
@@ -248,9 +248,10 @@ export namespace Input {
         if (!isNullOrUndefined(args.customTag)) {
           container = createElement(args.customTag , {  className: className} );
           container.classList.add(tagClass);
-         } else {
+        } else {
           container = createElement(tag, { className: className });
-         }
+        }
+        container.classList.add('e-control-wrapper');
         return container;
     }
 

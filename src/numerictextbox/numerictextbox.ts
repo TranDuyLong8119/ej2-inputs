@@ -1,13 +1,12 @@
-import { Component, EventHandler, Property, Event, Browser, CreateBuilder, L10n, EmitType } from '@syncfusion/ej2-base';
+import { Component, EventHandler, Property, Event, Browser, L10n, EmitType } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
 import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';
 import { isNullOrUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base';
 import { Internationalization, NumberFormatOptions, getNumericObject } from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
-import { NumericTextBoxHelper } from './numerictextbox-builder';
 import { Input, InputObject, FloatLabelType } from '../input/input';
 
-const ROOT: string = 'e-numeric';
+const ROOT: string = 'e-control-wrapper e-numeric';
 const SPINICON: string = 'e-input-group-icon';
 const SPINUP: string = 'e-spin-up';
 const SPINDOWN: string = 'e-spin-down';
@@ -39,7 +38,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private hiddenInput: HTMLInputElement;
     private spinUp: HTMLElement;
     private spinDown: HTMLElement;
-    private timeOut: number;
+    private timeOut: any; // tslint:disable-line
     private prevValue: number;
     private isValidState: boolean;
     private isFocused: boolean;
@@ -167,6 +166,15 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
      */
     @Property(null)
     public currency: string;
+
+    /**
+     * Specifies the currency code to use in currency formatting.
+     * Possible values are the ISO 4217 currency codes, such as 'USD' for the US dollar,'EUR' for the euro.
+     * @default null
+     * @private
+     */
+    @Property(null)
+    private currencyCode: string;
 
     /**
      * Specifies a value that indicates whether the NumericTextBox control allows the value for the specified range.
@@ -338,7 +346,10 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     private initCultureInfo(): void {
         this.cultureInfo.format = this.format;
-        if (getValue('currency', this) !== null) { setValue('currency', this.currency, this.cultureInfo); }
+        if (getValue('currency', this) !== null) {
+            setValue('currency', this.currency, this.cultureInfo);
+            this.setProperties({ currencyCode: this.currency }, true);
+        }
     }
 
     /* Wrapper creation */
@@ -356,7 +367,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             }
         });
         this.container = inputObj.container;
-        addClass([this.container], ROOT);
+        this.container.setAttribute('class', ROOT + ' ' + this.container.getAttribute('class'));
         if (this.readonly) { attributes(this.element, { 'aria-readonly': 'true' }); }
         this.hiddenInput = <HTMLInputElement>(createElement('input', { attrs: { type: 'hidden' } }));
         this.inputName = this.inputName !== null ? this.inputName : this.element.id;
@@ -550,6 +561,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
         this.changeValue(value === null || isNaN(value) ? null : this.strictMode ? this.trimValue(value) : value);
         this.raiseChangeEvent(event);
+    }
+
+    private updateCurrency(prop: string, propVal: string): void {
+        setValue(prop, propVal, this.cultureInfo);
+        this.updateValue(this.value);
     }
 
     private changeValue(value: number): void {
@@ -906,8 +922,14 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                     this.updateValue(this.value);
                     break;
                 case 'currency':
-                    setValue(prop, getValue(prop, newProp), this.cultureInfo);
-                    this.updateValue(this.value);
+                    let propVal: string = getValue(prop, newProp);
+                    this.setProperties({ currencyCode: propVal }, true);
+                    this.updateCurrency(prop, propVal);
+                    break;
+                case 'currencyCode':
+                    let propValue: string = getValue(prop, newProp);
+                    this.setProperties({ currency: propValue }, true);
+                    this.updateCurrency('currency', propValue);
                     break;
                 case 'format':
                     setValue(prop, getValue(prop, newProp), this);
@@ -938,8 +960,3 @@ export interface ChangeEventArgs extends BaseEventArgs {
     /** Returns the event parameters from NumericTextBox. */
     event?: Event;
 }
-
-/**
- * Builder for NumericTextBox
- */
-export let numerictextboxHelper: NumericTextBoxHelper = <NumericTextBoxHelper>CreateBuilder(NumericTextBox);

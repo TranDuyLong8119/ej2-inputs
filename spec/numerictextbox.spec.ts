@@ -352,6 +352,7 @@ describe('Numerictextbox Control', () => {
         it('Set the custom currency symbol', () => {
             numerictextbox = new NumericTextBox({ format: 'c2', value: 10, currency: 'EUR' }, '#tsNumeric');
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('€10.00');
+            expect(numerictextbox.currencyCode).toEqual('EUR');
             expect(numerictextbox.value).toEqual(10);
         });
 
@@ -2342,6 +2343,17 @@ describe('Numerictextbox Control', () => {
             numerictextbox.currency = 'EUR';
             numerictextbox.dataBind();
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('€15.00');
+            expect(numerictextbox.currencyCode).toEqual('EUR');
+        });
+
+        it('Set the currencyCode property value dynamically', () => {
+            numerictextbox = new NumericTextBox({ value: 15, format: 'c2' }, '#tsNumeric');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$15.00');
+            numerictextbox.currencyCode = 'EUR';
+            numerictextbox.dataBind();
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('€15.00');
+            expect(numerictextbox.currency).toEqual('EUR');
+            expect(numerictextbox.currencyCode).toEqual('EUR');
         });
 
         it('Set the format as ##.#### dynamically', () => {

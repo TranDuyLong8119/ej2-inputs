@@ -1,12 +1,14 @@
 {
 	"name": "@syncfusion/ej2-inputs",
-	"version": "15.4.21",
+	"version": "15.4.24",
 	"description": "Essential JS 2 Input Components",
 	"author": "Syncfusion Inc.",
 	"license": "SEE LICENSE IN license",
-	"module": "dist/es6/index.js",
+	"main": "./dist/ej2-inputs.umd.min.js",
+	"module": "./dist/es6/ej2-inputs.es5.js",
+	"es2015": "./dist/es6/ej2-inputs.es2015.js",
 	"dependencies": {
-		"@syncfusion/ej2-base": "^15.4.21"
+		"@syncfusion/ej2-base": "*"
 	},
 	"devDependencies": {
 		"@types/chai": "^3.4.28",

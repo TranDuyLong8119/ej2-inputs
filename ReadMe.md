@@ -5,10 +5,6 @@ A package of Essential JS 2 Input textbox components. It comes with full support
 * [TextBox Demos](http://ej2.syncfusion.com/demos/#/textboxes/default.html)
 * [MaskedTextBox Demos](http://ej2.syncfusion.com/demos/#/maskedtextbox/default.html)
 
-## Changelog
-
-Check the changelog [here](https://github.com/syncfusion/ej2-inputs/blob/master/CHANGELOG.md)
-
 ## Installing
 
 To install all dependent packages, use the below command
@@ -32,3 +28,6 @@ To test the source files, use the below command
 ```
 npm run test
 ```
+## Changelog
+
+Check the changelog [here](https://github.com/syncfusion/ej2-inputs/blob/master/CHANGELOG.md)
