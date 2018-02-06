@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### MaskedTextBox
+
+#### Bug Fixes
+
+- While set floatLabelType property as "Never", the placeholder not shown issue has been fixed
+
+- While set floatLabelType property as "Auto", the value becomes "undefined" at two-way binding issue has been fixed
+
 ## 15.4.24-preview (2018-01-10)
 
 ### MaskedTextBox
