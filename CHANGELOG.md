@@ -2,6 +2,56 @@
 
 ## [Unreleased]
 
+### TextBox
+
+#### Bug Fixes
+
+- Fixed the input alignment issue in the window 8.1 edge browser.
+
+- Removed the additional spaces for error messages on the input.
+
+### Slider
+
+The Slider component allows the user to select a value or range of values in-between the min and max range, by dragging the handle over the slider bar.
+
+There are three types of Slider:
+
+- `Default` - Shows a default slider to select a single value.
+- `MinRange` - Displays fill color from the start value to the current selected value.
+- `Range` - Select a range of values.
+
+The available key features are
+
+- **Types**: Provided three types of Slider.
+
+- **Orientation**: Displays the Slider in horizontal or vertical direction.
+
+- **Buttons**: Provided built-in support to render the buttons in both edges of the Slider.
+
+- **Tooltip**: Displays a tooltip to show the currently selected value.
+
+- **Ticks**: Displays a scale with small and big ticks.
+
+- **Format**: Customize the slider values into various format.
+
+- **Accessibility**: Built-in compliance with the [`WAI-ARIA`](http://www.w3.org/WAI/PF/aria-practices/) specifications.
+
+- **Keyboard Interaction**: The Slider can be intractable through the keyboard.
+
+## 15.4.29-preview (2018-02-07)
+
+### MaskedTextBox
+
+#### Bug Fixes
+
+- While set floatLabelType property as "Never", the placeholder not shown issue has been fixed
+
+- While set floatLabelType property as "Auto", the value becomes "undefined" at two-way binding issue has been fixed
+
+- While setting escape sequence in mask format, value is not updated properly issue has been fixed
+
+- Cursor is not positioned properly while focusing the MaskedTextBox issue has been fixed
+
 ## 15.4.24-preview (2018-01-10)
 
 ### MaskedTextBox
