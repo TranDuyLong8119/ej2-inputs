@@ -42,23 +42,24 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private prevValue: number;
     private isValidState: boolean;
     private isFocused: boolean;
-    private isPrevFocused: boolean = false;
+    private isPrevFocused: boolean;
     private instance: Internationalization;
     private cultureInfo: NumberFormatOptions;
     private inputStyle: string;
     private inputName: string;
-    private decimalSeparator: string = '.';
+    private decimalSeparator: string;
     private angularTagName: string;
-    private intRegExp: RegExp = new RegExp('/^(-)?(\d*)$/');
+    private intRegExp: RegExp;
     private l10n: L10n;
-    private isCalled: boolean = false;
+    private isCalled: boolean;
     private changeEventArgs: ChangeEventArgs;
+    private isInteract: boolean;
 
     /*NumericTextBox Options */
 
     /**
      * Gets or Sets the CSS classes to root element of the NumericTextBox which helps to customize the
-     * complete UI styles.
+     * complete UI styles for the NumericTextBox component.
      * @default null
      */
     @Property('')
@@ -73,6 +74,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /**
      * Specifies a minimum value that is allowed a user can enter.
+     * For more information on min, refer to
+     * [min](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
      * @default null
      */
     @Property(-(Number.MAX_VALUE))
@@ -80,6 +83,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /**
      * Specifies a maximum value that is allowed a user can enter.
+     * For more information on max, refer to
+     * [max](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
      * @default null
      */
     @Property(Number.MAX_VALUE)
@@ -87,6 +92,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /**
      * Specifies the incremental or decremental step size for the NumericTextBox.
+     * For more information on step, refer to
+     * [step](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
      * @default 1
      */
     @Property(1)
@@ -147,6 +154,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /**
      * Specifies the number format that indicates the display format for the value of the NumericTextBox.
+     * For more information on formats, refer to
+     * [formats](http://ej2.syncfusion.com/documentation/numerictextbox/formats.html#standard-formats).
      * @default 'n2'
      */
     @Property('n2')
@@ -154,6 +163,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /**
      * Specifies the number precision applied to the textbox value when the NumericTextBox is focused.
+     * For more information on decimals, refer to
+     * [decimals](http://ej2.syncfusion.com/documentation/numerictextbox/formats.html#precision-of-numbers).
      * @default null
      */
     @Property(null)
@@ -213,7 +224,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     public validateDecimalOnType: boolean;
 
     /**
-     * Sets the type of floating label which enables or disables the floating label in the NumericTextBox.
      * The <b><a href="#placeholder-string" target="_blank">placeholder</a></b> acts as a label
      * and floats above the NumericTextBox based on the below values.
      * Possible values are:
@@ -251,10 +261,14 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     protected preRender(): void {
+        this.isPrevFocused = false;
+        this.decimalSeparator = '.';
+        this.intRegExp = new RegExp('/^(-)?(\d*)$/');
+        this.isCalled = false;
         let ejInstance: Object = getValue('ej2_instances', this.element);
         this.cloneElement = <HTMLElement>this.element.cloneNode(true);
         this.angularTagName = null;
-        if (this.element.tagName === 'EJ-NUMERICTEXTBOX') {
+        if (this.element.tagName === 'EJS-NUMERICTEXTBOX') {
             this.angularTagName = this.element.tagName;
             let input: HTMLElement = <HTMLElement>createElement('input');
             let index: number = 0;
@@ -424,10 +438,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
     }
 
-    private action(operation: string): void {
+    private action(operation: string, event: Event): void {
+        this.isInteract = true;
         let value: number = this.isFocused ? this.instance.getNumberParser({ format: 'n' })(this.element.value) : this.value;
         this.changeValue(this.performAction(value, this.step, operation));
-        this.raiseChangeEvent();
+        this.raiseChangeEvent(event);
     }
 
     private checkErrorClass(): void {
@@ -488,10 +503,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private raiseChangeEvent(event?: Event): void {
         if (this.prevValue !== this.value) {
             let eventArgs: Object = {};
-            this.changeEventArgs = { value: this.value, previousValue: this.prevValue };
+            this.changeEventArgs = { value: this.value, previousValue: this.prevValue, isInteraction: this.isInteract, event: event };
             if (event) { this.changeEventArgs.event = event; }
             merge(eventArgs, this.changeEventArgs);
             this.prevValue = this.value;
+            this.isInteract = false;
             this.trigger('change', eventArgs);
         }
     }
@@ -509,11 +525,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         switch (event.keyCode) {
             case 38:
                 event.preventDefault();
-                this.action(INCREMENT);
+                this.action(INCREMENT, event);
                 break;
             case 40:
                 event.preventDefault();
-                this.action(DECREMENT);
+                this.action(DECREMENT, event);
                 break;
             default: break;
         }
@@ -554,6 +570,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     };
 
     private updateValue(value: number, event?: Event): void {
+        if (event) { this.isInteract = true; }
         if (value !== null && !isNaN(value)) {
             if (this.decimals) {
                 value = this.roundNumber(value, this.decimals);
@@ -688,9 +705,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             delta = -rawEvent.detail / 3;
         }
         if (delta > 0) {
-            this.action(INCREMENT);
+            this.action(INCREMENT, event);
         } else if (delta < 0) {
-            this.action(DECREMENT);
+            this.action(DECREMENT, event);
         }
         this.cancelEvent(event);
     }
@@ -749,7 +766,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         let target: HTMLElement = <HTMLElement>event.currentTarget;
         let action: string = (target.classList.contains(SPINUP)) ? INCREMENT : DECREMENT;
         EventHandler.add(target, 'mouseleave', this.mouseUpClick, this);
-        this.timeOut = setInterval(() => { this.isCalled = true; this.action(action); }, 150);
+        this.timeOut = setInterval(() => { this.isCalled = true; this.action(action, event); }, 150);
         EventHandler.add(document, 'mouseup', this.mouseUpClick, this);
     }
 
@@ -772,7 +789,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         let target: HTMLElement = <HTMLElement>event.currentTarget;
         let action: string = (target.classList.contains(SPINUP)) ? INCREMENT : DECREMENT;
         EventHandler.remove(target, 'mouseleave', this.mouseUpClick);
-        if (!this.isCalled) { this.action(action); }
+        if (!this.isCalled) { this.action(action, event); }
         this.isCalled = false;
         EventHandler.remove(document, 'mouseup', this.mouseUpClick);
     }
@@ -959,4 +976,6 @@ export interface ChangeEventArgs extends BaseEventArgs {
     previousValue?: number;
     /** Returns the event parameters from NumericTextBox. */
     event?: Event;
+    /** Returns the original event arguments. */
+    isInteraction?: boolean;
 }

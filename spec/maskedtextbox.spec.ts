@@ -47,8 +47,8 @@ describe('MaskedTextBox Component', () => {
             maskBox.appendTo('#maskDiv');
             expect(!divEle.parentElement.classList.contains('e-input-group')).toEqual(true);
         });
-        it('Render and check MaskedTextBox with "EJ-MASKEDTEXTBOX" tag', () => {
-            let customElement: HTMLElement = createElement('EJ-MASKEDTEXTBOX', { id: 'customTag' });
+        it('Render and check MaskedTextBox with "EJS-MASKEDTEXTBOX" tag', () => {
+            let customElement: HTMLElement = createElement('EJS-MASKEDTEXTBOX', { id: 'customTag' });
             document.body.appendChild(customElement);
             maskBox = new MaskedTextBox();
             maskBox.appendTo('#customTag');
@@ -446,7 +446,7 @@ describe('MaskedTextBox Component', () => {
             let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
             let eventUp: any = eventObject('KeyboardEvent', 'keyup');
             input.focus();
-            expect(input.selectionStart != 0 && input.selectionEnd != 0).toEqual(true);
+            expect(input.selectionStart == 0 && input.selectionEnd != 0).toEqual(true);
             let event: any = eventObject('KeyboardEvent', 'keypress');
             event.key = "P";
             EventHandler.trigger(input, 'keypress', event);
@@ -457,7 +457,7 @@ describe('MaskedTextBox Component', () => {
             expect(!inputParent.classList.contains('e-error')).toEqual(true);
             event.key = "5";
             EventHandler.trigger(input, 'keypress', event);
-            expect(inputParent.classList.contains('e-error')).toEqual(true);
+            expect(!inputParent.classList.contains('e-error')).toEqual(true);
             eventUp.key = "5";
             EventHandler.trigger(input, 'keyup', eventUp);
             expect(!inputParent.classList.contains('e-error')).toEqual(true);
@@ -1066,7 +1066,7 @@ describe('MaskedTextBox Component', () => {
             input.focus();
             setTimeout(
                 () => {
-                    expect(input.selectionStart === 0 && input.selectionEnd === 19).toEqual(true);
+                    expect(input.selectionStart === 0 && input.selectionEnd != 0).toEqual(true);
                     done();
                 },
                 10);

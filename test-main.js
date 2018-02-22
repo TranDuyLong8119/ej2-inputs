@@ -21,6 +21,16 @@ require.config({
       name: '@syncfusion/ej2-base',
       location: 'node_modules/@syncfusion/ej2-base',
       main: 'index.js'            
+    },
+    { 
+      name: '@syncfusion/ej2-buttons',
+      location: 'node_modules/@syncfusion/ej2-buttons',
+      main: 'src/button/index.js'            
+    },
+    { 
+      name: '@syncfusion/ej2-popups',
+      location: 'node_modules/@syncfusion/ej2-popups',
+      main: 'index.js'            
     }
     // Include dependent packages
   ],

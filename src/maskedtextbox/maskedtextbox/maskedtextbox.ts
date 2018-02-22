@@ -4,6 +4,7 @@ import { Input, InputObject, FloatLabelType } from '../../input/input';
 import { regularExpressions, createMask, applyMask, wireEvents, unwireEvents, unstrippedValue, strippedValue } from '../base/index';
 import { setMaskValue, MaskUndo, setElementValue } from '../base/index';
 import { MaskedTextBoxModel } from './maskedtextbox-model';
+import { maskInputBlurHandler } from '../base/mask-base';
 
 const ROOT: string = 'e-widget e-control-wrapper e-mask';
 const INPUT: string = 'e-input';
@@ -26,25 +27,26 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
 
     /* Internal variables */
     private cloneElement: HTMLElement;
-    private promptMask: string = '';
-    private hiddenMask: string = '';
-    private escapeMaskValue: string = '';
-    private regExpCollec: { [key: string]: string } = regularExpressions;
-    private customRegExpCollec: string[] = [];
+    private promptMask: string;
+    private hiddenMask: string;
+    private escapeMaskValue: string;
+    private regExpCollec: { [key: string]: string };
+    private customRegExpCollec: string[];
     private inputObj: InputObject;
-    private undoCollec: MaskUndo[] = [];
-    private redoCollec: MaskUndo[] = [];
-    private changeEventArgs: MaskChangeEventArgs = {};
-    private maskKeyPress: boolean = false;
+    private undoCollec: MaskUndo[];
+    private redoCollec: MaskUndo[];
+    private changeEventArgs: MaskChangeEventArgs;
+    private focusEventArgs: MaskFocusEventArgs;
+    private maskKeyPress: boolean;
     private angularTagName: string;
     private prevValue: string;
-    private isFocus: boolean = false;
-    private isInitial: boolean = false;
-    private isIosInvalid: boolean = false;
+    private isFocus: boolean;
+    private isInitial: boolean;
+    private isIosInvalid: boolean;
 
     /**
      * Gets or sets the CSS classes to root element of the MaskedTextBox which helps to customize the
-     * complete UI styles.
+     * complete UI styles for the MaskedTextBox component.
      * @default null
      */
     @Property(null)
@@ -67,11 +69,10 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
     public placeholder: string;
 
     /**
-     * Sets the type of floating label which specifies whether to display the floating label above the MaskedTextBox.
      * The <b><a href="#placeholder-string" target="_blank">placeholder</a></b> acts as a label
      * and floats above the MaskedTextBox based on the below values.
      * Possible values are:
-     * * Never - Never floats the label in the MaskedTextBox when the placeholder is available.
+     * * Never - The floating label will not be enable when the placeholder is available.
      * * Always - The floating label always floats above the MaskedTextBox.
      * * Auto - The floating label floats above the MaskedTextBox after focusing it or when enters the value in it.
      * @default Never
@@ -107,6 +108,8 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * * Mask allows <b><a href="../maskedtextbox/mask-configuration.html#standard-mask-elements" target="_blank">standard mask elements
      * </a></b>, <b><a href="../maskedtextbox/mask-configuration.html#custom-characters" target="_blank">custom characters</a></b> and
      * <b><a href="../maskedtextbox/mask-configuration.html#regular-expression" target="_blank">regular expression</a></b> as mask elements.
+     * For more information on mask, refer to
+     * [mask](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#standard-mask-elements).
      * * If the mask value is empty, the MaskedTextBox will behave as an input element with text type.
      * @default null
      */
@@ -116,6 +119,8 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
     /**
      * Gets or sets a value that will be shown as a prompting symbol for the masked value.
      * The symbol used to show input positions in the MaskedTextBox.
+     * For more information on prompt-character, refer to
+     * [prompt-character](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#prompt-character).
      * @default _
      */
     @Property('_')
@@ -123,7 +128,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
 
     /**
      * Gets or sets the value of the MaskedTextBox. It is a raw value of the MaskedTextBox excluding literals
-     * and prompt characters.
+     * and prompt characters. By using `getMaskedValue` property, you can get the value of MaskedTextBox with the masked format.
      * ```html
      * <input id="mask" type="text" />
      * ```
@@ -153,6 +158,8 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * maskObj.appendTo('#mask');
      * </script>
      * ```
+     * For more information on customCharacters, refer to
+     * [customCharacters](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#custom-characters).
      * @default null
      */
     @Property(null)
@@ -177,7 +184,13 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * @event
      */
     @Event()
-    public change: EmitType<MaskChangeEventArgs>;
+    public change: EmitType <MaskChangeEventArgs>;
+    /**
+     * Triggers when the MaskedTextBox while got focus in.
+     * @event
+     */
+    @Event()
+    public focus: EmitType<MaskFocusEventArgs>;
 
     constructor(options?: MaskedTextBoxModel, element?: string | HTMLElement | HTMLInputElement) {
         super(options, <HTMLInputElement | string>element);
@@ -196,10 +209,23 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * @private
      */
     protected preRender(): void {
+        this.promptMask = '';
+        this.hiddenMask = '';
+        this.escapeMaskValue = '';
+        this.regExpCollec = regularExpressions;
+        this.customRegExpCollec = [];
+        this.undoCollec = [];
+        this.redoCollec = [];
+        this.changeEventArgs = {};
+        this.focusEventArgs = {};
+        this.maskKeyPress = false;
+        this.isFocus = false;
+        this.isInitial = false;
+        this.isIosInvalid = false;
         let ejInstance: Object = getValue('ej2_instances', this.element);
         this.cloneElement = <HTMLElement>this.element.cloneNode(true);
         this.angularTagName = null;
-        if (this.element.tagName === 'EJ-MASKEDTEXTBOX') {
+        if (this.element.tagName === 'EJS-MASKEDTEXTBOX') {
             this.angularTagName = this.element.tagName;
             let input: HTMLElement = <HTMLElement>createElement('input');
             for (let i: number = 0; i < this.element.attributes.length; i++) {
@@ -267,6 +293,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
             if (this.element.value === this.promptMask && setVal && this.floatLabelType !== 'Always') {
                 setElementValue.call(this, '');
             }
+            if (this.floatLabelType === 'Never') { maskInputBlurHandler.call(this); }
         }
     }
 
@@ -361,6 +388,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
 
     /**
      * Gets the value of the MaskedTextBox with the masked format.
+     * By using `value` property, you can get the raw value of maskedtextbox without literals and prompt characters.
      * @return {string}
      */
     public getMaskedValue(): string {
@@ -393,3 +421,11 @@ export interface MaskChangeEventArgs extends BaseEventArgs {
     /** Returns the original event arguments. */
     event?: Event;
 }
+
+export interface MaskFocusEventArgs extends BaseEventArgs {
+    /** Returns selectionStart value as zero by default */
+    selectionStart?: number;
+    /** Returns selectionEnd value depends on mask length */
+    selectionEnd?: number;
+}
+

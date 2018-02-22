@@ -29,8 +29,8 @@ describe('Numerictextbox Control', () => {
             numerictextbox1.appendTo('#divElement');
             expect(document.getElementById('divElement').classList.contains('e-input')).toEqual(false);
         });
-        it('Control rendering test with other (EJ-NUMERICTEXTBOX) than input element', () => {
-            let divElement: HTMLElement = createElement('EJ-NUMERICTEXTBOX', { id: 'divElement' });
+        it('Control rendering test with other (EJS-NUMERICTEXTBOX) than input element', () => {
+            let divElement: HTMLElement = createElement('EJS-NUMERICTEXTBOX', { id: 'divElement' });
             document.body.appendChild(divElement);
             numerictextbox1 = new NumericTextBox({ floatLabelType: 'Never' });
             numerictextbox1.appendTo('#divElement');

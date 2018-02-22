@@ -61,6 +61,7 @@
       background-size: 4px 1px;
       border-bottom-color: transparent;
     }
+
     @else {
       border-color: $input-disable-border-color;
     }
@@ -74,7 +75,7 @@
 
   .e-input-group:not(.e-disabled) .e-input-group-icon:hover,
   .e-input-group.e-control-wrapper:not(.e-disabled) .e-input-group-icon:hover {
-    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' or $skin-name == 'highcontrast' {
       background: $input-hover-bg-color;
     }
     color: $input-group-hovered-color;
@@ -109,6 +110,14 @@
     border-color: $input-warning-color;
   }
 
+  .e-input + .e-input-group-icon:not(.e-input-group.e-float-icon-left):last-child:hover,
+  .e-input-group.e-success .e-input + .e-input-group-icon:last-child:hover,
+  .e-input-group.e-success.e-control-wrapper .e-input + .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-color: $input-success-color;
+    }
+  }
+
   .e-input.e-error,
   .e-input.e-error:focus,
   .e-input.e-css.e-error,
@@ -136,6 +145,9 @@
   .e-bigger .e-float-input.e-small:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
   .e-bigger .e-float-input.e-control-wrapper.e-small:not(.e-error) input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
     color: $input-header-font-color;
+    @if $skin-name == 'highcontrast' {
+      color: $input-placeholder;
+    }
   }
 
   .e-float-input.e-error label.e-float-text,
@@ -145,6 +157,9 @@
   .e-float-input.e-error textarea:focus ~ label.e-float-text,
   .e-float-input.e-control-wrapper.e-error textarea:focus ~ label.e-float-text {
     color: $input-error-color;
+    @if $skin-name == 'highcontrast' {
+      color: $content-font;
+    }
   }
 
   .e-float-input input,
@@ -169,6 +184,16 @@
     @include input-state-color ($input-error-color);
   }
 
+  label.e-float-text,
+  .e-float-input label.e-float-text,
+  .e-float-input.e-control-wrapper label.e-float-text,
+  .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-control-wrapper input:not(:focus):valid ~ label.e-float-text.e-label-bottom {
+    @if $skin-name == 'highcontrast' {
+      color: $content-font-alt;
+    }
+  }
+
   .e-float-input:not(.e-input-group) .e-float-line::before,
   .e-float-input:not(.e-input-group) .e-float-line::after,
   .e-float-input:not(.e-input-group) .e-float-line::before,
@@ -179,6 +204,34 @@
   .e-float-input.e-control-wrapper:not(.e-input-group) .e-float-line::after {
     @if $skin-name == 'material' {
       background: $input-active-accent-color;
+    }
+  }
+
+  label.e-float-text,
+  .e-float-input label.e-float-text,
+  .e-float-input.e-control-wrapper  label.e-float-text,
+  .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger.e-small .e-float-input input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-control-wrapper input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-control-wrapper.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input.e-control-wrapper input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-control-wrapper.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input.e-control-wrapper input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-float-input.e-control-wrapper.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-small .e-float-input.e-control-wrapper.e-bigger input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-control-wrapper.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-bigger.e-small .e-float-input.e-control-wrapper input:not(:focus):valid ~ label.e-float-text.e-label-bottom,
+  .e-float-input.e-control-wrapper.e-bigger.e-small input:not(:focus):valid ~ label.e-float-text.e-label-bottom  {
+    @if $skin-name == 'highcontrast' {
+      color: $content-font-alt;
     }
   }
 
@@ -208,6 +261,16 @@
     }
   }
 
+  .e-float-input:not(.e-input-focus) input:not(:focus):not(:valid) ~ label.e-float-text:not(.e-label-top),
+  .e-float-input.e-control-wrapper:not(.e-input-focus) input:not(:focus):not(:valid) ~ label.e-float-text:not(.e-label-top) {
+    color: $input-placeholder;
+  }
+
+  .e-float-input.e-small textarea:focus,
+  .e-float-input textarea:focus {
+    border-color: $input-active-border-color;
+  }
+
   .e-float-input.e-error:not(.e-input-group) .e-float-line::before,
   .e-float-input.e-error:not(.e-input-group) .e-float-line::after,
   .e-float-input.e-error:not(.e-input-group) .e-float-line::before,
@@ -230,6 +293,100 @@
       -webkit-box-shadow: $input-icon-shadow;
       box-shadow: $input-icon-shadow;
     }
+    @if $skin-name == 'highcontrast' {
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+  }
+
+  .e-float-input.e-input-group.e-small.e-float-icon-left .e-input-group-icon:last-child:hover,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-group-icon:last-child:hover,
+  .e-float-input.e-control-wrapper.e-input-group.e-small.e-float-icon-left .e-input-group-icon:last-child:hover,
+  .e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-right-color: transparent;
+    }
+  }
+
+  .e-float-input.e-input-group.e-small.e-float-icon-left .e-input-group-icon:not(:last-child):hover,
+  .e-float-input.e-input-group.e-float-icon-left .e-input-group-icon:not(:last-child):hover,
+  .e-float-input.e-control-wrapper.e-input-group.e-small.e-float-icon-left .e-input-group-icon:not(:last-child):hover,
+  .e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-group-icon:not(:last-child):hover {
+    @if $skin-name == 'highcontrast' {
+      border-left-color: transparent;
+    }
+  }
+
+  .e-float-input.e-input-group.e-small:not(.e-float-icon-left):not(.e-input-group.e-disabled) .e-input-group-icon:last-child:hover,
+  .e-float-input.e-control-wrapper.e-input-group.e-small:not(.e-float-icon-left):not(.e-input-group.e-disabled) .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-right-color: transparent;
+    }
+  }
+
+  .e-input-group.e-small.e-float-icon-left:not(.e-disabled) .e-input-group-icon:first-child:hover,
+  .e-input-group.e-control-wrapper.e-small.e-float-icon-left:not(.e-disabled) .e-input-group-icon:first-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-left-color: transparent;
+    }
+  }
+
+  .e-input-group.e-small:not(.e-disabled) .e-input-group-icon:first-child:hover,
+  .e-input-group.e-float-icon-left .e-input-group-icon:first-child:hover,
+  .e-input-group.e-control-wrapper.e-small:not(.e-disabled) .e-input-group-icon:first-child:hover,
+  .e-input-group.e-control-wrapper.e-float-icon-left .e-input-group-icon:first-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-left-color: transparent;
+    }
+  }
+
+  .e-input-group.e-small:not(.e-disabled):not(.e-float-input):not(.e-rtl) .e-input-group-icon:last-child:hover,
+  .e-input-group.e-float-icon-left .e-input-group-icon:last-child:hover,
+  .e-input-group.e-control-wrapper.e-small:not(.e-disabled):not(.e-float-input):not(.e-rtl) .e-input-group-icon:last-child:hover,
+  .e-input-group.e-control-wrapper.e-float-icon-left .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-right-color: transparent;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input-group.e-rtl:not(.e-disabled) .e-input-group-icon:last-child:hover,
+  .e-input-group.e-control-wrapper.e-rtl:not(.e-disabled) .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-left-color: transparent;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input-group:not(.e-rtl):not(.e-disabled) .e-input + .e-input-group-icon:last-child:hover,
+  .e-input-group.e-control-wrapper:not(.e-rtl):not(.e-disabled) .e-input + .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-right-color: transparent;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input-group:not(.e-disabled) .e-input-group-icon:first-child:hover,
+  .e-input-group.e-control-wrapper:not(.e-disabled) .e-input-group-icon:first-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-left-color: transparent;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input-group:not(.e-disabled) .e-input-group-icon:not(:last-child):hover + .e-input-group-icon:not(:last-child):hover
+  .e-input-group.e-control-wrapper:not(.e-disabled) .e-input-group-icon:not(:last-child):hover + .e-input-group-icon:not(:last-child):hover {
+    @if $skin-name == 'highcontrast' {
+      border-right-color: transparent;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes
+  .e-input-group:not(.e-rtl):not(.e-disabled) .e-input-group-icon:last-child:hover,
+  .e-input-group.e-control-wrapper:not(.e-rtl):not(.e-disabled) .e-input-group-icon:last-child:hover {
+    @if $skin-name == 'highcontrast' {
+      border-right-color: transparent;
+    }
   }
 
   input.e-input::selection,
@@ -240,6 +397,11 @@
   .e-input-group.e-control-wrapper input.e-input::selection,
   .e-float-input input::selection,
   .e-float-input.e-control-wrapper input::selection {
+    @include input-selection;
+  }
+
+  .e-float-input.e-small textarea::selection,
+  .e-float-input textarea::selection {
     @include input-selection;
   }
 
@@ -784,7 +946,7 @@
   // sass-lint:disable no-vendor-prefixes 
   .e-input-group:not(.e-disabled):active:not(.e-success):not(.e-warning):not(.e-error),
   .e-input-group.e-control-wrapper:not(.e-disabled):active:not(.e-success):not(.e-warning):not(.e-error) {
-    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' or $skin-name == 'highcontrast' {
       border-color: $input-active-border-color;
     }
     @if $skin-name == 'bootstrap' {
@@ -819,7 +981,7 @@
 
   .e-input-group.e-disabled:not(.e-success):not(.e-warning):not(.e-error),
   .e-input-group.e-control-wrapper.e-disabled:not(.e-success):not(.e-warning):not(.e-error) {
-    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' or $skin-name == 'highcontrast' {
       border-color: $input-disable-border-color;
     }
   }
@@ -1194,7 +1356,7 @@
   .e-float-input.e-control-wrapper:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled),
   .e-float-input.e-control-wrapper:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]),
   .e-float-input.e-control-wrapper:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) textarea:not([disabled]) {
-    @if $skin-name != 'material' and $skin-name != 'bootstrap'  {
+    @if $skin-name != 'material' and $skin-name != 'bootstrap' and $skin-name != 'highcontrast' {
       border-color: $input-group-border-color-hover;
     }
   }
@@ -1233,7 +1395,7 @@
   .e-float-input.e-control-wrapper:active:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled),
   .e-float-input:active:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]),
   .e-float-input.e-control-wrapper:active:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]) {
-    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
+    @if $skin-name == 'fabric' or $skin-name == 'bootstrap' or $skin-name == 'highcontrast' {
       border-color: $input-active-border-color;
     }
   }

@@ -179,7 +179,7 @@ export function strippedValue(element: HTMLInputElement): string {
                         (this.customRegExpCollec[k].length > 2 && this.customRegExpCollec[k][0] === '[' &&
                             this.customRegExpCollec[k][this.customRegExpCollec[k].length - 1] === ']') ||
                         (!isNullOrUndefined(this.customCharacters) &&
-                            (!isNullOrUndefined(this.customCharacters[this.customRegExpCollec[k]])))))) {
+                            (!isNullOrUndefined(this.customCharacters[this.customRegExpCollec[k]]))))) && (element.value !== '')) {
                     value += element.value[i];
                 }
             }
@@ -199,17 +199,27 @@ function pushIntoRegExpCollec(value: string): void {
 }
 
 export function maskInputFocusHandler(event: KeyboardEvent): void {
+    if (this.promptMask.length > 0) {
+        this.focusEventArgs = { selectionStart: 0, selectionEnd: this.promptMask.length };
+    } else {
+        this.focusEventArgs = { selectionStart: 0, selectionEnd: this.element.value.length };
+    }
+    let eventArgs: Object = {};
+    merge(eventArgs, this.focusEventArgs);
+    this.trigger('focus', eventArgs);
+    this.focusEventArgs = eventArgs;
     if (this.mask) {
         this.isFocus = true;
         if (this.placeholder && this.element.value === '') {
             setElementValue.call(this, this.promptMask);
-            this.element.setSelectionRange(0, this.element.value.length);
+            this.element.setSelectionRange(this.focusEventArgs.selectionStart, this.focusEventArgs.selectionEnd);
             setTimeout(
                 () => {
-                    this.element.setSelectionRange(0, this.element.value.length);
+                    this.element.setSelectionRange(this.focusEventArgs.selectionStart, this.focusEventArgs.selectionEnd);
                 },
                 1);
-
+        } else {
+            this.element.setSelectionRange(this.focusEventArgs.selectionStart, this.focusEventArgs.selectionEnd);
         }
     }
 }
@@ -541,6 +551,7 @@ function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): v
     let value: string = this.element.value;
     let eventOldVal: string;
     let prevSupport: boolean = false;
+    let isEqualVal: boolean = false;
     for (let k: number = 0; k < key.length; k++) {
         let keyValue: string = key[k];
         startIndex = this.element.selectionStart;
@@ -552,6 +563,7 @@ function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): v
             for (let i: number = startIndex; i < this.promptMask.length; i++) {
                 let maskValue: string = this.escapeMaskValue;
                 curMask = maskValue[startIndex];
+                if (this.hiddenMask[startIndex] === '\\' && this.hiddenMask[startIndex + 1] === key) { isEqualVal = true; }
                 if ((isNullOrUndefined(this.regExpCollec[curMask]) && (isNullOrUndefined(this.customCharacters)
                     || (!isNullOrUndefined(this.customCharacters) && isNullOrUndefined(this.customCharacters[curMask])))
                     && ((this.hiddenMask[startIndex] !== this.promptChar && this.customRegExpCollec[startIndex][0] !== '['
@@ -601,12 +613,11 @@ function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): v
                     }
                 }
                 startIndex = this.element.selectionStart;
-                applySupportedValues.call(this, event, startIndex, keyValue, eventOldVal);
+                applySupportedValues.call(this, event, startIndex, keyValue, eventOldVal, isEqualVal);
                 prevSupport = true;
                 if (k === key.length - 1) {
                     this.redoCollec.unshift({
-                        value: this.element.value, startIndex: this.element.selectionStart,
-                        endIndex: this.element.selectionEnd
+                        value: this.element.value, startIndex: this.element.selectionStart, endIndex: this.element.selectionEnd
                     });
                 }
                 allowText = false;
@@ -617,9 +628,7 @@ function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): v
             if (k === key.length - 1 && !allowText) {
                 if (!Browser.isAndroid || (Browser.isAndroid && startIndex < this.promptMask.length)) {
                     this.redoCollec.unshift({
-                        value: this.element.value,
-                        startIndex: this.element.selectionStart,
-                        endIndex: this.element.selectionEnd
+                        value: this.element.value, startIndex: this.element.selectionStart, endIndex: this.element.selectionEnd
                     });
                 }
             }
@@ -631,14 +640,16 @@ function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): v
     }
 }
 
-function applySupportedValues(event: KeyboardEvent, startIndex: number, keyValue: string, eventOldVal: string): void {
+function applySupportedValues(event: KeyboardEvent, startIndex: number, keyValue: string, eventOldVal: string, isEqualVal: boolean): void {
     if (this.hiddenMask.length > this.promptMask.length) {
         keyValue = changeToLowerUpperCase.call(this, keyValue, this.element.value);
     }
+    if (!isEqualVal) {
     let value: string = this.element.value;
     let elementValue: string = value.substring(0, startIndex) + keyValue + value.substring(startIndex + 1, value.length);
     setElementValue.call(this, elementValue);
     this.element.selectionStart = this.element.selectionEnd = startIndex + 1;
+    }
     triggerMaskChangeEvent.call(this, event, eventOldVal);
 }
 
