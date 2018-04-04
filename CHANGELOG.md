@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+## 16.1.29 (2018-03-13)
+
+### Input
+
+#### Features
+
+- The clear button can be enabled/disabled dynamically through `setClearButton` method.
+
+## 16.1.28-preview (2018-03-09)
+
+### NumericTextBox
+
+#### Bug Fixes
+
+- In NumericTextBox, unwanted “change” events has been prevented from triggering.
+
+### Uploader
+
+#### Bug Fixes
+
+- The issue with rendering Uploader component in internet explorer browser has been fixed.
+
+### Input
+
+#### Bug Fixes
+
+- Theme compatibility issue resolved for CSS Input component.
+
 ## 16.1.24 (2018-02-22)
 
 ### Uploader

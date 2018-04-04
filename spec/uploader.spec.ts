@@ -81,6 +81,7 @@ describe('Uploader Control', () => {
             expect(liElements[0].querySelector('.e-file-status').textContent).toEqual('File uploaded successfully');
             expect(liElements[2].querySelector('.e-file-status').textContent).toEqual('File uploaded successfully');
             expect(liElements[1].querySelector('.e-icons').classList.contains('e-file-delete-btn')).toBe(true);
+            expect(liElements[0].querySelector('.e-icons').getAttribute('title')).toEqual('Delete file');
         });
         it('Dynamically update files without autoUpload', () => {
             let preLoadFiles: any = [

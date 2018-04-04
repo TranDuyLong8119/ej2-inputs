@@ -1417,6 +1417,91 @@ describe('Input Groups - Enable/Disable', () => {
         });
     });
 
+    describe('Remove the clear icon dynamically in Normal Input', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+        });
+        it('Ensure the clear icon', () => {
+           Input.setClearButton(false, element, inputObj);
+           expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") === undefined);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Remove the clear icon dynamically in Floating Input', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 floatLabelType: 'Auto',
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: true
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
+        });
+        it('Ensure the clear icon', () => {
+           Input.setClearButton(false, element, inputObj);
+           expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") === undefined);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
+    describe('Add the clear icon dynamically in Floating Input', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement;
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        element = <HTMLInputElement>createElement('input', { id: 'inputclear',  attrs: { value: '12345'} });
+        beforeAll(() => {
+                document.body.appendChild(element);
+                inputObj = Input.createInput({
+                 element: element,
+                 floatLabelType: 'Auto',
+                 properties: {
+                  placeholder: 'Clear button',
+                  showClearButton: false
+                 }
+              });
+            });
+        it('Ensure whether clear icon element rendered and shown intial with value', () => {
+            expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") === undefined);
+        });
+        it('Ensure the clear icon', () => {
+           Input.setClearButton(true , element, inputObj);
+           expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
     describe('Render the textbox value as 12345 with clear icon support', () => {
         let inputObj: InputObject;
         let element: HTMLInputElement;

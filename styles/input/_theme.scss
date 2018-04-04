@@ -1,12 +1,10 @@
-﻿@include export-module('input-theme') {
+@include export-module('input-theme') {
   /*! input theme */
 
-  input.e-input,
-  input.e-input.e-css,
+  input.e-input#{$css},
   .e-input-group input.e-input,
   .e-input-group.e-control-wrapper input.e-input,
-  textarea.e-input,
-  textarea.e-input.e-css,
+  textarea.e-input#{$css},
   .e-float-input input,
   .e-float-input.e-control-wrapper input,
   .e-float-input textarea,
@@ -30,8 +28,7 @@
     color: $input-icon-font-color;
   }
 
-  .e-input[readonly],
-  .e-input.e-css[readonly],
+  .e-input#{$css}[readonly],
   .e-input-group .e-input[readonly],
   .e-input-group.e-control-wrapper .e-input[readonly] {
     background: $input-bg-color;
@@ -42,8 +39,7 @@
     color: $input-group-disabled-color;
   }
 
-  .e-input[disabled],
-  .e-input.e-css[disabled],
+  .e-input#{$css}[disabled],
   .e-input-group .e-input[disabled],
   .e-input-group.e-control-wrapper .e-input[disabled],
   .e-input-group.e-disabled,
@@ -88,10 +84,8 @@
     }
   }
 
-  .e-input.e-success,
-  .e-input.e-css.e-success,
-  .e-input.e-success:focus,
-  .e-input.e-css.e-success:focus,
+  .e-input#{$css}.e-success,
+  .e-input#{$css}.e-success:focus,
   .e-input-group.e-success input.e-input,
   .e-input-group.e-control-wrapper.e-success input.e-input,
   .e-input-group.e-success .e-input-group-icon,
@@ -99,10 +93,8 @@
     border-color: $input-success-color;
   }
 
-  .e-input.e-warning,
-  .e-input.e-warning:focus,
-  .e-input.e-css.e-warning,
-  .e-input.e-css.e-warning:focus,
+  .e-input#{$css}.e-warning,
+  .e-input#{$css}.e-warning:focus,
   .e-input-group.e-warning input.e-input,
   .e-input-group.e-control-wrapper.e-warning input.e-input,
   .e-input-group.e-warning .e-input-group-icon,
@@ -118,10 +110,8 @@
     }
   }
 
-  .e-input.e-error,
-  .e-input.e-error:focus,
-  .e-input.e-css.e-error,
-  .e-input.e-css.e-error:focus,
+  .e-input#{$css}.e-error,
+  .e-input#{$css}.e-error:focus,
   .e-input-group.e-error input.e-input,
   .e-input-group.e-control-wrapper.e-error input.e-input,
   .e-input-group.e-control-wrapper.e-error .e-input-group-icon,
@@ -389,10 +379,8 @@
     }
   }
 
-  input.e-input::selection,
-  textarea.e-input::selection,
-  input.e-input.e-css::selection,
-  textarea.e-input.e-css::selection,
+  input.e-input#{$css}::selection,
+  textarea.e-input#{$css}::selection,
   .e-input-group input.e-input::selection,
   .e-input-group.e-control-wrapper input.e-input::selection,
   .e-float-input input::selection,
@@ -406,12 +394,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input:-moz-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css:-moz-placeholder {
+  input.e-input#{$css}:-moz-placeholder {
     color: $input-placeholder;
   }
 
@@ -427,12 +410,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input:-moz-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css:-moz-placeholder {
+  input.e-input#{$css}:-moz-placeholder {
     color: $input-placeholder;
   }
 
@@ -447,12 +425,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input:-moz-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css:-moz-placeholder {
+  textarea.e-input#{$css}:-moz-placeholder {
     color: $input-placeholder;
   }
 
@@ -467,12 +440,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input::-moz-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css::-moz-placeholder {
+  input.e-input#{$css}::-moz-placeholder {
     color: $input-placeholder;
   }
 
@@ -487,7 +455,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input::-moz-placeholder {
+  textarea.e-input#{$css}::-moz-placeholder {
     color: $input-placeholder;
   }
 
@@ -502,12 +470,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css::-moz-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input:-ms-input-placeholder {
+  input.e-input#{$css}:-ms-input-placeholder {
     color: $input-placeholder;
   }
 
@@ -522,12 +485,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css:-ms-input-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input:-ms-input-placeholder {
+  textarea.e-input#{$css}:-ms-input-placeholder {
     color: $input-placeholder;
   }
 
@@ -542,12 +500,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css:-ms-input-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input::-webkit-input-placeholder {
+  input.e-input#{$css}::-webkit-input-placeholder {
     color: $input-placeholder;
   }
 
@@ -562,12 +515,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css::-webkit-input-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input::-webkit-input-placeholder {
+  textarea.e-input#{$css}::-webkit-input-placeholder {
     color: $input-placeholder;
   }
 
@@ -578,11 +526,6 @@
 
   // sass-lint:disable no-vendor-prefixes
   .e-input-group.e-control-wrapper textarea.e-input::-webkit-input-placeholder {
-    color: $input-placeholder;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css::-webkit-input-placeholder {
     color: $input-placeholder;
   }
 
@@ -774,8 +717,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-input:focus:not(.e-success):not(.e-warning):not(.e-error),
-  .e-input.e-css:focus:not(.e-success):not(.e-warning):not(.e-error),
+  .e-input#{$css}:focus:not(.e-success):not(.e-warning):not(.e-error),
   .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:focus,
   .e-float-input.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:focus,
   .e-float-input.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) textarea:focus {
@@ -787,8 +729,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-input:focus:not(.e-success):not(.e-warning).e-error,
-  .e-input.e-css:focus:not(.e-success):not(.e-warning).e-error,
+  .e-input#{$css}:focus:not(.e-success):not(.e-warning).e-error,
   .e-float-input:not(.e-success):not(.e-warning).e-error:not(.e-input-group) input:focus,
   .e-float-input:not(.e-success):not(.e-warning).e-error:not(.e-input-group) textarea:focus,
   .e-float-input.e-control-wrapper:not(.e-success):not(.e-warning).e-error:not(.e-input-group) input:focus,
@@ -800,8 +741,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-input:focus:not(.e-error):not(.e-warning).e-success,
-  .e-input.e-css:focus:not(.e-error):not(.e-warning).e-success,
+  .e-input#{$css}:focus:not(.e-error):not(.e-warning).e-success,
   .e-float-input:not(.e-error):not(.e-warning).e-success:not(.e-input-group) input:focus,
   .e-float-input:not(.e-error):not(.e-warning).e-success:not(.e-input-group) textarea:focus,
   .e-float-input.e-control-wrapper:not(.e-error):not(.e-warning).e-success:not(.e-input-group) input:focus,
@@ -813,8 +753,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-input:focus:not(.e-success):not(.e-error).e-warning,
-  .e-input.e-css:focus:not(.e-success):not(.e-error).e-warning,
+  .e-input#{$css}:focus:not(.e-success):not(.e-error).e-warning,
   .e-float-input:not(.e-success):not(.e-error).e-warning:not(.e-input-group) input:focus,
   .e-float-input:not(.e-success):not(.e-error).e-warning:not(.e-input-group) textarea:focus,
   .e-float-input.e-control-wrapper:not(.e-success):not(.e-error).e-warning:not(.e-input-group) input:focus,
@@ -1321,10 +1260,8 @@
     }
   }
 
-  input.e-input:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]):not(:focus),
-  input.e-input.e-css:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]):not(:focus),
-  textarea.e-input:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]),
-  textarea.e-input.e-css:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]) {
+  input.e-input#{$css}:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]):not(:focus),
+  textarea.e-input#{$css}:hover:not(.e-success):not(.e-warning):not(.e-error):not([disabled]) {
     @if $skin-name == 'fabric' or $skin-name == 'bootstrap' {
       border-color: $input-group-border-color-hover;
     }

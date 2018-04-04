@@ -1,4 +1,4 @@
-﻿@include export-module('input-layout') {
+@include export-module('input-layout') {
   /*! input layout */
   .e-input-group,
   .e-input-group.e-control-wrapper {
@@ -7,12 +7,10 @@
     margin-bottom: $input-margin-bottom;
   }
 
-  input.e-input,
-  input.e-input.e-css,
+  input.e-input#{$css},
   .e-input-group input.e-input,
   .e-input-group.e-control-wrapper input.e-input,
-  textarea.e-input,
-  textarea.e-input.e-css,
+  textarea.e-input#{$css},
   .e-input-group textarea.e-input,
   .e-input-group.e-control-wrapper textarea.e-input {
     border: $input-border;
@@ -30,8 +28,7 @@
     width: 100%;
   }
 
-  input.e-input,
-  input.e-input.e-css,
+  input.e-input#{$css},
   .e-input-group input.e-input,
   .e-input-group input,
   .e-input-group.e-control-wrapper input.e-input,
@@ -40,8 +37,7 @@
   .e-float-input.e-input-group input,
   .e-float-input.e-control-wrapper input,
   .e-float-input.e-control-wrapper.e-input-group input,
-  input.e-input:focus,
-  input.e-input.e-css:focus,
+  input.e-input#{$css}:focus,
   .e-input-group input.e-input:focus,
   .e-input-group input:focus,
   .e-input-group.e-control-wrapper input.e-input:focus,
@@ -55,8 +51,7 @@
     white-space: nowrap;
   }
 
-  input.e-input,
-  input.e-input.e-css,
+  input.e-input#{$css},
   .e-input-group input.e-input,
   .e-input-group input,
   .e-input-group.e-control-wrapper input.e-input,
@@ -72,59 +67,47 @@
     border-radius: $input-border-radius;
   }
 
-  .e-input:focus,
-  .e-input.e-css:focus {
+  .e-input#{$css}:focus {
     border-width: $input-focus-border-width;
     padding-bottom: $input-padding-bottom;
   }
 
-  .e-input.e-small:focus,
-  .e-input.e-small.e-css:focus {
+  .e-input.e-small#{$css}:focus {
     border-width: $input-focus-border-width;
     padding-bottom: $input-small-padding-bottom;
   }
 
-  .e-input.e-bigger:focus,
-  .e-input.e-bigger.e-css:focus,
-  .e-bigger .e-input:focus,
-  .e-bigger .e-input.e-css:focus {
+  .e-input.e-bigger#{$css}:focus,
+  .e-bigger .e-input#{$css}:focus {
     padding-bottom: $input-bigger-padding-bottom;
   }
 
-  .e-input.e-small.e-bigger:focus,
-  .e-bigger .e-input.e-small:focus,
-  .e-input.e-small.e-bigger.e-css:focus,
-  .e-bigger .e-input.e-small.e-css:focus {
+  .e-input.e-small.e-bigger#{$css}:focus,
+  .e-bigger .e-input.e-small#{$css}:focus {
     padding-bottom: $input-bigger-small-padding-bottom;
   }
 
-  .e-input:focus,
-  .e-input.e-css:focus {
+  .e-input#{$css}:focus {
     @if $skin-name == 'material' {
       padding-bottom: $input-focus-padding-bottom;
     }
   }
 
-  .e-input.e-small:focus,
-  .e-input.e-small.e-css:focus {
+  .e-input.e-small#{$css}:focus {
     @if $skin-name == 'material' {
       padding-bottom: $input-focus-small-padding-bottom;
     }
   }
 
-  .e-input.e-bigger:focus,
-  .e-bigger .e-input:focus,
-  .e-input.e-bigger.e-css:focus,
-  .e-bigger .e-input.e-css:focus {
+  .e-input.e-bigger#{$css}:focus,
+  .e-bigger .e-input#{$css}:focus {
     @if $skin-name == 'material' {
       padding-bottom: $input-focus-bigger-padding-bottom;
     }
   }
 
-  .e-input.e-small.e-bigger:focus,
-  .e-bigger .e-input.e-small:focus,
-  .e-input.e-small.e-bigger.e-css:focus,
-  .e-bigger .e-input.e-small.e-css:focus {
+  .e-input.e-small.e-bigger#{$css}:focus,
+  .e-bigger .e-input.e-small#{$css}:focus {
     @if $skin-name == 'material' {
       padding-bottom: $input-focus-bigger-small-padding-bottom;
     }
@@ -137,16 +120,12 @@
     padding: $input-padding;
   }
 
-  input.e-input.e-bigger,
-  input.e-input.e-bigger.e-css,
-  textarea.e-input.e-bigger,
-  textarea.e-input.e-bigger.e-css,
+  input.e-input.e-bigger#{$css},
+  textarea.e-input.e-bigger#{$css},
   .e-input-group.e-bigger .e-input,
   .e-input-group.e-bigger.e-control-wrapper .e-input,
-  .e-bigger input.e-input,
-  .e-bigger input.e-input.e-css,
-  .e-bigger textarea.e-input,
-  .e-bigger textarea.e-input.e-css,
+  .e-bigger input.e-input#{$css},
+  .e-bigger textarea.e-input#{$css},
   .e-bigger .e-input-group .e-input,
   .e-bigger .e-input-group.e-control-wrapper .e-input {
     font-size: $input-bigger-font-size;
@@ -430,8 +409,7 @@
 
   .e-input[disabled],
   .e-input-group .e-input[disabled],
-  .e-input-group.e-control-wrapper .e-input[disabled],
-  .e-input.e-css[disabled],
+  .e-input-group.e-control-wrapper .e-input#{$css}[disabled],
   .e-input-group.e-disabled,
   .e-input-group.e-disabled input,
   .e-input-group.e-disabled input.e-input,
@@ -455,8 +433,7 @@
     cursor: not-allowed;
   }
 
-  .e-input[disabled],
-  .e-input.e-css[disabled],
+  .e-input#{$css}[disabled],
   .e-input-group.e-disabled,
   .e-input-group.e-control-wrapper.e-disabled,
   .e-float-input input[disabled],
@@ -477,8 +454,7 @@
     }
   }
 
-  .e-input[disabled],
-  .e-input.e-css[disabled],
+  .e-input#{$css}[disabled],
   .e-input-group.e-disabled,
   .e-input-group.e-control-wrapper.e-disabled,
   .e-float-input.e-disabled,
@@ -493,15 +469,13 @@
     opacity: $input-opacity;
   }
 
-  .e-input.e-rtl,
-  .e-input.e-css.e-rtl,
+  .e-input#{$css}.e-rtl,
   .e-input-group.e-rtl,
   .e-input-group.e-control-wrapper.e-rtl   {
     direction: rtl;
   }
 
-  .e-input.e-corner,
-  .e-input.e-css.e-corner {
+  .e-input#{$css}.e-corner {
     border-radius: $input-border-radius;
   }
 
@@ -640,8 +614,7 @@
     }
   }
 
-  .e-input.e-small,
-  .e-input.e-css.e-small,
+  .e-input#{$css}.e-small,
   .e-input-group.e-small .e-input,
   .e-input-group.e-control-wrapper.e-small .e-input {
     font-size: $input-small-font-size;
@@ -654,14 +627,12 @@
     padding: $input-small-padding;
   }
 
-  .e-input.e-small.e-bigger,
-  .e-input.e-small.e-bigger.e-css,
+  .e-input.e-small.e-bigger#{$css},
   .e-input-group.e-small.e-bigger .e-input,
   .e-input-group.e-small .e-input.e-bigger,
   .e-input-group.e-control-wrapper.e-small.e-bigger .e-input,
   .e-input-group.e-control-wrapper.e-small .e-input.e-bigger,
-  .e-bigger .e-input.e-small,
-  .e-bigger .e-input.e-css.e-small,
+  .e-bigger .e-input#{$css}.e-small,
   .e-bigger .e-input-group.e-small .e-input,
   .e-bigger .e-input-group.e-control-wrapper.e-small .e-input {
     font-size: $input-bigger-small-font-size;
@@ -1685,19 +1656,16 @@
     }
   }
 
-  .e-input.e-small,
-  .e-input.e-css.e-small,
+  .e-input#{$css}.e-small,
   .e-input-group.e-small,
   .e-input-group.e-control-wrapper.e-small {
     margin-bottom: $input-small-margin-bottom;
   }
 
-  .e-input.e-small.e-bigger,
-  .e-input.e-css.e-small.e-bigger,
+  .e-input#{$css}.e-small.e-bigger,
   .e-input-group.e-small.e-bigger,
   .e-input-group.e-control-wrapper.e-small.e-bigger,
-  .e-bigger .e-input.e-small,
-  .e-bigger .e-input.e-css.e-small,
+  .e-bigger .e-input#{$css}.e-small,
   .e-bigger .e-input-group.e-small,
   .e-bigger .e-input-group.e-control-wrapper.e-small {
     line-height: inherit;
@@ -1933,8 +1901,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes  
-  input.e-input::-ms-clear,
-  input.e-input.e-css::-ms-clear,
+  input.e-input#{$css}::-ms-clear,
   .e-float-input input::-ms-clear,
   .e-float-input.e-control-wrapper input::-ms-clear {
     display: none;
@@ -1963,109 +1930,55 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input::-webkit-input-placeholder,
-  input.e-input:-moz-placeholder,
-  input.e-input:-ms-input-placeholder,
-  input.e-input::-moz-placeholder {
+  input.e-input#{$css}::-webkit-input-placeholder,
+  input.e-input#{$css}:-moz-placeholder,
+  input.e-input#{$css}:-ms-input-placeholder,
+  input.e-input#{$css}::-moz-placeholder {
     font-size: $input-font-size;
     font-style: $input-font-style;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css::-webkit-input-placeholder,
-  input.e-input.e-css:-moz-placeholder,
-  input.e-input.e-css:-ms-input-placeholder,
-  input.e-input.e-css::-moz-placeholder {
-    font-size: $input-font-size;
-    font-style: $input-font-style;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  .e-bigger input.e-input::-webkit-input-placeholder,
-  input.e-bigger.e-input::-webkit-input-placeholder,
-  .e-bigger input.e-input:-moz-placeholder,
-  input.e-bigger.e-input:-moz-placeholder,
-  .e-bigger input.e-input:-ms-input-placeholder,
-  input.e-bigger.e-input:-ms-input-placeholder,
-  .e-bigger input.e-input::-moz-placeholder,
-  input.e-bigger.e-input::-moz-placeholder {
+  .e-bigger input.e-input#{$css}::-webkit-input-placeholder,
+  input.e-bigger.e-input#{$css}::-webkit-input-placeholder,
+  .e-bigger input.e-input#{$css}:-moz-placeholder,
+  input.e-bigger.e-input#{$css}:-moz-placeholder,
+  .e-bigger input.e-input#{$css}:-ms-input-placeholder,
+  input.e-bigger.e-input#{$css}:-ms-input-placeholder,
+  .e-bigger input.e-input#{$css}::-moz-placeholder,
+  input.e-bigger.e-input#{$css}::-moz-placeholder {
     font-size: $input-bigger-font-size;
     font-style: $input-font-style;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-bigger input.e-input.e-css::-webkit-input-placeholder,
-  input.e-bigger.e-input.e-css::-webkit-input-placeholder,
-  .e-bigger input.e-input.e-css:-moz-placeholder,
-  input.e-bigger.e-input.e-css:-moz-placeholder,
-  .e-bigger input.e-input.e-css:-ms-input-placeholder,
-  input.e-bigger.e-input.e-css:-ms-input-placeholder,
-  .e-bigger input.e-input.e-css::-moz-placeholder,
-  input.e-bigger.e-input.e-css::-moz-placeholder {
-    font-size: $input-bigger-font-size;
-    font-style: $input-font-style;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  .e-small input.e-input::-webkit-input-placeholder,
-  input.e-small.e-input::-webkit-input-placeholder,
-  .e-small input.e-input:-moz-placeholder,
-  input.e-small.e-input:-moz-placeholder,
-  .e-small input.e-input:-ms-input-placeholder,
-  input.e-small.e-input:-ms-input-placeholder,
-  .e-small input.e-input::-moz-placeholder,
-  input.e-small.e-input::-moz-placeholder {
+  .e-small input.e-input#{$css}::-webkit-input-placeholder,
+  input.e-small.e-input#{$css}::-webkit-input-placeholder,
+  .e-small input.e-input#{$css}:-moz-placeholder,
+  input.e-small.e-input#{$css}:-moz-placeholder,
+  .e-small input.e-input#{$css}:-ms-input-placeholder,
+  input.e-small.e-input#{$css}:-ms-input-placeholder,
+  .e-small input.e-input#{$css}::-moz-placeholder,
+  input.e-small.e-input#{$css}::-moz-placeholder {
     font-size: $input-small-font-size;
     font-style: $input-font-style;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-small input.e-input.e-css::-webkit-input-placeholder,
-  input.e-small.e-input.e-css::-webkit-input-placeholder,
-  .e-small input.e-input.e-css:-moz-placeholder,
-  input.e-small.e-input.e-css:-moz-placeholder,
-  .e-small input.e-input.e-css:-ms-input-placeholder,
-  input.e-small.e-input.e-css:-ms-input-placeholder,
-  .e-small input.e-input.e-css::-moz-placeholder,
-  input.e-small.e-input.e-css::-moz-placeholder {
-    font-size: $input-small-font-size;
-    font-style: $input-font-style;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  .e-bigger input.e-small.e-input::-webkit-input-placeholder,
-  .e-small input.e-bigger.e-input::-webkit-input-placeholder,
-  .e-bigger input.e-small.e-input:-moz-placeholder,
-  .e-small input.e-bigger.e-input:-moz-placeholder,
-  .e-bigger input.e-small.e-input:-ms-input-placeholder,
-  .e-small input.e-bigger.e-input:-ms-input-placeholder,
-  .e-bigger input.e-small.e-input::-moz-placeholder,
-  .e-small input.e-bigger.e-input::-moz-placeholder {
+  .e-bigger input.e-small.e-input#{$css}::-webkit-input-placeholder,
+  .e-small input.e-bigger.e-input#{$css}::-webkit-input-placeholder,
+  .e-bigger input.e-small.e-input#{$css}:-moz-placeholder,
+  .e-small input.e-bigger.e-input#{$css}:-moz-placeholder,
+  .e-bigger input.e-small.e-input#{$css}:-ms-input-placeholder,
+  .e-small input.e-bigger.e-input#{$css}:-ms-input-placeholder,
+  .e-bigger input.e-small.e-input#{$css}::-moz-placeholder,
+  .e-small input.e-bigger.e-input#{$css}::-moz-placeholder {
     font-size: $input-bigger-small-font-size;
     font-style: $input-font-style;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  .e-bigger input.e-small.e-input.e-css::-webkit-input-placeholder,
-  .e-small input.e-bigger.e-input.e-css::-webkit-input-placeholder,
-  .e-bigger input.e-small.e-input.e-css:-moz-placeholder,
-  .e-small input.e-bigger.e-inpu.e-csst:-moz-placeholder,
-  .e-bigger input.e-small.e-input.e-css:-ms-input-placeholder,
-  .e-small input.e-bigger.e-input.e-css:-ms-input-placeholder,
-  .e-bigger input.e-small.e-input.e-css::-moz-placeholder,
-  .e-small input.e-bigger.e-input.e-css::-moz-placeholder {
-    font-size: $input-bigger-small-font-size;
-    font-style: $input-font-style;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input:-moz-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css:-moz-placeholder {
+  input.e-input#{$css}:-moz-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
@@ -2083,13 +1996,7 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input:-moz-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css:-moz-placeholder {
+  input.e-input#{$css}:-moz-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
@@ -2107,91 +2014,48 @@
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input:-moz-placeholder {
+  textarea.e-input#{$css}:-moz-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css:-moz-placeholder {
+  input.e-input#{$css}::-moz-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input::-moz-placeholder {
+  textarea.e-input#{$css}::-moz-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css::-moz-placeholder {
+  input.e-input#{$css}:-ms-input-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input::-moz-placeholder {
+  textarea.e-input#{$css}:-ms-input-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css::-moz-placeholder {
+  input.e-input#{$css}::-webkit-input-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
-  input.e-input:-ms-input-placeholder {
+  textarea.e-input#{$css}::-webkit-input-placeholder {
     font-style: $input-font-style;
     user-select: none;
   }
 
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css:-ms-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input:-ms-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css:-ms-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input::-webkit-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  input.e-input.e-css::-webkit-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input::-webkit-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  // sass-lint:disable no-vendor-prefixes
-  textarea.e-input.e-css::-webkit-input-placeholder {
-    font-style: $input-font-style;
-    user-select: none;
-  }
-
-  input.e-input,
-  input.e-input.e-css,
+  input.e-input#{$css},
   .e-input-group input,
   .e-input-group.e-control-wrapper input,
   .e-float-input.e-control-wrapper input,
@@ -2229,8 +2093,7 @@
     }
   }
 
-  input.e-input.e-bigger,
-  input.e-input.e-bigger.e-css,
+  input.e-input.e-bigger#{$css},
   .e-input-group.e-bigger input,
   .e-input-group.e-bigger input.e-input,
   .e-input-group.e-control-wrapper.e-bigger input,
@@ -2263,8 +2126,7 @@
     @include input-height ($float-input-bigger-height);
   }
 
-  input.e-input.e-small,
-  input.e-input.e-small.e-css,
+  input.e-input.e-small#{$css},
   .e-input-group.e-small input,
   .e-input-group.e-small input.e-input,
   .e-small .e-input-group input,
@@ -2297,8 +2159,7 @@
     @include input-height ($float-input-small-height);
   }
 
-  input.e-input.e-small.e-bigger,
-  input.e-input.e-small.e-bigger.e-css,
+  input.e-input.e-small.e-bigger#{$css},
   .e-input-group.e-bigger.e-small input,
   .e-input-group.e-bigger.e-small input.e-input,
   .e-bigger.e-small .e-input-group input,
@@ -2331,9 +2192,8 @@
     @include input-height ($float-input-bigger-small-height);
   }
 
-  textarea.e-input,
+  textarea.e-input#{$css},
   .e-input-group textarea,
-  textarea.e-input.e-css,
   .e-input-group.e-control-wrapper textarea,
   .e-float-input textarea,
   .e-float-input.e-control-wrapper textarea {
@@ -2343,7 +2203,7 @@
 
   .e-input-group textarea.e-input.e-bigger,
   .e-input-group.e-control-wrapper textarea.e-input.e-bigger,
-  textarea.e-input.e-bigger.e-css,
+  textarea.e-input.e-bigger#{$css},
   .e-input-group.e-bigger textarea,
   .e-input-group.e-bigger textarea.e-input,
   .e-bigger .e-input-group textarea,
@@ -2364,8 +2224,7 @@
     @include input-height ($textarea-bigger-height);
   }
 
-  textarea.e-input.e-small,
-  textarea.e-input.e-small.e-css,
+  textarea.e-input.e-small#{$css},
   .e-input-group.e-small textarea,
   .e-input-group.e-small textarea.e-input,
   .e-small .e-input-group textarea,
@@ -2386,8 +2245,7 @@
     @include input-height ($textarea-small-height);
   }
 
-  textarea.e-input.e-small.e-bigger,
-  textarea.e-input.e-small.e-bigger.e-css,
+  textarea.e-input.e-small.e-bigger#{$css},
   .e-input-group.e-bigger.e-small textarea,
   .e-input-group.e-bigger.e-small textarea.e-input,
   .e-bigger.e-small .e-input-group textarea,
@@ -2408,16 +2266,14 @@
     @include input-height ($textarea-bigger-small-height);
   }
 
-  input.e-input.e-bigger,
+  input.e-input.e-bigger#{$css},
   .e-input-group input.e-input.e-bigger,
   .e-input-group input.e-input.e-bigger,
   .e-input-group.e-control-wrapper input.e-input.e-bigger,
   .e-input-group.e-control-wrapper input.e-input.e-bigger,
-  input.e-input.e-bigger.e-css,
   .e-input-group.e-bigger .e-input,
   .e-input-group.e-control-wrapper.e-bigger .e-input,
-  .e-bigger input.e-input,
-  .e-bigger input.e-input.e-css,
+  .e-bigger input.e-input#{$css},
   .e-bigger .e-input-group .e-input,
   .e-bigger .e-input-group.e-control-wrapper .e-input,
   .e-float-input.e-bigger input,
@@ -2429,14 +2285,12 @@
     text-indent: $input-bigger-text-indent;
   }
 
-  input.e-input.e-small,
-  input.e-input.e-css.e-small,
+  input.e-input#{$css}.e-small,
   .e-input-group input.e-input.e-small,
   .e-input-group.e-control-wrapper input.e-input.e-small,
   .e-input-group.e-small .e-input,
   .e-input-group.e-control-wrapper.e-small .e-input,
-  .e-small input.e-input,
-  .e-small input.e-input.e-css,
+  .e-small input.e-input#{$css},
   .e-small .e-input-group .e-input,
   .e-small .e-input-group.e-control-wrapper .e-input,
   .e-float-input.e-small input,
@@ -2448,8 +2302,7 @@
     text-indent: $input-small-text-indent;
   }
 
-  input.e-input,
-  input.e-input.e-css,
+  input.e-input#{$css},
   .e-input-group input.e-input,
   .e-input-group input,
   .e-input-group.e-control-wrapper input.e-input,
@@ -2466,8 +2319,7 @@
     text-indent: 0;
   }
 
-  textarea.e-input,
-  textarea.e-input.e-css,
+  textarea.e-input#{$css},
   .e-input-group textarea.e-input,
   .e-input-group textarea,
   .e-input-group.e-control-wrapper textarea.e-input,
@@ -2484,8 +2336,7 @@
     text-indent: 0;
   }
 
-  input.e-input.e-rtl,
-  input.e-input.e-rtl.e-css,
+  input.e-input.e-rtl#{$css},
   .e-input-group.e-rtl input.e-input,
   .e-input-group.e-control-wrapper.e-rtl input.e-input,
   .e-float-input.e-rtl input,
@@ -2515,8 +2366,7 @@
     text-indent: 0;
   }
 
-  textarea.e-input.e-rtl,
-  textarea.e-input.e-rtl.e-css,
+  textarea.e-input.e-rtl#{$css},
   .e-input-group.e-rtl textarea.e-input,
   .e-input-group.e-control-wrapper.e-rtl textarea.e-input,
   .e-float-input.e-rtl textarea,
@@ -2545,10 +2395,8 @@
     text-indent: 0;
   }
 
-  input.e-input.e-small,
-  input.e-input.e-small.e-css,
-  .e-small input.e-input,
-  .e-small input.e-input.e-css,
+  input.e-input.e-small#{$css},
+  .e-small input.e-input#{$css},
   .e-input-group.e-small input.e-input,
   .e-input-group.e-control-wrapper.e-small input.e-input,
   .e-float-input.e-small input,
@@ -2573,10 +2421,8 @@
     text-indent: 0;
   }
 
-  textarea.e-input.e-small,
-  .e-small textarea.e-input,
-  textarea.e-input.e-small.e-css,
-  .e-small textarea.e-input.e-css,
+  textarea.e-input.e-small#{$css},
+  .e-small textarea.e-input#{$css},
   .e-input-group.e-small textarea.e-input,
   .e-input-group.e-control-wrapper.e-small textarea.e-input,
   .e-float-input.e-control-wrapper.e-small textarea,
@@ -2601,14 +2447,10 @@
     text-indent: 0;
   }
 
-  .e-rtl input.e-input.e-small,
-  input.e-input.e-small.e-rtl,
-  .e-small.e-rtl input.e-input,
-  .e-small input.e-input.e-rtl,
-  .e-rtl input.e-input.e-small.e-css,
-  input.e-input.e-css.e-small.e-rtl,
-  .e-small.e-rtl input.e-input.e-css,
-  .e-small input.e-input.e-rtl.e-css,
+  .e-rtl input.e-input.e-small#{$css},
+  input.e-input#{$css}.e-small.e-rtl,
+  .e-small.e-rtl input.e-input#{$css},
+  .e-small input.e-input.e-rtl#{$css},
   .e-float-input.e-control-wrapper.e-small.e-rtl input,
   .e-float-input.e-small.e-rtl input,
   .e-input-group.e-small.e-rtl input.e-input,
@@ -2646,14 +2488,10 @@
     text-indent: 0;
   }
 
-  .e-rtl textarea.e-input.e-small,
-  textarea.e-input.e-small.e-rtl,
-  .e-small.e-rtl textarea.e-input,
-  .e-small textarea.e-input.e-rtl,
-  .e-rtl textarea.e-input.e-small.e-css,
-  textarea.e-input.e-small.e-rtl.e-css,
-  .e-small.e-rtl textarea.e-input.e-css,
-  .e-small textarea.e-input.e-rtl.e-css,
+  .e-rtl textarea.e-input.e-small#{$css},
+  textarea.e-input.e-small.e-rtl#{$css},
+  .e-small.e-rtl textarea.e-input#{$css},
+  .e-small textarea.e-input.e-rtl#{$css},
   .e-float-input.e-small.e-rtl textarea,
   .e-float-input.e-control-wrapper.e-small.e-rtl textarea,
   .e-input-group.e-small.e-rtl textarea.e-input,
@@ -2690,10 +2528,8 @@
     text-indent: 0;
   }
 
-  input.e-input.e-bigger,
-  .e-bigger input.e-input,
-  input.e-input.e-bigger.e-css,
-  .e-bigger input.e-input.e-css,
+  input.e-input.e-bigger#{$css},
+  .e-bigger input.e-input#{$css},
   .e-input-group.e-bigger input.e-input,
   .e-input-group.e-control-wrapper.e-bigger input.e-input,
   .e-float-input.e-control-wrapper.e-bigger input,
@@ -2718,14 +2554,10 @@
     text-indent: 0;
   }
 
-  .e-rtl input.e-input.e-bigger,
-  input.e-input.e-bigger.e-rtl,
-  .e-bigger.e-rtl input.e-input,
-  .e-bigger input.e-input.e-rtl,
-  .e-rtl input.e-input.e-bigger.e-css,
-  input.e-input.e-bigger.e-rtl.e-css,
-  .e-bigger.e-rtl input.e-input.e-css,
-  .e-bigger input.e-input.e-rtl.e-css,
+  .e-rtl input.e-input.e-bigger#{$css},
+  input.e-input.e-bigger.e-rtl#{$css},
+  .e-bigger.e-rtl input.e-input#{$css},
+  .e-bigger input.e-input.e-rtl#{$css},
   .e-float-input.e-control-wrapper.e-bigger.e-rtl input,
   .e-float-input.e-bigger.e-rtl input,
   .e-input-group.e-bigger.e-rtl input.e-input,
@@ -2763,10 +2595,8 @@
     text-indent: 0;
   }
 
-  textarea.e-input.e-bigger,
-  .e-bigger textarea.e-input,
-  textarea.e-input.e-bigger.e-css,
-  .e-bigger textarea.e-input.e-css,
+  textarea.e-input.e-bigger#{$css},
+  .e-bigger textarea.e-input#{$css},
   .e-input-group.e-bigger textarea.e-input,
   .e-input-group.e-control-wrapper.e-bigger textarea.e-input,
   .e-float-input.e-control-wrapper.e-bigger textarea,
@@ -2791,14 +2621,10 @@
     text-indent: 0;
   }
 
-  .e-rtl textarea.e-input.e-bigger,
-  textarea.e-input.e-bigger.e-rtl,
-  .e-bigger.e-rtl textarea.e-input,
-  .e-bigger textarea.e-input.e-rtl,
-  .e-rtl textarea.e-input.e-bigger.e-css,
-  textarea.e-input.e-bigger.e-rtl.e-css,
-  .e-bigger.e-rtl textarea.e-input.e-css,
-  .e-bigger textarea.e-input.e-rtl.e-css,
+  .e-rtl textarea.e-input.e-bigger#{$css},
+  textarea.e-input.e-bigger.e-rtl#{$css},
+  .e-bigger.e-rtl textarea.e-input#{$css},
+  .e-bigger textarea.e-input.e-rtl#{$css},
   .e-float-input.e-control-wrapper.e-bigger.e-rtl textarea,
   .e-float-input.e-bigger.e-rtl textarea,
   .e-input-group.e-bigger.e-rtl textarea.e-input,
@@ -2835,10 +2661,8 @@
     text-indent: 0;
   }
 
-  input.e-input.e-bigger.e-small,
-  .e-bigger input.e-input.e-small,
-  input.e-input.e-bigger.e-small.e-css,
-  .e-bigger input.e-input.e-small.e-css,
+  input.e-input.e-bigger.e-small#{$css},
+  .e-bigger input.e-input.e-small#{$css},
   .e-input-group.e-small.e-bigger input.e-input,
   .e-input-group.e-control-wrapper.e-small.e-bigger input.e-input,
   .e-input-group.e-small input.e-input.e-bigger,
@@ -2867,8 +2691,7 @@
     text-indent: 0;
   }
 
-  .e-bigger input.e-input.e-small.e-rtl,
-  .e-bigger input.e-input.e-small.e-rtl.e-css,
+  .e-bigger input.e-input.e-small.e-rtl#{$css},
   .e-input-group.e-small.e-bigger.e-rtl input.e-input,
   .e-input-group.e-control-wrapper.e-small.e-bigger.e-rtl input.e-input,
   .e-input-group.e-small.e-rtl input.e-input.e-bigger,
@@ -2923,10 +2746,8 @@
     text-indent: 0;
   }
 
-  textarea.e-input.e-bigger.e-small,
-  .e-bigger textarea.e-input.e-small,
-  textarea.e-input.e-bigger.e-small.e-css,
-  .e-bigger textarea.e-input.e-small.e-css,
+  textarea.e-input.e-bigger.e-small#{$css},
+  .e-bigger textarea.e-input.e-small#{$css},
   .e-input-group.e-small.e-bigger textarea.e-input,
   .e-input-group.e-control-wrapper.e-small.e-bigger textarea.e-input,
   .e-input-group.e-small textarea.e-input.e-bigger,
@@ -2955,8 +2776,7 @@
     text-indent: 0;
   }
 
-  .e-bigger textarea.e-input.e-small.e-rtl,
-  .e-bigger textarea.e-input.e-small.e-rtl.e-css,
+  .e-bigger textarea.e-input.e-small.e-rtl#{$css},
   .e-input-group.e-small.e-bigger.e-rtl textarea.e-input,
   .e-input-group.e-control-wrapper.e-small.e-bigger.e-rtl textarea.e-input,
   .e-input-group.e-small.e-rtl textarea.e-input.e-bigger,
@@ -2969,8 +2789,7 @@
   .e-float-input.e-control-wrapper.e-small.e-bigger.e-rtl textarea,
   .e-float-input.e-control-wrapper.e-small.e-rtl textarea.e-bigger,
   .e-bigger .e-float-input.e-control-wrapper.e-small.e-rtl textarea,
-  .e-bigger.e-rtl textarea.e-input.e-small,
-  .e-bigger.e-rtl textarea.e-input.e-small.e-css,
+  .e-bigger.e-rtl textarea.e-input.e-small#{$css},
   .e-rtl .e-input-group.e-small.e-bigger textarea.e-input,
   .e-rtl .e-input-group.e-control-wrapper.e-small.e-bigger textarea.e-input,
   .e-rtl .e-input-group.e-small textarea.e-input.e-bigger,
@@ -3241,10 +3060,8 @@
     padding-top: $float-input-clear-icon-small-padding-top;
   }
 
-  .e-input:not(:valid),
-  .e-input:valid,
-  .e-input.e-css:not(:valid),
-  .e-input.e-css:valid,
+  .e-input#{$css}:not(:valid),
+  .e-input#{$css}:valid,
   .e-float-input.e-control-wrapper input:not(:valid),
   .e-float-input.e-control-wrapper input:valid,
   .e-float-input input:not(:valid),

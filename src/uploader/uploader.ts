@@ -1,7 +1,7 @@
 import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, createElement, detach, append, Animation } from '@syncfusion/ej2-base';
 import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';
-import { Collection, Complex } from '@syncfusion/ej2-base';
+import { Collection, Complex, Browser } from '@syncfusion/ej2-base';
 import { UploaderModel, AsyncSettingsModel, ButtonsPropsModel, FilesPropModel } from './uploader-model';
 
 const ROOT: string =  'e-uploader';
@@ -689,7 +689,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let dropTextArea: HTMLElement = <HTMLElement>this.dropAreaWrapper.querySelector('.e-file-drop');
         if (this.dropArea) {
             this.dropZoneElement = (typeof(this.dropArea) !== 'string') ? this.dropArea :
-            document.querySelector(this.dropArea);
+            document.querySelector(this.dropArea) as HTMLElement;
             let element: HTMLElement = this.element;
             let enableDropText: Boolean = false;
             while (element.parentNode) {
@@ -926,8 +926,9 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     private removeUploadedFile(file: FileInfo, custom: boolean): void {
         let selectedFiles: FileInfo = file;
         let ajax : XMLHttpRequest = new XMLHttpRequest();
+        let name: string = this.element.getAttribute('name');
         let formData : FormData = new FormData();
-        formData.append('_datas', selectedFiles.rawFile);
+        formData.append(name, selectedFiles.rawFile);
         ajax.addEventListener('load',  (e : Event) => { this.removeCompleted(e, selectedFiles, custom);  }, false);
         /* istanbul ignore next */
         ajax.addEventListener('error', (e : Event) => { this.removeFailed(e, selectedFiles, custom); }, false);
@@ -1029,7 +1030,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             detach(this.listParent);
             this.listParent = null;
         }
-        this.element.value = '';
+        if (Browser.info.name !== 'msie') {  this.element.value = '';  }
         this.fileList = [];
         this.filesData = [];
         this.removeActionButtons();
@@ -1152,7 +1153,12 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 statusElement.innerHTML = listItem.status;
                 liElement.appendChild(textContainer);
                 let iconElement: HTMLElement = createElement('span', {className: ' e-icons', attrs: { 'tabindex': '-1'}});
-                iconElement.setAttribute('title', this.localizedTexts('remove'));
+                if (Browser.info.name === 'msie') { iconElement.classList.add('e-msie'); }
+                if (listItem.statusCode !== '2') {
+                    iconElement.setAttribute('title', this.localizedTexts('remove'));
+                } else {
+                    iconElement.setAttribute('title', this.localizedTexts('delete'));
+                }
                 liElement.appendChild(iconElement);
                 EventHandler.add(iconElement, 'click', this.removeFiles, this);
                 if (listItem.statusCode === '2') {
@@ -1550,7 +1556,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             if (selectedFiles[i].statusCode === '1') {
                 let eventArgs: UploadingEventArgs = {
                     fileData: selectedFiles[i],
-                    customFormData: [{}],
+                    customFormData: [],
                     cancel: false
                 };
                 this.trigger('uploading', eventArgs);

@@ -52,6 +52,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private intRegExp: RegExp;
     private l10n: L10n;
     private isCalled: boolean;
+    private isKeyDown: boolean;
     private changeEventArgs: ChangeEventArgs;
     private isInteract: boolean;
 
@@ -535,7 +536,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
         if (!this.element.value.length) {
             this.setProperties({ value: null }, true);
+            this.isKeyDown = true;
             this.updateValue(this.instance.getNumberParser({ format: 'n' })(this.element.value));
+            this.isKeyDown = false;
         }
     };
 
@@ -577,7 +580,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             }
         }
         this.changeValue(value === null || isNaN(value) ? null : this.strictMode ? this.trimValue(value) : value);
-        this.raiseChangeEvent(event);
+        if (!this.isKeyDown) {
+            this.raiseChangeEvent(event);
+        }
     }
 
     private updateCurrency(prop: string, propVal: string): void {

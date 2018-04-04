@@ -61,7 +61,7 @@ export namespace Input {
           }
         });
         if (!isNullOrUndefined(args.properties) && !isNullOrUndefined(args.properties.showClearButton) && args.properties.showClearButton) {
-            inputObject.clearButton = createClearButton(args.element, inputObject.container);
+            setClearButton(args.properties.showClearButton, args.element, inputObject, true);
             if (inputObject.container.classList.contains(CLASSNAMES.FLOATINPUT)) {
                 addClass([inputObject.container], CLASSNAMES.INPUTGROUP);
             }
@@ -200,9 +200,17 @@ export namespace Input {
    /**
     * To create clear button.
     */
-    function createClearButton(element: HTMLInputElement, container: HTMLElement ): HTMLElement {
+    function createClearButton(element: HTMLInputElement, inputObject?: InputObject ,
+                               initial ?: boolean ): HTMLElement {
         let button: HTMLElement = <HTMLElement>createElement('span', { className: CLASSNAMES.CLEARICON });
-        container.appendChild(button);
+        let container: HTMLElement = inputObject.container;
+        if (!isNullOrUndefined(initial)) {
+            container.appendChild(button);
+        } else {
+            let baseElement: HTMLElement = inputObject.container.classList.contains(CLASSNAMES.FLOATINPUT) ?
+            inputObject.container.querySelector('.' + CLASSNAMES.FLOATTEXT) : element;
+            baseElement.insertAdjacentElement('afterend', button);
+        }
         if (!isNullOrUndefined(container) &&
         container.classList.contains(CLASSNAMES.FLOATINPUT)) {
             addClass([container], CLASSNAMES.INPUTGROUP);
@@ -385,6 +393,16 @@ export namespace Input {
         }
         if (!isNullOrUndefined(floatLabelType)) {
           validateLabel(element, floatLabelType);
+        }
+    }
+
+    export function setClearButton (isClear: boolean, element: HTMLInputElement,
+                                    inputObject: InputObject, initial ?: boolean ): void {
+        if (isClear) {
+            inputObject.clearButton = createClearButton (element, inputObject, initial);
+        } else {
+            inputObject.clearButton.remove();
+            inputObject.clearButton = null;
         }
     }
    /**

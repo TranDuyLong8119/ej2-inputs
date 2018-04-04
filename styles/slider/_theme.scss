@@ -1,4 +1,4 @@
-﻿@include export-module('slider-theme') {
+@include export-module('slider-theme') {
   /*! component theme */
   #{&}.e-slider-container {
     @if $skin-name == 'material' {
