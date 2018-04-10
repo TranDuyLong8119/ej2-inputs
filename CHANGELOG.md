@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 16.1.34 (2018-04-10)
+
+### FormValidator
+
+#### Bug Fixes
+
+- Resolved multiple form validation issue.
+
 ## 16.1.29 (2018-03-13)
 
 ### Input

@@ -60,7 +60,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
      * Maps the input fields with validation rules
      * @default {};
      */
-    @Property({})
+    @Property()
     public rules: { [name: string]: { [rule: string]: Object } };
 
     /**
@@ -289,6 +289,9 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
     // Initializes the FormValidator 
     constructor(element: string | HTMLFormElement, options?: FormValidatorModel) {
         super(options, element);
+        if (typeof this.rules === 'undefined') {
+            this.rules = {};
+        }
         element = typeof element === 'string' ? <HTMLFormElement>select(element, document) : element;
         // Set novalidate to prevent default HTML5 form validation
         if (this.element != null) {
