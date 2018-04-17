@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## 16.1.35 (2018-04-17)
+
+### MaskedTextBox
+
+#### Bug Fixes
+
+- While dynamically changing the MaskedTextBox value as null, value not updated properly issue is fixed.
+
+### Uploader
+
+#### Bug Fixes
+
+- The script issue with removing uploaded files has been fixed.
+
 ## 16.1.34 (2018-04-10)
 
 ### FormValidator

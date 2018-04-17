@@ -612,7 +612,7 @@ describe('MaskedTextBox Component', () => {
             EventHandler.trigger(input, 'keydown', event);
             EventHandler.trigger(input, 'keydown', event);
             expect(input.value.length === 8 && input.value[2].trim() === '').toEqual(true);
-            expect(input.selectionStart === 1).toEqual(true);
+            expect(input.selectionStart === 0).toEqual(true);
         });
     });
     describe('Edit values in MaskedTextBox-- Custom Characters', () => {

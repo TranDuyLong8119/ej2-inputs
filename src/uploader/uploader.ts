@@ -916,7 +916,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let index: number = this.fileList.indexOf(selectedElement);
         this.fileList.splice(index, 1);
         this.filesData.splice(index, 1);
-        if (this.fileList.length === 0) {
+        if (this.fileList.length === 0 && !isNullOrUndefined(this.listParent)) {
             detach(this.listParent);
             this.listParent = null;
             this.removeActionButtons();
@@ -1298,7 +1298,6 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             this.updateProgressbar(e, li);
             if (!isNullOrUndefined(li.querySelector('.e-icons'))) {
             li.querySelector('.e-icons').removeAttribute('title');
-            EventHandler.remove(li.querySelector('.e-icons'), 'click', this.removeFiles);
             li.querySelector('.e-icons').classList.add(UPLOAD_INPROGRESS);
             }
         }
@@ -1321,7 +1320,6 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                     li.querySelector('.' + CLEAR_ICON).classList.remove(CLEAR_ICON);
                 }
                 if (!isNullOrUndefined(li.querySelector('.e-icons'))) {
-                EventHandler.add(li.querySelector('.e-icons'), 'click', this.removeFiles, this);
                 li.querySelector('.e-icons').classList.remove(UPLOAD_INPROGRESS);
                 li.querySelector('.e-icons').setAttribute('title', this.localizedTexts('delete'));
                 }
@@ -1343,7 +1341,6 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             this.updateProgressBarClasses(li, UPLOAD_FAILED);
             this.removeProgressbar(li, 'failure');
             li.querySelector('.' + CLEAR_ICON).setAttribute('title', this.localizedTexts('remove'));
-            EventHandler.add(li.querySelector('.e-icons'), 'click', this.removeFiles, this);
             li.querySelector('.e-icons').classList.remove(UPLOAD_INPROGRESS);
         }
         this.trigger('failure', args);

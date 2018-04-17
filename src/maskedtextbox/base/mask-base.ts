@@ -761,15 +761,17 @@ function changeToLowerUpperCase(key: string, value: string): string {
  * To set updated values in the MaskedTextBox.
  */
 export function setMaskValue(val?: string): void {
-    if (this.mask && !isNullOrUndefined(val) && (val === '' || this.prevValue !== val)) {
+    if (this.mask && val !== undefined && (val === '' || this.prevValue !== val)) {
         this.maskKeyPress = true;
         setElementValue.call(this, this.promptMask);
         if (val !== '') {
             this.element.selectionStart = 0;
             this.element.selectionEnd = 0;
         }
-        for (let i: number = 0; i < val.length; i++) {
-            validateValue.call(this, val[i], false, null);
+        if (val !== null) {
+            for (let i: number = 0; i < val.length; i++) {
+                validateValue.call(this, val[i], false, null);
+            }
         }
         this.value = strippedValue.call(this, this.element);
         this.maskKeyPress = false;
