@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## 16.1.37 (2018-04-24)
+
+### NumericTextBox
+
+#### Features
+
+- Provided clear button option in NumericTextBox.
+
+#### Bug Fixes
+
+- NumericTextBox is now aligned properly in inline element when `showSpinButton` property disabled.
+
 ## 16.1.35 (2018-04-17)
 
 ### MaskedTextBox

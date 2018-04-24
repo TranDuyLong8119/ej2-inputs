@@ -85,6 +85,12 @@ export interface NumericTextBoxModel extends ComponentModel{
     enableRtl?: boolean;
 
     /**
+     * Specifies whether to show or hide the clear icon.
+     * @default false
+     */
+    showClearButton?: boolean;
+
+    /**
      * Enable or disable persisting NumericTextBox state between page reloads. If enabled, the `value` state will be persisted.
      * @default false
      */

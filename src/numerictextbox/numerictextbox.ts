@@ -34,6 +34,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /* Internal variables */
     private container: HTMLElement;
+    private inputWrapper: InputObject;
     private cloneElement: HTMLElement;
     private hiddenInput: HTMLInputElement;
     private spinUp: HTMLElement;
@@ -145,6 +146,13 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
      */
     @Property(false)
     public enableRtl: boolean;
+
+    /**
+     * Specifies whether to show or hide the clear icon.
+     * @default false
+     */
+    @Property(false)
+    public showClearButton: boolean;
 
     /**
      * Enable or disable persisting NumericTextBox state between page reloads. If enabled, the `value` state will be persisted.
@@ -309,6 +317,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             this.createWrapper();
             if (this.showSpinButton) { this.spinBtnCreation(); }
             if (!isNullOrUndefined(this.width)) { setStyleAttribute(this.container, { 'width': formatUnit(this.width) }); }
+            if (!this.container.classList.contains('e-input-group')) { this.container.classList.add('e-input-group'); }
             this.changeValue(this.value);
             this.wireEvents();
             if (this.value !== null && !isNaN(this.value)) {
@@ -378,9 +387,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                 placeholder: this.placeholder,
                 cssClass: this.cssClass,
                 enableRtl: this.enableRtl,
+                showClearButton: this.showClearButton,
                 enabled: this.enabled
             }
         });
+        this.inputWrapper = inputObj;
         this.container = inputObj.container;
         this.container.setAttribute('class', ROOT + ' ' + this.container.getAttribute('class'));
         if (this.readonly) { attributes(this.element, { 'aria-readonly': 'true' }); }
@@ -388,7 +399,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.inputName = this.inputName !== null ? this.inputName : this.element.id;
         this.element.removeAttribute('name');
         attributes(this.hiddenInput, { 'name': this.inputName });
-        this.container.insertBefore(this.hiddenInput, this.element);
+        this.container.insertBefore(this.hiddenInput, this.container.childNodes[1]);
         if (this.inputStyle !== null) { attributes(this.container, { 'style': this.inputStyle }); }
     }
 
@@ -455,6 +466,22 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         attributes(this.element, { 'aria-invalid': this.isValidState ? 'false' : 'true' });
     }
 
+    private bindClearEvent(): void {
+        if (this.showClearButton) {
+            EventHandler.add(this.inputWrapper.clearButton, 'mousedown touchstart', this.resetHandler, this);
+        }
+    }
+    protected resetHandler(e?: MouseEvent): void {
+        e.preventDefault();
+        if (!(this.inputWrapper.clearButton.classList.contains('e-clear-icon-hide'))) {
+            this.clear(e);
+        }
+    }
+    private clear(event: MouseEvent): void {
+        this.setProperties({ value: null }, true);
+        this.setElementValue('');
+    }
+
     private wireEvents(): void {
         EventHandler.add(this.element, 'focus', this.focusIn, this);
         EventHandler.add(this.element, 'blur', this.focusOut, this);
@@ -462,6 +489,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         EventHandler.add(this.element, 'keypress', this.keyPressHandler, this);
         EventHandler.add(this.element, 'change', this.changeHandler, this);
         EventHandler.add(this.element, 'paste', this.pasteHandler, this);
+        if (this.enabled) {
+            this.bindClearEvent();
+        }
     }
 
     private wireSpinBtnEvents(): void {
@@ -621,7 +651,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         }
     };
     private setElementValue(val: string, element ? : HTMLInputElement): void {
-        Input.setValue(val, (element ? element : this.element), this.floatLabelType);
+        Input.setValue(val, (element ? element : this.element), this.floatLabelType, this.showClearButton);
     }
 
     private validateState(): void {
@@ -909,6 +939,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                         detach(this.spinUp);
                         detach(this.spinDown);
                     }
+                    break;
+                case 'showClearButton':
+                        Input.setClearButton(newProp.showClearButton, this.element, this.inputWrapper);
                     break;
                 case 'value':
                     this.updateValue(newProp.value);

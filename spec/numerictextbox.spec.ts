@@ -296,6 +296,10 @@ describe('Numerictextbox Control', () => {
             numerictextbox = new NumericTextBox({ showSpinButton: false }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.querySelector(".e-spin-up") === undefined);
         });
+		it('Spin button disabled alignment testing', () => {
+            numerictextbox = new NumericTextBox({ showSpinButton: false, floatLabelType: 'Auto' }, '#tsNumeric');
+            expect(document.getElementById("tsNumeric").classList.contains('e-input-group')).toEqual(false);
+        });
         it('Enable the RightToLeft option in numerictextbox', () => {
             numerictextbox = new NumericTextBox({ enableRtl: true }, '#tsNumeric');
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-rtl')).toEqual(true);
@@ -4635,5 +4639,51 @@ describe('Numerictextbox Control', () => {
             expect(numerictextbox.element.value).toEqual('25.00');
         });
 
+    });
+    describe('Enable Clear Icon', () => {
+        let numeric: any;
+        let setModelNumeric: any;       
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        let mouseEvent2: MouseEvent = document.createEvent('MouseEvents');
+        clickEvent.initEvent('mousedown', true, true);
+        mouseEvent2.initEvent("mouseup", true, true);
+        beforeEach((): void => {
+            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'clrNumeric' });
+            document.body.appendChild(ele);
+            numeric = new NumericTextBox({ value: 25, showClearButton:true });
+            numeric.appendTo('#clrNumeric');
+        });
+        afterEach((): void => {
+            if (numeric) {
+                numeric.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+
+        it('clear icon', () => {
+            expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
+            document.getElementById('clrNumeric').focus();
+            expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon')).toBe(true);
+        });       
+        it('clear button default state', () => {
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('clrNumeric');
+            input.value = '123456';
+             expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
+            document.getElementById('clrNumeric').focus();
+            expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon')).toBe(true);
+        });
+        it('click on clear button without focus', () => {
+             let input: HTMLInputElement = <HTMLInputElement>document.getElementById('clrNumeric');
+             input.value = '123456';
+             document.getElementById('clrNumeric').focus();
+             let clearBtn = document.getElementById('clrNumeric').parentElement.querySelector('.e-clear-icon');
+             clearBtn.dispatchEvent(clickEvent);
+             clearBtn.dispatchEvent(mouseEvent2);
+             expect(input.value === '').toEqual(true);
+        });
+        it('setModel test case', () => {
+            setModelNumeric = new NumericTextBox({ showClearButton: false }, '#clrNumeric');
+            expect(setModelNumeric.inputWrapper.clearButton == null).toBe(true);
+        });
     });
 });
