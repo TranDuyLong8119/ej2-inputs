@@ -407,7 +407,7 @@
     }
   }
 
-  .e-input[disabled],
+  .e-input#{$css}[disabled],
   .e-input-group .e-input[disabled],
   .e-input-group.e-control-wrapper .e-input#{$css}[disabled],
   .e-input-group.e-disabled,
@@ -1357,6 +1357,20 @@
   .e-float-input.e-control-wrapper .e-input-in-wrap input:valid ~ label.e-float-text,
   .e-float-input.e-control-wrapper .e-input-in-wrap input:valid ~ label.e-float-text.e-label-top,
   .e-float-input.e-control-wrapper .e-input-in-wrap input ~ label.e-float-text.e-label-top {
+    @if $skin-name == 'bootstrap' {
+      font-weight: bold;
+    }
+    user-select: text;
+  }
+
+  .e-float-input textarea:valid ~ label.e-float-text,
+  .e-float-input textarea:focus ~ label.e-float-text,
+  .e-float-input textarea:valid ~ label.e-float-text.e-label-top,
+  .e-float-input textarea ~ label.e-float-text.e-label-top,
+  .e-float-input.e-control-wrapper textarea:valid ~ label.e-float-text,
+  .e-float-input.e-control-wrapper textarea:focus ~ label.e-float-text,
+  .e-float-input.e-control-wrapper textarea:valid ~ label.e-float-text.e-label-top,
+  .e-float-input.e-control-wrapper textarea ~ label.e-float-text.e-label-top {
     @if $skin-name == 'bootstrap' {
       font-weight: bold;
     }
@@ -2863,6 +2877,7 @@
   .e-float-input.e-control-wrapper.e-static-clear .e-clear-icon.e-clear-icon-hide,
   .e-input-group.e-static-clear .e-clear-icon.e-clear-icon-hide,
   .e-input-group.e-control-wrapper.e-static-clear .e-clear-icon.e-clear-icon-hide {
+    cursor: pointer;
     display: flex;
   }
 
@@ -2870,14 +2885,14 @@
   .e-float-input.e-control-wrapper.e-small.e-bigger .e-clear-icon,
   .e-input-group.e-small.e-bigger .e-clear-icon,
   .e-input-group.e-control-wrapper.e-small.e-bigger .e-clear-icon,
-  .e-small .e-input-group.e-bigger input ~ .e-clear-icon,
-  .e-small .e-input-group.e-control-wrapper.e-bigger input ~ .e-clear-icon,
-  .e-bigger .e-input-group.e-small input ~ .e-clear-icon,
-  .e-bigger .e-input-group.e-control-wrapper.e-small input ~ .e-clear-icon,
-  .e-small .e-float-input.e-control-wrapper.e-bigger input ~ .e-clear-icon,
-  .e-small .e-float-input.e-bigger input ~ .e-clear-icon,
-  .e-bigger .e-float-input.e-control-wrapper.e-small input ~ .e-clear-icon,
-  .e-bigger .e-float-input.e-small input ~ .e-clear-icon {
+  .e-small .e-input-group.e-bigger input:first-child ~ .e-clear-icon,
+  .e-small .e-input-group.e-control-wrapper.e-bigger input:first-child ~ .e-clear-icon,
+  .e-bigger .e-input-group.e-small input:first-child ~ .e-clear-icon,
+  .e-bigger .e-input-group.e-control-wrapper.e-small input:first-child ~ .e-clear-icon,
+  .e-small .e-float-input.e-control-wrapper.e-bigger input:first-child ~ .e-clear-icon,
+  .e-small .e-float-input.e-bigger input:first-child ~ .e-clear-icon,
+  .e-bigger .e-float-input.e-control-wrapper.e-small input:first-child ~ .e-clear-icon,
+  .e-bigger .e-float-input.e-small input:first-child ~ .e-clear-icon {
     padding-bottom: $zero-value;
   }
 
@@ -2885,9 +2900,9 @@
   .e-float-input.e-control-wrapper.e-small .e-clear-icon::before,
   .e-input-group.e-small .e-clear-icon::before,
   .e-input-group.e-control-wrapper.e-small .e-clear-icon::before,
-  .e-float-input.e-control-wrapper input.e-small ~ .e-clear-icon::before,
+  .e-float-input.e-control-wrapper input.e-small:first-child ~ .e-clear-icon::before,
   .e-small .e-float-input.e-control-wrapper .e-clear-icon::before,
-  .e-float-input input.e-small ~ .e-clear-icon::before,
+  .e-float-input input.e-small:first-child ~ .e-clear-icon::before,
   .e-small .e-float-input .e-clear-icon::before,
   .e-small .e-input-group .e-clear-icon::before,
   .e-small .e-input-group.e-control-wrapper .e-clear-icon::before {
@@ -2898,9 +2913,9 @@
   .e-float-input.e-control-wrapper.e-bigger .e-clear-icon::before,
   .e-input-group.e-bigger .e-clear-icon::before,
   .e-input-group.e-control-wrapper.e-bigger .e-clear-icon::before,
-  .e-float-input.e-control-wrapper input.e-bigger ~ .e-clear-icon::before,
+  .e-float-input.e-control-wrapper input.e-bigger:first-child ~ .e-clear-icon::before,
   .e-bigger .e-float-input.e-control-wrapper .e-clear-icon::before,
-  .e-float-input input.e-bigger ~ .e-clear-icon::before,
+  .e-float-input input.e-bigger:first-child ~ .e-clear-icon::before,
   .e-bigger .e-float-input .e-clear-icon::before,
   .e-bigger .e-input-group .e-clear-icon::before,
   .e-bigger .e-input-group.e-control-wrapper .e-clear-icon::before {
@@ -2911,30 +2926,30 @@
   .e-float-input.e-control-wrapper.e-small.e-bigger .e-clear-icon::before,
   .e-input-group.e-small.e-bigger .e-clear-icon::before,
   .e-input-group.e-control-wrapper.e-small.e-bigger .e-clear-icon::before,
-  .e-small .e-input-group.e-bigger input ~ .e-clear-icon::before,
-  .e-small .e-input-group.e-control-wrapper.e-bigger input ~ .e-clear-icon::before,
-  .e-bigger .e-input-group.e-small input ~ .e-clear-icon::before,
-  .e-bigger .e-input-group.e-control-wrapper.e-small input ~ .e-clear-icon::before,
-  .e-small .e-float-input.e-control-wrapper.e-bigger input ~ .e-clear-icon::before,
-  .e-small .e-float-input.e-bigger input ~ .e-clear-icon::before,
-  .e-bigger .e-float-input.e-control-wrapper.e-small input ~ .e-clear-icon::before,
-  .e-bigger .e-float-input.e-small input ~ .e-clear-icon::before {
+  .e-small .e-input-group.e-bigger input:first-child ~ .e-clear-icon::before,
+  .e-small .e-input-group.e-control-wrapper.e-bigger input:first-child ~ .e-clear-icon::before,
+  .e-bigger .e-input-group.e-small input:first-child ~ .e-clear-icon::before,
+  .e-bigger .e-input-group.e-control-wrapper.e-small input:first-child ~ .e-clear-icon::before,
+  .e-small .e-float-input.e-control-wrapper.e-bigger input:first-child ~ .e-clear-icon::before,
+  .e-small .e-float-input.e-bigger input:first-child ~ .e-clear-icon::before,
+  .e-bigger .e-float-input.e-control-wrapper.e-small input:first-child ~ .e-clear-icon::before,
+  .e-bigger .e-float-input.e-small input:first-child ~ .e-clear-icon::before {
     font-size: $input-bigger-small-clear-icon;
   }
 
-  .e-input:not(:valid) ~ .e-clear-icon,
-  .e-input-group input.e-input:not(:valid) ~ .e-clear-icon,
-  .e-input-group.e-control-wrapper input.e-input:not(:valid) ~ .e-clear-icon,
-  .e-float-input input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-control-wrapper input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-input-group input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-input-group.e-control-wrapper input:not(:valid) ~ .e-clear-icon {
-    visibility: hidden;
+  .e-input:not(:valid):first-child ~ .e-clear-icon,
+  .e-input-group input.e-input:not(:valid):first-child ~ .e-clear-icon,
+  .e-input-group.e-control-wrapper input.e-input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-control-wrapper input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-input-group input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-input-group.e-control-wrapper input:not(:valid):first-child ~ .e-clear-icon {
+    display: none;
   }
 
   .e-input-group .e-clear-icon.e-clear-icon-hide,
   .e-input-group.e-control-wrapper .e-clear-icon.e-clear-icon-hide {
-    visibility: hidden;
+    display: none;
   }
 
   .e-input-group.e-static-clear .e-clear-icon.e-clear-icon-hide,
@@ -2942,25 +2957,25 @@
     cursor: pointer;
   }
 
-  .e-input-group.e-disabled input.e-input:not(:valid) ~ .e-clear-icon,
-  .e-input-group.e-control-wrapper.e-disabled input.e-input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-disabled input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-input-group.e-disabled input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-input-group.e-control-wrapper.e-disabled input:not(:valid) ~ .e-clear-icon,
-  .e-float-input.e-control-wrapper.e-disabled input:not(:valid) ~ .e-clear-icon,
+  .e-input-group.e-disabled input.e-input:not(:valid):first-child ~ .e-clear-icon,
+  .e-input-group.e-control-wrapper.e-disabled input.e-input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-disabled input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-input-group.e-disabled input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-input-group.e-control-wrapper.e-disabled input:not(:valid):first-child ~ .e-clear-icon,
+  .e-float-input.e-control-wrapper.e-disabled input:not(:valid):first-child ~ .e-clear-icon,
   .e-input-group.e-disabled .e-clear-icon.e-clear-icon-hide,
   .e-input-group.e-control-wrapper.e-disabled .e-clear-icon.e-clear-icon-hide {
     cursor: not-allowed;
   }
 
-  .e-float-input.e-control-wrapper input[readonly] ~ .e-clear-icon,
-  .e-float-input.e-control-wrapper.e-input-group input[readonly] ~ .e-clear-icon,
-  .e-float-input input[readonly] ~ .e-clear-icon,
-  .e-float-input.e-input-group input[readonly] ~ .e-clear-icon,
-  .e-input-group input[readonly] .e-clear-icon.e-clear-icon-hide,
-  .e-float-input.e-control-wrapper.e-input-group input[readonly] ~ .e-clear-icon,
-  .e-float-input.e-input-group.e-control-wrapper input[readonly] ~ .e-clear-icon,
-  .e-input-group.e-control-wrapper input[readonly] .e-clear-icon.e-clear-icon-hide  {
+  .e-float-input.e-control-wrapper input[readonly]:first-child ~ .e-clear-icon,
+  .e-float-input.e-control-wrapper.e-input-group input[readonly]:first-child ~ .e-clear-icon,
+  .e-float-input input[readonly]:first-child ~ .e-clear-icon,
+  .e-float-input.e-input-group input[readonly]:first-child ~ .e-clear-icon,
+  .e-input-group input[readonly]:first-child ~ .e-clear-icon.e-clear-icon-hide,
+  .e-float-input.e-control-wrapper.e-input-group input[readonly]:first-child ~ .e-clear-icon,
+  .e-float-input.e-input-group.e-control-wrapper input[readonly]:first-child ~ .e-clear-icon,
+  .e-input-group.e-control-wrapper input[readonly]:first-child .e-clear-icon.e-clear-icon-hide  {
     cursor: auto;
   }
 

@@ -216,11 +216,11 @@ export namespace Input {
             addClass([container], CLASSNAMES.INPUTGROUP);
         }
         addClass([button], CLASSNAMES.CLEARICONHIDE);
-        wireClearBtnEvents(element, button);
+        wireClearBtnEvents(element, button, container);
         return button;
     }
 
-    function wireClearBtnEvents(element: HTMLInputElement, button: HTMLElement): void {
+    function wireClearBtnEvents(element: HTMLInputElement, button: HTMLElement, container: HTMLElement): void {
       button.addEventListener('click', (event: MouseEvent) => {
         if (!(element.classList.contains(CLASSNAMES.DISABLE) || element.readOnly)) {
           event.preventDefault();

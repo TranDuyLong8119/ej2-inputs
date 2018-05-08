@@ -160,17 +160,23 @@
   }
 
   .e-float-input.e-success input,
-  .e-float-input.e-control-wrapper.e-success input {
+  .e-float-input.e-success textarea,
+  .e-float-input.e-control-wrapper.e-success input,
+  .e-float-input.e-control-wrapper.e-success textarea {
     @include input-state-color ($input-success-color);
   }
 
   .e-float-input.e-warning input,
-  .e-float-input.e-control-wrapper.e-warning input {
+  .e-float-input.e-control-wrapper.e-warning input,
+  .e-float-input.e-warning textarea,
+  .e-float-input.e-control-wrapper.e-warning textarea {
     @include input-state-color ($input-warning-color);
   }
 
   .e-float-input.e-error input,
-  .e-float-input.e-control-wrapper.e-error input {
+  .e-float-input.e-control-wrapper.e-error input,
+  .e-float-input.e-error textarea,
+  .e-float-input.e-control-wrapper.e-error textarea {
     @include input-state-color ($input-error-color);
   }
 
@@ -252,13 +258,9 @@
   }
 
   .e-float-input:not(.e-input-focus) input:not(:focus):not(:valid) ~ label.e-float-text:not(.e-label-top),
+  .e-float-input:not(.e-input-focus) textarea:not(:focus):not(:valid) ~ label.e-float-text:not(.e-label-top),
   .e-float-input.e-control-wrapper:not(.e-input-focus) input:not(:focus):not(:valid) ~ label.e-float-text:not(.e-label-top) {
     color: $input-placeholder;
-  }
-
-  .e-float-input.e-small textarea:focus,
-  .e-float-input textarea:focus {
-    border-color: $input-active-border-color;
   }
 
   .e-float-input.e-error:not(.e-input-group) .e-float-line::before,
@@ -719,6 +721,7 @@
   // sass-lint:disable no-vendor-prefixes
   .e-input#{$css}:focus:not(.e-success):not(.e-warning):not(.e-error),
   .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:focus,
+  .e-float-input:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) textarea:focus,
   .e-float-input.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) input:focus,
   .e-float-input.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error):not(.e-input-group) textarea:focus {
     border-color: $input-active-border-color;

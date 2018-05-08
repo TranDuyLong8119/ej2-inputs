@@ -1286,7 +1286,7 @@ describe('Input Groups - Enable/Disable', () => {
             btn.dispatchEvent (clickEvent);
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon") !== undefined);
             expect(document.getElementById('inputclear').parentElement.querySelector(".e-clear-icon").classList.contains('e-clear-icon-hide')).toEqual(true);
-            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '');
+            expect((<HTMLInputElement>document.getElementById('inputclear')).value === '12345');
         });
         afterAll(() => {
             element.remove();

@@ -120,6 +120,8 @@ export interface SelectedEventArgs {
 export interface RemovingEventArgs {
     cancel: boolean;
     filesData: FileInfo[];
+    customFormData: { [key: string]: Object }[];
+    currentRequest?: XMLHttpRequest;
 }
 
 export interface ClearingEventArgs {
@@ -131,6 +133,7 @@ export interface UploadingEventArgs {
     fileData: FileInfo;
     customFormData: { [key: string]: Object }[];
     cancel: boolean;
+    currentRequest?: XMLHttpRequest;
 }
 
 interface InitialAttr {
@@ -923,16 +926,20 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         }
     }
 
-    private removeUploadedFile(file: FileInfo, custom: boolean): void {
+    private removeUploadedFile(file: FileInfo, eventArgs: RemovingEventArgs, custom: boolean): void {
         let selectedFiles: FileInfo = file;
         let ajax : XMLHttpRequest = new XMLHttpRequest();
-        let name: string = this.element.getAttribute('name');
-        let formData : FormData = new FormData();
-        formData.append(name, selectedFiles.rawFile);
         ajax.addEventListener('load',  (e : Event) => { this.removeCompleted(e, selectedFiles, custom);  }, false);
         /* istanbul ignore next */
         ajax.addEventListener('error', (e : Event) => { this.removeFailed(e, selectedFiles, custom); }, false);
         ajax.open('POST', this.asyncSettings.removeUrl);
+        eventArgs.currentRequest = ajax;
+        this.trigger('removing', eventArgs);
+        if (eventArgs.cancel) { return; }
+        let name: string = this.element.getAttribute('name');
+        let formData : FormData = new FormData();
+        formData.append(name, selectedFiles.rawFile);
+        this.updateFormData(formData,  eventArgs.customFormData);
         ajax.send(formData);
     }
 
@@ -1452,6 +1459,18 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         }
     }
 
+      /* istanbul ignore next */
+      private updateFormData(formData: FormData, customData: { [key: string]: Object }[]): void {
+        if (customData.length > 0 && customData[0]) {
+            for (let i: number = 0; i < customData.length; i++) {
+                let data: { [key: string]: Object } = customData[i];
+                // tslint:disable-next-line
+                formData.append(Object.keys(data)[i], (<any>Object).values(data)[i]);
+            }
+        }
+    }
+
+
     /**
      * It is used to convert bytes value into kilobytes or megabytes depending on the size based
      * on [binary prefix](https://en.wikipedia.org/wiki/Binary_prefix).
@@ -1549,30 +1568,24 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         }
         for (let i: number = 0; i < selectedFiles.length; i++ ) {
             let ajax : XMLHttpRequest = new XMLHttpRequest();
+            ajax.addEventListener('load',  (e : Event) => { this.uploadComplete(e, selectedFiles[i], custom);  }, false);
+            /* istanbul ignore next */
+            ajax.addEventListener('error', (e : Event) => { this.uploadFailed(e, selectedFiles[i] ); }, false);
+            ajax.upload.addEventListener('progress', (e : Event) => { this.uploadInProgress(e, selectedFiles[i], custom); }, false);
+            ajax.open('POST', this.asyncSettings.saveUrl);
             let formData : FormData = new FormData();
             if (selectedFiles[i].statusCode === '1') {
                 let eventArgs: UploadingEventArgs = {
                     fileData: selectedFiles[i],
                     customFormData: [],
-                    cancel: false
+                    cancel: false,
+                    currentRequest: ajax
                 };
                 this.trigger('uploading', eventArgs);
                 if (eventArgs.cancel) { return; }
                 let name: string = this.element.getAttribute('name');
                 formData.append(name, selectedFiles[i].rawFile, selectedFiles[i].name);
-                if (eventArgs.customFormData.length > 0 ) {
-                    let datas: Object[] = eventArgs.customFormData;
-                    for (let i: number = 0; i < eventArgs.customFormData.length; i++) {
-                        let customData: { [key: string]: Object } = eventArgs.customFormData[i];
-                        // tslint:disable-next-line
-                        formData.append(Object.keys(customData)[0], (<any>Object).values(customData)[0]);
-                    }
-                }
-                ajax.addEventListener('load',  (e : Event) => { this.uploadComplete(e, selectedFiles[i], custom);  }, false);
-                /* istanbul ignore next */
-                ajax.addEventListener('error', (e : Event) => { this.uploadFailed(e, selectedFiles[i] ); }, false);
-                ajax.upload.addEventListener('progress', (e : Event) => { this.uploadInProgress(e, selectedFiles[i], custom); }, false);
-                ajax.open('POST', this.asyncSettings.saveUrl);
+                this.updateFormData(formData, eventArgs.customFormData);
                 ajax.send(formData);
             }
         }
@@ -1595,16 +1608,17 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         }
         let eventArgs: RemovingEventArgs = {
             cancel: false,
-            filesData: removeFiles
+            filesData: removeFiles,
+            customFormData: []
         };
-        this.trigger('removing', eventArgs);
-        if (eventArgs.cancel) { return; }
         let removeUrl: string = this.asyncSettings.removeUrl;
         let validUrl: boolean = (removeUrl === '' || isNullOrUndefined(removeUrl)) ? false : true;
         for (let files of removeFiles) {
             if (files.statusCode === '2' && validUrl) {
-                this.removeUploadedFile(files, customTemplate);
+                this.removeUploadedFile(files, eventArgs, customTemplate);
             } else {
+                this.trigger('removing', eventArgs);
+                if (eventArgs.cancel) { return; }
                 this.removeFilesData(files, customTemplate);
             }
         }

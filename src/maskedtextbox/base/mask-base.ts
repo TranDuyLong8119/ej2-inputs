@@ -256,6 +256,12 @@ function maskInputPasteHandler(event: KeyboardEvent): void {
                 this.maskKeyPress = true;
                 do { validateValue.call(this, value[i], false, null); ++i; } while (i < value.length);
                 this.maskKeyPress = false;
+                if (this.element.value === oldValue) {
+                    let i: number = 0;
+                    this.maskKeyPress = true;
+                    do { validateValue.call(this, value[i], false, null); ++i; } while (i < value.length);
+                    this.maskKeyPress = false;
+                }
             },
             1);
     }
@@ -539,9 +545,16 @@ function mobileSwipeCheck(key: string): void {
     this.element.selectionEnd = this.element.selectionEnd - key.length;
 }
 
-function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): void {
+function mobileValidation(key: string): void {
     if (!this.maskKeyPress) {
         mobileSwipeCheck.call(this, key);
+    }
+}
+
+function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): void {
+    mobileValidation.call(this, key);
+    if (isNullOrUndefined(this) || isNullOrUndefined(key)) {
+        return;
     }
     let startIndex: number = this.element.selectionStart;
     let initStartIndex: number = startIndex;

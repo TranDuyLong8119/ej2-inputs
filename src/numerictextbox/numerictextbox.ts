@@ -284,11 +284,18 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             for (index; index < this.element.attributes.length; index++) {
                 input.setAttribute(this.element.attributes[index].nodeName, this.element.attributes[index].nodeValue);
                 input.innerHTML = this.element.innerHTML;
+
             }
-            this.element.parentNode.appendChild(input);
-            this.element.parentNode.removeChild(this.element);
+            if (this.element.hasAttribute('id')) {
+                this.element.removeAttribute('id');
+
+            }
+            this.element.classList.remove('e-control', 'e-numerictextbox');
+            this.element.classList.add('e-numeric-container');
+            this.element.appendChild(input);
             this.element = <HTMLInputElement>input;
             setValue('ej2_instances', ejInstance, this.element);
+
         }
         attributes(this.element, { 'role': 'spinbutton', 'tabindex': '0', 'autocomplete': 'off', 'aria-live': 'assertive' });
         let localeText: object = { incrementTitle: 'Increment value', decrementTitle: 'Decrement value', placeholder: '' };
@@ -380,7 +387,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private createWrapper(): void {
         let inputObj: InputObject = Input.createInput({
             element: this.element,
-            customTag: this.angularTagName,
             floatLabelType: this.floatLabelType,
             properties: {
                 readonly: this.readonly,

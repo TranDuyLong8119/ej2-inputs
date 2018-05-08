@@ -2,7 +2,32 @@
 
 ## [Unreleased]
 
+## 16.1.40 (2018-05-08)
+
+### MaskedTextBox
+
+#### Bug Fixes
+
+- While copying a text and hold the “Ctrl + v” on the MaskedTextBox with number mask, value is not updating properly
+  along with script error issue has been fixed.
+
 ## 16.1.38 (2018-05-02)
+
+### Uploader
+
+#### Bug Fixes
+
+- Provided option to customize request header on trigger `uploading` and `removing` events.
+
+- Provided option to add additional data in `removing` event.
+
+### NumericTextBox
+
+#### Bug Fixes
+
+- Now native events triggered properly in Angular NumericTextBox component.
+
+## 16.1.37 (2018-04-24)
 
 ### NumericTextBox
 
