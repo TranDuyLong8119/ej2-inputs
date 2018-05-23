@@ -450,6 +450,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 element.innerHTML = this.localizedTexts(this.getKeyValue(this.filesData[i].status));
                 this.filesData[i].status = this.localizedTexts(this.getKeyValue(this.filesData[i].status));
                 if (this.fileList[i].classList.contains(UPLOAD_SUCCESS)) {
+                    /* istanbul ignore next */
                     this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('remove'));
                 } else {
                     this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('delete'));
@@ -935,6 +936,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         ajax.open('POST', this.asyncSettings.removeUrl);
         eventArgs.currentRequest = ajax;
         this.trigger('removing', eventArgs);
+        /* istanbul ignore next */
         if (eventArgs.cancel) { return; }
         let name: string = this.element.getAttribute('name');
         let formData : FormData = new FormData();
@@ -1160,7 +1162,10 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 statusElement.innerHTML = listItem.status;
                 liElement.appendChild(textContainer);
                 let iconElement: HTMLElement = createElement('span', {className: ' e-icons', attrs: { 'tabindex': '-1'}});
-                if (Browser.info.name === 'msie') { iconElement.classList.add('e-msie'); }
+                if (Browser.info.name === 'msie') {
+                    /* istanbul ignore next */
+                    iconElement.classList.add('e-msie');
+                }
                 if (listItem.statusCode !== '2') {
                     iconElement.setAttribute('title', this.localizedTexts('remove'));
                 } else {
@@ -1176,6 +1181,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                     statusElement.classList.add(VALIDATION_FAILS);
                 }
                 if (this.autoUpload && listItem.statusCode === '1' && this.asyncSettings.saveUrl !== '') {
+                    /* istanbul ignore next */
                     statusElement.innerHTML = '';
                 }
                 if (!iconElement.classList.contains(REMOVE_ICON)) {
@@ -1275,6 +1281,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         liElement.querySelector('.' + TEXT_CONTAINER).appendChild(progressbarWrapper);
     }
 
+    /* istanbul ignore next */
     private updateProgressbar(e : ProgressEventInit, li : Element) : void {
         if (!isNaN(Math.round((e.loaded / e.total) * 100)) && !isNullOrUndefined(li.querySelector('.' + PROGRESSBAR))) {
             if (!isNullOrUndefined(this.progressInterval) && this.progressInterval !== '') {
@@ -1295,7 +1302,10 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
 
     private uploadInProgress (e: ProgressEventInit , files : FileInfo, customUI?: boolean) : void {
         let li : HTMLElement = this.getLiElement(files);
-        if (isNullOrUndefined(li)  &&  (!customUI || isNullOrUndefined(customUI)) ) { return; }
+        if (isNullOrUndefined(li)  &&  (!customUI || isNullOrUndefined(customUI)) ) {
+            /* istanbul ignore next */
+            return;
+        }
         if (!isNullOrUndefined(li)) {
             if (!(li.querySelectorAll('.' + PROGRESS_WRAPPER).length > 0) && li.querySelector('.' + STATUS)) {
                 li.querySelector('.' + STATUS).classList.add(UPLOAD_INPROGRESS);

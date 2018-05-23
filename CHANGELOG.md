@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 16.1.45 (2018-05-23)
+
+### Input
+
+#### Bug Fixes
+
+- Added `Focus` and `Blur` event arguments.
+
 ## 16.1.40 (2018-05-08)
 
 ### MaskedTextBox

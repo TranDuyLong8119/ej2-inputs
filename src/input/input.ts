@@ -641,3 +641,19 @@ export interface IInput {
      */
     change: Function;
 }
+
+/**
+ * Defines the argument for the focus event.
+ */
+export interface FocusEventArgs {
+    model?: object;
+
+}
+
+/**
+ * Defines the argument for the blur event.
+ */
+export interface BlurEventArgs {
+    model?: object;
+
+}
