@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 16.1.48 (2018-06-14)
+
+### Input
+
+#### Bug Fixes
+
+- Typing issues resolved in `Focus` and `Blur` event arguments.
+
 ## 16.1.45 (2018-05-23)
 
 ### Input
