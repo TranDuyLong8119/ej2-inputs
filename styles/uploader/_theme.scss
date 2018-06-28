@@ -15,10 +15,6 @@
       .e-upload-file-list {
         border-bottom: $list-bottom-border;
 
-        &.e-upload-li-focused {
-          background-color: $li-focused-state;
-        }
-
         .e-file-container {
 
           .e-file-name {
@@ -77,17 +73,14 @@
       }
 
       & .e-file-remove-btn.e-icons,
-      & .e-file-delete-btn.e-icons {
+      & .e-file-delete-btn.e-icons,
+      & .e-file-abort-btn.e-icons,
+      & .e-file-pause-btn.e-icons,
+      & .e-file-play-btn.e-icons {
+        color: $remove-icon-color;
 
-        &::before {
-          color: $remove-icon-color;
-        }
-
-        &.e-upload-progress {
-
-          &::before {
-            color: $remove-icon-disabled-color;
-          }
+        &:hover {
+          color: $hover-icon-color;
         }
       }
     }

@@ -53,7 +53,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private intRegExp: RegExp;
     private l10n: L10n;
     private isCalled: boolean;
-    private isKeyDown: boolean;
+    private prevVal: string;
+    private nextEle: string;
+    private cursorPosChanged: boolean;
     private changeEventArgs: ChangeEventArgs;
     private isInteract: boolean;
 
@@ -77,7 +79,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     /**
      * Specifies a minimum value that is allowed a user can enter.
      * For more information on min, refer to
-     * [min](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
+     * [min](./getting-started.html#range-validation).
      * @default null
      */
     @Property(-(Number.MAX_VALUE))
@@ -86,7 +88,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     /**
      * Specifies a maximum value that is allowed a user can enter.
      * For more information on max, refer to
-     * [max](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
+     * [max](./getting-started.html#range-validation).
      * @default null
      */
     @Property(Number.MAX_VALUE)
@@ -95,7 +97,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     /**
      * Specifies the incremental or decremental step size for the NumericTextBox.
      * For more information on step, refer to
-     * [step](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
+     * [step](./getting-started.html#range-validation).
      * @default 1
      */
     @Property(1)
@@ -164,7 +166,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     /**
      * Specifies the number format that indicates the display format for the value of the NumericTextBox.
      * For more information on formats, refer to
-     * [formats](http://ej2.syncfusion.com/documentation/numerictextbox/formats.html#standard-formats).
+     * [formats](./formats.html#standard-formats).
      * @default 'n2'
      */
     @Property('n2')
@@ -173,7 +175,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     /**
      * Specifies the number precision applied to the textbox value when the NumericTextBox is focused.
      * For more information on decimals, refer to
-     * [decimals](http://ej2.syncfusion.com/documentation/numerictextbox/formats.html#precision-of-numbers).
+     * [decimals](./formats.html#precision-of-numbers).
      * @default null
      */
     @Property(null)
@@ -291,7 +293,6 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
             }
             this.element.classList.remove('e-control', 'e-numerictextbox');
-            this.element.classList.add('e-numeric-container');
             this.element.appendChild(input);
             this.element = <HTMLInputElement>input;
             setValue('ej2_instances', ejInstance, this.element);
@@ -325,7 +326,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             if (this.showSpinButton) { this.spinBtnCreation(); }
             if (!isNullOrUndefined(this.width)) { setStyleAttribute(this.container, { 'width': formatUnit(this.width) }); }
             if (!this.container.classList.contains('e-input-group')) { this.container.classList.add('e-input-group'); }
-            this.changeValue(this.value);
+            this.changeValue(this.value === null || isNaN(this.value) ? null : this.strictMode ? this.trimValue(this.value) : this.value);
             this.wireEvents();
             if (this.value !== null && !isNaN(this.value)) {
                 if (this.decimals) {
@@ -401,7 +402,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.container = inputObj.container;
         this.container.setAttribute('class', ROOT + ' ' + this.container.getAttribute('class'));
         if (this.readonly) { attributes(this.element, { 'aria-readonly': 'true' }); }
-        this.hiddenInput = <HTMLInputElement>(createElement('input', { attrs: { type: 'hidden' } }));
+        this.hiddenInput = <HTMLInputElement>(createElement('input', { attrs: { type: 'hidden', 'validateHidden': 'true' } }));
         this.inputName = this.inputName !== null ? this.inputName : this.element.id;
         this.element.removeAttribute('name');
         attributes(this.hiddenInput, { 'name': this.inputName });
@@ -492,6 +493,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         EventHandler.add(this.element, 'focus', this.focusIn, this);
         EventHandler.add(this.element, 'blur', this.focusOut, this);
         EventHandler.add(this.element, 'keydown', this.keyDownHandler, this);
+        EventHandler.add(this.element, 'keyup', this.keyUpHandler, this);
+        EventHandler.add(this.element, 'input', this.inputHandler, this);
         EventHandler.add(this.element, 'keypress', this.keyPressHandler, this);
         EventHandler.add(this.element, 'change', this.changeHandler, this);
         EventHandler.add(this.element, 'paste', this.pasteHandler, this);
@@ -513,6 +516,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     private unwireEvents(): void {
         EventHandler.remove(this.element, 'focus', this.focusIn);
         EventHandler.remove(this.element, 'blur', this.focusOut);
+        EventHandler.remove(this.element, 'keyup', this.keyUpHandler);
+        EventHandler.remove(this.element, 'input', this.inputHandler);
         EventHandler.remove(this.element, 'keydown', this.keyDownHandler);
         EventHandler.remove(this.element, 'keypress', this.keyPressHandler);
         EventHandler.remove(this.element, 'change', this.changeHandler);
@@ -558,23 +563,102 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         });
     }
 
+    private preventHandler(): void {
+        let iOS: boolean = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        setTimeout(() => {
+                if (this.element.selectionStart > 0) {
+                    let currentPos: number = this.element.selectionStart;
+                    let prevPos: number = this.element.selectionStart - 1;
+                    let start: number = 0;
+                    let ignoreKeyCode: number;
+                    let valArray: string[] = this.element.value.split('');
+                    let numericObject: Object = getNumericObject(this.locale);
+                    let decimalSeparator: string = getValue('decimal', numericObject);
+                    ignoreKeyCode = decimalSeparator.charCodeAt(0);
+                    if (this.element.value[prevPos] === ' ' && this.element.selectionStart > 0 && !iOS) {
+                        if (isNullOrUndefined(this.prevVal)) {
+                            this.element.value = this.element.value.trim();
+                        } else if (prevPos !== 0) {
+                            this.element.value = this.prevVal;
+                        } else if (prevPos === 0) {
+                            this.element.value = this.element.value.trim();
+                        }
+                        this.element.setSelectionRange(prevPos, prevPos);
+                    } else if (isNaN(parseFloat(this.element.value[this.element.selectionStart - 1])) &&
+                        this.element.value[this.element.selectionStart - 1].charCodeAt(0) !== 45) {
+                        if ((valArray.indexOf(this.element.value[this.element.selectionStart - 1]) !==
+                            valArray.lastIndexOf(this.element.value[this.element.selectionStart - 1]) &&
+                            this.element.value[this.element.selectionStart - 1].charCodeAt(0) === ignoreKeyCode) ||
+                            this.element.value[this.element.selectionStart - 1].charCodeAt(0) !== ignoreKeyCode) {
+                            this.element.value = this.element.value.substring(0, prevPos) +
+                            this.element.value.substring(currentPos, this.element.value.length);
+                            this.element.setSelectionRange(prevPos, prevPos);
+                            if (isNaN(parseFloat(this.element.value[this.element.selectionStart - 1])) && this.element.selectionStart > 0
+                                && this.element.value.length) {
+                                this.preventHandler();
+                            }
+                        }
+                    } else if (isNaN(parseFloat(this.element.value[this.element.selectionStart - 2])) && this.element.selectionStart > 1 &&
+                        this.element.value[this.element.selectionStart - 2].charCodeAt(0) !== 45) {
+                        if ((valArray.indexOf(this.element.value[this.element.selectionStart - 2]) !==
+                            valArray.lastIndexOf(this.element.value[this.element.selectionStart - 2]) &&
+                            this.element.value[this.element.selectionStart - 2].charCodeAt(0) === ignoreKeyCode) ||
+                            this.element.value[this.element.selectionStart - 2].charCodeAt(0) !== ignoreKeyCode) {
+                            this.element.setSelectionRange(prevPos, prevPos);
+                            this.nextEle = this.element.value[this.element.selectionStart];
+                            this.cursorPosChanged = true;
+                            this.preventHandler();
+                        }
+                    }
+                    if (this.cursorPosChanged === true && this.element.value[this.element.selectionStart] === this.nextEle &&
+                        isNaN(parseFloat(this.element.value[this.element.selectionStart - 1]))) {
+                        this.element.setSelectionRange(this.element.selectionStart + 1, this.element.selectionStart + 1);
+                        this.cursorPosChanged = false;
+                        this.nextEle = null;
+                    }
+                    if (this.element.value.trim() === '') {
+                        this.element.setSelectionRange(start, start);
+                    }
+                    if (this.element.selectionStart > 0) {
+                        if ((this.element.value[this.element.selectionStart - 1].charCodeAt(0) === 45) && this.element.selectionStart > 1) {
+                            if (isNullOrUndefined(this.prevVal)) {
+                                this.element.value = this.element.value;
+                            } else {
+                                this.element.value = this.prevVal;
+                            }
+                            this.element.setSelectionRange(this.element.selectionStart, this.element.selectionStart);
+                        }
+                    }
+                    this.prevVal = this.element.value;
+            }
+        });
+    }
+    private keyUpHandler(event: KeyboardEvent): void {
+        let iOS: boolean = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        if (!iOS && Browser.isDevice) {
+            this.preventHandler();
+        }
+    };
+    private inputHandler(event: KeyboardEvent): void {
+        let iOS: boolean = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        if (iOS && Browser.isDevice) {
+            this.preventHandler();
+        }
+    };
+
     private keyDownHandler(event: KeyboardEvent): void {
-        switch (event.keyCode) {
-            case 38:
+        if (!this.readonly) {
+            switch (event.keyCode) {
+                case 38:
                 event.preventDefault();
                 this.action(INCREMENT, event);
                 break;
-            case 40:
+                case 40:
                 event.preventDefault();
                 this.action(DECREMENT, event);
                 break;
-            default: break;
-        }
-        if (!this.element.value.length) {
-            this.setProperties({ value: null }, true);
-            this.isKeyDown = true;
-            this.updateValue(this.instance.getNumberParser({ format: 'n' })(this.element.value));
-            this.isKeyDown = false;
+                default: break;
+            }
         }
     };
 
@@ -616,9 +700,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             }
         }
         this.changeValue(value === null || isNaN(value) ? null : this.strictMode ? this.trimValue(value) : value);
-        if (!this.isKeyDown) {
-            this.raiseChangeEvent(event);
-        }
+        this.raiseChangeEvent(event);
     }
 
     private updateCurrency(prop: string, propVal: string): void {
@@ -762,7 +844,12 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             let formatValue: string = this.formatNumber();
             this.setElementValue(formatValue);
             if (!this.isPrevFocused) {
-                this.element.setSelectionRange(0, formatValue.length);
+                let delay: number = (Browser.isDevice && Browser.isIos) ? 600 : 0;
+                setTimeout(
+                    () => {
+                        this.element.setSelectionRange(0, formatValue.length);
+                    },
+                    delay);
             }
         }
         if (!Browser.isDevice) {
@@ -844,6 +931,14 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         return true;
     }
 
+    private floatLabelTypeUpdate(): void {
+        Input.removeFloating(this.inputWrapper);
+        let hiddenInput : HTMLElement = this.hiddenInput;
+        this.hiddenInput.remove();
+        Input.addFloating(this.element, this.floatLabelType, this.placeholder);
+        this.container.insertBefore(hiddenInput, this.container.childNodes[1]);
+    }
+
     private mouseUpClick(event: MouseEvent): void {
         event.stopPropagation();
         clearInterval(this.timeOut);
@@ -858,7 +953,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
      * if its not given then numeric value will be incremented based on the step property value.
      */
     public increment(step: number = this.step): void {
+        this.isInteract = false;
         this.changeValue(this.performAction(this.value, step, INCREMENT));
+        this.raiseChangeEvent();
     }
     /**
      * Decrements the NumericTextBox value with specified step value.
@@ -866,7 +963,9 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
      * if its not given then numeric value will be decremented based on the step property value.
      */
     public decrement(step: number = this.step): void {
+        this.isInteract = false;
         this.changeValue(this.performAction(this.value, step, DECREMENT));
+        this.raiseChangeEvent();
     }
 
     /**
@@ -948,6 +1047,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                     break;
                 case 'showClearButton':
                         Input.setClearButton(newProp.showClearButton, this.element, this.inputWrapper);
+                        this.bindClearEvent();
+                    break;
+                case 'floatLabelType':
+                    this.floatLabelType = newProp.floatLabelType;
+                    this.floatLabelTypeUpdate();
                     break;
                 case 'value':
                     this.updateValue(newProp.value);

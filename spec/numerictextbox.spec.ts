@@ -526,7 +526,7 @@ describe('Numerictextbox Control', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { value: '20', min: '5', max: '10' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({}, ele);
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('10.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(10);
         });
@@ -544,7 +544,7 @@ describe('Numerictextbox Control', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { value: '20', min: '5', max: '10' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({ min: 20, max: 25 }, ele);
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('10.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(10);
         });
@@ -553,7 +553,7 @@ describe('Numerictextbox Control', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { value: '2', min: '0.5', max: '1' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({ format: 'p2' }, ele);
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('200.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('100.00%');
             expect(numerictextbox.min).toEqual(0.5);
             expect(numerictextbox.max).toEqual(1);
         });
@@ -562,7 +562,7 @@ describe('Numerictextbox Control', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { value: '2', min: '0.5', max: '1' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({ format: 'p2', min: 20, max: 25 }, ele);
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('200.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('100.00%');
             expect(numerictextbox.min).toEqual(0.5);
             expect(numerictextbox.max).toEqual(1);
         });
@@ -571,7 +571,7 @@ describe('Numerictextbox Control', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { value: '20', min: '5', max: '10' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({ format: 'c2' }, ele);
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$20.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$10.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(10);
         });
@@ -580,7 +580,7 @@ describe('Numerictextbox Control', () => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric', attrs: { value: '20', min: '5', max: '10' } });
             document.body.appendChild(ele);
             numerictextbox = new NumericTextBox({ format: 'c2', min: 20, max: 25 }, ele);
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$20.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$10.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(10);
         });
@@ -944,24 +944,24 @@ describe('Numerictextbox Control', () => {
 
         it('Render numeric textbox with value less than min value', () => {
             numerictextbox = new NumericTextBox({ value: -6, min: 5, max: 20 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-6.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('5.00');
         });
 
         it('Render numeric textbox with value greater than max value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 5, max: 20 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
         });
 
         it('Render numeric textbox with min value greater than max value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 15, max: 10 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('10.00');
             expect(numerictextbox.min).toEqual(10);
             expect(numerictextbox.max).toEqual(10);
         });
 
         it('Render numeric textbox with max value less than min value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 20, max: 5 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('5.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(5);
         });
@@ -975,31 +975,31 @@ describe('Numerictextbox Control', () => {
 
         it('Render numeric textbox with negative numeric value less than min value ', () => {
             numerictextbox = new NumericTextBox({ value: -30, min: -20, max: -10 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-30.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-20.00');
         });
 
         it('Render numeric textbox with negative numeric value greater than max value ', () => {
             numerictextbox = new NumericTextBox({ value: -5, min: -20, max: -10 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-5.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-10.00');
         });
 
         it('Min value greater than max value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -15, max: -20 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-20.00');
             expect(numerictextbox.min).toEqual(-20);
             expect(numerictextbox.max).toEqual(-20);
         });
 
         it('Max value less than min value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -10, max: -15 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-15.00');
             expect(numerictextbox.min).toEqual(-15);
             expect(numerictextbox.max).toEqual(-15);
         });
 
         it('Max value less than min value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -10, max: -15 }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-15.00');
             expect(numerictextbox.min).toEqual(-15);
             expect(numerictextbox.max).toEqual(-15);
         });
@@ -1036,6 +1036,8 @@ describe('Numerictextbox Control', () => {
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('6.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(20);
+            expect(numerictextbox.value).toBeLessThan(numerictextbox.max);
+            expect(numerictextbox.value).toBeGreaterThan(numerictextbox.min);
         });
 
         it('Value less than min value with strict mode', () => {
@@ -1043,6 +1045,7 @@ describe('Numerictextbox Control', () => {
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-6.00');
             expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-error')).toEqual(true);
             expect(numerictextbox.value).toEqual(-6);
+            expect(numerictextbox.value).toBeLessThan(numerictextbox.min);
         });
 
         it('Value greater than max value with strict mode', () => {
@@ -1121,24 +1124,24 @@ describe('Numerictextbox Control', () => {
 
         it('Render percentage textbox with value less than min value', () => {
             numerictextbox = new NumericTextBox({ value: -0.6, min: 0.5, max: 1, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-60.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('50.00%');
         });
 
         it('Render percentage textbox with value greater than max value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 0.5, max: 1, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('5,000.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('100.00%');
         });
 
         it('Render percentage textbox with min value greater than max value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 1.5, max: 1, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('5,000.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('100.00%');
             expect(numerictextbox.min).toEqual(1);
             expect(numerictextbox.max).toEqual(1);
         });
 
         it('Render percentage textbox with max value less than min value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 20, max: 1, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('5,000.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('100.00%');
             expect(numerictextbox.min).toEqual(1);
             expect(numerictextbox.max).toEqual(1);
         });
@@ -1152,24 +1155,24 @@ describe('Numerictextbox Control', () => {
 
         it('Render percentage textbox with negative numeric value less than min value ', () => {
             numerictextbox = new NumericTextBox({ value: -2, min: -1, max: -0.5, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-200.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-100.00%');
         });
 
         it('Render percentage textbox with negative numeric value greater than max value ', () => {
             numerictextbox = new NumericTextBox({ value: -0.2, min: -1, max: -0.5, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-20.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-50.00%');
         });
 
         it('Min value greater than max value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -0.5, max: -1, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-5,000.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-100.00%');
             expect(numerictextbox.min).toEqual(-1);
             expect(numerictextbox.max).toEqual(-1);
         });
 
         it('Max value less than min value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -0.5, max: -1, format: 'p2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-5,000.00%');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-100.00%');
             expect(numerictextbox.min).toEqual(-1);
             expect(numerictextbox.max).toEqual(-1);
         });
@@ -1282,24 +1285,24 @@ describe('Numerictextbox Control', () => {
 
         it('Render currency textbox with value less than min value', () => {
             numerictextbox = new NumericTextBox({ value: -6, min: 5, max: 20, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$6.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$5.00');
         });
 
         it('Render currency textbox with value greater than max value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 5, max: 20, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$20.00');
         });
 
         it('Render currency textbox with min value greater than max value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 15, max: 10, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$10.00');
             expect(numerictextbox.min).toEqual(10);
             expect(numerictextbox.max).toEqual(10);
         });
 
         it('Render currency textbox with max value less than min value', () => {
             numerictextbox = new NumericTextBox({ value: 50, min: 20, max: 5, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$5.00');
             expect(numerictextbox.min).toEqual(5);
             expect(numerictextbox.max).toEqual(5);
         });
@@ -1313,24 +1316,24 @@ describe('Numerictextbox Control', () => {
 
         it('Render currency textbox with negative numeric value less than min value ', () => {
             numerictextbox = new NumericTextBox({ value: -30, min: -20, max: -10, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$30.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$20.00');
         });
 
         it('Render currency textbox with negative numeric value greater than max value ', () => {
             numerictextbox = new NumericTextBox({ value: -5, min: -20, max: -10, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$5.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$10.00');
         });
 
         it('Min value greater than max value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -15, max: -20, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$20.00');
             expect(numerictextbox.min).toEqual(-20);
             expect(numerictextbox.max).toEqual(-20);
         });
 
         it('Max value less than min value with negative numeric value ', () => {
             numerictextbox = new NumericTextBox({ value: -50, min: -10, max: -15, format: 'c2' }, '#tsNumeric');
-            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$50.00');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('-$15.00');
             expect(numerictextbox.min).toEqual(-15);
             expect(numerictextbox.max).toEqual(-15);
         });
@@ -3238,6 +3241,98 @@ describe('Numerictextbox Control', () => {
 
     });
 
+    describe('Keyboard navigation triggering keyup', () => {
+        let numerictextbox: any;
+        let androidUserAgent: string = 'Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JWR66Y) ' +
+                'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.92 Safari/537.36'+
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X)' +
+                'AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3';
+        
+        beforeEach((): void => {
+            Browser.userAgent = androidUserAgent;
+            numerictextbox = undefined;
+            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric' });
+            document.body.appendChild(ele);
+        });
+        afterEach((): void => {
+            if (numerictextbox) {
+                numerictextbox.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+
+        it('prevent mobile device keyup while pressing characters', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({ value: 20 }, '#tsNumeric');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('20.00');
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+        });
+
+        it('prevent mobile device keyup while pressing characters with space', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = '25 ';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+           it('prevent mobile device keyup while pressing characters with number', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = '123abc';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+           it('prevent mobile device keyup while pressing number with -', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = '123-';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+           it('prevent mobile device keyup while pressing number,-,++', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = '123-++';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+           it('prevent mobile device keyup while pressing number with comma', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = '10,20';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+           it('prevent mobile device keyup while pressing number with dot', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = '10.10';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+           it('prevent mobile device keyup while pressing', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({}, '#tsNumeric');
+            (<HTMLInputElement>document.getElementById('tsNumeric')).value = 'Yyr';
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+          });
+
+         it('prevent mobile device keyup while pressing number with localization', () => {
+             let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({ value: 12.34, format: 'c2', locale: 'de' }, '#tsNumeric');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('$12.34');
+            numerictextbox.keyUpHandler(extend({}, {}, eventArgs));
+        });
+
+        it('ios device', () => {
+            let eventArgs: any = { keyCode: 229, which: 229, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox = new NumericTextBox({ value: 10 }, '#tsNumeric');
+            expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('10.00');
+            numerictextbox.inputHandler(extend({}, {}, eventArgs));
+        });
+         
+     });
+
     describe('Keyboard navigation up/down and enter key press', () => {
         let numerictextbox: any;
         beforeEach((): void => {
@@ -4650,7 +4745,7 @@ describe('Numerictextbox Control', () => {
         beforeEach((): void => {
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'clrNumeric' });
             document.body.appendChild(ele);
-            numeric = new NumericTextBox({ value: 25, showClearButton:true });
+            numeric = new NumericTextBox({ value: 25, showClearButton:true, floatLabelType: "Auto" });
             numeric.appendTo('#clrNumeric');
         });
         afterEach((): void => {
@@ -4663,7 +4758,7 @@ describe('Numerictextbox Control', () => {
         it('clear icon', () => {
             expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
             document.getElementById('clrNumeric').focus();
-            expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon')).toBe(true);
+            expect(numeric.inputWrapper.clearButton.classList.contains('e-clear-icon-hide')).toBe(false);
         });       
         it('clear button default state', () => {
             let input: HTMLInputElement = <HTMLInputElement>document.getElementById('clrNumeric');
@@ -4682,8 +4777,65 @@ describe('Numerictextbox Control', () => {
              expect(input.value === '').toEqual(true);
         });
         it('setModel test case', () => {
-            setModelNumeric = new NumericTextBox({ showClearButton: false }, '#clrNumeric');
+            setModelNumeric = new NumericTextBox({ showClearButton: true }, '#clrNumeric');
+            setModelNumeric.showClearButton = false;
+            setModelNumeric.dataBind();
             expect(setModelNumeric.inputWrapper.clearButton == null).toBe(true);
+        });
+    });
+    describe('Readonly NumericTextBox', () => {
+        let numerictextbox: any;
+        beforeEach(():void =>{
+            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', {id: 'numeric'});
+            document.body.appendChild(ele);
+            numerictextbox = new NumericTextBox({ value: 30, readonly: true });
+            numerictextbox.appendTo('#numeric');
+        });
+        afterEach((): void =>{
+            if (numerictextbox) {
+                numerictextbox.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+        it('Keyboard Actions', () => {
+            expect(numerictextbox.readonly).toEqual(true);
+            numerictextbox.focusIn();
+            let eventArgs: any = { keyCode: 38, which: 38, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { } };
+            numerictextbox.keyDownHandler(extend({}, {}, eventArgs));
+            expect(numerictextbox.value).toEqual(30);
+        });
+    });
+    describe('Enable set Model Float floatLabelType', () => {
+        let numerictextbox: any;
+        let setModelNumeric: any;       
+        let clickEvent: MouseEvent = document.createEvent('MouseEvents');
+        let mouseEvent2: MouseEvent = document.createEvent('MouseEvents');
+        clickEvent.initEvent('mousedown', true, true);
+        mouseEvent2.initEvent("mouseup", true, true);
+        beforeEach((): void => {
+            let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric' });
+            document.body.appendChild(ele);
+            numerictextbox = new NumericTextBox({ value: 25, showClearButton:true });
+            numerictextbox.appendTo('#tsNumeric');
+        });
+        afterEach((): void => {
+            if (numerictextbox) {
+                numerictextbox.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+		it('floating label-functionality:Always', () => {
+            numerictextbox = new NumericTextBox({ min: 10, max: 30, format: 'c2', placeholder: 'Enter the numeric value' }, '#tsNumeric');
+            numerictextbox.floatLabelType = 'Always';
+            numerictextbox.dataBind();
+            expect(document.querySelector('.e-float-input').children[3].classList.contains('e-label-top')).toEqual(true);
+        });
+
+        it('floating label-functionality:Never', () => {
+            numerictextbox = new NumericTextBox({ min: 10, max: 30, format: 'c2', placeholder: 'Enter the numeric value' }, '#tsNumeric');
+            numerictextbox.floatLabelType = 'Never';
+            numerictextbox.dataBind();
+            expect(document.getElementById('tsNumeric').parentElement.classList.contains('e-float-input')).toEqual(false);
         });
     });
 });

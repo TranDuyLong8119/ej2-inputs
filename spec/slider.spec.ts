@@ -114,6 +114,39 @@ describe('Slider Control', () => {
             expect(document.getElementById('slider').querySelectorAll(".e-handle").length).toBe(2);
         });
 
+        it('Slider with customvalue value testing', () => {
+            let eventArgs: any;
+            let events: any;
+            slider = new Slider({ ticks: { placement: 'After' }, customValues: [10, 20, 70, 95, 100, 200, 500, 30, 90], value: 1 });
+            slider.appendTo('#slider');
+            expect((document.getElementById('slider').querySelectorAll(".e-large")[1] as HTMLElement).innerText).toBe("20");
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('20');
+            slider.type = "MinRange";
+            slider.customValues = ["poor", "average", "good", "excellent"],
+            slider.value = 3;
+            slider.dataBind();
+            expect((document.getElementById('slider').querySelectorAll('.e-large')[3] as HTMLElement).innerText).toBe("excellent");
+            slider.dataBind();
+            expect(document.getElementById('slider').querySelectorAll('.e-range').length).toBe(1);
+            events = new Slider({ type: 'Range', customValues: [10, 20, 25, 30, 40, 45, 60, 80, 70, 35, 90, 100], value: [0, 2], tooltip: { isVisible: true } });
+            events.appendTo('#slider');
+            eventArgs = { keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement), target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { } };
+            events.keyDown(eventArgs);
+            eventArgs = { keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement), target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { } };
+            events.keyDown(eventArgs);
+            expect(document.querySelectorAll('.e-tip-content')[0].textContent).toBe("10 - 25");
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('10');
+            expect((document.getElementsByClassName('e-handle')[2] as HTMLElement).getAttribute('aria-valuenow')).toBe('25');
+            slider.enableRtl =true;
+            slider.dataBind();
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('10');
+            expect((document.getElementsByClassName('e-handle')[2] as HTMLElement).getAttribute('aria-valuenow')).toBe('25');
+            slider.orientation = "Vertical";
+            slider.dataBind();
+            expect((document.getElementsByClassName('e-slider-container')[0]).classList.contains("e-vertical")).toBe(true);
+        });
+
+
         it('Range Slider with value declaration testing', () => {
             slider = new Slider({ type: 'Range', value: [10, 30] });
             slider.appendTo('#slider');
@@ -1417,6 +1450,7 @@ describe('Slider Control', () => {
         let instance: any;
         let mouseUp: any;
         it('Slide the range slider using sliderbarmove', () => {
+            setTheme('material');
             dragEle = createElement('div', { id: 'slider' });
             targetEle = createElement('div', {
                 id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
@@ -2201,6 +2235,79 @@ describe('Slider Control', () => {
         });
     });
 
+    describe('Slider bootstrap theme testing', () => {
+        let slider: any;
+        let element: HTMLElement;
+        let eventArgs: any;
+        it('Before tooltip test', () => {
+            element = createElement('div', { id: 'slider' });
+            document.body.appendChild(element);
+            setTheme('bootstrap');
+            slider = new Slider({ value: 10, min: 0, max: 100, type: 'Range', tooltip: { isVisible: true, placement: 'Before'} }, '#slider');
+            eventArgs = { keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement), target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { } };
+            slider.keyDown(eventArgs);
+            expect(document.querySelectorAll('.e-tip-content')[0].textContent).toBe('0 - 100');
+            slider.bootstrapCollisionArgs.collidedPosition = 'TopCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+            slider.type = 'Default';
+            slider.dataBind();
+            slider.bootstrapCollisionArgs.collidedPosition = 'TopCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+        });
+
+        it('After tooltip test', () => {
+            element = createElement('div', { id: 'slider' });
+            document.body.appendChild(element);
+            setTheme('bootstrap');
+            slider = new Slider({ value: 10, min: 0, max: 100, type: 'Range', tooltip: { isVisible: true, placement: 'After'} }, '#slider');
+            eventArgs = { keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement), target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { } };
+            slider.keyDown(eventArgs);
+            expect(document.querySelectorAll('.e-tip-content')[0].textContent).toBe('0 - 100');
+            slider.bootstrapCollisionArgs.collidedPosition = 'BottomCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+            slider.type = 'Default';
+            slider.dataBind();
+            slider.bootstrapCollisionArgs.collidedPosition = 'BottomCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+        });
+
+        it('Before tooltip test in vertical', () => {
+            element = createElement('div', { id: 'slider' });
+            document.body.appendChild(element);
+            setTheme('bootstrap');
+            slider = new Slider({ value: 10, min: 0, max: 100, type: 'Range', orientation: 'Vertical', tooltip: { isVisible: true, placement: 'Before'} }, '#slider');
+            eventArgs = { keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement), target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { } };
+            slider.keyDown(eventArgs);
+            expect(document.querySelectorAll('.e-tip-content')[0].textContent).toBe('0 - 100');
+            slider.bootstrapCollisionArgs.collidedPosition = 'LeftCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+            slider.type = 'Default';
+            slider.dataBind();
+            slider.bootstrapCollisionArgs.collidedPosition = 'LeftCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+        });
+
+        it('After tooltip test in vertical', () => {
+            element = createElement('div', { id: 'slider' });
+            document.body.appendChild(element);
+            setTheme('bootstrap');
+            slider = new Slider({ value: 10, min: 0, max: 100, type: 'Range', orientation: 'Vertical', tooltip: { isVisible: true, placement: 'After'} }, '#slider');
+            eventArgs = { keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement), target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { } };
+            slider.keyDown(eventArgs);
+            expect(document.querySelectorAll('.e-tip-content')[0].textContent).toBe('0 - 100');
+            slider.bootstrapCollisionArgs.collidedPosition = 'RightCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+            slider.type = 'Default';
+            slider.dataBind();
+            slider.bootstrapCollisionArgs.collidedPosition = 'RightCenter';
+            slider.tooltipBeforeOpen(eventArgs);
+        });
+
+        afterEach(() => {
+            document.body.innerHTML = '';
+        });
+    });
+
     describe('Slider Tooltip format testing', () => {
         let slider: any;
         let element: HTMLElement;
@@ -2319,6 +2426,1010 @@ describe('Slider Control', () => {
             document.body.innerHTML = '';
         });
     })
+
+    describe('Slider Limits Testing', () => {
+        let slider: any;
+        let element: HTMLElement;
+        let eventArgs: any;
+
+        beforeEach(() => {
+            element = createElement('div', { id: 'slider' });
+            document.body.appendChild(element);
+        });
+
+        it('Default slider with limits enabled - minimum side testing', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minStart: 3, minEnd: 7 }, showButtons: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 5; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(3);
+        });
+
+        it('Default slider with limits enabled - maximum side testing', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minStart: 3, minEnd: 7 }, showButtons: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 5; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(7);
+        });
+
+        it('Default slider with limits enabled - minimum side only limited', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minStart: 4 }, showButtons: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 5; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(10);
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 8; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(4);
+        });
+
+        it('Default slider with limits enabled - maximum side only limited', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minEnd: 7 }, showButtons: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 6; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(0);
+
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 8; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(7);
+        });
+
+        it('MinRange slider with limits enabled - maximum side only limited RTL Mode', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minEnd: 7 }, showButtons: true, enableRtl: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 6; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(7);
+
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 8; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(0);
+        });
+
+        it('Range slider with limits enabled - RTL Mode', () => {
+            slider = new Slider({ min: 0, max: 10, value: [3, 6], limits: { enabled: true, maxEnd: 6 }, showButtons: true,
+                enableRtl: true, type: 'Range' });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 6; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(6);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[1]).toBe(6);
+        });
+
+        it('Default slider with limits enabled - handle fixed', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minEnd: 7, startHandleFixed: true }, showButtons: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(5);
+
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(5);
+        });
+
+        it('Range slider with limits enabled - only one limits enabled for both handle', () => {
+            slider = new Slider({ min: 0, max: 10, value: [5, 6], limits: { enabled: true, minStart: 4, maxEnd: 7 }, showButtons: true,
+             type: 'Range'});
+            slider.appendTo('#slider');
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(4);
+            expect(slider.value[1]).toBe(6);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(4);
+            expect(slider.value[1]).toBe(7);
+        });
+
+        it('Range slider with limits enabled - only limits enabled for first handle', () => {
+            slider = new Slider({ min: 0, max: 10, value: [5, 8], limits: { enabled: true, minStart: 4, minEnd: 7 }, showButtons: true,
+                type: 'Range' });
+            slider.appendTo('#slider');
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(4);
+            expect(slider.value[1]).toBe(8);
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 4; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(7);
+            expect(slider.value[1]).toBe(8);
+        });
+
+        it('Range slider with limits enabled - both handle are fixed', () => {
+            slider = new Slider({ min: 0, max: 10, value: [5, 6], limits: { enabled: true, minStart: 4, maxEnd: 7, startHandleFixed: true,
+                endHandleFixed: true }, showButtons: true, type: 'Range'});
+            slider.appendTo('#slider');
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(6);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(6);
+        });
+
+        it('Range slider with limits enabled - only limits enabled for second handle', () => {
+            slider = new Slider({ min: 0, max: 10, value: [5, 7], limits: { enabled: true, maxStart: 6, maxEnd: 8 }, showButtons: true,
+                type: 'Range' });
+            slider.appendTo('#slider');
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(6);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(8);
+        });
+
+        it('Range slider with limits enabled - for both handle', () => {
+            slider = new Slider({ min: 0, max: 10, value: [4, 8], limits: { enabled: true, minStart: 2, minEnd: 5, maxStart: 7, maxEnd: 9 },
+                showButtons: true, type: 'Range' });
+            slider.appendTo('#slider');
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(2);
+            expect(slider.value[1]).toBe(8);
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 4; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(8);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(7);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(5);
+            expect(slider.value[1]).toBe(9);
+        });
+
+        it('slider with limits enabled - limitbar element for default slider', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minStart: 2, minEnd: 8 }, showButtons: true });
+            slider.appendTo('#slider');
+            let sliderElement: HTMLElement = document.getElementById('slider');
+            expect(sliderElement.querySelector('.e-limits').classList.contains('e-limit-bar')).toBe(true);
+        });
+
+        it('slider with limits enabled - limitbar element for range slider', () => {
+            slider = new Slider({ min: 0, max: 10, value: [5, 7], limits: { enabled: true, minStart: 2, minEnd: 4, maxStart: 6, maxEnd: 8 },
+                showButtons: true, type: 'Range' });
+            slider.appendTo('#slider');
+            let sliderElement: HTMLElement = document.getElementById('slider');
+            expect(sliderElement.querySelectorAll('.e-limits')[0].classList.contains('e-limit-first')).toBe(true);
+            expect(sliderElement.querySelectorAll('.e-limits')[1].classList.contains('e-limit-second')).toBe(true);
+        });
+
+        it('slider with limits enabled - feeding wrong limit values in default slider', () => {
+            slider = new Slider({ min: 0, max: 5, value: 3, limits: { enabled: true, minStart: -3, minEnd: 50 }, showButtons: true });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 4; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(0);
+
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 6; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(5);
+        });
+
+        it('slider with limits enabled - feeding wrong limit values in range slider', () => {
+            slider = new Slider({ min: 0, max: 5, value: [0, 5], limits: { enabled: true, minStart: -10, minEnd: -1, maxStart: 10, maxEnd: 50 }, 
+                showButtons: true, type: 'Range' });
+            slider.appendTo('#slider');
+            
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 37, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(0);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 39, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[1]).toBe(5);
+        });
+
+        it('slider with limits enabled - in vertical orientation default slider', () => {
+            document.getElementById('slider').style.height = '300px';
+            slider = new Slider({ min: 0, max: 10, value: 4, limits: { enabled: true, minStart: 2, minEnd: 5 }, 
+                showButtons: true, orientation: 'Vertical', type: 'Default' });
+            slider.appendTo('#slider');
+
+            eventArgs = {
+                keyCode: 40, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 3; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(2);
+
+            eventArgs = {
+                keyCode: 38, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 4; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value).toBe(5);
+
+            slider.type = 'MinRange';
+            slider.dataBind();
+            slider.type = 'Default';
+            slider.dataBind();
+            slider.limits.enabled = false;
+            slider.dataBind();
+            slider.limits.enabled = true;
+            slider.dataBind();
+        });
+
+        it('slider with limits enabled - in vertical orientation range slider', () => {
+            document.getElementById('slider').style.height = '300px';
+            slider = new Slider({ min: 0, max: 10, value: [3, 7], limits: { enabled: true, minStart: 2, minEnd: 5, maxStart: 6, maxEnd: 8 }, 
+                showButtons: true, type: 'Range', orientation: 'Vertical' });
+            slider.appendTo('#slider');
+
+            slider.activeHandle = 1;
+            eventArgs = {
+                keyCode: 40, currentTarget: (document.getElementsByClassName("e-handle")[0] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[0] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[0]).toBe(2);
+
+            slider.activeHandle = 2;
+            eventArgs = {
+                keyCode: 38, currentTarget: (document.getElementsByClassName("e-handle")[1] as HTMLElement),
+                target: (document.getElementsByClassName("e-handle")[1] as HTMLElement), preventDefault: (): void => { }
+            };
+            for (let i = 0; i < 2; i++) {
+                (slider as any).keyDown(eventArgs);
+            }
+            expect(slider.value[1]).toBe(8);
+
+            slider.type = 'Default';
+            slider.dataBind();
+        });
+
+        it('slider with limits enabled - onPropertyChange method testing', () => {
+            slider = new Slider({ min: 0, max: 10, value: [3, 7],  showButtons: true, type: 'Range' });
+            slider.appendTo('#slider');
+            slider.limits = { enabled: true, minStart: 2, minEnd: 5, maxStart: 6, maxEnd: 8 };
+            slider.dataBind();
+            slider.limits.minStart = 4;
+            slider.dataBind();
+            slider.limits.enabled = false;
+            slider.dataBind();
+        });
+
+        it('slider with limits enabled - repeatbutton testing in default slider', () => {
+            slider = new Slider({ min: 0, max: 10, value: 5, limits: { enabled: true, minStart: 4, minEnd: 7 }, showButtons: true });
+            slider.appendTo('#slider');
+
+            let eventArgs = { type: 'mousedown', target: slider.firstBtn, currentTarget: slider.firstBtn, preventDefault: (): void => { } };
+            slider.repeatButton(eventArgs);
+            slider.repeatButton(eventArgs);
+            slider.repeatHandlerUp();
+
+            expect(slider.value).toBe(4); 
+        });
+
+        it('slider with limits enabled - repeatbutton testing in range slider', () => {
+            slider = new Slider({ min: 0, max: 10, value: [6, 7], limits: { enabled: true, minStart: 4, maxEnd: 7 }, showButtons: true,
+            type: 'Range' });
+            slider.appendTo('#slider');
+
+            let eventArgs = { type: 'mousedown', target: slider.firstBtn, currentTarget: slider.firstBtn, preventDefault: (): void => { } };
+            slider.repeatButton(eventArgs);
+            slider.repeatButton(eventArgs);
+            slider.repeatHandlerUp();
+            expect(slider.value[0]).toBe(4);
+
+            slider.activeHandle = 2;
+            eventArgs = { type: 'mousedown', target: slider.secondBtn, currentTarget: slider.secondBtn, preventDefault: (): void => { } };
+            slider.repeatButton(eventArgs);
+            slider.repeatButton(eventArgs);
+            slider.repeatHandlerUp();
+
+            expect(slider.value[1]).toBe(7);
+        });
+
+        afterEach(() => {
+            document.body.innerHTML = "";
+        });
+    });
+
+    describe('Slider slidermove and sliderbarclick method testing with limits', () => {
+        let slider: any;
+        let dragEle: HTMLElement;
+        let targetEle: HTMLElement;
+        let mousemove: any;
+        let instance: any;
+        let mouseUp: any;
+        it('Slide first handle in  the range slider using sliderbarmove', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+         limits: { enabled: true, minStart: 30, minEnd: 50, maxStart: 70, maxEnd: 90 } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 319, 148);
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 312, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+            mousemove = setMouseCoordinates(mousemove, 319, 148);
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+
+
+            mousemove = setMouseCoordinates(mousemove, 319, 148);
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('30');
+        });
+
+        it('Slide the range slider for second handle using sliderbarmove', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [0, 30], tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: { enabled: true, minStart: 30, minEnd: 50, maxStart: 70, maxEnd: 90 }  });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            slider.activeHandle = 2;
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 619, 148);
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 612, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+            mousemove = setMouseCoordinates(mousemove, 619, 148);
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+
+            mousemove = setMouseCoordinates(mousemove, 619, 148);
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('70');
+        });
+
+        it('Slide the default slider using sliderbarmove', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: { enabled: true, minStart: 30, minEnd: 90 }   });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 319, 148);
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 312, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+            mousemove = setMouseCoordinates(mousemove, 319, 148);
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+
+            mousemove = setMouseCoordinates(mousemove, 319, 148);
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('30');
+        });
+
+        afterEach(() => {
+            document.body.innerHTML = '';
+        })
+    });
+
+    describe('Slider Interval dragging test cases', () => {
+        let dragEle: any;
+        let targetEle: any;
+        let slider: any;
+        let mousemove: any;
+        let mouseUp: any;
+
+        it('Sliding the slider using range bar with drag interval enabled', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [0, 30], tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 519, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('34');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('64');
+        });
+
+        it('Sliding the slider using range bar with drag interval and limits enabled - v1', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [10, 60],
+            tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: {enabled: true, minStart: 10, minEnd: 30, maxStart: 60, maxEnd: 90 } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 619, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('30');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('80');
+        });
+
+        it('Sliding the slider using range bar with drag interval and limits enabled - v2', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [10, 80],
+            tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: {enabled: true, minStart: 0, minEnd: 30, maxStart: 70, maxEnd: 90 } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 919, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('20');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('90');
+        });
+
+        it('Sliding the slider using range bar with drag interval and limits enabled - v3', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [10, 60],
+            tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: {enabled: true, minStart: 10, minEnd: 30, maxStart: 60, maxEnd: 90 } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 0, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('10');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('60');
+        });
+
+        it('Sliding the slider using range bar with drag interval and limits enabled - v4', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [10, 60],
+            tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: { enabled: true, minStart: 10, minEnd: 30, maxStart: 60, maxEnd: 90, startHandleFixed: true } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 0, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('10');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('60');
+        });
+
+        it('Sliding the slider using range bar with drag interval and limits enabled - v5', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [10, 60],
+            tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' },
+            limits: { enabled: true, minStart: 10, minEnd: 30, maxStart: 60, maxEnd: 90, endHandleFixed: true } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 0, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('10');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('60');
+        });
+
+        it('Sliding the slider to max value using range bar with drag interval enabled', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [0, 30], tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 819, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('70');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('100');
+            
+            slider.firstTooltipElement = true;
+            slider.secondTooltipElement = true;
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 819, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+        });
+
+        it('Sliding the slider to minimum value using range bar with drag interval enabled', () => {
+            setTheme('material');
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [0, 30], tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' } });
+            slider.appendTo('#slider');
+
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 0, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('0');
+            expect((document.getElementsByClassName('e-handle')[2] as HTMLElement).getAttribute('aria-valuenow')).toBe('30');
+
+            slider.firstTooltipElement.classList.add('e-material-tooltip-open');
+            slider.secondTooltipElement.classList.add('e-material-tooltip-open');
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 0, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            slider.value = [0, 30];
+            slider.dataBind();
+
+            let args: any = {
+                changedTouches: [{ clientX: 350, clientY: 144 }], type: 'touchstart', preventDefault: function () { },
+                currentTarget: document.getElementsByClassName("e-range")[0], target: document.getElementsByClassName("e-range")[0]
+            };
+            slider.sliderDown(args);
+
+            args = {
+                changedTouches: [{ clientX: 0, clientY: 148 }], type: 'touchmove', preventDefault: function () { },
+                currentTarget: document.getElementsByClassName("e-slider")[0]
+            };
+            slider.dragRangeBarMove(args);
+        });
+
+        it('Sliding the slider using range bar with drag interval and RTL enabled', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [70, 100], enableRtl: true });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.height = '6px';
+
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 350, 144);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 519, 148);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('36');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('66');
+
+            slider.value = [70, 100];
+            slider.dataBind();
+
+            let args: any = {
+                changedTouches: [{ clientX: 350, clientY: 144 }], type: 'touchstart', preventDefault: function () { },
+                currentTarget: document.getElementsByClassName("e-range")[0], target: document.getElementsByClassName("e-range")[0]
+            };
+            slider.sliderDown(args);
+
+            args = {
+                changedTouches: [{ clientX: 519, clientY: 148 }], type: 'touchmove', preventDefault: function () { },
+                currentTarget: document.getElementsByClassName("e-slider")[0]
+            };
+            slider.dragRangeBarMove(args);
+        });
+
+        it('Sliding the slider using range bar with drag interval enabled in vertical slider', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [0, 30], orientation: 'Vertical', tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' } });
+            slider.appendTo('#slider');
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.height = '2px';
+            (document.getElementsByClassName("e-handle")[0] as HTMLElement).style.width = '2px';
+            (document.getElementsByClassName("e-range")[0] as HTMLElement).style.width = '6px';
+            (document.getElementsByClassName("e-slider")[0] as HTMLElement).style.height = '300px';
+
+            slider.handlePos2  = slider.checkHandlePosition(slider.handleVal2);
+            slider.setRangeBar();
+            let mousedown: any = getEventObject('MouseEvents', 'mousedown');
+            mousedown = setMouseCoordinates(mousedown, 300, 200);
+            mousedown.target = mousedown.currentTarget = document.getElementsByClassName("e-range")[0];
+            EventHandler.trigger(document.getElementsByClassName("e-slider")[0] as HTMLElement, 'mousedown', mousedown);
+            
+            mousemove = getEventObject('MouseEvents', 'mousemove');
+            mousemove = setMouseCoordinates(mousemove, 300, 250);
+            mousemove.srcElement = mousemove.target = mousemove.toElement = document.getElementsByClassName("e-slider");
+            EventHandler.trigger(<any>(document), 'mousemove', mousemove);
+
+            mouseUp = getEventObject('MouseEvents', 'mouseup');
+            mouseUp.srcElement = mouseUp.target = mouseUp.toElement = document.getElementsByClassName("e-slider")[0];
+            EventHandler.trigger(<any>(document), 'mouseup', mouseUp);
+
+            expect((document.getElementsByClassName('e-handle')[0] as HTMLElement).getAttribute('aria-valuenow')).toBe('53');
+            expect((document.getElementsByClassName('e-handle')[1] as HTMLElement).getAttribute('aria-valuenow')).toBe('83');
+
+            slider.value = [0, 30];
+            slider.dataBind();
+
+            let args: any = {
+                changedTouches: [{ clientX: 300, clientY: 200 }], type: 'touchstart', preventDefault: function () { },
+                currentTarget: document.getElementsByClassName("e-range")[0], target: document.getElementsByClassName("e-range")[0]
+            };
+            slider.sliderDown(args);
+        });
+
+        it('interval dragging property change method testing', () => {
+            dragEle = createElement('div', { id: 'slider' });
+            targetEle = createElement('div', {
+                id: 'target', styles: 'top: 150px;left: 300px;height: 300px;width: 500px;position: absolute;'
+            });
+            document.body.appendChild(targetEle);
+            targetEle.appendChild(dragEle);
+            slider = new Slider({ type: 'Range', value: [0, 30], orientation: 'Vertical', tooltip: { placement: 'After', isVisible: true, showOn: 'Auto' } });
+            slider.appendTo('#slider');
+
+            slider.dragInterval = true;
+            slider.dataBind();
+            slider.dragInterval = false;
+            slider.dataBind();
+        })
+        afterEach(() => {
+            document.body.innerHTML = '';
+        });
+    });
+
     describe('Slider Ticks Format Testing', () => {
         let slider: any;
         let element: HTMLElement;
@@ -2600,6 +3711,100 @@ describe('Slider Control', () => {
             slider.handlePos1 = undefined;
             slider.onResize();
         })
+        it('Resize method testing with RTL enabled', () => {
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'MinRange', orientation: 'Horizontal', enableRtl: true, tooltip: { isVisible: true } }, '#slider');
+            slider.handlePos1 = undefined;
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with RTL enabled in range', () => {
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'Range', orientation: 'Horizontal', enableRtl: true, tooltip: { isVisible: true } }, '#slider');
+            slider.handlePos1 = undefined;
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with RTL enabled in range with vertical', () => {
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'Range', orientation: 'Vertical', enableRtl: true, tooltip: { isVisible: true } }, '#slider');
+            slider.handlePos1 = undefined;
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with ticks enabled in range', () => {
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'MinRange', orientation: 'Horizontal', ticks: { placement: 'Before' } }, '#slider');
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with ticks enabled in range with RTL', () => {
+            setTheme('material');
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'Range', orientation: 'Horizontal', enableRtl: true, ticks: { placement: 'Before' },
+                tooltip: { isVisible: true } }, '#slider');
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with ticks and tooltip enabled in range', () => {
+            setTheme('material');
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'Range', orientation: 'Horizontal', enableRtl: false, ticks: { placement: 'Before' },
+                tooltip: { isVisible: true } }, '#slider');
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with ticks enabled in range with RTL in vertical', () => {
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'Range', orientation: 'Vertical', ticks: { placement: 'Before' } }, '#slider');
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+        })
+        it('Resize method testing with tooltip enabled in range with RTL in vertical', () => {
+            setTheme('material');
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'Range', orientation: 'Vertical', ticks: { placement: 'Before' },
+            tooltip: { isVisible: true } }, '#slider');
+            
+            slider.dataBind();
+            slider.onResize();
+            slider.openTooltip();
+        })
+        it('Resize method testing with limits enabled', () => {
+            let ele: HTMLElement;
+            ele = createElement('div', { id: 'slider' });
+            document.body.appendChild(ele);
+            let slider: any = new Slider({ type: 'MinRange', orientation: 'Horizontal', limits: { enabled: true, minStart: 20, minEnd: 40 } }, '#slider');
+            slider.isMaterial = true;
+            slider.dataBind();
+            slider.onResize();
+            slider.firstTooltipElement = undefined;
+            slider.getTooltipTransformProperties('');
+            slider.handleValueAdjust(60, 100, 3);
+        })
         afterEach(() => {
             document.body.innerHTML = '';
         })
@@ -2880,7 +4085,7 @@ describe('Slider Control', () => {
             });
             it('control initialization', () => {
                 let slider: any = new Slider({
-                    readOnly: true
+                    readonly: true
                 }, '#slider');
                 expect(slider.sliderContainer.classList.contains('e-read-only')).toBe(true);
             });
@@ -2897,7 +4102,7 @@ describe('Slider Control', () => {
                 element.id = "slider";
                 document.body.appendChild(element);
                 slider = new Slider({
-                    readOnly: true,
+                    readonly: true,
                     value: 30,
                     showButtons: true
                 }, '#slider');
@@ -2922,16 +4127,16 @@ describe('Slider Control', () => {
                 document.body.appendChild(element);
                 slider = new Slider({
                     value: 30,
-                    readOnly: true,
+                    readonly: true,
                     showButtons: true,
                 }, '#slider');
             });
             it('onProperty change method', () => {
                 expect(slider.sliderContainer.classList.contains('e-read-only')).toBe(true);
-                slider.readOnly = false;
+                slider.readonly = false;
                 slider.dataBind();
                 expect(slider.sliderContainer.classList.contains('e-read-only')).toBe(false);
-                slider.readOnly = true;
+                slider.readonly = true;
                 slider.dataBind();
                 expect(slider.sliderContainer.classList.contains('e-read-only')).toBe(true);
             });

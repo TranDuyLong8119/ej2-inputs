@@ -1,4 +1,4 @@
-import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, createElement, detach, append, Animation } from '@syncfusion/ej2-base';import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';import { Collection, Complex, Browser } from '@syncfusion/ej2-base';
+import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, createElement, detach, append, Animation } from '@syncfusion/ej2-base';import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';import { Collection, Complex, Browser, Ajax, BeforeSendEventArgs } from '@syncfusion/ej2-base';import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
 import {SelectedEventArgs,RemovingEventArgs,ClearingEventArgs} from "./uploader";
 import {ComponentModel} from '@syncfusion/ej2-base';
 
@@ -34,7 +34,7 @@ export interface ButtonsPropsModel {
 
     /**
      * Specifies the text or html content to browse button
-     * @default 'Browse'
+     * @default 'Browse...'
      */
     browse?: string | HTMLElement;
 
@@ -61,15 +61,41 @@ export interface AsyncSettingsModel {
      * Specifies the URL of save action that will receive the upload files and save in the server.
      * The save action type must be POST request and define the argument as same input name used to render the component.
      * The upload operations could not perform without this property.
+     * @default ''
      */
     saveUrl?: string;
 
     /**
      * Specifies the URL of remove action that receives the file information and handle the remove operation in server.
      * The remove action type must be POST request and define “removeFileNames” attribute to get file information that will be removed.
-     * This property is optional. 
+     * This property is optional.
+     * @default ''
      */
     removeUrl?: string;
+
+    /**
+     * Specifies the chunk size to split the large file into chunks, and upload it to the server in a sequential order.
+     * If the chunk size property has value, the uploader enables the chunk upload by default.
+     * It must be specified in bytes value.
+     * 
+     * > For more information, refer to the [chunk upload](./chunk-upload.html) section from the documentation.
+     * 
+     * @default 0
+     */
+    chunkSize?: number;
+
+    /**
+     * Specifies the number of retries that the uploader can perform on the file failed to upload.
+     * By default, the uploader set 3 as maximum retries. This property must be specified to prevent infinity looping.
+     * @default 3
+     */
+    retryCount?: number;
+
+    /**
+     * Specifies the delay time in milliseconds that the automatic retry happens after the delay.
+     * @default 500
+     */
+    retryAfterDelay?: number;
 
 }
 
@@ -99,6 +125,9 @@ export interface UploaderModel extends ComponentModel{
 
     /**
      * Specifies the HTML string that used to customize the content of each file in the list.
+     * 
+     * > For more information, refer to the [template](./template.html) section from the documentation.
+     * 
      * @default null
      */
     template?: string;
@@ -122,7 +151,7 @@ export interface UploaderModel extends ComponentModel{
      * You can customize the default text of “browse, clear, and upload” buttons with plain text or HTML elements.
      * The buttons’ text can be customized from localization also. If you configured both locale and buttons property,
      * the uploader component considers the buttons property value.
-     * @default { browse : 'Browse', clear: 'Clear', upload: 'Upload' }
+     * @default { browse : 'Browse...', clear: 'Clear', upload: 'Upload' }
      */
     buttons?: ButtonsPropsModel;
 
@@ -151,6 +180,9 @@ export interface UploaderModel extends ComponentModel{
     /**
      * Specifies the drop target to handle the drag-and-drop upload.
      * By default, the component creates wrapper around file input that will act as drop target.
+     * 
+     * > For more information, refer to the [drag-and-drop](./draganddrop.html) section from the documentation.
+     * 
      * @default null
      */
     dropArea?: string | HTMLElement;
@@ -162,20 +194,10 @@ export interface UploaderModel extends ComponentModel{
      * * Name
      * * Size
      * * Type
-     * ```html
-     * <input type="file" id="fileupload"/>
-     * ```
-     * ```typescript
-     *   let preloadFiles = [{
-     *      { name: 'Nature', size: 500000, type: '.png' },
-     *      { name: 'TypeScript Succintly', size: 12000, type: '.pdf' },
-     *      { name: 'ASP.NET Webhooks', size: 500000, type: '.docx' }
-     *   }]
-     *   let uploadObj: Uploader = new Uploader({
-     *      files: preloadFiles
-     *   });
-     *   uploadObj.appendTo("#fileupload");
-     * ```
+     * 
+     * {% codeBlock src="uploader/files-api/index.ts" %}{% endcodeBlock %}
+     * 
+     * {% codeBlock src="uploader/files-api/index.html" %}{% endcodeBlock %}
      * @default { name: '', size: null, type: '' }
      */
     files?: FilesPropModel[];
@@ -234,5 +256,35 @@ export interface UploaderModel extends ComponentModel{
      * @event
      */
     change?: EmitType<Object>;
+
+    /**
+     * Fires when the chunk file uploaded successfully.
+     * @event
+     */
+    chunkSuccess?: EmitType<Object>;
+
+    /**
+     * Fires if the chunk file failed to upload.
+     * @event
+     */
+    chunkFailure?: EmitType<Object>;
+
+    /**
+     * Fires if cancel the chunk file uploading.
+     * @event
+     */
+    canceling?: EmitType<Object>;
+
+    /**
+     * Fires if pause the chunk file uploading.
+     * @event
+     */
+    pausing?: EmitType<Object>;
+
+    /**
+     * Fires if resume the paused chunk file upload.
+     * @event
+     */
+    resuming?: EmitType<Object>;
 
 }

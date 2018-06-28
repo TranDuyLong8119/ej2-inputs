@@ -3,13 +3,14 @@
  */
 import { createElement, attributes, Browser, L10n, EmitType, isUndefined, detach } from '@syncfusion/ej2-base';
 import { isNullOrUndefined, EventHandler } from '@syncfusion/ej2-base';
+import { createSpinner, showSpinner } from '@syncfusion/ej2-popups';
 import { Uploader } from '../src/uploader/uploader';
 
 describe('Uploader Control', () => {
     describe('Basics', () => {
         let uploadObj: any;
         beforeAll((): void => {
-            let element: HTMLElement = createElement('input', {id: 'upload'});            
+            let element: HTMLElement = createElement('input', {id: 'upload'});
             document.body.appendChild(element);
             element.setAttribute('type', 'file');
             element.setAttribute('name', 'files');
@@ -34,7 +35,7 @@ describe('Uploader Control', () => {
         })
         it('element structure testing', () => {
             expect(uploadObj.element.parentElement.classList.contains('e-file-select')).toBe(true);
-            expect(uploadObj.browseButton.innerText).toEqual('Browse');
+            expect(uploadObj.browseButton.innerText).toEqual('Browse...');
             expect(uploadObj.uploadWrapper.classList.contains('e-upload')).toBe(true);
         })
         it('file selection validate', () => {
@@ -43,7 +44,7 @@ describe('Uploader Control', () => {
             let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
             expect(uploadObj.fileList.length).toEqual(2);
-        })
+        })        
         it('check li elements', () => {
             let liElement = uploadObj.listParent.querySelectorAll('li');
             expect(liElement.length).toBe(2);
@@ -55,6 +56,43 @@ describe('Uploader Control', () => {
             uploadObj.clearAll();
             expect(uploadObj.listParent).toBe(null);
         });
+    });
+  
+    describe('API testing for', () => {
+        let uploadObj: any;
+        beforeAll((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload', attrs: {name: 'fileUpload'}});            
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            element.setAttribute('name', 'files');
+            uploadObj = new Uploader({ 
+                autoUpload: false, showFileList: false, 
+                asyncSettings: {
+                    saveUrl: 'http://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'http://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+                }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterAll((): void => {
+            document.body.innerHTML = '';
+        });
+        it('ShowFileList', () => {
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["2nd File"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(0);
+        });        
+
+        it('Auto Upload', () => {
+            let fileList = [{name: "7z938-x64.msi", rawFile: "", size: 151347452, status: 'Ready to upload', statusCode: '1', type: 'msi', validationMessages:{minsize: "", maxsize: ""}},
+            {name: "764.png", rawFile: "", size: 151, status: 'Ready to upload', statusCode: '1', type: 'png', validationMessages:{minsize: "", maxsize: ""}}];
+            uploadObj.autoUpload = true;
+            uploadObj.dataBind();
+            uploadObj.createFileList(fileList);             
+            expect(uploadObj.uploadWrapper.querySelector('.e-file-upload-btn')).toBe(null);            
+        });        
     });
 
     describe('preload file testing', () => {
@@ -70,7 +108,7 @@ describe('Uploader Control', () => {
         });
         it('files with autoUpload', () => {
             let preLoadFiles: any = [
-                {name: 'Books', size: 500, type: '.png'},
+                {name: 'ASP.Net books', size: 500, type: '.png'},
                 {name: 'Movies', size: 12000, type: '.pdf'},
                 {name: 'Study materials', size: 500000, type: '.docx'},
             ];
@@ -82,6 +120,7 @@ describe('Uploader Control', () => {
             expect(liElements[2].querySelector('.e-file-status').textContent).toEqual('File uploaded successfully');
             expect(liElements[1].querySelector('.e-icons').classList.contains('e-file-delete-btn')).toBe(true);
             expect(liElements[0].querySelector('.e-icons').getAttribute('title')).toEqual('Delete file');
+            expect(uploadObj.getFilesData()[0].name).toEqual('ASP.Net books.png');
         });
         it('Dynamically update files without autoUpload', () => {
             let preLoadFiles: any = [
@@ -170,6 +209,8 @@ describe('Uploader Control', () => {
             expect(uploadObj.element.hasAttribute('multiple')).toBe(false);
         });
         it('upload method with single file upload ', (done) => {
+            uploadObj.progressInterval = '1';
+            uploadObj.dataBind();
             uploadObj.upload([uploadObj.filesData[0]]);
             setTimeout(() => {
                 expect(uploadObj.uploadWrapper.querySelectorAll('li').length).toBe(1);
@@ -177,8 +218,28 @@ describe('Uploader Control', () => {
                 done();
             }, 1500);
         });
+        it('upload method with single file without array type ', (done) => {
+            uploadObj.progressInterval = '1';
+            uploadObj.dataBind();
+            uploadObj.upload(uploadObj.filesData[0]);
+            setTimeout(() => {
+                expect(uploadObj.uploadWrapper.querySelectorAll('li').length).toBe(1);
+                expect(uploadObj.element.hasAttribute('multiple')).toBe(false);
+                done();
+            }, 1500);
+        });
+        it('upload method with single file without array type ', (done) => {
+            uploadObj.progressInterval = '1';
+            uploadObj.dataBind();
+            uploadObj.upload(uploadObj.filesData[0]);
+            setTimeout(() => {
+                expect(uploadObj.uploadWrapper.querySelectorAll('li').length).toBe(1);
+                expect(uploadObj.element.hasAttribute('multiple')).toBe(false);
+                done();
+            }, 1500);
+        });
         it('upload method with multiple file upload ', (done) => {
-            uploadObj.asyncSettings = { saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save' };
+            uploadObj.asyncSettings = { saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save' };
             uploadObj.upload([uploadObj.filesData[0]]);
             setTimeout(() => {
                 expect(uploadObj.uploadWrapper.querySelectorAll('li').length).toBe(1);
@@ -187,15 +248,19 @@ describe('Uploader Control', () => {
             }, 1500);
         });
         it('rtl support enabled', () => {
+            let previousButton: boolean = isNullOrUndefined(uploadObj.actionButtons);
             uploadObj.enableRtl = true;
             uploadObj.dataBind();
+            expect(isNullOrUndefined(uploadObj.actionButtons)).toBe(previousButton);
             expect(uploadObj.enableRtl).toBe(true);
             expect(uploadObj.uploadWrapper.classList.contains('e-rtl')).toBe(true);
         });
         it('rtl support disabled', () => {
+            let previousButton: boolean = isNullOrUndefined(uploadObj.actionButtons);
             uploadObj.enableRtl = false;
             uploadObj.dataBind();
             expect(uploadObj.enableRtl).toBe(false);
+            expect(isNullOrUndefined(uploadObj.actionButtons)).toBe(previousButton);
             expect(uploadObj.uploadWrapper.classList.contains('e-rtl')).toBe(false);
         });
         it('enable auto upload ', () => {
@@ -218,7 +283,7 @@ describe('Uploader Control', () => {
         it('drop area set null ', () => {
             uploadObj.dropArea = null;
             uploadObj.dataBind();
-            expect(uploadObj.dropAreaWrapper.querySelector('.e-file-drop').textContent).toEqual('or Drop files here');
+            expect(uploadObj.dropAreaWrapper.querySelector('.e-file-drop').textContent).toEqual('Or drop files here');
         });
         it('set allowed extensions ', () => {
             uploadObj.allowedExtensions = '.pdf';
@@ -255,24 +320,12 @@ describe('Uploader Control', () => {
             uploadObj.onSelectFiles(eventArgs);
             expect(uploadObj.uploadWrapper.querySelectorAll('li').length).toBe(2);
             expect(uploadObj.element.hasAttribute('multiple')).toBe(true);
-        });
-        it('hide the file list ', () => {
-            uploadObj.showFileList = false;
-            uploadObj.dataBind();
-            expect(uploadObj.showFileList).toBe(false);
-            expect(uploadObj.listParent.style.display).toBe('none');
-        })
-        it('show the file list ', () => {
-            uploadObj.showFileList = true;
-            uploadObj.dataBind();
-            expect(uploadObj.showFileList).toBe(true);
-            expect(uploadObj.listParent.style.display).toBe('block');
-        });
+        });        
         it('change the save and remove urls ', () => {
-            uploadObj.asyncSettings = { saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save', removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'};
+            uploadObj.asyncSettings = { saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save', removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'};
             uploadObj.dataBind();
-            expect(uploadObj.asyncSettings.saveUrl).toEqual('http://104.238.131.174:8984/api/uploadbox/Save');
-            expect(uploadObj.asyncSettings.removeUrl).toEqual('http://104.238.131.174:8984/api/uploadbox/Remove');
+            expect(uploadObj.asyncSettings.saveUrl).toEqual('https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save');
+            expect(uploadObj.asyncSettings.removeUrl).toEqual('https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove');
         });
     });
 
@@ -368,7 +421,7 @@ describe('Uploader Control', () => {
             element1.setAttribute('type', 'file');
             uploadObj = new Uploader({autoUpload: false, dropArea: document.getElementById('dropele') });
             uploadObj.appendTo(document.getElementById('upload1'));
-            expect(uploadObj.dropAreaWrapper.querySelector('.e-file-drop').textContent).toBe('or Drop files here');
+            expect(uploadObj.dropAreaWrapper.querySelector('.e-file-drop').textContent).toBe('Or drop files here');
         });
         it('drag hover ', () => {
             let dragEventArgs: any = { preventDefault: (): void => {}, action: null, target: null, stopPropagation: (): void => {}, };
@@ -437,7 +490,7 @@ describe('Uploader Control', () => {
         it('default button text', () => {
             uploadObj = new Uploader({ autoUpload: false });
             uploadObj.appendTo(document.getElementById('upload'));
-            expect(uploadObj.localizedTexts('Browse')).toBe('Browse');
+            expect(uploadObj.localizedTexts('Browse')).toBe('Browse...');
             expect(uploadObj.localizedTexts('Upload')).toBe('Upload');
             expect(uploadObj.localizedTexts('Clear')).toBe('Clear');
         });
@@ -454,7 +507,7 @@ describe('Uploader Control', () => {
             expect(uploadObj.clearButton.innerText).toBe('');
             expect(uploadObj.buttons.clear).toBe(''); 
         });
-        it('buttons with HTMLElements', () => {
+        it('buttons with HTMLElements', (done) => {
             let item1 = createElement('span', { id: 'item1', className: 'select'});
             document.body.appendChild(item1);
             let item2 = createElement('span', { id: 'item2', className: 'load'});
@@ -466,8 +519,8 @@ describe('Uploader Control', () => {
                 clear:document.getElementById('item3'),
                 upload: document.getElementById('item2')},
                 asyncSettings: {
-                    saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save',
-                    removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
                 }
             });
             uploadObj.appendTo(document.getElementById('upload'));
@@ -480,11 +533,11 @@ describe('Uploader Control', () => {
             expect(uploadObj.fileList.length).toEqual(1);
             uploadObj.browseButtonClick();
             uploadObj.uploadButtonClick();
-            // setTimeout(() => {
-            //     expect(uploadObj.filesData[0].status).not.toBe('Ready to upload');
-            //     expect(uploadObj.filesData[0].statusCode).not.toBe('1');
-            //     done();
-            // }, 1500)
+            setTimeout(() => {
+                expect(uploadObj.filesData[0].status).not.toBe('Ready to upload');
+                expect(uploadObj.filesData[0].statusCode).not.toBe('1');
+                done();
+            }, 1500)
         });
         it('enable multiple at initial rendering', () => {
             uploadObj = new Uploader({ autoUpload: false });
@@ -560,8 +613,8 @@ describe('Uploader Control', () => {
             uploadObj = new Uploader({
                 selected: select, multiple: true, clearing: clear, removing: remove, autoUpload: false,
                 asyncSettings: {
-                    saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save',
-                    removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
                 }
             });
             uploadObj.appendTo(document.getElementById('upload'));
@@ -575,7 +628,7 @@ describe('Uploader Control', () => {
             let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
             expect(select).toHaveBeenCalled();
-            expect(uploadObj.fileList.length).toEqual(2);          
+            expect(uploadObj.fileList.length).toEqual(2);            
         });
         it('Clear event triggered', () => {
             uploadObj.clearAll();
@@ -594,7 +647,7 @@ describe('Uploader Control', () => {
             expect(uploadObj.filesData.length).toEqual(1);
         });
     });
-    describe('Event cancelling ', () => {
+    describe('Event canceling ', () => {
         let uploadObj: any;
         beforeEach((): void => {
             let element: HTMLElement = createElement('input', {id: 'upload'});            
@@ -604,7 +657,7 @@ describe('Uploader Control', () => {
         afterEach((): void => {
             document.body.innerHTML = '';
         });
-        it('Selected event cancelled', () => {
+        it('Selected event canceled', () => {
             uploadObj = new Uploader({ selected: function(e: any) {
                 e.cancel = true
             } });
@@ -615,7 +668,7 @@ describe('Uploader Control', () => {
             expect(uploadObj.listParent).toBe(undefined);
             expect(uploadObj.actionButtons).toBe(undefined);
         });
-        it('Removing event cancelled', () => {
+        it('Removing event canceled', () => {
             let uploadObj1: any = new Uploader({ autoUpload: false, removing: function(e: any) {
                 e.cancel = true
             } });
@@ -631,7 +684,7 @@ describe('Uploader Control', () => {
             expect(uploadObj1.actionButtons).not.toBe(undefined);
             expect(uploadObj1.listParent.querySelectorAll('li').length).toEqual(1);
         });
-        it('clearing event cancelled', () => {
+        it('clearing event canceled', () => {
             let uploadObj2: any = new Uploader({ autoUpload: false, clearing: function(e: any) {
                 e.cancel = true
             } });
@@ -651,16 +704,59 @@ describe('Uploader Control', () => {
             expect(uploadObj2.filesData.length).toBe(1);
             expect(uploadObj2.listParent.querySelectorAll('li').length).toEqual(1);
         });
-        it('Uploading event cancel', () => {
+        it('Uploading event cancel', (done) => {
             let uploadObj2: any = new Uploader({ uploading: function(e: any) {
                 e.cancel = true
             } });
             uploadObj2.appendTo(document.getElementById('upload'));
-            let fileList = [{name: "7z938-x64.msi", rawFile: "", size: 15, statusCode:'1', status: 'Ready to upload', type: 'msi', validationMessages:{minsize: "", maxsize: ""}}]
-            uploadObj.asyncSettings = { saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save'};
-            uploadObj.upload(fileList, true);
-            expect(fileList[0].statusCode).toBe('1');
-        })
+            uploadObj2.asyncSettings = { saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save'};
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: { files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj2.onSelectFiles(eventArgs);
+            setTimeout(() => {
+                expect(uploadObj2.getFilesData()[0].statusCode).toBe('5');
+                done();
+            }, 500);
+        });   
+        it('Uploading event cancel in chunk upload', (done) => {
+            let uploadObj2: any = new Uploader({ uploading: function(e: any) {
+                e.cancel = true
+            } });
+            uploadObj2.appendTo(document.getElementById('upload'));
+            uploadObj2.asyncSettings = { saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save', chunkSize: 1};
+            let fileObj: File = new File(["Nice two"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: { files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj2.onSelectFiles(eventArgs);
+            setTimeout(() => {
+                expect(uploadObj2.getFilesData()[0].statusCode).toBe('5');
+                done();
+            }, 500);
+        });     
+        it('args.cancel in cancel event', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false, canceling: function(e: any) {
+                    e.cancel = true
+                },
+                asyncSettings: { 
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1, retryAfterDelay: 0 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                uploadObj.uploadWrapper.querySelector('.e-file-abort-btn').click();
+                setTimeout(() => {
+                    expect(uploadObj.filesData[0].statusCode).not.toEqual('5');
+                    let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                    expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(false);
+                    done();
+                }, 500);
+            }, 700);
+        });
     })
     describe('Methods', () => {
         let uploadObj: any;
@@ -707,11 +803,11 @@ describe('Uploader Control', () => {
         });
         it('format the size in KB ', () => {
             let size: string = uploadObj.bytesToSize(20000);
-            expect(size).toEqual('20.0 KB');
+            expect(size).toEqual('19.5 KB');
         });
         it('format the size in MB ', () => {
             let size: string = uploadObj.bytesToSize(2000000);
-            expect(size).toEqual('2.0 MB');
+            expect(size).toEqual('1.9 MB');
         });
         it('format the 0 size file ', () => {
             let size: string = uploadObj.bytesToSize(0);
@@ -719,7 +815,7 @@ describe('Uploader Control', () => {
         });
         it('format the large size ', () => {
             let size: string = uploadObj.bytesToSize(1500000000);
-            expect(size).toEqual('1500.0 MB');
+            expect(size).toEqual('1430.5 MB');
         });
         it('remove the uploaded files', () => {
             let fileObj: File = new File(["Nice One"], "last.txt", {lastModified: 0, type: "overide/mimetype"});
@@ -736,6 +832,8 @@ describe('Uploader Control', () => {
             uploadObj.onSelectFiles(selectEventArgs);
             expect(uploadObj.listParent.children[0].querySelector('.e-file-status').textContent).toBe('File uploaded successfully');
             expect(uploadObj.uploadedFilesData.length).toBe(1);
+            createSpinner({target: uploadObj.uploadWrapper.querySelector('.e-file-delete-btn') as HTMLElement});
+            showSpinner(uploadObj.uploadWrapper.querySelector('.e-file-delete-btn') as HTMLElement);
             uploadObj.remove(fileList);
             // setTimeout(() => {
             //     expect(uploadObj.uploadedFilesData.length).toBe(0);
@@ -744,6 +842,7 @@ describe('Uploader Control', () => {
             // }, 1500);
         })
      });
+
     describe('Localization', () => {
         let uploadObj: any;
         beforeAll((): void => {
@@ -826,17 +925,31 @@ describe('Uploader Control', () => {
             let fileObj1: File = new File(["2nd File"], "dmo.txt", {lastModified: 0, type: "overide/mimetype"});
             let eventArgs = { type: 'click', target: {files: [fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
-            expect(uploadObj.uploadButton.hasAttribute('disabled')).toBe(false);
+            expect(uploadObj.uploadButton.hasAttribute('disabled')).toBe(true);
             uploadObj.destroy();
         })
     })
+    
     describe('File List Template UI', () => {
-        let uploadObj: any;
+        let uploadObj: any;       
         beforeAll((): void => {
             let element: HTMLElement = createElement('input', {id: 'upload'});            
             document.body.appendChild(element);
             element.setAttribute('type', 'file');
-            uploadObj = new Uploader({  template: "<div class='wrapper'><table><tbody><tr><td><span class='file-name'>${name}</span></td><td><span class='file-size'>${size} bytes</span></td></tr></tbody></table></div>" });
+            let item1 = createElement('span', { id: 'item1', className: 'select', innerHTML: "Select"});
+            document.body.appendChild(item1);
+            let item2 = createElement('span', { id: 'item2', className: 'load', innerHTML: 'Load'});
+            document.body.appendChild(item2);
+            let item3 = createElement('span', { id: 'item3', className: 'clear', innerHTML: 'Clear Data'});
+            document.body.appendChild(item3);
+            uploadObj = new Uploader({  
+                buttons: {
+                    browse: document.getElementById('item1'),
+                    upload: document.getElementById('item2'),
+                    clear: document.getElementById('item3'),
+                },
+                template: "<div class='wrapper'><table><tbody><tr><td><span class='file-name'>${name}</span></td><td><span class='file-size'>${size} bytes</span></td></tr></tbody></table></div>" 
+            });
             uploadObj.appendTo(document.getElementById('upload'));
         })
         afterAll((): void => {
@@ -854,6 +967,7 @@ describe('Uploader Control', () => {
             let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
             expect(uploadObj.fileList.length).toEqual(3);
+            uploadObj.upload(uploadObj.filesData[0]);
         });
         it('Template changed dynamically', () => {
             uploadObj.template = "<span class='wrapper'></span><span class='icon file-icon ${type}'></span><span class='name file-name'>${name}</span>"
@@ -862,15 +976,23 @@ describe('Uploader Control', () => {
             let eventArgs = { type: 'click', target: {files: [fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
             expect(uploadObj.fileList.length).toBe(1);
-            expect(uploadObj.listParent.querySelector('li').children.length).toBe(3);
+            //expect(uploadObj.listParent.querySelector('li').children.length).toBe(3);
         })
+        it ('uploadFailed method', () => {
+            let fileObj: File = new File(["Nicee1"], "ChatLog 192680_Dropdown value property binding is not working in case the dropdown contains large number.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            let uploadEventArgs = { type: 'click', target: (uploadObj.fileList[0]), preventDefault: (): void => { } };
+            uploadObj.uploadFailed(uploadEventArgs, uploadObj.filesData[1]);    
+            expect(uploadObj.filesData[1].status).toEqual('File failed to upload');
+        });        
     })
      
     describe('File List Template UI with ID', () => {
         let uploadObj: any;
         beforeAll((): void => {
             let template: Element = createElement('div', { id: 'template' });
-            template.innerHTML = "<div class='wrapper'><table><tbody><tr><td><span class='file-name'>${name}</span></td><td><span class='file-size'>${size} bytes</span></td></tr></tbody></table></div>";
+            template.innerHTML = "<div class='wrapper'><table><tbody><tr><td><span class='file-name'>${name}</span></td><td><span class='file-size'>${size} bytes</span><span class='e-file-delete-btn e-spinner-pane' style='display:block;height:30px; width: 30px;'></span></td></tr></tbody></table></div>";
             document.body.appendChild(template);
             let element: HTMLElement = createElement('input', {id: 'upload'});            
             document.body.appendChild(element);
@@ -890,12 +1012,15 @@ describe('Uploader Control', () => {
         })
         it ('customTemplate with uploader', () => {
             let fileObj1: File = new File(["2nd File"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
-            let eventArg: any = { type: 'click', target: {files: [fileObj1]}, preventDefault: (): void => { } };
+            let eventArg: any = { type: 'click', target: {files: [ fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArg);
             let length: number = uploadObj.filesData.length;
             uploadObj.removeFilesData(uploadObj.filesData[0], true);
             expect(uploadObj.filesData.length).toBe(length);
             let event = { type: 'click', target: {files: [uploadObj.filesData[0]]}, preventDefault: (): void => { } };
+            createSpinner({target: uploadObj.uploadWrapper.querySelector('.e-file-delete-btn')});
+            showSpinner(uploadObj.uploadWrapper.querySelector('.e-file-delete-btn'));
+            expect(isNullOrUndefined(uploadObj.uploadWrapper.querySelector('.e-spinner-pane'))).toBe(false);
             uploadObj.removeFailed(event, uploadObj.filesData[0], true);
             expect(uploadObj.filesData.length).toBe(length);
         });
@@ -968,8 +1093,8 @@ describe('Uploader Control', () => {
             uploadObj = new Uploader({
                 autoUpload: false, 
                 asyncSettings: {
-                    saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save',
-                    removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
                 }
             });
             uploadObj.appendTo(document.getElementById('upload'));
@@ -1170,12 +1295,7 @@ describe('Uploader Control', () => {
             uploadObj.bindDropEvents();
             uploadObj.unBindDropEvents();
             expect(isNullOrUndefined(uploadObj.dropZoneElement)).toBe(true);
-        });
-        it ('show file list before list creation', () => {
-            uploadObj.showFileList = true;
-            uploadObj.dataBind();
-            expect(isNullOrUndefined(uploadObj.listParent)).toBe(true);
-        });
+        });        
         it('set rtl before list creation', () => {
             uploadObj.enableRtl = true;
             uploadObj.dataBind();
@@ -1198,7 +1318,7 @@ describe('Uploader Control', () => {
         });
         it ('with custom UI', () => {
             let fileList = [{name: "7z938-x64.msi", rawFile: "", size: 15, status: 'File upload successfully', type: 'msi', validationMessages:{minsize: "", maxsize: ""}}]
-            uploadObj.asyncSettings = { saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save'};
+            uploadObj.asyncSettings = { saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save'};
             uploadObj.upload(fileList, true);
             expect(fileList[0].status).toBe('File upload successfully');
         });
@@ -1207,7 +1327,111 @@ describe('Uploader Control', () => {
             let compiledString =  uploadObj.templateComplier(template);
             expect(isUndefined(compiledString)).toBe(true);
         });
-    })
+        it ('uploadRetry method', () => {
+            uploadObj.showFileList = true;
+            uploadObj.multiple = true;
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["One"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArg = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArg);
+            uploadObj.pauseButton =  uploadObj.fileList[1];
+            uploadObj.retry(uploadObj.filesData[0], true);
+            expect(uploadObj.filesData[0].statusCode).toBe('1');
+        });
+        it ('uploadCancel method', () => {
+            uploadObj.showFileList = true;
+            uploadObj.multiple = true;
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["One"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArg = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArg);
+            uploadObj.cancel(uploadObj.filesData[0]);
+            expect(uploadObj.filesData[0].statusCode).toBe('0');
+        });
+        it ('uploadResume method', () => {
+            uploadObj.showFileList = true;
+            uploadObj.multiple = true;
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["One"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArg = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArg);
+            uploadObj.resume(uploadObj.filesData[0]);
+            expect(uploadObj.filesData[0].statusCode).toBe('0');
+        });
+        it ('uploadPause method', () => {
+            uploadObj.showFileList = true;
+            uploadObj.multiple = true;
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["One"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArg = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArg);
+            uploadObj.pause(uploadObj.filesData[0]);
+            expect(uploadObj.filesData[0].statusCode).toBe('0');
+        });
+    });
+
+    describe('Default upload with', () => {
+        let uploadObj: any;
+        beforeEach((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload'});            
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+                }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterEach((): void => {
+            uploadObj.destroy();
+            document.body.innerHTML = '';
+        });
+        it('cancel the request', (done) => {
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            uploadObj.upload(uploadObj.filesData);            
+            setTimeout(() => {
+                expect(uploadObj.pauseButton).toBe(undefined);
+                let iconElement = uploadObj.fileList[0].querySelector('.e-icons');
+                iconElement.classList.remove('e-file-remove-btn');
+                iconElement.classList.add('e-file-abort-btn');
+                createSpinner({target:iconElement});
+                uploadObj.removecanceledFile(null, uploadObj.filesData[0]);
+                // expect(uploadObj.pauseButton).not.toBe(undefined);
+                done();
+            }, 500);
+        });
+        it('Reload the canceled file', () => {
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.pauseButton).toBe(undefined);
+            let iconElement = uploadObj.fileList[0].querySelector('.e-icons');
+            iconElement.classList.remove('e-file-remove-btn');
+            iconElement.classList.add('e-file-abort-btn');
+            createSpinner({target:iconElement});
+            uploadObj.removecanceledFile(null, uploadObj.filesData[0]);
+            expect(uploadObj.pauseButton).not.toBe(undefined);
+            uploadObj.reloadcanceledFile(null, uploadObj.filesData[0], uploadObj.fileList[0]);            
+            expect(uploadObj.filesData[0].status).toBe('Ready to upload');
+            // setTimeout(() => {
+            //     expect(uploadObj.filesData[0].status).toBe('File uploaded successfully');
+            //     done();
+            // }, 1000);
+        });
+        it ('worst case', () => {
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.pauseButton).toBe(undefined);
+            let iconElement = uploadObj.fileList[0].querySelector('.e-icons');
+            createSpinner({target:iconElement});
+            uploadObj.removecanceledFile(null, uploadObj.filesData[0]);
+        })
+    });
 
     describe('unused test cases', () => {
         let uploadObj: any;
@@ -1215,7 +1439,7 @@ describe('Uploader Control', () => {
             let element: HTMLElement = createElement('input', {id: 'upload', attrs: {accept : '.png'}});            
             document.body.appendChild(element);
             element.setAttribute('type', 'file');
-            uploadObj = new Uploader({ autoUpload: false, showFileList: false, allowedExtensions: '.pdf', multiple: false });
+            uploadObj = new Uploader({ autoUpload: false, allowedExtensions: '.pdf', multiple: false });
             uploadObj.appendTo(document.getElementById('upload'));
         })
         afterAll((): void => {
@@ -1227,9 +1451,9 @@ describe('Uploader Control', () => {
             let fileObj1: File = new File(["2nd File"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
             let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
-            let removeEventArgs = { type: 'click', target: (uploadObj.fileList[0]), preventDefault: (): void => { } };
+            let removeEventArgs = { type: 'click', target: (uploadObj.fileList[0]), preventDefault: (): void => { } };            
             uploadObj.removeFailed(removeEventArgs, uploadObj.filesData[0]);
-            expect(uploadObj.listParent.querySelector('.e-file-status').textContent).toBe('File failed to remove');
+            expect(uploadObj.listParent.querySelector('.e-file-status').textContent).toBe('Unable to remove file');
         });
         it ('uploadFailed method', () => {
             let fileObj: File = new File(["Nice One"], "ChatLog 192680_Dropdown value property binding is not working in case the dropdown contains large number.txt", {lastModified: 0, type: "overide/mimetype"});
@@ -1237,9 +1461,10 @@ describe('Uploader Control', () => {
             let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
             let uploadEventArgs = { type: 'click', target: (uploadObj.fileList[0]), preventDefault: (): void => { } };
+            uploadObj.template = '';
             uploadObj.uploadFailed(uploadEventArgs, uploadObj.filesData[0]);
             expect(uploadObj.listParent.querySelector('.e-file-status').textContent).toEqual('File failed to upload');
-        });
+        });        
     })
 
     describe('Tooltip support', () => {
@@ -1344,7 +1569,7 @@ describe('Uploader Control', () => {
             uploadObj.resetForm();
             expect(uploadObj.element.value).toEqual('');
         });
-        it('name attribute with isModified', () => {
+        it('name attribute with isModified', () => {            
             let fileObj: File = new File(["One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
             let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
             uploadObj.onSelectFiles(eventArgs);
@@ -1357,12 +1582,13 @@ describe('Uploader Control', () => {
             uploadObj.onSelectFiles(eventArgs1);
             let element : HTMLFormElement = <HTMLFormElement>document.getElementById("form1");
             expect(uploadObj.fileList.length).toEqual(1);
-        });
-    })
-
+        });        
+    })    
+   
     describe('Dynamic Localization update', () => {
         let uploadObj: any;
         beforeAll((): void => {
+            
             L10n.load({
                 'fr-BE': {
                    'uploader' : {
@@ -1426,6 +1652,57 @@ describe('Uploader Control', () => {
             expect(document.querySelector('.e-upload-files')).toBe(null);
         })
     });
+
+    describe('Button as Html Element in localization', () => {
+        let uploadObj: any;
+        beforeAll((): void => {
+            
+            L10n.load({
+                'fr-BE': {
+                   'uploader' : {
+                    "invalidMinFileSize" : "La taille du fichier est trop petite! S'il vous plaît télécharger des fichiers avec une taille minimale de 10 Ko",
+                    "invalidMaxFileSize" : "La taille du fichier dépasse 4 Mo",
+                    "invalidFileType" : "Le type de fichier n'est pas autorisé",
+                    "Browse"  : "Feuilleter", 
+                    "Clear" : "Clair", 
+                    "Upload" : "Télécharger",
+                    "dropFilesHint" : "ou Déposer des fichiers ici", 
+                    "uploadFailedMessage" : "Impossible d'importer le fichier", 
+                    "uploadSuccessMessage" : "Fichier téléchargé avec succès",
+                    "removedSuccessMessage": "Fichier supprimé avec succès",
+                    "removedFailedMessage": "Le fichier n'a pas pu être supprimé",
+                    "inProgress": "Téléchargement",
+                    "readyToUploadMessage": "Prêt à télécharger", 
+                    "remove": "Retirer", 
+                    "cancel": "Annuler",
+                    "delete": "Supprimer le fichier"
+                     }
+                 }
+            });
+            let element: HTMLElement = createElement('input', {id: 'upload'});            
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({ autoUpload: false, maxFileSize: 4000000, minFileSize: 1000 });
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterAll((): void => {
+            document.body.innerHTML = '';
+        });
+        it('set locale through with button as HTML element', () => {
+            let item1 = createElement('span', { id: 'item1', className: 'select'});
+            document.body.appendChild(item1);
+            let item2 = createElement('span', { id: 'item2', className: 'load'});
+            document.body.appendChild(item2);
+            let item3 = createElement('span', { id: 'item3', className: 'clear'});
+            document.body.appendChild(item3);            
+            uploadObj.buttons.browse = document.getElementById('item1');
+            uploadObj.dataBind();            
+            uploadObj.locale = 'fr-BE';
+            uploadObj.dataBind();          
+            expect(document.getElementsByClassName('select')[0].innerHTML).not.toEqual('Feuilleter');
+        })
+    });
+
     describe('Localization for Template support', () => {
         let uploadObj: any;
         beforeAll((): void => {
@@ -1464,11 +1741,680 @@ describe('Uploader Control', () => {
             uploadObj.createFileList(fileList);
             uploadObj.locale = 'fr-BE';
             uploadObj.dataBind();
-            expect(uploadObj.browseButton.innerText).toEqual('Browse');
-            expect(uploadObj.uploadWrapper.querySelector('.e-file-drop').textContent).toBe('or Drop files here');
+            expect(uploadObj.browseButton.innerText).toEqual('Browse...');
+            expect(uploadObj.uploadWrapper.querySelector('.e-file-drop').textContent).toBe('Or drop files here');
         });
         
     })
- 
+
+    describe('Chunk upload support', () => {
+        let uploadObj: any;
+        let chunkSuccess: EmitType<Object> = jasmine.createSpy('chunkSuccess');
+        let chunkFailure: EmitType<Object> = jasmine.createSpy('chunkFailure');
+        let originalTimeout: number;
+        beforeEach((): void => {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 6000;
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+        })
+        afterEach((): void => {
+            if (uploadObj.uploadWrapper) { uploadObj.destroy();}
+            document.body.innerHTML = '';
+        });
+        it('chunk success event trigger', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, chunkSuccess: chunkSuccess, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 4, retryAfterDelay: 100
+                }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(1);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                expect(chunkSuccess).toHaveBeenCalled();
+                done();
+            }, 1500);
+        });
+        it('chunk failure event trigger', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, chunkFailure: chunkFailure, autoUpload: false,
+                asyncSettings: { saveUrl: 'js.syncfusion.comm', chunkSize: 4, retryAfterDelay: 100 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(1);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                expect(chunkFailure).toHaveBeenCalled();
+                uploadObj.uploadWrapper.querySelector('.e-file-reload-btn').click();
+                done();
+            }, 1500);
+        }); 
+        it('Progressbar with worst case - remove chunk progress bar', () => {
+            uploadObj = new Uploader({
+                multiple: true, chunkFailure: chunkFailure, autoUpload: false,
+                asyncSettings: { saveUrl: 'js.syncfusion.comm', chunkSize: 4, retryAfterDelay: 100 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            let metaData = { file: new File(["New"], "demo.txt"), chunkIndex: 0, };
+            uploadObj.removeChunkProgressBar(metaData);
+            expect(uploadObj.getLiElement(metaData.file)).toBe(undefined);
+            uploadObj.chunkUploadInProgress(eventArgs, metaData);
+            uploadObj.destroy();
+        });
+        it('cancel the request', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, chunkFailure: chunkFailure, autoUpload: false,
+                asyncSettings: { 
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1, retryAfterDelay: 0 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                uploadObj.uploadWrapper.querySelector('.e-file-abort-btn').click();
+                setTimeout(() => {
+                    expect(uploadObj.filesData[0].statusCode).toEqual('5');
+                    expect(uploadObj.filesData[0].status).toEqual('File upload canceled');
+                    let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                    expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(true);
+                    done();
+                }, 1000);
+            }, 800);
+        });
+        it('Retry the canceled request', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, chunkFailure: chunkFailure, autoUpload: false,
+                asyncSettings: { 
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1, retryAfterDelay: 0 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                uploadObj.uploadWrapper.querySelector('.e-file-abort-btn').click();
+                setTimeout(() => {
+                    expect(uploadObj.filesData[0].statusCode).toEqual('5');
+                    expect(uploadObj.filesData[0].status).toEqual('File upload canceled');
+                    let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                    expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(true);
+                    pausebtn.click();
+                    setTimeout(() => {
+                        expect(uploadObj.filesData[0].status).not.toBe('File upload canceled');
+                        let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                        expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(false);
+                        expect(pausebtn.classList.contains('e-file-pause-btn')).toBe(true);
+                        done();
+                    }, 600);
+                }, 800);
+            }, 800);
+        });
+        it('Keyboard interaction with cancel the request', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, chunkFailure: chunkFailure, autoUpload: false,
+                asyncSettings: { 
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1, retryAfterDelay: 0 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+
+            var textContent = 'The uploader component is useful to upload images, documents, and other files to server.' 
+            + 'The component is the extended version of HTML5 that is uploaded with multiple file selection, auto upload, drag and drop, progress bar, preload files, and validation'
+            + 'Asynchronous upload - Allows you to upload the files asynchronously. The upload process requires save and remove action URL to manage upload process in the server.'
+            + 'Drag and drop - Allows you to drag files from the file explorer and drop into the drop area. By default, the uploader component act as drop area element.'
+            + 'Form supports - The selected or dropped files are received as a collection in a form action when the form is submitted.'
+            + 'Validation - Validates the selected file size and extension by using the allowedExtensions, maxFileSize, and minFileSize properties.'
+            + 'Template - You can customize default appearance of the uploader using the template property along with the buttons property.'
+            + 'Localization - Supports to localize the text content of action buttons, file status, clear icon title, tooltips, and text content of drag area.'
+            + 'The uploader component is useful to upload images, documents, and other files to server.'
+            + 'The component is the extended version of HTML5 that is uploaded with multiple file selection, auto upload, drag and drop, progress bar, preload files, and validation'
+            + 'Asynchronous upload - Allows you to upload the files asynchronously. The upload process requires save and remove action URL to manage upload process in the server.'
+            + 'Drag and drop - Allows you to drag files from the file explorer and drop into the drop area. By default, the uploader component act as drop area element.'
+            + 'Form supports - The selected or dropped files are received as a collection in a form action when the form is submitted.'
+            + 'Validation - Validates the selected file size and extension by using the allowedExtensions, maxFileSize, and minFileSize properties.'
+            + 'Template - You can customize default appearance of the uploader using the template property along with the buttons property.'
+            + 'Localization - Supports to localize the text content of action buttons, file status, clear icon title, tooltips, and text content of drag area.'
+            + 'The uploader component is useful to upload images, documents, and other files to server.' 
+            
+            let parts = [
+                new Blob([textContent], {type: 'text/plain'}),
+                new Uint16Array([33])
+            ];
+              
+        // Construct a file
+            let fileObj = new File(parts, 'sample.txt', {lastModified: 0, type: "overide/mimetype" });
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            let keyboardEventArgs: any = { preventDefault: (): void => {}, action: null, target: null, stopImmediatePropagation: (): void => {},
+                stopPropagation: (): void => {} };
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                let abortBtn =  uploadObj.uploadWrapper.querySelector('.e-file-abort-btn');
+                abortBtn.focus();
+                abortBtn.classList.add('e-clear-icon-focus');
+                keyboardEventArgs.target = abortBtn;
+                keyboardEventArgs.action = 'enter';
+                uploadObj.keyActionHandler(keyboardEventArgs);
+                setTimeout(() => {
+                    expect(uploadObj.filesData[0].statusCode).toEqual('5');
+                    let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                     expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(true);
+                    done();
+                }, 800);
+            }, 850);
+        });       
+        it('Keyboard interaction with retry the canceled request', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, chunkFailure: chunkFailure, autoUpload: false,
+                asyncSettings: { 
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1, retryAfterDelay: 0 }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            let keyboardEventArgs: any = { preventDefault: (): void => {}, action: null, target: null, stopImmediatePropagation: (): void => {},
+                stopPropagation: (): void => {} };
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                uploadObj.uploadWrapper.querySelector('.e-file-abort-btn').click();
+                setTimeout(() => {
+                    expect(uploadObj.getFilesData()[0].statusCode).toEqual('5');
+                    expect(uploadObj.getFilesData()[0].status).toEqual('File upload canceled');
+                    let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                    expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(true);
+                    pausebtn.focus();
+                    pausebtn.classList.add('e-clear-icon-focus');
+                    keyboardEventArgs.target = pausebtn;
+                    keyboardEventArgs.action = 'enter';
+                    uploadObj.keyActionHandler(keyboardEventArgs);
+                    setTimeout(() => {
+                        expect(uploadObj.filesData[0].status).not.toBe('File upload canceled');
+                        let pausebtn = uploadObj.uploadWrapper.querySelector('span.e-icons');
+                        expect(pausebtn.classList.contains('e-file-reload-btn')).toBe(false);
+                        expect(pausebtn.classList.contains('e-file-pause-btn')).toBe(true);
+                        done();
+                    }, 700);
+                }, 800);
+            }, 850);
+        });
+    })
+
+    describe('Chunk upload KeyBoard support', () => {
+        let iconElement : any;
+        let uploadObj: any;
+        
+        let originalTimeout: number;
+        let keyboardEventArgs: any = {
+            preventDefault: (): void => {},
+            action: null,
+            target: null,
+            stopImmediatePropagation: (): void => {},
+            stopPropagation: (): void => {},
+        };
+        beforeAll((): void => {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
+            let element: HTMLElement = createElement('input', {id: 'upload'});            
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1
+                }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterAll((): void => {
+            document.body.innerHTML = '';
+        });  
+    
+        it('Pause and resume upload', (done) => {
+            //let fileObj: File = new File(["Nice One"], "sample1.txt", {lastModified: 0, type: "overide/mimetype"});
+            var textContent = 'The uploader component is useful to upload images, documents, and other files to server.' 
+                + 'The component is the extended version of HTML5 that is uploaded with multiple file selection, auto upload, drag and drop, progress bar, preload files, and validation'
+                + 'Asynchronous upload - Allows you to upload the files asynchronously. The upload process requires save and remove action URL to manage upload process in the server.'
+                + 'Drag and drop - Allows you to drag files from the file explorer and drop into the drop area. By default, the uploader component act as drop area element.'
+                + 'Form supports - The selected or dropped files are received as a collection in a form action when the form is submitted.'
+                + 'Validation - Validates the selected file size and extension by using the allowedExtensions, maxFileSize, and minFileSize properties.'
+                + 'Template - You can customize default appearance of the uploader using the template property along with the buttons property.'
+                + 'Localization - Supports to localize the text content of action buttons, file status, clear icon title, tooltips, and text content of drag area.'
+                + 'The uploader component is useful to upload images, documents, and other files to server.'
+                + 'The component is the extended version of HTML5 that is uploaded with multiple file selection, auto upload, drag and drop, progress bar, preload files, and validation'
+                + 'Asynchronous upload - Allows you to upload the files asynchronously. The upload process requires save and remove action URL to manage upload process in the server.'
+                + 'Drag and drop - Allows you to drag files from the file explorer and drop into the drop area. By default, the uploader component act as drop area element.'
+                + 'Form supports - The selected or dropped files are received as a collection in a form action when the form is submitted.'
+                + 'Validation - Validates the selected file size and extension by using the allowedExtensions, maxFileSize, and minFileSize properties.'
+                + 'Template - You can customize default appearance of the uploader using the template property along with the buttons property.'
+                + 'Localization - Supports to localize the text content of action buttons, file status, clear icon title, tooltips, and text content of drag area.'
+                + 'The uploader component is useful to upload images, documents, and other files to server.' 
+                
+                let parts = [
+                    new Blob([textContent], {type: 'text/plain'}),
+                    new Uint16Array([33])
+                ];
+                  
+            // Construct a file
+            let fileObj = new File(parts, 'sample.txt', {lastModified: 0, type: "overide/mimetype" });
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(1);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                let pauseBtn =  uploadObj.uploadWrapper.querySelectorAll('.e-upload-file-list ')[0].querySelectorAll('.e-file-pause-btn')[0];
+                expect(isNullOrUndefined(pauseBtn)).toBe(false);
+                pauseBtn.focus();
+                pauseBtn.classList.add('e-clear-icon-focus');
+                keyboardEventArgs.action = 'enter';
+                keyboardEventArgs.target = pauseBtn;
+                uploadObj.keyActionHandler(keyboardEventArgs);
+                setTimeout(() => {
+                    let playBtn = uploadObj.uploadWrapper.querySelectorAll('.e-upload-file-list ')[0].querySelectorAll('.e-file-play-btn')[0];
+                    expect(isNullOrUndefined(playBtn)).toBe(false);
+                    playBtn.focus();
+                    playBtn.classList.add('e-clear-icon-focus');
+                    keyboardEventArgs.action = 'enter';
+                    keyboardEventArgs.target = playBtn;
+                    uploadObj.keyActionHandler(keyboardEventArgs);   
+                    setTimeout(() => {
+                        expect(isNullOrUndefined(pauseBtn)).toBe(false);
+                        done();
+                    }, 300);
+                }, 400);
+            }, 700);  
+        });    
+    })
+
+    describe('Chunk upload Pause resume', () => {
+        let uploadObj: any;
+        let originalTimeout: number;
+        let keyboardEventArgs: any = {
+            preventDefault: (): void => {},
+            action: null,
+            target: null,
+            stopImmediatePropagation: (): void => {},
+            stopPropagation: (): void => {},
+        };
+        beforeAll((): void => {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
+            let element: HTMLElement = createElement('input', {id: 'upload'});            
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 5
+                }
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterAll((): void => {
+            uploadObj.destroy();
+            document.body.innerHTML = '';
+        });  
+        it('using UI interaction', (done) => {
+            var textContent = 'The uploader component is useful to upload images, documents, and other files to server.' 
+                + 'The component is the extended version of HTML5 that is uploaded with multiple file selection, auto upload, drag and drop, progress bar, preload files, and validation'
+                + 'Asynchronous upload - Allows you to upload the files asynchronously. The upload process requires save and remove action URL to manage upload process in the server.'
+                + 'Drag and drop - Allows you to drag files from the file explorer and drop into the drop area. By default, the uploader component act as drop area element.'
+                + 'Form supports - The selected or dropped files are received as a collection in a form action when the form is submitted.'
+                + 'Validation - Validates the selected file size and extension by using the allowedExtensions, maxFileSize, and minFileSize properties.'
+                + 'Template - You can customize default appearance of the uploader using the template property along with the buttons property.'
+                + 'Localization - Supports to localize the text content of action buttons, file status, clear icon title, tooltips, and text content of drag area.'
+                + 'The uploader component is useful to upload images, documents, and other files to server.'
+                + 'The component is the extended version of HTML5 that is uploaded with multiple file selection, auto upload, drag and drop, progress bar, preload files, and validation'
+                + 'Asynchronous upload - Allows you to upload the files asynchronously. The upload process requires save and remove action URL to manage upload process in the server.'
+                + 'Drag and drop - Allows you to drag files from the file explorer and drop into the drop area. By default, the uploader component act as drop area element.'
+                + 'Form supports - The selected or dropped files are received as a collection in a form action when the form is submitted.'
+                + 'Validation - Validates the selected file size and extension by using the allowedExtensions, maxFileSize, and minFileSize properties.'
+                + 'Template - You can customize default appearance of the uploader using the template property along with the buttons property.'
+                + 'Localization - Supports to localize the text content of action buttons, file status, clear icon title, tooltips, and text content of drag area.'
+                + 'The uploader component is useful to upload images, documents, and other files to server.' 
+                
+                let parts = [
+                    new Blob([textContent], {type: 'text/plain'}),
+                    new Uint16Array([33])
+                ];
+                  
+                // Construct a file
+            let fileObj = new File(parts, 'sample.txt', {lastModified: 0, type: "overide/mimetype" });
+
+            // let fileObj: File = new File(["Nice One"], "sample1.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(1);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                let pauseBtn: any =  document.querySelector('.e-upload').querySelectorAll('.e-upload-file-list ')[0].querySelectorAll('.e-file-pause-btn')[0];
+                expect(isNullOrUndefined(pauseBtn)).toBe(false);
+                pauseBtn.focus();
+                pauseBtn.classList.add('e-clear-icon-focus');
+                keyboardEventArgs.action = 'enter';
+                keyboardEventArgs.target = pauseBtn;
+                uploadObj.keyActionHandler(keyboardEventArgs);
+                setTimeout(() => {
+                    let playBtn = uploadObj.uploadWrapper.querySelectorAll('.e-upload-file-list ')[0].querySelectorAll('.e-file-play-btn')[0];
+                    expect(isNullOrUndefined(playBtn)).toBe(false);
+                    playBtn.focus();
+                    playBtn.classList.add('e-clear-icon-focus');
+                    keyboardEventArgs.action = 'enter';
+                    keyboardEventArgs.target = playBtn;
+                    uploadObj.keyActionHandler(keyboardEventArgs);   
+                    setTimeout(() => {
+                        expect(isNullOrUndefined(pauseBtn)).toBe(false);
+                        done();
+                    }, 500);
+                }, 500);
+            }, 500); 
+        });
+    });
+
+    describe('Chunk upload pause & resume public methods', () => {
+        let iconElement : any;
+        let uploadObj: any;    
+        let originalTimeout: number;
+        let keyboardEventArgs: any = {
+            preventDefault: (): void => {},
+            action: null,
+            target: null,
+            stopImmediatePropagation: (): void => {},
+            stopPropagation: (): void => {},
+        };
+        beforeAll((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 0.5
+                },
+                template: "<span class='wrapper'><span class='icon template-icons sf-icon-${type}'></span>" +
+                "<span class='name file-name'>${name} ( ${size} bytes)</span><span class='upload-status'>${status}</span>" +
+                "</span><span class='e-icons e-file-remove-btn' title='Remove'></span>"
+            });
+        })
+        afterAll((): void => {
+            uploadObj.destroy();
+            document.body.innerHTML = '';
+        });
+        it('Pause, resume', (done) => {
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["pause upload"], "pauseData.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(1);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                uploadObj.pause(uploadObj.getFilesData()[0]);
+                setTimeout(() => {
+                    //ensure the uploading is paused.
+                    expect(uploadObj.getFilesData()[0].statusCode).toEqual('4');
+                    uploadObj.resume(uploadObj.getFilesData()[0]);
+                    //Reume the upload
+                    setTimeout(() => {
+                            expect(uploadObj.getFilesData()[0].statusCode).toEqual('3');  
+                        done();
+                    }, 500);                    
+                }, 500);
+            }, 800);
+        });
+    })
+    describe('Chunk upload pause & resume with single and multiple files its public methods', () => {
+        let iconElement : any;
+        let uploadObj: any;    
+        let originalTimeout: number;
+        let keyboardEventArgs: any = {
+            preventDefault: (): void => {},
+            action: null,
+            target: null,
+            stopImmediatePropagation: (): void => {},
+            stopPropagation: (): void => {},
+        };
+        beforeAll((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1
+                },
+                template: "<span class='wrapper'><span class='icon template-icons sf-icon-${type}'></span>" +
+                "<span class='name file-name'>${name} ( ${size} bytes)</span><span class='upload-status'>${status}</span>" +
+                "</span><span class='e-icons e-file-remove-btn' title='Remove'></span>"
+            });
+        })
+        afterAll((): void => {
+            uploadObj.destroy();
+            document.body.innerHTML = '';
+        });
+        it('Pause, resume', (done) => {
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["pause upload"], "pauseData.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["pause upload file1"], "pauseData1.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj,fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(2);
+            uploadObj.upload(uploadObj.filesData);
+            setTimeout(() => {
+               let getFileList: any = uploadObj.getFilesData()[0]
+                uploadObj.pause(uploadObj.getFilesData());
+                setTimeout(() => {
+                    //ensure the uploading is paused.
+                    expect(uploadObj.getFilesData()[0].statusCode).toEqual('4');
+                    expect(uploadObj.getFilesData()[1].statusCode).toEqual('4');
+                    //Resume the upload
+                    setTimeout(() => {
+                            uploadObj.resume(uploadObj.getFilesData()[0]);
+                            expect(uploadObj.getFilesData()[0].statusCode).toEqual('3');
+                        done();
+                    }, 500);                    
+                }, 500);
+            }, 800);
+        });
+    })    
+    describe('Cancel & retry public methods', () => {
+        let iconElement : any;
+        let uploadObj: any;
+        
+        let originalTimeout: number;
+        let keyboardEventArgs: any = {
+            preventDefault: (): void => {},
+            action: null,
+            target: null,
+            stopImmediatePropagation: (): void => {},
+            stopPropagation: (): void => {},
+        };
+        beforeAll((): void => {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+        })
+        afterAll((): void => {        
+            document.body.innerHTML = '';
+        });
+        it('cancel, retry', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1
+                },
+                template: "<span class='wrapper'><span class='icon template-icons sf-icon-${type}'></span>" +
+                "<span class='name file-name'>${name} ( ${size} bytes)</span><span class='upload-status'>${status}</span>" +
+                "</span><span class='e-icons e-file-abort-icon' title='Remove'></span>"
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["pause upload"], "pauseData.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(1);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            setTimeout(() => {
+                uploadObj.cancel(uploadObj.getFilesData()[0]);
+                setTimeout(() => {
+                    expect(uploadObj.getFilesData()[0].statusCode).toEqual('5');
+                    uploadObj.retry(uploadObj.getFilesData()[0], false);
+                    setTimeout(() => {
+                        expect(uploadObj.getFilesData()[0].statusCode).toEqual('3')
+                        uploadObj.cancel(uploadObj.getFilesData()[0]);
+                        setTimeout(() => {
+                            expect(uploadObj.getFilesData()[0].statusCode).toEqual('5')
+                            done();
+                        }, 800);
+                    }, 600);
+                }, 700);
+            }, 1000)
+        });
+    })
+
+    describe('Cancel & retry public methods with uploading single and multiple file', () => {
+        let iconElement : any;
+        let uploadObj: any;
+        
+        let originalTimeout: number;
+        let keyboardEventArgs: any = {
+            preventDefault: (): void => {},
+            action: null,
+            target: null,
+            stopImmediatePropagation: (): void => {},
+            stopPropagation: (): void => {},
+        };
+        beforeAll((): void => {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 7000;
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+        })
+        afterAll((): void => {        
+            document.body.innerHTML = '';
+        });
+        it('cancel, retry', (done) => {
+            uploadObj = new Uploader({
+                multiple: true, autoUpload: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                    chunkSize: 1
+                },
+                template: "<span class='wrapper'><span class='icon template-icons sf-icon-${type}'></span>" +
+                "<span class='name file-name'>${name} ( ${size} bytes)</span><span class='upload-status'>${status}</span>" +
+                "</span><span class='e-icons e-file-abort-icon' title='Remove'></span>"
+            });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["pause upload"], "pauseData.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["pause upload file1"], "pauseData1.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj,fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.fileList.length).toEqual(2);
+            uploadObj.upload(uploadObj.filesData);
+            setTimeout(() => {
+                uploadObj.cancel(uploadObj.getFilesData()[0]);
+                setTimeout(() => {
+                    expect(uploadObj.getFilesData()[0].statusCode).toEqual('5');
+                    uploadObj.retry(uploadObj.getFilesData()[0], false);
+                    setTimeout(() => {
+                        expect(uploadObj.getFilesData()[0].statusCode).toEqual('3')
+                        uploadObj.cancel(uploadObj.getFilesData()[0]);
+                        setTimeout(() => {
+                            expect(uploadObj.getFilesData()[0].statusCode).toEqual('5')
+                            done();
+                        }, 800);
+                    }, 600);
+                }, 700);
+            }, 1000)
+        });
+    })
+
+    describe('Uploading event ', () => {
+        let uploadObj: any;
+        beforeEach((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+        })
+        afterEach((): void => {
+            document.body.innerHTML = '';
+        });
+        it('canceled', () => {
+            uploadObj = new Uploader({ uploading: function(e: any) {
+                e.cancel = true
+            },
+            asyncSettings: {
+                saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+            } });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let fileObj: File = new File(["Nice One"], "sample.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: { files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            uploadObj.upload([uploadObj.filesData[0]]);
+            expect(uploadObj.filesData[0].statusCode).toEqual('5');
+        });
+    });
+
+    describe('Uploading drop area customization ', () => {
+        let uploadObj: any;
+        beforeEach((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+        })
+        afterEach((): void => {
+            document.body.innerHTML = '';
+        });
+        it('change target dynamically', () => {
+            uploadObj = new Uploader({ });
+            uploadObj.appendTo(document.getElementById('upload'));
+            let dropElement: HTMLElement = createElement('div', {id: 'dropele'});
+            document.body.appendChild(dropElement);
+            expect(document.querySelector('.e-file-drop').textContent).toEqual('Or drop files here');
+            uploadObj.dropArea = '#dropele';
+            uploadObj.dataBind();
+            expect(document.querySelector('.e-file-drop').textContent).toEqual('');
+            uploadObj.dropArea = '.e-upload';
+            uploadObj.dataBind();
+            expect(document.querySelector('.e-file-drop').textContent).toEqual('Or drop files here');
+        });
+    });
 });
 

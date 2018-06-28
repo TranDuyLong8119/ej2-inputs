@@ -322,11 +322,11 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
     }
 
     private createHTML5Rules(): void {
-        let defRules: string[] = ['required', 'regex', 'rangeLength', 'maxLength', 'minLength', 'dateIso', 'digits', 'pattern',
-            'data-val-required', 'type', 'data-validation', 'min', 'max', 'range', 'equalTo', 'data-val-minlength-min',
+        let defRules: string[] = ['required', 'validateHidden', 'regex', 'rangeLength', 'maxLength', 'minLength', 'dateIso', 'digits',
+            'pattern', 'data-val-required', 'type', 'data-validation', 'min', 'max', 'range', 'equalTo', 'data-val-minlength-min',
             'data-val-equalto-other', 'data-val-maxlength-max', 'data-val-range-min', 'data-val-regex-pattern', 'data-val-length-max',
             'data-val-creditcard', 'data-val-phone'];
-        let acceptedTypes: string[] = ['email', 'url', 'date', 'number', 'tel'];
+        let acceptedTypes: string[] = ['hidden', 'email', 'url', 'date', 'number', 'tel'];
         for (let input of (this.inputElements)) {
             // Default attribute rules 
             let allRule: { [key: string]: Object } = {};
@@ -517,42 +517,62 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
             return;
         }
         let rules: string[] = Object.keys(this.rules[name]);
+        let hiddenType: boolean = false;
+        let validateHiddenType: boolean = false;
+        let vhPos: number = rules.indexOf('validateHidden');
+        let hPos: number = rules.indexOf('hidden');
         this.getInputElement(name);
-        this.getErrorElement(name);
-        for (let rule of rules) {
-            let errorMessage: string = this.getErrorMessage(this.rules[name][rule], rule);
-            let errorRule: ErrorRule = { name: name, message: errorMessage };
-            let eventArgs: FormEventArgs = {
-                inputName: name,
-                element: this.inputElement,
-                message: errorMessage
-            };
-            if (!this.isValid(name, rule) && !this.inputElement.classList.contains(this.ignore)) {
-                this.removeErrorRules(name);
-                this.errorRules.push(errorRule);
-                // Set aria attributes to invalid elements
-                this.inputElement.setAttribute('aria-invalid', 'true');
-                this.inputElement.setAttribute('aria-describedby', this.inputElement.id + '-info');
-                if (!this.infoElement) {
-                    this.createErrorElement(name, errorRule.message, this.inputElement);
-                } else {
-                    this.showMessage(errorRule);
-                }
-                eventArgs.errorElement = this.infoElement;
-                eventArgs.status = 'failure';
-                this.inputElement.classList.add(this.errorClass);
-                this.inputElement.classList.remove(this.validClass);
-                this.trigger('validationComplete', eventArgs);
-                // Set aria-required to required rule elements
-                if (rule === 'required') {
-                    this.inputElement.setAttribute('aria-required', 'true');
-                }
-                break;
-            } else {
-                this.hideMessage(name);
-                eventArgs.status = 'success';
-                this.trigger('validationComplete', eventArgs);
+        if (hPos !== -1) {
+            hiddenType = true;
+        }
+        if (vhPos !== -1) {
+            validateHiddenType = true;
+        }
+        if (!hiddenType || (hiddenType && validateHiddenType)) {
+            if (vhPos !== -1) {
+                rules.splice(vhPos, 1);
             }
+            if (hPos !== -1) {
+                rules.splice((hPos - 1), 1);
+            }
+            this.getErrorElement(name);
+            for (let rule of rules) {
+                let errorMessage: string = this.getErrorMessage(this.rules[name][rule], rule);
+                let errorRule: ErrorRule = { name: name, message: errorMessage };
+                let eventArgs: FormEventArgs = {
+                    inputName: name,
+                    element: this.inputElement,
+                    message: errorMessage
+                };
+                if (!this.isValid(name, rule) && !this.inputElement.classList.contains(this.ignore)) {
+                    this.removeErrorRules(name);
+                    this.errorRules.push(errorRule);
+                    // Set aria attributes to invalid elements
+                    this.inputElement.setAttribute('aria-invalid', 'true');
+                    this.inputElement.setAttribute('aria-describedby', this.inputElement.id + '-info');
+                    this.inputElement.classList.add(this.errorClass);
+                    this.inputElement.classList.remove(this.validClass);
+                    if (!this.infoElement) {
+                        this.createErrorElement(name, errorRule.message, this.inputElement);
+                    } else {
+                        this.showMessage(errorRule);
+                    }
+                    eventArgs.errorElement = this.infoElement;
+                    eventArgs.status = 'failure';
+                    this.trigger('validationComplete', eventArgs);
+                    // Set aria-required to required rule elements
+                    if (rule === 'required') {
+                        this.inputElement.setAttribute('aria-required', 'true');
+                    }
+                    break;
+                } else {
+                    this.hideMessage(name);
+                    eventArgs.status = 'success';
+                    this.trigger('validationComplete', eventArgs);
+                }
+            }
+        } else {
+            return;
         }
     }
 

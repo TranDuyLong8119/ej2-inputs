@@ -14,7 +14,7 @@
   .e-input-group textarea.e-input,
   .e-input-group.e-control-wrapper textarea.e-input {
     border: $input-border;
-    border-width: $input-border-width;
+    border-width: $input-box-border-width;
     font-family: $input-font-family;
     font-size: $input-font-size;
     font-weight: 400;
@@ -64,7 +64,7 @@
   .e-input-group.e-control-wrapper,
   .e-float-input,
   .e-float-input.e-control-wrapper {
-    border-radius: $input-border-radius;
+    border-radius: $input-box-border-radius;
   }
 
   .e-input#{$css}:focus {
@@ -243,9 +243,11 @@
   }
 
   .e-input-group.e-rtl .e-input-group-icon + .e-input-group-icon,
-  .e-input-group.e-control-wrapper.e-rtl .e-input-group-icon + .e-input-group-icon {
+  .e-input-group.e-control-wrapper.e-rtl .e-input-group-icon + .e-input-group-icon,
+  .e-input-group .e-input-group-icon + .e-input-group-icon,
+  .e-input-group.e-control-wrapper .e-input-group-icon + .e-input-group-icon {
     @if $skin-name == 'bootstrap' {
-      border-left-width: 1px;
+      border-left-width: $zero-value;
       border-right-width: $zero-value;
     }
   }
@@ -476,13 +478,18 @@
   }
 
   .e-input#{$css}.e-corner {
-    border-radius: $input-border-radius;
+    border-radius: $input-box-border-radius;
   }
 
   .e-input-group,
   .e-input-group.e-control-wrapper {
     display: inline-flex;
     vertical-align: middle;
+  }
+
+  .e-float-input:not(.e-input-group),
+  .e-float-input.e-control-wrapper:not(.e-input-group) {
+    display: inline-block;
   }
 
   .e-input-group .e-input-group-icon,
@@ -554,16 +561,16 @@
   .e-input-group.e-corner .e-input-group-icon:first-child,
   .e-input-group.e-control-wrapper.e-corner .e-input:first-child,
   .e-input-group.e-control-wrapper.e-corner .e-input-group-icon:first-child {
-    border-bottom-left-radius: $input-border-radius;
-    border-top-left-radius: $input-border-radius;
+    border-bottom-left-radius: $input-box-border-radius;
+    border-top-left-radius: $input-box-border-radius;
   }
 
   .e-input-group.e-corner .e-input:last-child,
   .e-input-group.e-corner .e-input-group-icon:last-child,
   .e-input-group.e-control-wrapper.e-corner .e-input:last-child,
   .e-input-group.e-control-wrapper.e-corner .e-input-group-icon:last-child {
-    border-bottom-right-radius: $input-border-radius;
-    border-top-right-radius: $input-border-radius;
+    border-bottom-right-radius: $input-box-border-radius;
+    border-top-right-radius: $input-box-border-radius;
   }
 
   .e-input-group.e-rtl .e-input-group-icon:first-child,
@@ -1464,18 +1471,18 @@
   .e-input-group.e-control-wrapper.e-corner.e-rtl .e-input:first-child,
   .e-input-group.e-control-wrapper.e-corner.e-rtl .e-input-group-icon:first-child {
     border-bottom-left-radius: $zero-value;
-    border-bottom-right-radius: $input-border-radius;
+    border-bottom-right-radius: $input-box-border-radius;
     border-top-left-radius: $zero-value;
-    border-top-right-radius: $input-border-radius;
+    border-top-right-radius: $input-box-border-radius;
   }
 
   .e-input-group.e-corner.e-rtl .e-input:last-child,
   .e-input-group.e-corner.e-rtl .e-input-group-icon:last-child,
   .e-input-group.e-control-wrapper.e-corner.e-rtl .e-input:last-child,
   .e-input-group.e-control-wrapper.e-corner.e-rtl .e-input-group-icon:last-child  {
-    border-bottom-left-radius: $input-border-radius;
+    border-bottom-left-radius: $input-box-border-radius;
     border-bottom-right-radius: $zero-value;
-    border-top-left-radius: $input-border-radius;
+    border-top-left-radius: $input-box-border-radius;
     border-top-right-radius: $zero-value;
   }
 
@@ -1498,7 +1505,7 @@
 
   .e-input-group.e-corner.e-rtl input.e-input:only-child,
   .e-input-group.e-control-wrapper.e-corner.e-rtl input.e-input:only-child {
-    border-radius: $input-border-radius;
+    border-radius: $input-box-border-radius;
   }
 
   .e-input-group.e-rtl .e-input:not(:first-child):focus,
@@ -1861,7 +1868,7 @@
 
   .e-input-group.e-input-focus.e-corner,
   .e-input-group.e-control-wrapper.e-input-focus.e-corner {
-    border-radius: $input-border-radius;
+    border-radius: $input-box-border-radius;
   }
 
   .e-input-group:not(.e-success):not(.e-warning):not(.e-error):not(.e-float-icon-left).e-disabled,
@@ -1887,7 +1894,7 @@
 
   .e-float-custom-tag,
   .e-float-custom-tag.e-control-wrapper {
-    display: block;
+    display: inline-block;
   }
 
   .e-float-custom-tag.e-input-group,
@@ -2072,19 +2079,14 @@
   input.e-input#{$css},
   .e-input-group input,
   .e-input-group.e-control-wrapper input,
-  .e-float-input.e-control-wrapper input,
   .e-input-group input.e-input,
-  .e-input-group.e-control-wrapper input.e-input,
-  .e-float-input input,
-  .e-float-input.e-control-wrapper input {
+  .e-input-group.e-control-wrapper input.e-input {
     @include input-sizing;
     @include input-height ($input-normal-height);
   }
 
   .e-float-input:not(.e-input-group) input,
-  .e-float-input:not(.e-input-group.e-control-wrapper) input,
-  .e-float-input.e-control-wrapper:not(.e-input-group) input,
-  .e-float-input.e-control-wrapper:not(.e-input-group.e-control-wrapper) input  {
+  .e-float-input.e-control-wrapper:not(.e-input-group) input {
     @include input-sizing;
     @include input-height ($float-input-normal-height);
   }
@@ -2984,6 +2986,7 @@
     min-height: $input-clear-icon-min-height;
     min-width: $input-clear-icon-min-width;
     padding-bottom: $input-clear-icon-padding-bottom;
+    padding-left: $input-clear-icon-padding-right;
     padding-right: $input-clear-icon-padding-right;
     padding-top: $input-clear-icon-padding-top;
   }

@@ -20,7 +20,8 @@ module.exports = function (config) {
       { pattern: "spec/**/*.spec.js", included: false },
       { pattern: "node_modules/@syncfusion/ej2-base/**/*.js", included: false }, 
       { pattern: "node_modules/@syncfusion/ej2-buttons/**/*.js", included: false },
-      { pattern: "node_modules/@syncfusion/ej2-popups/**/*.js", included: false }
+      { pattern: "node_modules/@syncfusion/ej2-popups/**/*.js", included: false },
+      { pattern: "node_modules/@syncfusion/ej2-splitbuttons/**/*.js", included: false }
       // Add dependent package's script files here              
     ],
 

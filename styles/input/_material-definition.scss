@@ -1,5 +1,5 @@
 $skin-name: 'material';
-$input-border-radius: $zero-value;
+$input-box-border-radius: $zero-value;
 $input-group-child-border-width: $zero-value;
 $input-bg-color: transparent;
 $input-font-size: 13px;
@@ -58,10 +58,10 @@ $input-font-style: normal;
 $input-font-normal: normal;
 $input-border: $zero-value $border-type;
 $float-input-border: $zero-value $border-type;
-$input-border-width: $zero-value $zero-value $one-value $zero-value;
+$input-box-border-width: $zero-value $zero-value $one-value $zero-value;
 $float-input-border-width: $zero-value $zero-value $one-value $zero-value;
 $input-focus-border-width: $zero-value $zero-value 2px $zero-value;
-$input-border-color: rgba($grey-light-font, .42);
+$input-box-border-color: rgba($grey-light-font, .42);
 $input-font-color: rgba($grey-light-font, .87);
 $input-icon-font-color: rgba($grey-black, .54);
 $input-clear-icon-color: rgba($grey-light-font, .54);
@@ -72,7 +72,7 @@ $input-placeholder: rgba($grey-light-font, .42);
 $input-active-border-color: $accent;
 $input-group-active-border-color: transparent;
 $input-disable-border-type: dashed;
-$input-disable-border-color: $input-border-color;
+$input-disable-border-color: $input-box-border-color;
 $input-disabled-group-bg-color: transparent;
 $input-border-left-width: $zero-value;
 $input-group-active-border: transparent;
@@ -105,12 +105,12 @@ $input-opacity: 1;
 $input-opacity-filter: 100;
 $input-group-border-width-focus: $zero-value $zero-value $one-value $zero-value;;
 $input-group-border-type-focus: $border-type;
-$input-group-border-color-focus: $input-border-color;
-$input-group-border-color-hover: $input-border-color;
+$input-group-border-color-focus: $input-box-border-color;
+$input-group-border-color-hover: $input-box-border-color;
 $input-group-border-width-hover: 1px;
 $input-group-border-right-focus: transparent;
 $input-group-border-left-focus: transparent;
-$input-group-full-border-color: $input-border-color;
+$input-group-full-border-color: $input-box-border-color;
 $input-group-full-border-width: $zero-value $zero-value $one-value $zero-value;
 $input-group-success-color: $input-success-color;
 $input-group-warning-color: $input-warning-color;
@@ -208,7 +208,7 @@ $input-clear-icon-font: '\e932';
 }
 @mixin input-selection {
   background: $input-accent;
-  color: $grey-dark-font;
+  color: $accent-font;
 }
 @mixin float-label-alignment {
   content: '';

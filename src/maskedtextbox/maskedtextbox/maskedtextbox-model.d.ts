@@ -1,4 +1,4 @@
-import { Component, Event, Property, EmitType, NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';import { isNullOrUndefined, formatUnit, getValue, setValue, attributes, addClass, detach, createElement } from '@syncfusion/ej2-base';import { Input, InputObject, FloatLabelType } from '../../input/input';import { regularExpressions, createMask, applyMask, wireEvents, unwireEvents, unstrippedValue, strippedValue } from '../base/index';import { setMaskValue, MaskUndo, setElementValue } from '../base/index';import { maskInputBlurHandler } from '../base/mask-base';
+import { Component, Event, Property, EmitType, NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';import { isNullOrUndefined, formatUnit, getValue, setValue, attributes, addClass, detach, createElement } from '@syncfusion/ej2-base';import { Input, InputObject, FloatLabelType } from '../../input/input';import { regularExpressions, createMask, applyMask, wireEvents, unwireEvents, unstrippedValue, strippedValue } from '../base/index';import { setMaskValue, MaskUndo, setElementValue, bindClearEvent } from '../base/index';import { maskInputBlurHandler } from '../base/mask-base';
 import {MaskChangeEventArgs,MaskFocusEventArgs} from "./maskedtextbox";
 import {ComponentModel} from '@syncfusion/ej2-base';
 
@@ -46,6 +46,12 @@ export interface MaskedTextBoxModel extends ComponentModel{
     enabled?: boolean;
 
     /**
+     * Specifies whether to show or hide the clear icon.
+     * @default false
+     */
+    showClearButton?: boolean;
+
+    /**
      * Sets a value that enables or disables the persisting state of the MaskedTextBox after reloading the page.
      * If enabled, the 'value' state will be persisted.
      * @default false
@@ -65,7 +71,7 @@ export interface MaskedTextBoxModel extends ComponentModel{
      * </a></b>, <b><a href="../maskedtextbox/mask-configuration.html#custom-characters" target="_blank">custom characters</a></b> and
      * <b><a href="../maskedtextbox/mask-configuration.html#regular-expression" target="_blank">regular expression</a></b> as mask elements.
      * For more information on mask, refer to
-     * [mask](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#standard-mask-elements).
+     * [mask](./mask-configuration.html#standard-mask-elements).
      * * If the mask value is empty, the MaskedTextBox will behave as an input element with text type.
      * @default null
      */
@@ -75,7 +81,7 @@ export interface MaskedTextBoxModel extends ComponentModel{
      * Gets or sets a value that will be shown as a prompting symbol for the masked value.
      * The symbol used to show input positions in the MaskedTextBox.
      * For more information on prompt-character, refer to
-     * [prompt-character](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#prompt-character).
+     * [prompt-character](./mask-configuration.html#prompt-character).
      * @default _
      */
     promptChar?: string;
@@ -112,7 +118,7 @@ export interface MaskedTextBoxModel extends ComponentModel{
      * </script>
      * ```
      * For more information on customCharacters, refer to
-     * [customCharacters](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#custom-characters).
+     * [customCharacters](./mask-configuration.html#custom-characters).
      * @default null
      */
     customCharacters?: { [x: string]: Object };

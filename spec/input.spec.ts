@@ -1727,6 +1727,61 @@ describe('Input Groups - Enable/Disable', () => {
         });
     });
 
+    describe('Check whether ripple effect enabled / disaabled through public method', () => {
+        let inputObj: InputObject;
+        let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputpopup', attrs: { type: 'text' } });
+        beforeAll(() => {
+            document.body.appendChild(element);
+            inputObj = Input.createInput({
+                element: element,
+                buttons: ['e-input-group-icon']
+            });
+        });
+        
+        it('Check mouse down event', () => {
+            Input.appendSpan('e-input-group-icon e-input-down', inputObj.container);
+            Input.appendSpan('e-input-group-icon e-input-down', inputObj.container);
+            Input.setRipple(false, [inputObj]);
+            let spanEle: HTMLElement = inputObj.buttons[0];
+            let mouseEvents: Event = document.createEvent('MouseEvents');
+            mouseEvents.initEvent('mousedown', true, true);
+            spanEle.dispatchEvent(mouseEvents);
+            spanEle.addEventListener('mousedown', function (): void {
+                expect((this.classList.contains('e-input-btn-ripple'))).toBe(false);
+            });
+        });
+
+        it('Check mouse down event', () => {
+            Input.appendSpan('e-input-group-icon e-input-down', inputObj.container);
+            Input.appendSpan('e-input-group-icon e-input-down', inputObj.container);
+            Input.setRipple(true, [inputObj]);
+            let spanEle: HTMLElement = inputObj.buttons[0];
+            let mouseEvents: Event = document.createEvent('MouseEvents');
+            mouseEvents.initEvent('mousedown', true, true);
+            spanEle.dispatchEvent(mouseEvents);
+            spanEle.addEventListener('mousedown', function (): void {
+                expect((this.classList.contains('e-input-btn-ripple'))).toBe(true);
+            });
+        });
+        it('Check mouse up event', (done: Function) => {
+            let spanEle: HTMLElement = inputObj.buttons[0];
+            let mouseEvents: Event = document.createEvent('MouseEvents');
+            mouseEvents.initEvent('mouseup', true, true);
+            spanEle.dispatchEvent(mouseEvents);
+            setTimeout(
+                () => {
+                    spanEle.addEventListener('mouseup', function (): void {
+                        expect((this.classList.contains('e-input-btn-ripple'))).toBe(false);
+                    });
+                    done();
+                },
+                1500);
+        });
+        afterAll(() => {
+            element.remove();
+        });
+    });
+
      describe('Readonly state with floating input', () => {
         let inputObj: InputObject;
         let element: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'inputclear2', attrs: { type: 'text' } });

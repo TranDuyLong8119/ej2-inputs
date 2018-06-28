@@ -2,7 +2,7 @@ import { Component, Event, Property, EmitType, NotifyPropertyChanges, INotifyPro
 import { isNullOrUndefined, formatUnit, getValue, setValue, attributes, addClass, detach, createElement } from '@syncfusion/ej2-base';
 import { Input, InputObject, FloatLabelType } from '../../input/input';
 import { regularExpressions, createMask, applyMask, wireEvents, unwireEvents, unstrippedValue, strippedValue } from '../base/index';
-import { setMaskValue, MaskUndo, setElementValue } from '../base/index';
+import { setMaskValue, MaskUndo, setElementValue, bindClearEvent } from '../base/index';
 import { MaskedTextBoxModel } from './maskedtextbox-model';
 import { maskInputBlurHandler } from '../base/mask-base';
 
@@ -88,6 +88,13 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
     public enabled: boolean;
 
     /**
+     * Specifies whether to show or hide the clear icon.
+     * @default false
+     */
+    @Property(false)
+    public showClearButton: boolean;
+
+    /**
      * Sets a value that enables or disables the persisting state of the MaskedTextBox after reloading the page.
      * If enabled, the 'value' state will be persisted.
      * @default false
@@ -109,7 +116,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * </a></b>, <b><a href="../maskedtextbox/mask-configuration.html#custom-characters" target="_blank">custom characters</a></b> and
      * <b><a href="../maskedtextbox/mask-configuration.html#regular-expression" target="_blank">regular expression</a></b> as mask elements.
      * For more information on mask, refer to
-     * [mask](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#standard-mask-elements).
+     * [mask](./mask-configuration.html#standard-mask-elements).
      * * If the mask value is empty, the MaskedTextBox will behave as an input element with text type.
      * @default null
      */
@@ -120,7 +127,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * Gets or sets a value that will be shown as a prompting symbol for the masked value.
      * The symbol used to show input positions in the MaskedTextBox.
      * For more information on prompt-character, refer to
-     * [prompt-character](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#prompt-character).
+     * [prompt-character](./mask-configuration.html#prompt-character).
      * @default _
      */
     @Property('_')
@@ -159,7 +166,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
      * </script>
      * ```
      * For more information on customCharacters, refer to
-     * [customCharacters](http://ej2.syncfusion.com/documentation/maskedtextbox/mask-configuration.html#custom-characters).
+     * [customCharacters](./mask-configuration.html#custom-characters).
      * @default null
      */
     @Property(null)
@@ -232,8 +239,12 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
                 input.setAttribute(this.element.attributes[i].nodeName, this.element.attributes[i].nodeValue);
                 input.innerHTML = this.element.innerHTML;
             }
-            this.element.parentNode.appendChild(input);
-            this.element.parentNode.removeChild(this.element);
+            if (this.element.hasAttribute('id')) {
+                this.element.removeAttribute('id');
+            }
+            this.element.classList.remove('e-control', 'e-maskedtextbox');
+            this.element.classList.add('e-mask-container');
+            this.element.appendChild(input);
             this.element = <HTMLInputElement>input;
             setValue('ej2_instances', ejInstance, this.element);
         }
@@ -261,7 +272,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
             this.isInitial = true;
             this.resetMaskedTextBox();
             this.isInitial = false;
-            this.setMaskPlaceholder(true);
+            this.setMaskPlaceholder(true, false);
             this.setWidth(this.width);
         }
     }
@@ -278,6 +289,9 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
         }
         createMask.call(this);
         applyMask.call(this);
+        if (this.mask === null || this.mask === '' && this.value !== undefined ) {
+            setElementValue.call(this, this.value);
+        }
         let val: string = strippedValue.call(this, this.element);
         this.prevValue = val;
         this.value = val;
@@ -287,8 +301,8 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
         wireEvents.call(this);
     }
 
-    private setMaskPlaceholder(setVal: boolean): void {
-        if (this.placeholder) {
+    private setMaskPlaceholder(setVal: boolean, dynamicPlaceholder: boolean): void {
+        if (dynamicPlaceholder || this.placeholder) {
             Input.setPlaceholder(this.placeholder, this.element);
             if (this.element.value === this.promptMask && setVal && this.floatLabelType !== 'Always') {
                 setElementValue.call(this, '');
@@ -306,18 +320,20 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
     private setWidth(width: string | number): void {
         if (!isNullOrUndefined(width)) {
             this.element.style.width = formatUnit(width);
+            this.inputObj.container.style.width = formatUnit(width);
         }
     }
 
     private createWrapper(): void {
         this.inputObj = Input.createInput({
             element: this.element,
-            customTag: this.angularTagName,
             floatLabelType: this.floatLabelType,
             properties: {
                 enableRtl: this.enableRtl,
+                cssClass: this.cssClass,
                 enabled: this.enabled,
-                placeholder: this.placeholder
+                placeholder: this.placeholder,
+                showClearButton: this.showClearButton
             }
         });
         this.inputObj.container.setAttribute('class', ROOT + ' ' + this.inputObj.container.getAttribute('class'));
@@ -333,11 +349,11 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
                 case 'value':
                     setMaskValue.call(this, this.value);
                     if (this.placeholder) {
-                        this.setMaskPlaceholder(false);
+                        this.setMaskPlaceholder(false, false);
                     }
                     break;
                 case 'placeholder':
-                    this.setMaskPlaceholder(true);
+                    this.setMaskPlaceholder(true, true);
                     break;
                 case 'width':
                     this.setWidth(newProp.width);
@@ -354,6 +370,15 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
                 case 'customCharacters':
                     this.customCharacters = newProp.customCharacters;
                     this.resetMaskedTextBox();
+                    break;
+                case 'showClearButton':
+                    Input.setClearButton(newProp.showClearButton, this.element, this.inputObj);
+                    bindClearEvent.call(this);
+                    break;
+                case 'floatLabelType':
+                    this.floatLabelType = newProp.floatLabelType;
+                    Input.removeFloating(this.inputObj);
+                    Input.addFloating(this.element, this.floatLabelType, this.placeholder);
                     break;
                 case 'mask':
                     let strippedValue: string = this.value;

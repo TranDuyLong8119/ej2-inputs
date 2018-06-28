@@ -1,7 +1,7 @@
 /**
  * MaskedTextBox base module
  */
-import { EventHandler, isNullOrUndefined, merge, attributes, addClass, removeClass, Browser } from '@syncfusion/ej2-base';
+import { EventHandler, isNullOrUndefined, merge, attributes, addClass, removeClass, Browser, extend } from '@syncfusion/ej2-base';
 import { Input } from '../../input/input';
 
 const ERROR: string = 'e-error';
@@ -32,8 +32,10 @@ export let regularExpressions: { [key: string]: string } = {
  * Generate required masking elements to the MaskedTextBox from user mask input.
  */
 export function createMask(): void {
-    attributes(this.element, { 'role': 'textbox', 'autocomplete': 'off', 'autocorrect': 'off', 'autocapitalize': 'off',
-    'spellcheck': 'false', 'aria-live': 'assertive', 'aria-valuenow': '' });
+    attributes(this.element, {
+        'role': 'textbox', 'autocomplete': 'off', 'autocorrect': 'off', 'autocapitalize': 'off',
+        'spellcheck': 'false', 'aria-live': 'assertive', 'aria-valuenow': ''
+    });
     if (this.mask) {
         let splitMask: string[] = this.mask.split(']');
         for (let i: number = 0; i < splitMask.length; i++) {
@@ -126,11 +128,15 @@ export function wireEvents(): void {
     EventHandler.add(this.element, 'keydown', maskInputKeyDownHandler, this);
     EventHandler.add(this.element, 'keypress', maskInputKeyPressHandler, this);
     EventHandler.add(this.element, 'keyup', maskInputKeyUpHandler, this);
+    EventHandler.add(this.element, 'input', maskInputHandler, this);
     EventHandler.add(this.element, 'focus', maskInputFocusHandler, this);
     EventHandler.add(this.element, 'blur', maskInputBlurHandler, this);
     EventHandler.add(this.element, 'paste', maskInputPasteHandler, this);
     EventHandler.add(this.element, 'cut', maskInputCutHandler, this);
     EventHandler.add(this.element, 'drop', maskInputDropHandler, this);
+    if (this.enabled) {
+        bindClearEvent.call(this);
+    }
 }
 
 /**
@@ -141,10 +147,36 @@ export function unwireEvents(): void {
     EventHandler.remove(this.element, 'keydown', maskInputKeyDownHandler);
     EventHandler.remove(this.element, 'keypress', maskInputKeyPressHandler);
     EventHandler.remove(this.element, 'keyup', maskInputKeyUpHandler);
+    EventHandler.remove(this.element, 'input', maskInputHandler);
     EventHandler.remove(this.element, 'focus', maskInputFocusHandler);
     EventHandler.remove(this.element, 'blur', maskInputBlurHandler);
     EventHandler.remove(this.element, 'paste', maskInputPasteHandler);
     EventHandler.remove(this.element, 'cut', maskInputCutHandler);
+}
+
+/**
+ * @hidden
+ * To bind required events to the MaskedTextBox clearButton.
+ */
+export function bindClearEvent(): void {
+    if (this.showClearButton) {
+        EventHandler.add(this.inputObj.clearButton, 'mousedown touchstart', resetHandler, this);
+    }
+}
+function resetHandler(e?: MouseEvent): void {
+    e.preventDefault();
+    if (!this.inputObj.clearButton.classList.contains('e-clear-icon-hide')) {
+        clear.call(this, e);
+    }
+}
+function clear(event: MouseEvent): void {
+    let value: string = this.element.value;
+    setElementValue.call(this, this.promptMask);
+    this.redoCollec.unshift({
+        value: this.promptMask, startIndex: this.element.selectionStart, endIndex: this.element.selectionEnd
+    });
+    triggerMaskChangeEvent.call(this, event, value);
+    this.element.setSelectionRange(0, 0);
 }
 
 /**
@@ -159,11 +191,13 @@ export function unstrippedValue(element: HTMLInputElement): string {
  * @hidden
  * To extract raw value from the MaskedTextBox.
  */
-export function strippedValue(element: HTMLInputElement): string {
+export function strippedValue(element: HTMLInputElement, maskValues: string): string {
     let value: string = '';
     let k: number = 0;
     let checkMask: boolean = false;
-    if (!isNullOrUndefined(element) && !isNullOrUndefined(this) && element.value !== this.promptMask) {
+    let maskValue: string = (!isNullOrUndefined(maskValues)) ? maskValues : (!isNullOrUndefined(element) &&
+        !isNullOrUndefined(this)) ? element.value : maskValues;
+    if (maskValue !== this.promptMask) {
         for (let i: number = 0; i < this.customRegExpCollec.length; i++) {
             if (checkMask) {
                 checkMask = false;
@@ -174,17 +208,20 @@ export function strippedValue(element: HTMLInputElement): string {
                 checkMask = true;
             }
             if (!checkMask) {
-                if ((element.value[i] !== this.promptChar) && (!isNullOrUndefined(this.customRegExpCollec[k]) &&
+                if ((maskValue[i] !== this.promptChar) && (!isNullOrUndefined(this.customRegExpCollec[k]) &&
                     ((!isNullOrUndefined(this.regExpCollec[this.customRegExpCollec[k]])) ||
                         (this.customRegExpCollec[k].length > 2 && this.customRegExpCollec[k][0] === '[' &&
                             this.customRegExpCollec[k][this.customRegExpCollec[k].length - 1] === ']') ||
                         (!isNullOrUndefined(this.customCharacters) &&
-                            (!isNullOrUndefined(this.customCharacters[this.customRegExpCollec[k]]))))) && (element.value !== '')) {
-                    value += element.value[i];
+                            (!isNullOrUndefined(this.customCharacters[this.customRegExpCollec[k]]))))) && (maskValue !== '')) {
+                    value += maskValue[i];
                 }
             }
             ++k;
         }
+    }
+    if (this.mask === null || this.mask === '' && this.value !== undefined) {
+            value = maskValue;
     }
     return value;
 }
@@ -210,16 +247,20 @@ export function maskInputFocusHandler(event: KeyboardEvent): void {
     this.focusEventArgs = eventArgs;
     if (this.mask) {
         this.isFocus = true;
-        if (this.placeholder && this.element.value === '') {
+        if (this.element.value === '') {
             setElementValue.call(this, this.promptMask);
+        } else {
+            setElementValue.call(this, this.element.value);
+        }
+        if (!Browser.isDevice && Browser.info.version === '11.0') {
             this.element.setSelectionRange(this.focusEventArgs.selectionStart, this.focusEventArgs.selectionEnd);
+        } else {
+            let delay: number = (Browser.isDevice && Browser.isIos) ? 450 : 0;
             setTimeout(
                 () => {
                     this.element.setSelectionRange(this.focusEventArgs.selectionStart, this.focusEventArgs.selectionEnd);
                 },
-                1);
-        } else {
-            this.element.setSelectionRange(this.focusEventArgs.selectionStart, this.focusEventArgs.selectionEnd);
+                delay);
         }
     }
 }
@@ -243,9 +284,10 @@ function maskInputPasteHandler(event: KeyboardEvent): void {
         let eIndex: number = this.element.selectionEnd;
         let oldValue: string = this.element.value;
         setElementValue.call(this, '');
+        this._callPasteHandler = true;
         setTimeout(
             () => {
-                let value: string = this.element.value;
+                let value: string = this.element.value.replace(/ /g, '');
                 if (this.redoCollec.length > 0 && this.redoCollec[0].value === this.element.value) {
                     value = strippedValue.call(this, this.element);
                 }
@@ -256,6 +298,7 @@ function maskInputPasteHandler(event: KeyboardEvent): void {
                 this.maskKeyPress = true;
                 do { validateValue.call(this, value[i], false, null); ++i; } while (i < value.length);
                 this.maskKeyPress = false;
+                this._callPasteHandler = false;
                 if (this.element.value === oldValue) {
                     let i: number = 0;
                     this.maskKeyPress = true;
@@ -287,19 +330,49 @@ export function maskInputDropHandler(event: MouseEvent): void {
     event.preventDefault();
 }
 
+function maskInputHandler(event: KeyboardEvent): void {
+    let eventArgs: Object = { ctrlKey: false, keyCode: 229 };
+    // tslint:disable-next-line
+    extend(event, eventArgs);
+    if (this.mask) {
+        if (this.element.value === '') {
+            this.redoCollec.unshift({
+                value: this.promptMask, startIndex: this.element.selectionStart, endIndex: this.element.selectionEnd
+            });
+        }
+        if (this.element.value.length === 1) {
+            this.element.value = this.element.value + this.promptMask;
+            this.element.setSelectionRange(1, 1);
+        }
+        if (!this._callPasteHandler) {
+            removeMaskInputValues.call(this, event);
+        }
+        if (this.element.value.length > this.promptMask.length) {
+            let startIndex: number = this.element.selectionStart;
+            let addedValues: number = this.element.value.length - this.promptMask.length;
+            let value: string = this.element.value.substring(startIndex - addedValues, startIndex);
+            this.maskKeyPress = false;
+            let i: number = 0;
+            do { validateValue.call(this, value[i], event.ctrlKey, event); ++i; } while (i < value.length);
+        }
+        let val: string = strippedValue.call(this, this.element);
+        this.prevValue = val;
+        this.value = val;
+        if (val === '') {
+            setElementValue.call(this, this.promptMask);
+            this.element.setSelectionRange(0, 0);
+        }
+    }
+}
+
 function maskInputKeyDownHandler(event: KeyboardEvent): void {
     if (this.mask) {
+        let value: Object = this;
         if (event.keyCode !== 229) {
             if (event.ctrlKey && (event.keyCode === 89 || event.keyCode === 90)) {
                 event.preventDefault();
             }
             removeMaskInputValues.call(this, event);
-        } else {
-            setTimeout(
-                () => {
-                    removeMaskInputValues.call(this, event);
-                },
-                0);
         }
         let startValue: string = this.element.value;
         if (event.ctrlKey && (event.keyCode === 89 || event.keyCode === 90)) {
@@ -505,9 +578,9 @@ function maskInputKeyUpHandler(event: KeyboardEvent): void {
                     let oldVal: string = collec.value.substring(startIndex - addedValues, startIndex);
                     collec = this.redoCollec[0];
                     val = val.trim();
-                    let isSpace : boolean = Browser.isAndroid && val === '';
+                    let isSpace: boolean = Browser.isAndroid && val === '';
                     if (!isSpace && oldVal !== val && collec.value.substring(startIndex - addedValues, startIndex) !== val) {
-                       validateValue.call(this, val, event.ctrlKey, event);
+                        validateValue.call(this, val, event.ctrlKey, event);
                     } else if (isSpace) {
                         preventUnsupportedValues.call(
                             this, event, startIndex - 1, this.element.selectionEnd - 1, val, event.ctrlKey, false);
@@ -532,6 +605,15 @@ function maskInputKeyUpHandler(event: KeyboardEvent): void {
         triggerMaskChangeEvent.call(this, event);
         this.value = this.element.value;
     }
+    if (this.element.selectionStart === 0 && this.element.selectionEnd === 0) {
+        // tslint:disable-next-line
+        let temp: any = this.element;
+        setTimeout(
+            () => {
+                temp.setSelectionRange(0, 0);
+            },
+            0);
+    }
 }
 
 function mobileSwipeCheck(key: string): void {
@@ -554,7 +636,7 @@ function mobileValidation(key: string): void {
 function validateValue(key: string, isCtrlKey: boolean, event: KeyboardEvent): void {
     mobileValidation.call(this, key);
     if (isNullOrUndefined(this) || isNullOrUndefined(key)) {
-        return;
+            return;
     }
     let startIndex: number = this.element.selectionStart;
     let initStartIndex: number = startIndex;
@@ -658,10 +740,10 @@ function applySupportedValues(event: KeyboardEvent, startIndex: number, keyValue
         keyValue = changeToLowerUpperCase.call(this, keyValue, this.element.value);
     }
     if (!isEqualVal) {
-    let value: string = this.element.value;
-    let elementValue: string = value.substring(0, startIndex) + keyValue + value.substring(startIndex + 1, value.length);
-    setElementValue.call(this, elementValue);
-    this.element.selectionStart = this.element.selectionEnd = startIndex + 1;
+        let value: string = this.element.value;
+        let elementValue: string = value.substring(0, startIndex) + keyValue + value.substring(startIndex + 1, value.length);
+        setElementValue.call(this, elementValue);
+        this.element.selectionStart = this.element.selectionEnd = startIndex + 1;
     }
     triggerMaskChangeEvent.call(this, event, eventOldVal);
 }
@@ -789,12 +871,15 @@ export function setMaskValue(val?: string): void {
         this.value = strippedValue.call(this, this.element);
         this.maskKeyPress = false;
         let labelElement: HTMLElement = <HTMLElement>this.element.parentNode.querySelector('.e-float-text');
-        if (this.element.value === this.promptMask && this.floatLabelType === 'Auto' &&
+        if (this.element.value === this.promptMask && this.floatLabelType === 'Auto' && this.placeholder &&
             !isNullOrUndefined(labelElement) && labelElement.classList.contains(TOPLABEL) && !this.isFocus) {
             removeClass([labelElement], TOPLABEL);
             addClass([labelElement], BOTTOMLABEL);
             setElementValue.call(this, '');
         }
+    }
+    if (this.mask === null || this.mask === '' && this.value !== undefined) {
+                setElementValue.call(this, this.value);
     }
 }
 
@@ -803,10 +888,18 @@ export function setMaskValue(val?: string): void {
  * To set updated values in the input element.
  */
 export function setElementValue(val: string, element?: HTMLInputElement): void {
-    if (!this.isFocus && this.floatLabelType === 'Auto' && isNullOrUndefined(this.value)) {
+    if (!this.isFocus && this.floatLabelType === 'Auto' && this.placeholder && isNullOrUndefined(this.value)) {
         val = '';
     }
-    Input.setValue(val, (element ? element : this.element), this.floatLabelType);
+    let value: string = strippedValue.call(this, (element ? element : this.element), val);
+    if (value === null || value === '') {
+        Input.setValue(val, (element ? element : this.element), this.floatLabelType, false);
+        if (this.showClearButton) {
+            this.inputObj.clearButton.classList.add('e-clear-icon-hide');
+        }
+    } else {
+        Input.setValue(val, (element ? element : this.element), this.floatLabelType, this.showClearButton);
+    }
 }
 
 /**

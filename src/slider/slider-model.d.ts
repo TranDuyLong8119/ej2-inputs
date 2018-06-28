@@ -1,4 +1,4 @@
-import { Component, EventHandler, Property, Event, EmitType, Complex } from '@syncfusion/ej2-base';import { L10n, Internationalization, NumberFormatOptions } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, ChildProperty } from '@syncfusion/ej2-base';import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';import { isNullOrUndefined, formatUnit, Browser } from '@syncfusion/ej2-base';import { Tooltip, Position, TooltipEventArgs } from '@syncfusion/ej2-popups';
+import { Component, EventHandler, Property, Event, EmitType, Complex, classList } from '@syncfusion/ej2-base';import { L10n, Internationalization, NumberFormatOptions } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, ChildProperty } from '@syncfusion/ej2-base';import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';import { isNullOrUndefined, formatUnit, Browser } from '@syncfusion/ej2-base';import { Tooltip, Position, TooltipEventArgs } from '@syncfusion/ej2-popups';
 import {Placement,TooltipPlacement,TooltipShowOn,SliderType,SliderOrientation,SliderTooltipEventArgs} from "./slider";
 import {ComponentModel} from '@syncfusion/ej2-base';
 
@@ -41,6 +41,55 @@ export interface TicksDataModel {
      * It is used to customize the Slider scale value to the desired format using Internationalization or events(custom formatting).
      */
     format?: string;
+
+}
+
+/**
+ * Interface for a class LimitData
+ */
+export interface LimitDataModel {
+
+    /**
+     * It is used to enable the limit in the slider.
+     * @default false
+     */
+    enabled?: boolean;
+
+    /**
+     * It is used to set the minimum start limit value.
+     * @default null
+     */
+    minStart?: number;
+
+    /**
+     * It is used to set the minimum end limit value.
+     * @default null
+     */
+    minEnd?: number;
+
+    /**
+     * It is used to set the maximum start limit value.
+     * @default null
+     */
+    maxStart?: number;
+
+    /**
+     * It is used to set the maximum end limit value.
+     * @default null
+     */
+    maxEnd?: number;
+
+    /**
+     * It is used to lock the first handle.
+     * @default false
+     */
+    startHandleFixed?: boolean;
+
+    /**
+     * It is used to lock the second handle.
+     * @default false
+     */
+    endHandleFixed?: boolean;
 
 }
 
@@ -98,6 +147,13 @@ export interface SliderModel extends ComponentModel{
     value?: number | number[];
 
     /**
+     * It is used to denote own array of slider values.
+     * The value should be specified in array of number or string.The min,max and step value is not considered
+     * @default null
+     */
+    customValues?: string[] | number[];
+
+    /**
      * It is used to denote the step value of Slider component which is the amount of Slider value change
      *  when increase / decrease button is clicked or press arrow keys or drag the thumb.
      *  Refer the documentation
@@ -124,7 +180,7 @@ export interface SliderModel extends ComponentModel{
      * The slider rendered with user defined values and can’t be interacted with user actions.
      * @default false
      */
-    readOnly?: boolean;
+    readonly?: boolean;
 
     /**
      * It is used to denote the type of the Slider. The available options are:
@@ -143,6 +199,15 @@ export interface SliderModel extends ComponentModel{
      * @default { placement: 'before' }
      */
     ticks?: TicksDataModel;
+
+    /**
+     * It is used to limit the slider movement within certain limits.
+     * Refer the documentation
+     *  {@link http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript here}
+     *  to know more about this property with demo
+     * @default { enabled: false }
+     */
+    limits?: LimitDataModel;
 
     /**
      * It is used to enable or disable the slider.

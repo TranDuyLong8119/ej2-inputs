@@ -1,0 +1,136 @@
+$input-border-radius: $zero-value;
+$input-group-child-border-width: $zero-value;
+$input-padding: 10px $zero-value 2px;
+$input-padding-bottom: 1px;
+$input-clear-icon: 18px;
+$input-bigger-padding: 19px $zero-value 2px;
+$input-bigger-padding-bottom: 1px;
+$input-child-padding: $zero-value 5px;
+$input-child-min-height: 24px;
+$input-child-min-width: 24px;
+$input-bigger-child-padding: $zero-value 5px;
+$input-bigger-child-min-height: 28px;
+$input-bigger-child-min-width: 28px;
+$input-margin-bottom: 4px;
+$input-bigger-margin-bottom: 7px;
+$input-small-margin-bottom: 3px;
+$input-small-bigger-margin-bottom: 5px;
+$input-small-padding: 7px $zero-value 2px;
+$input-small-padding-bottom: 1px;
+$input-small-clear-icon: 18px;
+$input-bigger-clear-icon: 24px;
+$input-bigger-small-padding: 14px $zero-value 1px;
+$input-bigger-small-padding-bottom: $zero-value;
+$input-bigger-small-child-padding: $zero-value 5px;
+$input-bigger-small-child-min-height: 24px;
+$input-bigger-small-child-min-width: 24px;
+$input-small-child-padding: $zero-value 5px;
+$input-small-child-min-height: 18px;
+$input-small-child-min-width: 18px;
+$input-font-family: 'Roboto', Segoe UI;
+$input-border: $zero-value $border-type;
+$input-border-width: $zero-value $zero-value $one-value $zero-value;
+$input-focus-border-width: $zero-value $zero-value 2px $zero-value;
+$input-border-color: rgba($grey-black, .12);
+$input-font-color: rgba($grey-light-font,1);
+$input-button-font-color: rgba($grey-black, .54);
+$input-clear-icon-color: rgba(255, 64, 129, 0.8);
+$input-error-color: $error-font;
+$input-accent: #00bcd4;
+$input-placeholder: rgba($grey-light-font, .38);
+$input-active-border-color: $input-accent;
+$input-group-active-border-color: transparent;
+$input-disable-border-type: dashed;
+$input-border-left-width: $zero-value;
+$input-group-active-border: transparent;
+$input-group-border: 1px $border-type;
+$input-group-border-width: $zero-value;
+$input-group-border-radius: 2px;
+$input-group-pressed-bg: rgba(255, 64, 129, 0.6);
+$input-hover-bg-color:  rgba(255, 64, 129, 0.4);
+$input-active-accent-color: $input-accent;
+$input-valid-group-border-width: 2px;
+$input-header-font-color: $grey-500;
+$input-child-margin-bottom: 3px;
+$input-child-margin-top: 4px;
+$input-child-small-bigger-margin-bottom: 3px;
+$input-child-small-bigger-margin-top: 12px;
+$input-child-small-margin-bottom: 2px;
+$input-child-small-margin-top: 10px;
+$input-child-bigger-margin-bottom: 5px;
+$input-child-bigger-margin-top: 12px;
+$input-disable-group-border-width: $zero-value $zero-value $one-value $zero-value;
+$input-opacity: .8;
+$input-opacity-filter: 80;
+$input-group-border-width-focus: $zero-value $zero-value $one-value $zero-value;;
+$input-group-border-type-focus: $border-type;
+$input-group-border-color-focus: transparent;
+$input-group-border-right-focus: transparent;
+$input-group-border-left-focus: transparent;
+$input-group-full-border-color: $input-border-color;
+$input-group-full-border-width: $zero-value $zero-value $one-value $zero-value;
+$input-group-success-color: $input-success-color;
+$input-group-warning-color: $input-warning-color;
+$input-group-error-color: $input-error-color;
+$input-valid-border-bottom-width: 2px;
+$input-press-font-color: rgba($grey-black, .54);
+$input-select-font-color: $active-font-color;
+$input-right-border-width: $zero-value;
+$input-ripple-color: rgba(255, 64, 129, 0.8);
+@mixin input-group-animation {
+  bottom: -2px;
+  content: '';
+  height: 2px;
+  position: absolute;
+  transition: .2s cubic-bezier(.4, 0, .4, 1);
+  width: 0;
+  z-index: 10;
+}
+@mixin input-group-animation-left {
+  left: 50%;
+}
+@mixin input-group-animation-width {
+  width: 50%;
+}
+@mixin input-group-animation-right {
+  right: 50%;
+}
+@mixin input-group-animation-bg {
+  background: $input-active-border-color;
+}
+@mixin input-group-success-animation-bg {
+  background: $input-success-color;
+}
+@mixin input-group-warning-animation-bg {
+  background: $input-warning-color;
+}
+@mixin input-group-error-animation-bg {
+  background: $input-error-color;
+}
+@mixin input-ripple-parent {
+  overflow: hidden;
+  position: relative;
+}
+@mixin input-ripple-style {
+  background: $input-ripple-color;
+  border-radius: 100%;
+  content: '';
+  display: block;
+  filter: alpha(opacity=75);
+  height: 50%;
+  left: 25%;
+  opacity: .75;
+  position: absolute;
+  top: 25%;
+  transform: scale(0);
+  width: 50%;
+}
+@mixin input-ripple-animation {
+  animation: e-input-ripple .45s linear;
+}
+@keyframes e-input-ripple {
+  100% {
+    opacity: 0;
+    transform: scale(4);
+   }
+ }

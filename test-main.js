@@ -31,6 +31,11 @@ require.config({
       name: '@syncfusion/ej2-popups',
       location: 'node_modules/@syncfusion/ej2-popups',
       main: 'index.js'            
+    },
+    { 
+      name: '@syncfusion/ej2-splitbuttons',
+      location: 'node_modules/@syncfusion/ej2-splitbuttons',
+      main: 'index.js'            
     }
     // Include dependent packages
   ],

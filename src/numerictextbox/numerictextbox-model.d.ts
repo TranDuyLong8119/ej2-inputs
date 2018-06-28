@@ -23,7 +23,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     /**
      * Specifies a minimum value that is allowed a user can enter.
      * For more information on min, refer to
-     * [min](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
+     * [min](./getting-started.html#range-validation).
      * @default null
      */
     min?: number;
@@ -31,7 +31,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     /**
      * Specifies a maximum value that is allowed a user can enter.
      * For more information on max, refer to
-     * [max](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
+     * [max](./getting-started.html#range-validation).
      * @default null
      */
     max?: number;
@@ -39,7 +39,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     /**
      * Specifies the incremental or decremental step size for the NumericTextBox.
      * For more information on step, refer to
-     * [step](http://ej2.syncfusion.com/documentation/numerictextbox/getting-started.html#range-validation).
+     * [step](./getting-started.html#range-validation).
      * @default 1
      */
     step?: number;
@@ -99,7 +99,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     /**
      * Specifies the number format that indicates the display format for the value of the NumericTextBox.
      * For more information on formats, refer to
-     * [formats](http://ej2.syncfusion.com/documentation/numerictextbox/formats.html#standard-formats).
+     * [formats](./formats.html#standard-formats).
      * @default 'n2'
      */
     format?: string;
@@ -107,7 +107,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     /**
      * Specifies the number precision applied to the textbox value when the NumericTextBox is focused.
      * For more information on decimals, refer to
-     * [decimals](http://ej2.syncfusion.com/documentation/numerictextbox/formats.html#precision-of-numbers).
+     * [decimals](./formats.html#precision-of-numbers).
      * @default null
      */
     decimals?: number;

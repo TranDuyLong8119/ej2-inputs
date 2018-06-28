@@ -475,7 +475,7 @@ export namespace Input {
      }
     }
 
-    export function addFloating(input: HTMLInputElement, type: FloatLabelType, placeholder: string): void {
+    export function addFloating(input: HTMLInputElement, type: FloatLabelType | string, placeholder: string): void {
       let container: HTMLElement = <HTMLElement>closest(input, '.' + CLASSNAMES.INPUTGROUP);
       if (type !== 'Never') {
       let customTag: string = container.tagName;
@@ -500,6 +500,62 @@ export namespace Input {
     }
 
    /**
+    * Enable or Disable the ripple effect on the icons inside the Input. Ripple effect is only applicable for material theme.
+    * ```
+    * E.g : Input.setRipple(true, [inputObjects]);
+    * ```
+    * @param isRipple
+    * - Boolean value to specify whether to enable the ripple effect.
+    * @param inputObject
+    * - Specify the collection of input objects.
+    */
+    export function setRipple (isRipple: boolean, inputObj: InputObject[]): void {
+        for (let i: number = 0 ; i < inputObj.length ; i++ ) {
+            _internalRipple(isRipple, inputObj[i].container);
+        }
+    }
+
+    function _internalRipple(isRipple: boolean, container: HTMLElement, button?: HTMLElement): void {
+        let argsButton: HTMLElement[] = [];
+        argsButton.push(button);
+        let buttons : Element[] =  isNullOrUndefined(button) ?
+        <NodeListOf<Element> & Element[]>container.querySelectorAll('.e-input-group-icon') : argsButton;
+        if ( isRipple && buttons.length > 0) {
+          for ( let index: number = 0 ; index < buttons.length; index++ ) {
+            buttons[index].addEventListener('mousedown', _onMouseDownRipple , false);
+            buttons[index].addEventListener('mouseup', _onMouseUpRipple , false);
+          }
+        } else if (buttons.length > 0) {
+            for ( let index: number = 0 ; index < buttons.length; index++ ) {
+                buttons[index].removeEventListener('mousedown', _onMouseDownRipple, this);
+                buttons[index].removeEventListener('mouseup', _onMouseUpRipple, this);
+            }
+        }
+    }
+
+    function _onMouseRipple (container?: HTMLElement, button?: Element): void {
+        if (!container.classList.contains('e-disabled') && !container.querySelector('input').readOnly ) {
+            button.classList.add('e-input-btn-ripple');
+        }
+    }
+
+    function _onMouseDownRipple(): void {
+        let ele: HTMLElement = this;
+        let parentEle: HTMLElement = this.parentElement;
+        while (!parentEle.classList.contains('e-input-group')) {
+            parentEle = parentEle.parentElement;
+        }
+        _onMouseRipple(parentEle , ele);
+    }
+
+    function _onMouseUpRipple (): void {
+        let ele: HTMLElement = this;
+        setTimeout(
+         () => { ele.classList.remove('e-input-btn-ripple'); },
+         500);
+    }
+
+   /**
     * Creates a new span element with the given icons added and append it in container element.
     * ```
     * E.g : Input.appendSpan('e-icon-spin', inputObj.container);
@@ -510,21 +566,12 @@ export namespace Input {
     */
     export function appendSpan(iconClass: string, container: HTMLElement): HTMLElement {
         let button: HTMLElement = <HTMLElement>createElement('span', { className: iconClass });
+        button.classList.add('e-input-group-icon');
         container.appendChild(button);
         if (!container.classList.contains(CLASSNAMES.INPUTGROUP)) {
           container.classList.add(CLASSNAMES.INPUTGROUP);
         }
-        button.addEventListener('mousedown', function() : void {
-          if (!container.classList.contains('e-disabled') && !container.querySelector('input').readOnly ) {
-            this.classList.add('e-input-btn-ripple');
-          }
-        });
-        button.addEventListener('mouseup', function() : void {
-         let ele: HTMLElement = this;
-         setTimeout(
-          () => { ele.classList.remove('e-input-btn-ripple'); },
-          500);
-        });
+        _internalRipple(true, container, button);
         return button;
     }
 }
@@ -584,7 +631,7 @@ export interface InputArgs {
     * * Always - The floating label will always float above the input.
     * * Auto - The floating label will float above the input after focusing or entering a value in the input.
     */
-    floatLabelType ?: FloatLabelType;
+    floatLabelType ?: FloatLabelType | string;
    /**
     * ```
     * E.g : Input.createInput({ element: element, properties: { readonly: true, placeholder: 'Search here' } });
@@ -635,7 +682,7 @@ export interface IInput {
      * * Always - The floating label will always float above the input.
      * * Auto - The floating label will float above the input after focusing or entering a value in the input.
      */
-    floatLabelType?: FloatLabelType;
+    floatLabelType?: FloatLabelType | string;
     /**
      *  Sets the change event mapping function to input.
      */

@@ -68,7 +68,11 @@
         }
 
         & .e-file-remove-btn.e-icons,
-        & .e-file-delete-btn.e-icons {
+        & .e-file-delete-btn.e-icons,
+        & .e-file-abort-btn.e-icons,
+        & .e-file-reload-btn.e-icons,
+        & .e-file-play-btn.e-icons,
+        & .e-file-pause-btn.e-icons {
           font-size: $remove-icon-font-size;
           margin: $remove-icon-margin;
           margin-top: $remove-icon-margin-top;
@@ -76,8 +80,27 @@
           top: $remove-icon-top-smaller;
         }
 
+        & .e-file-remove-btn.e-msie.e-icons,
+        & .e-file-delete-btn.e-msie.e-icons,
+        & .e-file-abort-btn.e-msie.e-icons,
+        & .e-file-reload-btn.e-msie.e-icons,
+        & .e-file-play-btn.e-msie.e-icons,
+        & .e-file-pause-btn.e-msie.e-icons {
+          padding: $icons-bigger-ie-padding;
+        }
+
+        & .e-file-play-btn.e-icons,
+        & .e-file-reload-btn.e-icons,
+        & .e-file-pause-btn.e-icons {
+          right: $pause-play-button-right-value-bigger;
+        }
+
         & .e-file-delete-btn.e-icons {
           font-size: $delete-icon-font-size;
+        }
+
+        & .e-file-abort-btn.e-icons {
+          font-size: $abort-icon-font-size;
         }
     }
 
@@ -108,32 +131,55 @@
           }
         }
 
-        & .e-upload-file-list {
-          & .e-file-container {
-            margin-left: $file-container-left;
-            margin-right: $margin-rtl;
+        & .e-upload-files {
+          & .e-upload-file-list {
+            & .e-file-container {
+              margin-left: $file-container-left;
+              margin-right: $margin-rtl;
 
 
-            & .e-file-status {
-              top: $file-status-rtl;
-            }
+              & .e-file-status {
+                top: $file-status-rtl;
+              }
 
-            & .e-upload-progress-wrap {
+              & .e-upload-progress-wrap {
 
-              & .e-progress-bar-text {
-                left: $progress-bar-text-right;
-                right: initial;
+                & .e-progress-bar-text {
+                  left: $progress-bar-text-right;
+                  right: initial;
+                }
               }
             }
-          }
 
-          & .e-file-remove-btn.e-icons,
-          & .e-file-delete-btn.e-icons {
-            left: $remove-icon-rtl-bigger;
-            margin-left: $margin-rtl;
-            margin-right: $margin-rtl;
-            padding: $delete-icon-padding;
-            top: $remove-icon-top;
+            & .e-file-remove-btn.e-icons,
+            & .e-file-delete-btn.e-icons,
+            & .e-file-abort-btn.e-icons,
+            & .e-file-reload-btn.e-icons,
+            & .e-file-play-btn.e-icons,
+            & .e-file-pause-btn.e-icons {
+              left: $remove-icon-rtl-bigger;
+              margin-left: $margin-rtl;
+              margin-right: $margin-rtl;
+              padding: $delete-icon-padding;
+              top: $remove-icon-top;
+            }
+
+            & .e-file-remove-btn.e-msie.e-icons,
+            & .e-file-delete-btn.e-msie.e-icons,
+            & .e-file-abort-btn.e-msie.e-icons,
+            & .e-file-reload-btn.e-msie.e-icons,
+            & .e-file-play-btn.e-msie.e-icons,
+            & .e-file-pause-btn.e-msie.e-icons {
+              padding: $icons-bigger-ie-padding;
+            }
+
+            & .e-file-play-btn,
+            & .e-file-reload-btn,
+            & .e-file-pause-btn, {
+              &.e-icons {
+                left: $pause-play-button-right-value-bigger-rtl;
+              }
+            }
           }
         }
       }
@@ -264,7 +310,11 @@
       }
 
       & .e-file-remove-btn.e-icons,
-      & .e-file-delete-btn.e-icons {
+      & .e-file-delete-btn.e-icons,
+      & .e-file-abort-btn.e-icons,
+      & .e-file-pause-btn.e-icons,
+      & .e-file-play-btn.e-icons,
+      & .e-file-reload-btn.e-icons {
         align-items: center;
         cursor: pointer;
         display: inline-flex;
@@ -285,8 +335,27 @@
         }
       }
 
+      & .e-file-remove-btn.e-msie.e-icons,
+      & .e-file-delete-btn.e-msie.e-icons,
+      & .e-file-abort-btn.e-msie.e-icons,
+      & .e-file-pause-btn.e-msie.e-icons,
+      & .e-file-play-btn.e-msie.e-icons,
+      & .e-file-reload-btn.e-msie.e-icons {
+        padding: $icons-small-ie-padding;
+      }
+
+      & .e-file-pause-btn.e-icons,
+      & .e-file-play-btn.e-icons,
+      & .e-file-reload-btn.e-icons {
+        right: $pause-play-button-right-value;
+      }
+
       & .e-file-remove-btn.e-icons:not(.e-upload-progress):hover,
       & .e-file-delete-btn.e-icons:not(.e-upload-progress):hover,
+      & .e-file-pause-btn.e-icons:not(.e-upload-progress):hover,
+      & .e-file-play-btn.e-icons:not(.e-upload-progress):hover,
+      & .e-file-reload-btn.e-icons:hover,
+      & .e-file-abort-btn.e-icons:not(.e-disabled):hover,
       & .e-clear-icon-focus {
         background-color: $clear-icon-focus-color;
         border-color: transparent;
@@ -296,6 +365,11 @@
 
       & .e-file-delete-btn.e-icons {
         font-size: $delete-icon-font-size-smaller;
+        opacity: $delete-icon-opacity;
+      }
+
+      & .e-file-abort-btn.e-icons {
+        font-size: $abort-icon-font-size-smaller;
         opacity: $delete-icon-opacity;
       }
     }
@@ -336,57 +410,78 @@
         float: $float-left;
       }
 
-      & .e-upload-file-list {
-        & .e-file-container {
-          height: $file-container-height;
-          margin-left: $file-container-left;
-          margin-right: $margin-rtl-smaller;
-          position: relative;
-
-          & .e-rtl-container {
-            direction: ltr;
-            float: $float-right;
-            width: $file-container-height;
-          }
-
-          & .e-file-type {
-            float: $float-right;
-          }
-
-          & .e-file-name {
-            float: $float-right;
-          }
-
-          & .e-file-size {
-            direction: ltr;
-            float: $float-right;
+      & .e-upload-files {
+        & .e-upload-file-list {
+          & .e-file-container {
+            height: $file-container-height;
+            margin-left: $file-container-left;
+            margin-right: $margin-rtl-smaller;
             position: relative;
-            text-align: right;
-            width: $file-container-height;
-          }
 
-          & .e-upload-progress-wrap {
-            float: $float-right;
-            position: initial;
-            top: $progress-bar-wrap-top-smaller;
-            width: $progress-bar-width-rtl;
+            & .e-rtl-container {
+              direction: ltr;
+              float: $float-right;
+              width: $file-container-height;
+            }
 
-            & .e-progress-bar-text {
-              float: $float-left;
-              right: $progress-text-rtl-smaller;
-              top: $rtl-progress-top;
+            & .e-file-type {
+              float: $float-right;
+            }
+
+            & .e-file-name {
+              float: $float-right;
+            }
+
+            & .e-file-size {
+              direction: ltr;
+              float: $float-right;
+              position: relative;
+              text-align: right;
+              width: $file-container-height;
+            }
+
+            & .e-upload-progress-wrap {
+              float: $float-right;
+              position: initial;
+              top: $progress-bar-wrap-top-smaller;
+              width: $progress-bar-width-rtl;
+
+              & .e-progress-bar-text {
+                float: $float-left;
+                right: $progress-text-rtl-smaller;
+                top: $rtl-progress-top;
+              }
             }
           }
-        }
 
-        & .e-file-remove-btn,
-        & .e-file-delete-btn {
-          &.e-icons {
-            left: $left;
-            margin-left: $margin-rtl-smaller;
-            margin-right: $margin-rtl-smaller;
-            right: auto;
-            top: $remove-icon-rtl-top-smaller;
+          & .e-file-remove-btn,
+          & .e-file-delete-btn,
+          & .e-file-abort-btn,
+          & .e-file-reload-btn,
+          & .e-file-pause-btn,
+          & .e-file-play-btn, {
+            &.e-icons {
+              left: $left;
+              margin-left: $margin-rtl-smaller;
+              margin-right: $margin-rtl-smaller;
+              right: auto;
+              top: $remove-icon-rtl-top-smaller;
+            }
+          }
+
+          & .e-file-reload-btn {
+            &.e-icons {
+              left: $reload-btn-right;
+              right: auto;
+            }
+          }
+
+          & .e-file-play-btn,
+          & .e-file-reload-btn,
+          & .e-file-pause-btn, {
+            &.e-icons {
+              left: $pause-play-button-right-value;
+            }
           }
         }
       }

@@ -1,6 +1,6 @@
 @include export-module('slider-theme') {
   /*! component theme */
-  #{&}.e-slider-container {
+  .e-control-wrapper.e-slider-container {
     @if $skin-name == 'material' {
       &.e-material-slider .e-slider .e-handle.e-handle-first {
         background: transparent;
@@ -59,7 +59,6 @@
     .e-slider {
       .e-range {
         background-color: $slider-range-bar-color;
-        z-index: 8;
         @if $skin-name == 'highcontrast' {
           border-radius: 4px;
         }
@@ -161,7 +160,7 @@
   }
 }
 
-#{&}.e-slider-container {
+.e-control-wrapper.e-slider-container {
   &:not(.e-disabled):not(.e-read-only):active {
     .e-handle {
       @if $skin-name == 'fabric' {

@@ -2,13 +2,99 @@
 
 ## [Unreleased]
 
-## 16.1.48 (2018-06-14)
+## 16.2.41 (2018-06-25)
 
-### Input
+### Uploader
 
 #### Bug Fixes
 
-- Typing issues resolved in `Focus` and `Blur` event arguments.
+- No more files can upload which has wrong extension through `Choose Files` and change `all files`.
+
+## 16.2.41 (2018-06-25)
+
+### Common
+
+#### Breaking Changes
+
+- The splitbuttons package is used by ColorPicker component, so the splitbuttons package is a dependency for the inputs package.
+
+### Form-validator
+
+#### New Features
+
+- Provided option to validate the hidden element by using `validateHidden` attribute.
+
+### MaskedTextBox
+
+#### New Features
+
+- Provided option to show/hide clear button to reset the value in MaskedTextBox
+
+### NumericTextBox
+
+#### New Features
+
+- Provided option to show/hide clear button to reset the value in NumericTextBox.
+- Prevented to type unwanted text and symbols in NumericTextBox.
+
+### Slider
+
+#### New Features
+
+- Limits implemented to limit movement interval of min and max values to certain range.
+- Drag interval implemented to interact with the range slider by dragging the range.
+- Provided to support custom value arrays.
+- Bootstrap theme tooltip appearance improved by enabling tooltip pointer.
+
+#### Breaking Changes
+
+- The following API namings are renamed.
+
+| Existing API Name | New API Name    |
+| :-------------:   |:-------------:  |
+| readOnly          | readonly        |
+
+### ColorPicker
+
+Color picker is a user interface that is used to select and adjust color values.
+
+- **Color specification**: Supports `Red Green Blue`, `Hue Saturation Value` and `Hex` codes.
+
+- **Mode**: Supports `Picker` and `Palette` mode.
+
+- **Inline**: Supports inline type rendering of color picker.
+
+- **Custom palettes**: Allows you to customize palettes and supports multiple palette groups rendering.
+
+- **Opacity**: Allows to set and change the `opacity` of the selected color.
+
+- **Accessibility**: Built-in accessibility features to access color picker using the keyboard, screen readers, or other assistive technology devices.
+
+### Uploader
+
+#### New Features
+
+- Added `chunked upload` support to upload large files asynchronously with `pause` and `resume` options.
+- Support has been provided to resume automatically on failed chunk up to `maximum retry` options.
+- Included option to handle `retry upload` through UI (User Interface).
+- Support to `cancel the request` while uploading a file is added.
+
+#### Bug Fixes
+
+- Provided option to customize request header on trigger uploading and removing events.
+- Provided option to add additional data in removing event.
+- The issue with rendering Uploader component in internet explorer browser has been fixed.
+- The issue with submitting single file upload's value has been fixed.
+
+### TextBox
+
+#### New Features
+
+- The clear button can be enabled/disabled dynamically through `setClearButton` method.
+
+#### Bug Fixes
+
+- Theme compatibility issue resolved for CSS Input component.
 
 ## 16.1.45 (2018-05-23)
 
@@ -29,14 +115,6 @@
 
 ## 16.1.38 (2018-05-02)
 
-### Uploader
-
-#### Bug Fixes
-
-- Provided option to customize request header on trigger `uploading` and `removing` events.
-
-- Provided option to add additional data in `removing` event.
-
 ### NumericTextBox
 
 #### Bug Fixes
@@ -47,7 +125,7 @@
 
 ### NumericTextBox
 
-#### Features
+#### New Features
 
 - Provided clear button option in NumericTextBox.
 
@@ -63,47 +141,13 @@
 
 - While dynamically changing the MaskedTextBox value as null, value not updated properly issue is fixed.
 
-### Uploader
-
-#### Bug Fixes
-
-- The script issue with removing uploaded files has been fixed.
-
-## 16.1.34 (2018-04-10)
-
-### FormValidator
-
-#### Bug Fixes
-
-- Resolved multiple form validation issue.
-
-## 16.1.29 (2018-03-13)
-
-### Input
-
-#### Features
-
-- The clear button can be enabled/disabled dynamically through `setClearButton` method.
-
-## 16.1.28-preview (2018-03-09)
+## 16.1.28 (2018-03-09)
 
 ### NumericTextBox
 
 #### Bug Fixes
 
 - In NumericTextBox, unwanted “change” events has been prevented from triggering.
-
-### Uploader
-
-#### Bug Fixes
-
-- The issue with rendering Uploader component in internet explorer browser has been fixed.
-
-### Input
-
-#### Bug Fixes
-
-- Theme compatibility issue resolved for CSS Input component.
 
 ## 16.1.24 (2018-02-22)
 

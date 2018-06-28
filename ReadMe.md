@@ -5,6 +5,7 @@ A package of Essential JS 2 Input textbox components. It comes with full support
 * [TextBox Demos](http://ej2.syncfusion.com/demos/#/textboxes/default.html)
 * [MaskedTextBox Demos](http://ej2.syncfusion.com/demos/#/maskedtextbox/default.html)
 * [Uploader](http://ej2.syncfusion.com/demos/#/uploader/default.html)
+* [ColorPicker](http://ej2.syncfusion.com/demos/#/colorpicker/default.html)
 
 ## Installing
 
