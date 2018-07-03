@@ -558,7 +558,15 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
                         this.showMessage(errorRule);
                     }
                     eventArgs.errorElement = this.infoElement;
-                    eventArgs.status = 'failure';
+                    if (eventArgs.errorElement) {
+                        if (eventArgs.errorElement.getAttribute('aria-invalid') === 'false') {
+                            eventArgs.status = 'success';
+                        } else {
+                            eventArgs.status = 'failure';
+                            this.inputElement.classList.add(this.errorClass);
+                            this.inputElement.classList.remove(this.validClass);
+                        }
+                    }
                     this.trigger('validationComplete', eventArgs);
                     // Set aria-required to required rule elements
                     if (rule === 'required') {

@@ -210,6 +210,12 @@ export interface UploaderModel extends ComponentModel{
     showFileList?: boolean;
 
     /**
+     * Triggers when the component is created.
+     * @event 
+     */
+    created?: EmitType<Object>;
+
+    /**
      * Triggers after selecting or dropping the files by adding the files in upload queue.
      * @event
      */

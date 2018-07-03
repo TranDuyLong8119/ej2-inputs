@@ -948,9 +948,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private handlerDown(e: MouseEvent & TouchEvent): void {
-        if (e.type !== 'touchstart') {
-            e.preventDefault();
-        }
+        e.preventDefault();
         let x: number; let y: number;
         if (e.type === 'mousedown') {
             this.clientX = Math.abs(e.pageX - pageXOffset); this.clientY = Math.abs(e.pageY - pageYOffset);

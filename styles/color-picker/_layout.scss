@@ -185,6 +185,7 @@
     & .e-hsv-container {
       border-bottom: $color-picker-border;
       position: relative;
+      touch-action: none;
 
       & .e-hsv-color {
         background: linear-gradient(to bottom, $to-bottom-gradient-start 0, $to-bottom-gradient-end 100%), linear-gradient(to right, $to-right-gradient-start 0, $to-right-gradient-end 100%);
@@ -201,6 +202,7 @@
         margin-left: $handler-margin;
         margin-top: $handler-margin;
         position: absolute;
+        touch-action: none;
         user-select: none;
         width: $handler-width;
       }

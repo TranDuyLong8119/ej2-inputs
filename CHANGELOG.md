@@ -2,13 +2,27 @@
 
 ## [Unreleased]
 
-## 16.2.41 (2018-06-25)
+## 16.2.43 (2018-07-03)
+
+### ColorPicker
+
+#### Bug Fixes
+
+- IOS background scrolling issue fixed.
+
+### Form-validator
+
+#### Bug Fixes
+
+- Resolved status `updation` issue.
 
 ### Uploader
 
 #### Bug Fixes
 
-- No more files can upload which has wrong extension through `Choose Files` and change `all files`.
+- The files with the wrong extension cannot be uploaded when filtering the files by all files in the file dialog.
+
+- The `clearAll` method removes upload element’s value along with file list.
 
 ## 16.2.41 (2018-06-25)
 

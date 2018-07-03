@@ -466,6 +466,13 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     @Property(true)
     public showFileList: boolean;
 
+    /** 
+     * Triggers when the component is created.
+     * @event 
+     */
+    @Event()
+    public created: EmitType<Object>;
+
     /**
      * Triggers after selecting or dropping the files by adding the files in upload queue.
      * @event
@@ -2385,7 +2392,10 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
      * @returns void
      */
     public clearAll(): void {
-        if (isNullOrUndefined(this.listParent)) { return; }
+        if (isNullOrUndefined(this.listParent)) {
+            if (Browser.info.name !== 'msie') { this.element.value = ''; }
+            return;
+        }
         let eventArgs: ClearingEventArgs = {
             cancel: false,
             filesData: this.filesData

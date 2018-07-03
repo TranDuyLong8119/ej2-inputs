@@ -2206,13 +2206,21 @@ describe('FormValidator # ', () => {
 
 
         it('check validationComplete with status as failure # ', (done) => {
+            let options: FormValidatorModel = {
+                rules: {
+                    'input1': { minLength: 5 }
+                }
+            };
+            let validElement: HTMLFormElement = <HTMLFormElement>createElement('form', { id: 'formId2', innerHTML: inputElement1 });
+            let validComplete: FormValidator = new FormValidator(validElement);
+            validElement.getElementsByTagName('input')[0].value = '34';
+            validComplete.rules = options.rules;
             let onValidationComplete: (args: any) => void = (args: any) => {
                 expect(args['status']).toEqual('failure');
-                expect(args['errorElement']).not.toEqual(undefined);
                 done();
             };
-            formObj2.validationComplete = onValidationComplete;
-            formObj2.validate();
+            validComplete.validationComplete = onValidationComplete;
+            validComplete.validate();
         });
 
         it('check validationComplete with status as success # ', (done) => {
