@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 16.2.44 (2018-07-10)
+
+### Form-validator
+
+#### Bug Fixes
+
+- Resolved status `updation` issue when optional validation rules passed.
+
 ## 16.2.43 (2018-07-03)
 
 ### ColorPicker

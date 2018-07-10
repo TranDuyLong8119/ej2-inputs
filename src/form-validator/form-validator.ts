@@ -558,15 +558,10 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
                         this.showMessage(errorRule);
                     }
                     eventArgs.errorElement = this.infoElement;
-                    if (eventArgs.errorElement) {
-                        if (eventArgs.errorElement.getAttribute('aria-invalid') === 'false') {
-                            eventArgs.status = 'success';
-                        } else {
-                            eventArgs.status = 'failure';
-                            this.inputElement.classList.add(this.errorClass);
-                            this.inputElement.classList.remove(this.validClass);
-                        }
-                    }
+                    eventArgs.status = 'failure';
+                    this.inputElement.classList.add(this.errorClass);
+                    this.inputElement.classList.remove(this.validClass);
+                    this.optionalValidationStatus(name, eventArgs);
                     this.trigger('validationComplete', eventArgs);
                     // Set aria-required to required rule elements
                     if (rule === 'required') {
@@ -581,6 +576,16 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
             }
         } else {
             return;
+        }
+    }
+
+    // Update the optional validation status
+    private optionalValidationStatus(name: string, refer: FormEventArgs): void {
+        if (!this.rules[name][this.required] && !this.inputElement.value.length) {
+            this.infoElement.innerHTML = this.inputElement.value;
+            this.infoElement.setAttribute('aria-invalid', 'false');
+            refer.status = '';
+            this.hideMessage(name);
         }
     }
 

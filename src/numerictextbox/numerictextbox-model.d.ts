@@ -17,6 +17,7 @@ export interface NumericTextBoxModel extends ComponentModel{
     /**
      * Sets the value of the NumericTextBox.
      * @default null
+     * @aspType object
      */
     value?: number;
 
@@ -25,6 +26,7 @@ export interface NumericTextBoxModel extends ComponentModel{
      * For more information on min, refer to
      * [min](./getting-started.html#range-validation).
      * @default null
+     * @aspType object
      */
     min?: number;
 
@@ -33,6 +35,7 @@ export interface NumericTextBoxModel extends ComponentModel{
      * For more information on max, refer to
      * [max](./getting-started.html#range-validation).
      * @default null
+     * @aspType object
      */
     max?: number;
 
