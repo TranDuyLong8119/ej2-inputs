@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ColorPicker</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Typescript UI Controls" />
+    <meta name="author" content="Syncfusion" />
+    <link id="theme" href="./../../../styles/color-picker/highcontrast.css" rel="stylesheet" />
+    <script src="./../../../node_modules/requirejs/require.js" data-main="index"></script>
+    <script>
+        require.config({
+            packages: [{
+                    name: '@syncfusion/ej2-base',
+                    location: './../../../node_modules/@syncfusion/ej2-base',
+                    main: 'index.js'
+                },
+                {
+                    name: '@syncfusion/ej2-buttons',
+                    location: './../../../node_modules/@syncfusion/ej2-buttons',
+                    main: 'src/button/button.js'
+                },
+                {
+                    name: '@syncfusion/ej2-popups',
+                    location: './../../../node_modules/@syncfusion/ej2-popups',
+                    main: 'index.js'
+                },
+                {
+                    name: '@syncfusion/ej2-splitbuttons',
+                    location: './../../../node_modules/@syncfusion/ej2-splitbuttons',
+                    main: 'index.js'
+                }
+            ]
+        });
+    </script>
+    <style>
+        .colorpicker-sample {
+            min-height: 500px;
+            width: 100%;
+        }
+
+        .control-section {
+            margin: 4% 22%;
+        }
+
+        .colorpicker-demo {
+            display: inline-block;
+            margin: 3% 0 0 7%;
+            vertical-align: middle;
+        }
+
+        h4 {
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .e-container .e-palette .e-custom-tiles {
+            height: 32px;
+            width: 32px;
+            border-radius: 20px;
+            margin: 4px;
+        }
+
+        .e-container .e-palette .e-custom-tiles:hover {
+            border: none;
+            box-shadow: none;
+            transform: scale(1.2);
+            transition: transform .2s ease-out;
+        }
+
+        .e-container .e-palette .e-custom-tiles.e-selected {
+            border: 0;
+        }
+
+        .e-custom-tiles .e-custom-selection {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 20px;
+            transform: scale(0);
+            transition: transform 1.2s ease-in;
+        }
+
+        .e-custom-tiles.e-selected .e-custom-selection {
+            transform: scale(0.8);
+            background-color: snow;
+            transition: transform .2s ease-out;
+        }
+
+        .e-container {
+            background-color: transparent;
+            box-shadow: none;
+        }
+
+        .e-container .e-palette .e-multiple-custom {
+            height: 24px;
+            width: 40px;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+            margin: 1px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="colorpicker-sample">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <button class="e-btn" id="material">Material</button>
+                    </td>
+                    <td>
+                        <button class="e-btn" id="fabric">Fabric</button>
+                    </td>
+                    <td>
+                        <button class="e-btn" id="bootstrap">Bootstrap</button>
+                    </td>
+                    <td>
+                        <button class="e-btn" id="highcontrast">Highcontrast</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="control-section">
+            <div class="colorpicker-demo">
+                <h4>Select background color</h4>
+                <input id="color-palette-flat" type="color">
+            </div>
+            <div class="colorpicker-demo">
+                <h3>or</h3>
+            </div>
+            <div class="colorpicker-demo">
+                <h4>Choose custom color</h4>
+                <input id="color-picker-flat" type="color">
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

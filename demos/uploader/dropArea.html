@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Drag and Drop support</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Typescript UI Controls" />
+    <meta name="author" content="Syncfusion" />
+    <link href="../../node_modules/@syncfusion/ej2-buttons/styles/material.css" rel="stylesheet" />
+    <link href="../../node_modules/@syncfusion/ej2-popups/styles/material.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../../styles/material.css" />
+    <script src="../../node_modules/requirejs/require.js" data-main="drop"></script>
+    <script>
+        require.config({
+            packages: [{
+                name: '@syncfusion/ej2-base',
+                location: '../../node_modules/@syncfusion/ej2-base',
+                main: 'index.js'
+            },
+            {
+                name: '@syncfusion/ej2-buttons',
+                location: '../../node_modules/@syncfusion/ej2-buttons',
+                main: 'src/button/button.js'
+            },
+            {
+                name: '@syncfusion/ej2-popups',
+                location: '../../node_modules/@syncfusion/ej2-popups',
+                main: 'index.js'
+            },
+            ]
+        });
+    </script>
+</head>
+
+<body>
+    <div style='margin: 0 auto; width: 500px'>
+        <div id='dropArea' style='height: auto; overflow: auto'>
+            <span id='drop'> Drop files here or <a href="" id='browse'><u>Browse</u></a> </span>
+            <input type='file' id='fileupload'/>
+        </div>
+    </div>
+       
+<style>
+    .control_wrapper {
+        max-width: 500px;
+        margin: auto;
+    }
+    .e-upload {
+        width: 100%;
+    }
+    .e-file-select-wrap {
+        display: none;
+    }
+    .e-upload {
+        border: none;
+        margin-top: 15px;
+    }
+    #drop {
+        padding-left: 30%;
+    }
+    #dropArea {
+        min-height: 18px;
+        border: 1px dashed #c3c3cc;
+        padding-top: 15px;
+    }
+    span.file-icon.png, span.file-icon.PNG {
+        background-image: url('images/png.png');
+    }
+
+    span.file-icon.txt, span.file-icon.docx{
+        background-image: url('images/txt.png');
+    }
+
+    span.file-icon.zip{
+        background-image: url('images/zip.png');
+    }
+
+    span.file-icon.html{
+        background-image: url('images/html.png');
+    }
+    
+    span.file-icon.css{
+        background-image: url('images/css.png');
+    }
+
+    span.file-icon.pdf{
+        background-image: url('images/pdf.png');
+    }
+
+    span.file-icon.xml{
+        background-image: url('images/xml.png');
+    }
+    
+    span.file-icon.xls{
+        background-image: url('images/xls.png');
+    }
+
+    span.file-icon.jpg, span.file-icon.jpeg, span.file-icon.JPG, span.file-icon.JPEG{
+        background-image: url('images/jpg.png');
+    }
+
+    span.file-icon.mp3{
+        background-image: url('images/mp3.png');
+    }
+
+    span.file-icon.avi{
+        background-image: url('images/avi.png');
+    }
+    span.file-icon {
+        background-image: url('images/icon.png');
+    }
+    #dropArea .e-upload .e-upload-files .e-file-delete-btn.e-icons,
+    #dropArea .e-upload .e-upload-files .e-file-remove-btn.e-icons {
+        top: 10px;
+    }
+    span.file-icon{
+        width: 25px;
+        height: 25px;
+        display: inline-flex;
+        background-size: contain;
+        margin: 7px;
+    }
+    img.file-icon {
+        width: 20px;
+        height: 20px;
+    }
+    span.file-name {
+        color: rgba(0, 0, 0, 0.87);
+        font-size: 14px;
+        padding: 3px 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        width: 50%;
+        white-space: nowrap;
+    }
+    span.file-size {
+        color: hotpink;
+        font-size: 12px;
+        padding: 3px 10px;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .progressbar{
+        height: 5px;
+        width: 80%;
+    }
+    .progressbar.upload-success{
+        background-color: green
+    }
+    .progressbar.upload-failed{
+        background-color: red;
+    }
+    .e-upload .e-upload-files li.e-upload-file-list {
+        min-height: 40px;
+    }
+    </style>
+</body>
+</html>

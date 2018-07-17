@@ -1,6 +1,6 @@
 {
   "name": "@syncfusion/ej2-inputs",
-  "version": "16.2.44",
+  "version": "16.2.45",
   "description": "Essential JS 2 Input Components",
   "author": "Syncfusion Inc.",
   "license": "SEE LICENSE IN license",
@@ -8,10 +8,10 @@
   "module": "./dist/es6/ej2-inputs.es5.js",
   "es2015": "./dist/es6/ej2-inputs.es2015.js",
   "dependencies": {
-    "@syncfusion/ej2-base": "~16.2.41",
-    "@syncfusion/ej2-buttons": "~16.2.41",
-    "@syncfusion/ej2-popups": "~16.2.41",
-    "@syncfusion/ej2-splitbuttons": "~16.2.44"
+    "@syncfusion/ej2-base": "~16.2.45",
+    "@syncfusion/ej2-buttons": "~16.2.45",
+    "@syncfusion/ej2-popups": "~16.2.45",
+    "@syncfusion/ej2-splitbuttons": "~16.2.45"
   },
   "devDependencies": {
     "@types/chai": "^3.4.28",
@@ -61,7 +61,17 @@
     "numeric updown",
     "number formatting",
     "number input",
-    "colorpicker"
+    "color",
+    "color picker",
+    "colorpicker",
+    "picker",
+    "palette",
+    "hsv colorpicker",
+    "alpha colorpicker",
+    "color palette",
+    "custom palette",
+    "ej2 colorpicker",
+    "color chooser"
   ],
   "repository": {
     "type": "git",

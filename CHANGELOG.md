@@ -4,6 +4,12 @@
 
 ## 16.2.44 (2018-07-10)
 
+### NumericTextBox
+
+#### Bug Fixes
+
+- The data type of NumericTextBox min, max and value properties are changed to object due to all the data type support.
+
 ### Form-validator
 
 #### Bug Fixes

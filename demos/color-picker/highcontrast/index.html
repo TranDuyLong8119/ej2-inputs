@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ColorPicker</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Typescript UI Controls" />
+    <meta name="author" content="Syncfusion" />
+    <link href="./../../../styles/color-picker/highcontrast.css" rel="stylesheet" />
+    <script src="./../../../node_modules/requirejs/require.js" data-main="index"></script>
+    <script>
+        require.config({
+            packages: [{
+                    name: '@syncfusion/ej2-base',
+                    location: './../../../node_modules/@syncfusion/ej2-base',
+                    main: 'index.js'
+                },
+                {
+                    name: '@syncfusion/ej2-buttons',
+                    location: './../../../node_modules/@syncfusion/ej2-buttons',
+                    main: 'src/button/button.js'
+                },
+                {
+                    name: '@syncfusion/ej2-popups',
+                    location: './../../../node_modules/@syncfusion/ej2-popups',
+                    main: 'index.js'
+                },
+                {
+                    name: '@syncfusion/ej2-splitbuttons',
+                    location: './../../../node_modules/@syncfusion/ej2-splitbuttons',
+                    main: 'index.js'
+                }
+            ]
+        });
+    </script>
+    <style>
+        html,
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        #colorpicker-sample {
+            text-align: center;
+            padding-top: 13%;
+        }
+
+        h4 {
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="control-section">
+        <div id="colorpicker-sample">
+            <h4>Choose color</h4>
+            <input id="picker" type="color">
+        </div>
+    </div>
+</body>
+
+</html>

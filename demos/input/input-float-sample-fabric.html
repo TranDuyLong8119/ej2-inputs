@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>EJ2 Typescript: Float input </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+   <link href="../../styles/input/fabric.css" rel="stylesheet" />
+    <script>
+        window.require = {
+            config: function (json) {
+                window.rsConfig = json;
+                window.rsConfig.baseUrl = '';
+            }
+        };
+    </script>
+    <script src="./demo-config.js"></script>
+    <script data-main="input-float-sample" src="../../node_modules/requirejs/require.js"></script>
+    <style>
+        .e-input-group-icon.e-input-down:before {
+            content: "\e84f";
+            font-family: 'e-icons';
+        }
+        .e-close-icon:before {
+            content: "\e7e9";
+            font-family: 'e-icons';
+            vertical-align: middle;
+            text-align: center;
+        }
+        .e-close-icon {
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+        .e-input:not(:valid) ~ .e-close-icon {
+	        display: none;
+        }
+        table {
+            border: none;
+            border-collapse: collapse;
+        }
+        
+        table td {
+            padding: 10px 20px;
+        }
+        
+        table td {
+            border-left: 1px solid #cecece;
+            border-right: 1px solid #cecece;
+        }
+        
+        table td:first-child {
+            border-left: none;
+        }
+        
+        table td:last-child {
+            border-right: none;
+        }
+        
+        .e-border {
+            border: 1px solid #cecece;
+        }
+
+        .e-input-group .e-input-group-icon,
+        .e-input-group.e-bigger .e-input-group-icon,
+        .e-input-group.e-bigger.e-small .e-input-group-icon {
+            font-size: 12px !important;
+        }
+
+        .e-input-group.e-small .e-input-group-icon {
+            font-size: 10px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <table style="border-spacing:10px">
+        <tr>
+            <th></th>
+            <th>Default</th>
+            <th>Default - e-bigger</th>
+            <th>Disabled</th>
+            <th>Readonly</th>
+            <th>RTL</th>
+            <th>Success</th>
+            <th>Warning</th>
+            <th>Error</th>
+            <th>Small</th>
+            <th>Small - e-bigger</th>
+        </tr>
+        <tr>
+            <td>Textbox:</td>
+            <td>
+                <div class="e-float-input">
+                    <input type='text' required />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-bigger">
+                    <input type='text' required />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input">
+                    <input type='text' required disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+
+            </td>
+            <td>
+                
+                 <div class="e-float-input">
+                    <input type="text" required value="1@gmail.com" readonly />
+                    <span class="e-float-line e-label-top"></span>
+                    <label class="e-float-text e-label-top">Enter Email</label>
+                </div>
+
+            </td>
+            <td>
+                 <div class="e-float-input e-rtl">
+                    <input type="text" required value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-success">
+                    <input type="text" required value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-warning">
+                    <input type="text" required value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-error">
+                    <input type="text" required value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-small">
+                    <input type="text" required value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-small e-bigger">
+                    <input type="text" required value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter Email</label>
+                </div>
+            </td>
+            <td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with icon(right)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-bigger">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <input required name='check' type="text" value='122344' disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" value="1@gmail.com" readonly  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <input required name='check' type="text" value="1@gmail.com"  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with icon(left)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group e-bigger">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" readonly />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com"/>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with multple icons(right)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-bigger">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" value="1@gmail.com" readonly  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <input required name='check' type="text" value="1@gmail.com"  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with multiple icons(left)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group e-bigger">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" readonly />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com"/>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with multiple icons(left and right)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group e-bigger">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" readonly />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com"/>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">           
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-icon e-input-down"></span>
+                    <span class="e-input-group-icon e-input-down"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with button(left)
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group e-bigger">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" readonly />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com"/>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with button(right)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-bigger">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" value="1@gmail.com" readonly  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <input required name='check' type="text" value="1@gmail.com"  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Go!</button>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with multiple buttons(right)
+            </td>
+            <td>
+                <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-bigger">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <input required name='check' type="text" value="1@gmail.com" readonly  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <input required name='check' type="text" value="1@gmail.com"  />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <input required name='check' type="text" value="1@gmail.com"   />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Textbox with multiple buttons(left)
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group e-bigger">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" readonly />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com"/>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr style='visibility: hidden'>
+            <td>
+                Textbox with multiple buttons(left and right)
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <div class="e-input-in-wrap">
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    </div>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                 <div class="e-float-input e-input-group e-bigger">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-disabled">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" disabled />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                
+                <div class="e-float-input e-input-group">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com" readonly />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-rtl">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com"/>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-success">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-warning">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-error">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="e-float-input e-input-group e-small e-bigger">
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Prev</button>
+                    </span>
+                    <input required name='check' type="text" value="1@gmail.com" />
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text">Enter the Email</label>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next All..</button>
+                    </span>
+                    <span class="e-input-group-btn">
+                        <button type="button">Next</button>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+    <script type="text/javascript">
+        var ele = document.querySelectorAll('.e-float-input input');
+        for (var i = 0; i < ele.length; i++) {
+            ele[i].addEventListener("focus", function () {
+                getParentNode(this).classList.add('e-input-focus');
+            });
+            ele[i].addEventListener("blur", function () {
+                getParentNode(this).classList.remove('e-input-focus');
+            });
+        }
+        function getParentNode(element) {
+            var parentNode = element.parentNode;
+            if (parentNode.classList.contains('e-input-in-wrap')) {
+                return parentNode.parentNode;
+            }
+            return parentNode;
+        }
+    </script>
+</body>
+
+</html>
