@@ -1,5 +1,5 @@
 import { BaseEventArgs, Component, EmitType, Event, INotifyPropertyChanged, NotifyPropertyChanges, Property } from '@syncfusion/ej2-base';
-import { Browser, closest, createElement, detach, EventHandler, getInstance, select, selectAll, formatUnit } from '@syncfusion/ej2-base';
+import { Browser, closest, detach, EventHandler, getInstance, select, selectAll, formatUnit } from '@syncfusion/ej2-base';
 import { addClass, attributes, classList, isNullOrUndefined, L10n } from '@syncfusion/ej2-base';
 import { remove, removeClass, rippleEffect } from '@syncfusion/ej2-base';
 import { SplitButton, BeforeOpenCloseMenuEventArgs, getModel, ClickEventArgs, OpenCloseMenuEventArgs } from '@syncfusion/ej2-splitbuttons';
@@ -243,11 +243,11 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private initWrapper(): void {
-        let wrapper: HTMLElement = createElement('div', { className: 'e-' + this.getModuleName() + '-wrapper' });
+        let wrapper: HTMLElement = this.createElement('div', { className: 'e-' + this.getModuleName() + '-wrapper' });
         this.element.parentNode.insertBefore(wrapper, this.element);
         wrapper.appendChild(this.element);
         attributes(this.element, { 'tabindex': '-1', 'spellcheck': 'false' });
-        this.container = createElement('div', { className: CONTAINER });
+        this.container = this.createElement('div', { className: CONTAINER });
         this.getWrapper().appendChild(this.container);
         let value: string = this.value;
         this.element.value = value.slice(0, 7);
@@ -298,7 +298,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private createSplitBtn(): void {
-        let splitButton: HTMLButtonElement = createElement('button', { className: 'e-split-colorpicker' }) as HTMLButtonElement;
+        let splitButton: HTMLButtonElement = this.createElement('button', { className: 'e-split-colorpicker' }) as HTMLButtonElement;
         this.getWrapper().appendChild(splitButton);
         this.splitBtn = new SplitButton(
             {
@@ -317,7 +317,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 }
             },
             splitButton);
-        let preview: HTMLElement = createElement('span', { className: SPLITPREVIEW });
+        let preview: HTMLElement = this.createElement('span', { className: SPLITPREVIEW });
         select('.e-selected-color', splitButton).appendChild(preview);
         preview.style.backgroundColor = this.convertToRgbString(this.hexToRgb(this.value));
         let popupEle: Element = this.getPopupEle();
@@ -353,7 +353,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             this.createWidget();
             popupEle.style.display = '';
             if (Browser.isDevice) {
-                this.modal = createElement('div');
+                this.modal = this.createElement('div');
                 this.modal.className = 'e-' + this.getModuleName() + ' e-modal';
                 this.modal.style.display = 'none';
                 document.body.insertBefore(this.modal, popupEle);
@@ -391,7 +391,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     private createPalette(): void {
         classList(this.container, [PALETTECONTENT], [PICKERCONTENT]);
         if (this.presetColors) {
-            let paletteGroup: HTMLElement = createElement('div', { className: 'e-custom-palette' });
+            let paletteGroup: HTMLElement = this.createElement('div', { className: 'e-custom-palette' });
             this.appendElement(paletteGroup);
             let keys: string[] = Object.keys(this.presetColors as Object);
             if (keys.length === 1) {
@@ -424,7 +424,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private appendPalette(colors: string[], key: string, refEle?: HTMLElement): void {
-        let palette: HTMLElement = createElement('div', { className: PALETTES, attrs: { 'tabindex': '0' } });
+        let palette: HTMLElement = this.createElement('div', { className: PALETTES, attrs: { 'tabindex': '0' } });
         if (refEle) {
             refEle.appendChild(palette);
         } else {
@@ -433,12 +433,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         let row: HTMLElement; let tile: HTMLElement;
         for (let i: number = 0, len: number = colors.length; i < len; i++) {
             if (i === 0 || i % this.columns === 0) {
-                row = createElement('div', {
+                row = this.createElement('div', {
                     className: 'e-row', attrs: { 'role': 'row' }
                 });
                 palette.appendChild(row);
             }
-            tile = createElement('span', {
+            tile = this.createElement('span', {
                 className: TILE, attrs: { 'role': 'gridcell', 'aria-label': colors[i], 'aria-selected': 'false' }
             });
             this.trigger('beforeTileRender', <PaletteTileEventArgs>{ element: tile, presetName: key, value: colors[i] });
@@ -474,10 +474,10 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
 
     private createPicker(): void {
         classList(this.container, [PICKERCONTENT], [PALETTECONTENT]);
-        let hsvContainer: HTMLElement = createElement('div', { className: HSVCONTAINER });
+        let hsvContainer: HTMLElement = this.createElement('div', { className: HSVCONTAINER });
         this.appendElement(hsvContainer);
-        hsvContainer.appendChild(createElement('div', { className: HSVAREA }));
-        let dragHandler: HTMLElement = createElement('span', { className: HANDLER, attrs: { 'tabindex': '0' } });
+        hsvContainer.appendChild(this.createElement('div', { className: HSVAREA }));
+        let dragHandler: HTMLElement = this.createElement('span', { className: HANDLER, attrs: { 'tabindex': '0' } });
         hsvContainer.appendChild(dragHandler);
         this.rgb = this.hexToRgb(this.value);
         this.hsv = this.rgbToHsv.apply(this, this.rgb);
@@ -507,12 +507,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private createSlider(): void {
-        let sliderPreviewWrapper: Element = createElement('div', { className: 'e-slider-preview' });
+        let sliderPreviewWrapper: Element = this.createElement('div', { className: 'e-slider-preview' });
         this.appendElement(sliderPreviewWrapper, 1);
         this.createPreview(sliderPreviewWrapper);
-        let sliderWrapper: Element = createElement('div', { className: 'e-colorpicker-slider' });
+        let sliderWrapper: Element = this.createElement('div', { className: 'e-colorpicker-slider' });
         sliderPreviewWrapper.insertBefore(sliderWrapper, sliderPreviewWrapper.children[0]);
-        let slider: HTMLElement = createElement('div', { className: 'e-hue-slider' });
+        let slider: HTMLElement = this.createElement('div', { className: 'e-hue-slider' });
         sliderWrapper.appendChild(slider);
         this.hueSlider = new Slider(
             {
@@ -524,7 +524,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 change: this.hueChange.bind(this)
             },
             slider);
-        slider = createElement('div', { className: 'e-opacity-slider' });
+        slider = this.createElement('div', { className: 'e-opacity-slider' });
         sliderWrapper.appendChild(slider);
         this.opacitySlider = new Slider(
             {
@@ -536,7 +536,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 change: this.opacityChange.bind(this)
             },
             slider);
-        let opacityBgTrack: HTMLElement = createElement('div', { className: 'e-opacity-empty-track' });
+        let opacityBgTrack: HTMLElement = this.createElement('div', { className: 'e-opacity-empty-track' });
         slider.appendChild(opacityBgTrack);
         this.updateOpacitySliderBg();
     }
@@ -568,13 +568,13 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private createPreview(parentEle?: Element): void {
-        let previewContainer: HTMLElement = createElement('div', { className: PREVIEW });
+        let previewContainer: HTMLElement = this.createElement('div', { className: PREVIEW });
         parentEle.appendChild(previewContainer);
-        let preview: HTMLElement = createElement('span', { className: 'e-preview ' + CURRENT });
+        let preview: HTMLElement = this.createElement('span', { className: 'e-preview ' + CURRENT });
         previewContainer.appendChild(preview);
         let colorValue: string = this.convertToRgbString(this.rgb);
         preview.style.backgroundColor = colorValue;
-        preview = createElement('span', { className: 'e-preview ' + PREVIOUS });
+        preview = this.createElement('span', { className: 'e-preview ' + PREVIOUS });
         previewContainer.appendChild(preview);
         preview.style.backgroundColor = colorValue;
     }
@@ -608,12 +608,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private createInput(child: number = 2): void {
-        let inputWrap: HTMLElement = createElement('div', { className: INPUTWRAPPER });
+        let inputWrap: HTMLElement = this.createElement('div', { className: INPUTWRAPPER });
         this.appendElement(inputWrap, child);
-        let container: HTMLElement = createElement('div', { className: 'e-input-container' });
+        let container: HTMLElement = this.createElement('div', { className: 'e-input-container' });
         inputWrap.appendChild(container);
-        inputWrap.appendChild(createElement('button', { className: 'e-icons e-btn e-flat e-icon-btn ' + FORMATSWITCH + ' ' + TOHSV }));
-        let hexInput: HTMLInputElement = createElement('input', {
+        inputWrap.appendChild(this.createElement('button', { className: 'e-icons e-btn e-flat e-icon-btn ' + FORMATSWITCH + ' ' + TOHSV }));
+        let hexInput: HTMLInputElement = this.createElement('input', {
             className: HEX,
             attrs: { 'maxlength': '7', 'spellcheck': 'false' }
         }) as HTMLInputElement;
@@ -635,31 +635,31 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         for (let i: number = 0; i < 3; i++) {
             numericInput = new NumericTextBox(
                 this.getNumericTextBoxModel(this.rgb[i], label[i], 255),
-                container.appendChild(createElement('input', { className: 'e-' + clsName[i] + '-value' }) as HTMLInputElement)
+                container.appendChild(this.createElement('input', { className: 'e-' + clsName[i] + '-value' }) as HTMLInputElement)
             );
         }
         numericInput = new NumericTextBox(
             this.getNumericTextBoxModel(this.rgb[3] * 100, 'A', 100),
-            container.appendChild(createElement('input', { className: 'e-opacity-value' }) as HTMLInputElement)
+            container.appendChild(this.createElement('input', { className: 'e-opacity-value' }) as HTMLInputElement)
         );
     }
 
     private createCtrlBtn(): void {
         if (this.modeSwitcher || this.showButtons) {
             this.l10n.setLocale(this.locale);
-            let btnWrapper: Element = createElement('div', { className: CTRLSWITCH });
+            let btnWrapper: Element = this.createElement('div', { className: CTRLSWITCH });
             this.container.appendChild(btnWrapper);
             if (this.showButtons) {
-                let controlBtnWrapper: Element = createElement('div', { className: CTRLBTN });
+                let controlBtnWrapper: Element = this.createElement('div', { className: CTRLBTN });
                 btnWrapper.appendChild(controlBtnWrapper);
                 let apply: string = this.l10n.getConstant('Apply');
-                controlBtnWrapper.appendChild(createElement('button', {
+                controlBtnWrapper.appendChild(this.createElement('button', {
                     innerHTML: apply,
                     className: 'e-btn e-flat e-primary e-small ' + APPLY,
                     attrs: { 'title': apply }
                 }));
                 let cancel: string = this.l10n.getConstant('Cancel');
-                controlBtnWrapper.appendChild(createElement('button', {
+                controlBtnWrapper.appendChild(this.createElement('button', {
                     innerHTML: cancel,
                     className: 'e-btn e-flat e-small ' + CANCEL,
                     attrs: { 'title': cancel }
@@ -672,7 +672,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private appendModeSwitchBtn(): void {
-        let modeSwitcher: HTMLElement = createElement('button', {
+        let modeSwitcher: HTMLElement = this.createElement('button', {
             className: 'e-icons e-btn e-flat e-icon-btn ' + MODESWITCH, attrs: { title: this.l10n.getConstant('ModeSwitcher') }
         });
         select('.' + CTRLSWITCH, this.container).insertBefore(modeSwitcher, select('.' + CTRLBTN, this.container));
@@ -691,7 +691,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         tooltip.appendTo(this.container);
         tooltip.open(this.container);
         this.tooltipEle.style.zIndex = getZindexPartial(this.tooltipEle).toString();
-        select('.e-tip-content', this.tooltipEle).appendChild(createElement('div', { className: 'e-tip-transparent' }));
+        select('.e-tip-content', this.tooltipEle).appendChild(this.createElement('div', { className: 'e-tip-transparent' }));
     }
 
     private getTooltipInst(): Tooltip {

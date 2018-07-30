@@ -1,5 +1,5 @@
 import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';
-import { NotifyPropertyChanges, INotifyPropertyChanged, createElement, detach, append, Animation } from '@syncfusion/ej2-base';
+import { NotifyPropertyChanges, INotifyPropertyChanged, detach, append, Animation } from '@syncfusion/ej2-base';
 import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';
 import { Collection, Complex, Browser, Ajax, BeforeSendEventArgs } from '@syncfusion/ej2-base';
 import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
@@ -707,7 +707,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let ejInstance: any = getValue('ej2_instances', this.element);
         /* istanbul ignore next */
         if (this.element.tagName === 'EJS-UPLOADER') {
-            let inputElement: HTMLInputElement = <HTMLInputElement>createElement('input', { attrs: { type: 'file' }});
+            let inputElement: HTMLInputElement = <HTMLInputElement>this.createElement('input', { attrs: { type: 'file' }});
             let index: number = 0;
             for (index; index < this.element.attributes.length; index++) {
                 inputElement.setAttribute(this.element.attributes[index].nodeName, this.element.attributes[index].nodeValue);
@@ -770,7 +770,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     }
 
     private renderBrowseButton(): void {
-        this.browseButton = createElement('button', { className: 'e-css e-btn', attrs: {'type': 'button'}});
+        this.browseButton = this.createElement('button', { className: 'e-css e-btn', attrs: {'type': 'button'}});
         if (typeof(this.buttons.browse) === 'string') {
             this.browseButton.innerText = (this.buttons.browse === 'Browse...') ?
             this.localizedTexts('Browse') : this.buttons.browse;
@@ -783,9 +783,9 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
 
     private renderActionButtons(): void {
         this.element.setAttribute('tabindex', '-1');
-        this.actionButtons = createElement('div', { className: ACTION_BUTTONS });
-        this.uploadButton = createElement('button', { className: UPLOAD_BUTTONS , attrs: {'type': 'button', 'tabindex': '-1'} });
-        this.clearButton = createElement('button', { className: CLEAR_BUTTONS, attrs: {'type': 'button', 'tabindex': '-1'} });
+        this.actionButtons = this.createElement('div', { className: ACTION_BUTTONS });
+        this.uploadButton = this.createElement('button', { className: UPLOAD_BUTTONS , attrs: {'type': 'button', 'tabindex': '-1'} });
+        this.clearButton = this.createElement('button', { className: CLEAR_BUTTONS, attrs: {'type': 'button', 'tabindex': '-1'} });
         this.actionButtons.appendChild(this.clearButton);
         this.actionButtons.appendChild(this.uploadButton);
         this.renderButtonTemplates();
@@ -852,17 +852,17 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
 
     private initializeUpload(): void {
         this.element.setAttribute('tabindex', '-1');
-        let inputWrapper: HTMLElement = createElement('span', { className: INPUT_WRAPPER });
+        let inputWrapper: HTMLElement = this.createElement('span', { className: INPUT_WRAPPER });
         this.element.parentElement.insertBefore(inputWrapper, this.element);
-        this.dropAreaWrapper = createElement('div', { className: DROP_WRAPPER });
+        this.dropAreaWrapper = this.createElement('div', { className: DROP_WRAPPER });
         this.element.parentElement.insertBefore(this.dropAreaWrapper, this.element);
         inputWrapper.appendChild(this.element);
         this.dropAreaWrapper.appendChild(this.browseButton);
         this.dropAreaWrapper.appendChild(inputWrapper);
-        let fileDropArea: HTMLElement = createElement('span', { className: DROP_AREA});
+        let fileDropArea: HTMLElement = this.createElement('span', { className: DROP_AREA});
         fileDropArea.innerHTML = this.localizedTexts('dropFilesHint');
         this.dropAreaWrapper.appendChild(fileDropArea);
-        this.uploadWrapper = createElement('div', { className: CONTROL_WRAPPER, attrs: {'aria-activedescendant': 'li-focused'}});
+        this.uploadWrapper = this.createElement('div', { className: CONTROL_WRAPPER, attrs: {'aria-activedescendant': 'li-focused'}});
         this.dropAreaWrapper.parentElement.insertBefore(this.uploadWrapper, this.dropAreaWrapper);
         this.uploadWrapper.appendChild(this.dropAreaWrapper);
         this.setDropArea();
@@ -1344,7 +1344,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     }
 
     private updateSortedFileList(filesData: FileInfo[]): void {
-        let previousListClone: HTMLElement = createElement('div', {id: 'clonewrapper'});
+        let previousListClone: HTMLElement = this.createElement('div', {id: 'clonewrapper'});
         let added: number = -1;
         let removedList: HTMLElement[];
         if (this.listParent) {
@@ -1412,7 +1412,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     private createCustomfileList (fileData : FileInfo[]) : void {
         this.createParentUL();
         for (let listItem of fileData) {
-            let liElement: HTMLElement = createElement('li', { className: FILE, attrs: {'data-file-name': listItem.name}});
+            let liElement: HTMLElement = this.createElement('li', { className: FILE, attrs: {'data-file-name': listItem.name}});
             this.uploadTemplateFn = this.templateComplier(this.template);
             this.listParent.appendChild(liElement);
             let fromElements: HTMLElement[] = [].slice.call(this.uploadTemplateFn(listItem));
@@ -1423,7 +1423,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
 
     private createParentUL() : void {
         if (isNullOrUndefined(this.listParent)) {
-            this.listParent = createElement('ul', { className: LIST_PARENT });
+            this.listParent = this.createElement('ul', { className: LIST_PARENT });
             this.uploadWrapper.appendChild(this.listParent);
         }
     }
@@ -1434,29 +1434,29 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             this.createCustomfileList(fileData);
         } else {
             for (let listItem of fileData) {
-                let liElement: HTMLElement = createElement('li', { className: FILE, attrs: {'data-file-name': listItem.name}});
-                let textContainer: Element = createElement('span', { className: TEXT_CONTAINER });
-                let textElement: HTMLElement = createElement('span', { className: FILE_NAME, attrs: {'title': listItem.name} });
+                let liElement: HTMLElement = this.createElement('li', { className: FILE, attrs: {'data-file-name': listItem.name}});
+                let textContainer: Element = this.createElement('span', { className: TEXT_CONTAINER });
+                let textElement: HTMLElement = this.createElement('span', { className: FILE_NAME, attrs: {'title': listItem.name} });
                 textElement.innerHTML = this.getFileNameOnly(listItem.name);
-                let fileExtension: Element = createElement('span', { className: FILE_TYPE });
+                let fileExtension: Element = this.createElement('span', { className: FILE_TYPE });
                 fileExtension.innerHTML = '.' + this.getFileType(listItem.name);
                 if (!this.enableRtl) {
                     textContainer.appendChild(textElement);
                     textContainer.appendChild(fileExtension);
                 } else {
-                    let rtlContainer: Element = createElement('span', { className: RTL_CONTAINER });
+                    let rtlContainer: Element = this.createElement('span', { className: RTL_CONTAINER });
                     rtlContainer.appendChild(fileExtension);
                     rtlContainer.appendChild(textElement);
                     textContainer.appendChild(rtlContainer);
                 }
-                let fileSize: Element = createElement('span', { className: FILE_SIZE });
+                let fileSize: Element = this.createElement('span', { className: FILE_SIZE });
                 fileSize.innerHTML = this.bytesToSize(listItem.size);
                 textContainer.appendChild(fileSize);
-                let statusElement: HTMLElement = createElement('span', {className: STATUS});
+                let statusElement: HTMLElement = this.createElement('span', {className: STATUS});
                 textContainer.appendChild(statusElement);
                 statusElement.innerHTML = listItem.status;
                 liElement.appendChild(textContainer);
-                let iconElement: HTMLElement = createElement('span', {className: ' e-icons', attrs: { 'tabindex': '-1'}});
+                let iconElement: HTMLElement = this.createElement('span', {className: ' e-icons', attrs: { 'tabindex': '-1'}});
                 /* istanbul ignore next */
                 if (Browser.info.name === 'msie') { iconElement.classList.add('e-msie'); }
                 iconElement.setAttribute('title', this.localizedTexts('remove'));
@@ -1548,11 +1548,11 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     }
 
     private createProgressBar(liElement : Element) : void {
-        let progressbarWrapper : Element = createElement('span', {className: PROGRESS_WRAPPER});
-        let progressBar : Element = createElement('progressbar', {className: PROGRESSBAR, attrs: {value : '0', max : '100'}});
-        let progressbarInnerWrapper : Element = createElement('span', {className: PROGRESS_INNER_WRAPPER});
+        let progressbarWrapper : Element = this.createElement('span', {className: PROGRESS_WRAPPER});
+        let progressBar : Element = this.createElement('progressbar', {className: PROGRESSBAR, attrs: {value : '0', max : '100'}});
+        let progressbarInnerWrapper : Element = this.createElement('span', {className: PROGRESS_INNER_WRAPPER});
         progressBar.setAttribute('style', 'width: 0%');
-        let progressbarText : Element = createElement('span', {className: PROGRESSBAR_TEXT});
+        let progressbarText : Element = this.createElement('span', {className: PROGRESSBAR_TEXT});
         progressbarText.textContent = '0%';
         progressbarInnerWrapper.appendChild(progressBar);
         progressbarWrapper.appendChild(progressbarInnerWrapper);
@@ -1655,7 +1655,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         deleteIcon.classList.remove(ABORT_ICON, UPLOAD_INPROGRESS);
         deleteIcon.classList.add(CLEAR_ICON);
         deleteIcon.setAttribute('title', this.localizedTexts('remove'));
-        this.pauseButton = createElement('span', {className: 'e-icons e-file-reload-btn', attrs: { 'tabindex': '-1'}});
+        this.pauseButton = this.createElement('span', {className: 'e-icons e-file-reload-btn', attrs: { 'tabindex': '-1'}});
         liElement.insertBefore(this.pauseButton, deleteIcon);
         this.pauseButton.setAttribute('title', this.localizedTexts('retry'));
         let retryElement: HTMLElement = liElement.querySelector('.' + RETRY_ICON);
@@ -1870,7 +1870,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         liElement.querySelector('.' + STATUS).classList.add(UPLOAD_FAILED);
         eventArgs.fileData.statusCode = '5';
         eventArgs.fileData.status = this.localizedTexts('fileUploadCancel');
-        this.pauseButton = createElement('span', {className: 'e-icons e-file-reload-btn', attrs: { 'tabindex': '-1'}});
+        this.pauseButton = this.createElement('span', {className: 'e-icons e-file-reload-btn', attrs: { 'tabindex': '-1'}});
         liElement.insertBefore(this.pauseButton, liElement.querySelector('.' + CLEAR_ICON));
         this.pauseButton.setAttribute('title', this.localizedTexts('retry'));
         /* istanbul ignore next */
@@ -2195,7 +2195,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             }
         }
         if (isNullOrUndefined(liElement.querySelector('.' + PAUSE_UPLOAD)) && isNullOrUndefined(this.template) ) {
-            this.pauseButton = createElement('span', {className: 'e-icons e-file-pause-btn', attrs: { 'tabindex': '-1'}});
+            this.pauseButton = this.createElement('span', {className: 'e-icons e-file-pause-btn', attrs: { 'tabindex': '-1'}});
             if (Browser.info.name === 'msie') { this.pauseButton.classList.add('e-msie'); }
             liElement.insertBefore(this.pauseButton, liElement.querySelector('.' + ABORT_ICON));
             this.pauseButton.setAttribute('title', this.localizedTexts('pause'));

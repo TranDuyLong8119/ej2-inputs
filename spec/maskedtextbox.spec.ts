@@ -1827,5 +1827,15 @@ describe('MaskedTextBox Component', () => {
             expect(input.parentElement.getElementsByTagName('label')[0].classList.contains('e-label-top')).toEqual(true);
             expect(input.value === '____ ____ ____ ____').toBe(true);
         });
+        it('Destroy method testing', () => {
+            maskBox = new MaskedTextBox({
+                mask: '9999 9999 9999 9999',
+                placeholder: 'Enter card number'
+            });
+            maskBox.appendTo('#mask1');
+            maskBox.destroy();
+            expect(document.getElementById('mask1').className).toBe('');
+            maskBox = undefined;
+        });
     });
 });

@@ -1,5 +1,6 @@
 import { Component, Event, Property, EmitType, NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
 import { isNullOrUndefined, formatUnit, getValue, setValue, attributes, addClass, detach, createElement } from '@syncfusion/ej2-base';
+import { removeClass } from '@syncfusion/ej2-base';
 import { Input, InputObject, FloatLabelType } from '../../input/input';
 import { regularExpressions, createMask, applyMask, wireEvents, unwireEvents, unstrippedValue, strippedValue } from '../base/index';
 import { setMaskValue, MaskUndo, setElementValue, bindClearEvent } from '../base/index';
@@ -8,6 +9,8 @@ import { maskInputBlurHandler } from '../base/mask-base';
 
 const ROOT: string = 'e-widget e-control-wrapper e-mask';
 const INPUT: string = 'e-input';
+const COMPONENT: string = 'e-maskedtextbox';
+const CONTROL: string = 'e-control';
 
 /**
  * The MaskedTextBox allows the user to enter the valid input only based on the provided mask.
@@ -231,10 +234,11 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
         this.isIosInvalid = false;
         let ejInstance: Object = getValue('ej2_instances', this.element);
         this.cloneElement = <HTMLElement>this.element.cloneNode(true);
+        removeClass([this.cloneElement], [CONTROL, COMPONENT]);
         this.angularTagName = null;
         if (this.element.tagName === 'EJS-MASKEDTEXTBOX') {
             this.angularTagName = this.element.tagName;
-            let input: HTMLElement = <HTMLElement>createElement('input');
+            let input: HTMLElement = this.createElement('input');
             for (let i: number = 0; i < this.element.attributes.length; i++) {
                 input.setAttribute(this.element.attributes[i].nodeName, this.element.attributes[i].nodeValue);
                 input.innerHTML = this.element.innerHTML;

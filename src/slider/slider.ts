@@ -387,6 +387,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
     /**
      * It is used to denote the current value of the Slider.
      * The value should be specified in array of number when render Slider type as range.
+     * 
+     * {% codeBlock src="slider/value-api/index.ts" %}{% endcodeBlock %}
      * @default null
      */
     @Property(null)
@@ -406,6 +408,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
      *  Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript#step here}
      *  to know more about this property with demo.
+     * 
+     * {% codeBlock src="slider/step-api/index.ts" %}{% endcodeBlock %}
      * @default 1
      */
     @Property(1)
@@ -413,6 +417,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     /**
      * It sets the minimum value of Slider Component
+     * 
+     * {% codeBlock src="slider/min-max-api/index.ts" %}{% endcodeBlock %}
      * @default 0
      */
     @Property(0)
@@ -420,6 +426,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     /**
      * It sets the maximum value of Slider Component
+     * 
+     * {% codeBlock src="slider/min-max-api/index.ts" %}{% endcodeBlock %}
      * @default 100
      */
     @Property(100)
@@ -448,6 +456,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
      * Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript here}
      *  to know more about this property with demo.
+     * 
+     * {% codeBlock src="slider/ticks-api/index.ts" %}{% endcodeBlock %}
      * @default { placement: 'before' }
      */
     @Complex<TicksDataModel>({}, TicksData)
@@ -458,6 +468,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
      * Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript here}
      *  to know more about this property with demo
+     * 
+     * {% codeBlock src="slider/limits-api/index.ts" %}{% endcodeBlock %}
      * @default { enabled: false }
      */
     @Complex<LimitDataModel>({}, LimitData)
@@ -480,6 +492,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     /**
      * It is used to denote the slider tooltip and it's position.
+     * 
+     * {% codeBlock src="slider/tooltip-api/index.ts" %}{% endcodeBlock %}
      * @default { placement: 'Before', isVisible: false, showOn: 'Focus', format: null }
      */
     @Complex<TooltipDataModel>({}, TooltipData)
@@ -491,6 +505,8 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
      * Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#buttons here}
      *  to know more about this property with demo.
+     * 
+     * {% codeBlock src="slider/showButtons-api/index.ts" %}{% endcodeBlock %}
      * @default false
      */
     @Property(false)

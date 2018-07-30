@@ -26,6 +26,10 @@
 
   .e-upload .e-upload-files .e-icons.e-msie::before {
     position: relative;
-    right: 5px;
+    right: $ie-icons-position-value;
+  }
+
+  .e-upload .e-upload-files .e-icons.e-file-abort-icon.e-msie::before {
+    right: $ie-abort-icon-position-value;
   }
 }

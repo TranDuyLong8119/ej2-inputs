@@ -64,6 +64,7 @@ describe('Numerictextbox Control', () => {
             let numerictextbox1: NumericTextBox = new NumericTextBox({ value: 10 }, '#tsNumeric');
             numerictextbox1.destroy();
             expect(document.getElementById('tsNumeric').classList.contains('e-input')).toEqual(false);
+            expect(document.getElementById('tsNumeric').className).toBe('');
         });
     });
 

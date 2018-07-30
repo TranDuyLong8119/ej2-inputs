@@ -19,23 +19,23 @@ require.config({
   packages: [
     { 
       name: '@syncfusion/ej2-base',
-      location: 'node_modules/@syncfusion/ej2-base',
-      main: 'index.js'            
+      location: 'node_modules/@syncfusion/ej2-base/dist',
+      main: 'ej2-base.umd.min.js'     
     },
     { 
       name: '@syncfusion/ej2-buttons',
-      location: 'node_modules/@syncfusion/ej2-buttons',
-      main: 'src/button/index.js'            
+      location: 'node_modules/@syncfusion/ej2-buttons/dist',
+      main: 'ej2-buttons.umd.min.js'
     },
     { 
       name: '@syncfusion/ej2-popups',
-      location: 'node_modules/@syncfusion/ej2-popups',
-      main: 'index.js'            
+      location: 'node_modules/@syncfusion/ej2-popups/dist',
+      main: 'ej2-popups.umd.min.js'
     },
     { 
       name: '@syncfusion/ej2-splitbuttons',
-      location: 'node_modules/@syncfusion/ej2-splitbuttons',
-      main: 'index.js'            
+      location: 'node_modules/@syncfusion/ej2-splitbuttons/dist',
+      main: 'ej2-splitbuttons.umd.min.js'      
     }
     // Include dependent packages
   ],

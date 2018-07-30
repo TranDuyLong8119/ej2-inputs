@@ -15,6 +15,8 @@ const INCREMENT: string = 'increment';
 const DECREMENT: string = 'decrement';
 const INTREGEXP: RegExp = new RegExp('/^(-)?(\d*)$/');
 const DECIMALSEPARATOR: string = '.';
+const COMPONENT: string = 'e-numerictextbox';
+const CONTROL: string = 'e-control';
 
 /**
  * Represents the NumericTextBox component that allows the user to enter only numeric values.
@@ -281,10 +283,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.isCalled = false;
         let ejInstance: Object = getValue('ej2_instances', this.element);
         this.cloneElement = <HTMLElement>this.element.cloneNode(true);
+        removeClass([this.cloneElement], [CONTROL, COMPONENT]);
         this.angularTagName = null;
         if (this.element.tagName === 'EJS-NUMERICTEXTBOX') {
             this.angularTagName = this.element.tagName;
-            let input: HTMLElement = <HTMLElement>createElement('input');
+            let input: HTMLElement = this.createElement('input');
             let index: number = 0;
             for (index; index < this.element.attributes.length; index++) {
                 input.setAttribute(this.element.attributes[index].nodeName, this.element.attributes[index].nodeValue);
@@ -405,7 +408,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         this.container = inputObj.container;
         this.container.setAttribute('class', ROOT + ' ' + this.container.getAttribute('class'));
         if (this.readonly) { attributes(this.element, { 'aria-readonly': 'true' }); }
-        this.hiddenInput = <HTMLInputElement>(createElement('input', { attrs: { type: 'hidden', 'validateHidden': 'true' } }));
+        this.hiddenInput = <HTMLInputElement>(this.createElement('input', { attrs: { type: 'hidden', 'validateHidden': 'true' } }));
         this.inputName = this.inputName !== null ? this.inputName : this.element.id;
         this.element.removeAttribute('name');
         attributes(this.hiddenInput, { 'name': this.inputName });

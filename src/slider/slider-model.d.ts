@@ -142,6 +142,8 @@ export interface SliderModel extends ComponentModel{
     /**
      * It is used to denote the current value of the Slider.
      * The value should be specified in array of number when render Slider type as range.
+     * 
+     * {% codeBlock src="slider/value-api/index.ts" %}{% endcodeBlock %}
      * @default null
      */
     value?: number | number[];
@@ -159,18 +161,24 @@ export interface SliderModel extends ComponentModel{
      *  Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript#step here}
      *  to know more about this property with demo.
+     * 
+     * {% codeBlock src="slider/step-api/index.ts" %}{% endcodeBlock %}
      * @default 1
      */
     step?: number;
 
     /**
      * It sets the minimum value of Slider Component
+     * 
+     * {% codeBlock src="slider/min-max-api/index.ts" %}{% endcodeBlock %}
      * @default 0
      */
     min?: number;
 
     /**
      * It sets the maximum value of Slider Component
+     * 
+     * {% codeBlock src="slider/min-max-api/index.ts" %}{% endcodeBlock %}
      * @default 100
      */
     max?: number;
@@ -196,6 +204,8 @@ export interface SliderModel extends ComponentModel{
      * Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript here}
      *  to know more about this property with demo.
+     * 
+     * {% codeBlock src="slider/ticks-api/index.ts" %}{% endcodeBlock %}
      * @default { placement: 'before' }
      */
     ticks?: TicksDataModel;
@@ -205,6 +215,8 @@ export interface SliderModel extends ComponentModel{
      * Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript here}
      *  to know more about this property with demo
+     * 
+     * {% codeBlock src="slider/limits-api/index.ts" %}{% endcodeBlock %}
      * @default { enabled: false }
      */
     limits?: LimitDataModel;
@@ -223,6 +235,8 @@ export interface SliderModel extends ComponentModel{
 
     /**
      * It is used to denote the slider tooltip and it's position.
+     * 
+     * {% codeBlock src="slider/tooltip-api/index.ts" %}{% endcodeBlock %}
      * @default { placement: 'Before', isVisible: false, showOn: 'Focus', format: null }
      */
     tooltip?: TooltipDataModel;
@@ -233,6 +247,8 @@ export interface SliderModel extends ComponentModel{
      * Refer the documentation
      *  {@link http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#buttons here}
      *  to know more about this property with demo.
+     * 
+     * {% codeBlock src="slider/showButtons-api/index.ts" %}{% endcodeBlock %}
      * @default false
      */
     showButtons?: boolean;
