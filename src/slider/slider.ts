@@ -1,7 +1,7 @@
 import { Component, EventHandler, Property, Event, EmitType, Complex, classList } from '@syncfusion/ej2-base';
 import { L10n, Internationalization, NumberFormatOptions } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, ChildProperty } from '@syncfusion/ej2-base';
-import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';
+import { attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';
 import { isNullOrUndefined, formatUnit, Browser } from '@syncfusion/ej2-base';
 import { Tooltip, Position, TooltipEventArgs } from '@syncfusion/ej2-popups';
 import { SliderModel, TicksDataModel, TooltipDataModel, LimitDataModel } from './slider-model';
@@ -701,10 +701,10 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
      * @private
      */
     private initRender(): void {
-        this.sliderContainer = createElement('div', { className: classNames.sliderContainer + ' ' + classNames.controlWrapper });
+        this.sliderContainer = this.createElement('div', { className: classNames.sliderContainer + ' ' + classNames.controlWrapper });
         this.element.parentNode.insertBefore(this.sliderContainer, this.element);
         this.sliderContainer.appendChild(this.element);
-        this.sliderTrack = createElement('div', { className: classNames.sliderTrack });
+        this.sliderTrack = this.createElement('div', { className: classNames.sliderTrack });
         this.element.appendChild(this.sliderTrack);
         this.element.tabIndex = -1;
         this.isMaterial = this.getTheme(this.sliderContainer) === 'material';
@@ -715,7 +715,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
             this.createLimitBar();
         }
         this.setOrientClass();
-        this.hiddenInput = <HTMLInputElement>(createElement('input', {
+        this.hiddenInput = <HTMLInputElement>(this.createElement('input', {
             attrs: {
                 type: 'hidden', value: (isNullOrUndefined(this.value) ? this.min.toString() : this.value.toString()),
                 name: this.element.getAttribute('name') || this.element.getAttribute('id') ||
@@ -762,7 +762,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     private createRangeBar(): void {
         if (this.type !== 'Default') {
-            this.rangeBar = <HTMLElement>(createElement('div', { attrs: { class: classNames.rangeBar } }));
+            this.rangeBar = <HTMLElement>(this.createElement('div', { attrs: { class: classNames.rangeBar } }));
             this.element.appendChild(this.rangeBar);
 
             if (this.drag && this.type === 'Range') {
@@ -779,12 +779,12 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
         let firstElementClassName: string = this.type !== 'Range' ? classNames.limitBarDefault :
             classNames.limitBarFirst;
         firstElementClassName += ' ' + classNames.limits;
-        this.limitBarFirst = <HTMLElement>(createElement('div', {
+        this.limitBarFirst = <HTMLElement>(this.createElement('div', {
             attrs: { class: firstElementClassName }
         }));
         this.element.appendChild(this.limitBarFirst);
         if (this.type === 'Range') {
-            this.limitBarSecond = <HTMLElement>(createElement('div', {
+            this.limitBarSecond = <HTMLElement>(this.createElement('div', {
                 attrs: {
                     class: classNames.limitBarSecond + ' ' + classNames.limits
                 }
@@ -837,7 +837,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
         }
     }
     private createSecondHandle(): void {
-        this.secondHandle = createElement('div', {
+        this.secondHandle = this.createElement('div', {
             attrs: {
                 class: classNames.sliderHandle, 'role': 'slider', 'aria-labelledby':
                     this.element.id + '_title', tabIndex: '0'
@@ -846,7 +846,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
         this.secondHandle.classList.add(classNames.sliderSecondHandle);
         this.element.appendChild(this.secondHandle);
         if (this.isMaterial && this.tooltip.isVisible) {
-            this.secondMaterialHandle = createElement('div', {
+            this.secondMaterialHandle = this.createElement('div', {
                 attrs: {
                     class: classNames.sliderHandle + ' ' +
                         classNames.sliderMaterialHandle
@@ -857,7 +857,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
     }
 
     private createFirstHandle(): void {
-        this.firstHandle = createElement('div', {
+        this.firstHandle = this.createElement('div', {
             attrs: {
                 class: classNames.sliderHandle, 'role': 'slider', 'aria-labelledby':
                     this.element.id + '_title', tabIndex: '0'
@@ -866,7 +866,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
         this.firstHandle.classList.add(classNames.sliderFirstHandle);
         this.element.appendChild(this.firstHandle);
         if (this.isMaterial && this.tooltip.isVisible) {
-            this.firstMaterialHandle = createElement('div', {
+            this.firstMaterialHandle = this.createElement('div', {
                 attrs: {
                     class: classNames.sliderHandle + ' ' +
                         classNames.sliderMaterialHandle
@@ -1369,11 +1369,11 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
     }
 
     private setButtons(): void {
-        this.firstBtn = createElement('div', { className: classNames.sliderButton + ' ' + classNames.firstButton });
-        this.firstBtn.appendChild(createElement('span', { className: classNames.sliderButtonIcon }));
+        this.firstBtn = this.createElement('div', { className: classNames.sliderButton + ' ' + classNames.firstButton });
+        this.firstBtn.appendChild(this.createElement('span', { className: classNames.sliderButtonIcon }));
         this.firstBtn.tabIndex = -1;
-        this.secondBtn = createElement('div', { className: classNames.sliderButton + ' ' + classNames.secondButton });
-        this.secondBtn.appendChild(createElement('span', { className: classNames.sliderButtonIcon }));
+        this.secondBtn = this.createElement('div', { className: classNames.sliderButton + ' ' + classNames.secondButton });
+        this.secondBtn.appendChild(this.createElement('span', { className: classNames.sliderButtonIcon }));
         this.secondBtn.tabIndex = -1;
         this.sliderContainer.classList.add(classNames.sliderButtonClass);
         this.sliderContainer.appendChild(this.firstBtn);
@@ -1469,7 +1469,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
         let orien: string = this.orientation === 'Vertical' ? 'v' : 'h';
         let spanText: number;
         this.noOfDecimals = this.numberOfDecimals(this.step);
-        this.ul = createElement('ul', {
+        this.ul = this.createElement('ul', {
             className: classNames.scale + ' ' + 'e-' + orien + '-scale ' + classNames.tick + '-' + this.ticks.placement.toLowerCase(),
             attrs: { role: 'presentation', tabIndex: '-1', 'aria-hidden': 'true' }
         });
@@ -1502,7 +1502,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
         }
         for (let i: number = 0, y: number = !isNullOrUndefined(this.customValues) && this.customValues.length > 0 ?
             this.customValues.length - 1 : 0, k: number = 0; i <= count; i++) {
-            li = (createElement('li', {
+            li = (this.createElement('li', {
                 attrs: {
                     class: classNames.tick, role: 'presentation', tabIndex: '-1',
                     'aria-hidden': 'true'
@@ -1586,7 +1586,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
     }
 
     private createTick(li: HTMLElement, start: number | string): void {
-        let span: HTMLElement = createElement('span', {
+        let span: HTMLElement = this.createElement('span', {
             className: classNames.tickValue + ' ' + classNames.tick + '-' + this.ticks.placement.toLowerCase(),
             attrs: { role: 'presentation', tabIndex: '-1', 'aria-hidden': 'true' }
         });

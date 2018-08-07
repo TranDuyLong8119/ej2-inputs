@@ -1021,8 +1021,19 @@ describe('Uploader Control', () => {
             createSpinner({target: uploadObj.uploadWrapper.querySelector('.e-file-delete-btn')});
             showSpinner(uploadObj.uploadWrapper.querySelector('.e-file-delete-btn'));
             expect(isNullOrUndefined(uploadObj.uploadWrapper.querySelector('.e-spinner-pane'))).toBe(false);
-            uploadObj.removeFailed(event, uploadObj.filesData[0], true);
+        });
+
+        it ('FilesData value when enabling showFileList', () => {
+            let fileObj1: File = new File(["2nd File"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArg: any = { type: 'click', target: {files: [ fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArg);
+            let length: number = uploadObj.filesData.length;
+            uploadObj.removeFilesData(uploadObj.filesData[0], true);
             expect(uploadObj.filesData.length).toBe(length);
+            let event = { type: 'click', target: {files: [uploadObj.filesData[0]]}, preventDefault: (): void => { } };
+            createSpinner({target: uploadObj.uploadWrapper.querySelector('.e-file-delete-btn')});
+            showSpinner(uploadObj.uploadWrapper.querySelector('.e-file-delete-btn'));
+            expect(isNullOrUndefined(uploadObj.uploadWrapper.querySelector('.e-spinner-pane'))).toBe(false);
         });
     })
     describe('Disable', () => {
@@ -2416,5 +2427,84 @@ describe('Uploader Control', () => {
             expect(document.querySelector('.e-file-drop').textContent).toEqual('Or drop files here');
         });
     });
+
+    describe('Disabling showFileList and checking', () => {
+        let uploadObj: any;
+        beforeEach((): void => {
+            let element: HTMLElement = createElement('input', {id: 'UploadFiles'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+        })
+        afterEach((): void => {
+            document.body.innerHTML = '';
+        });
+        it('getFilesData method with autoUpload true', (done) => {
+            uploadObj = new Uploader({
+                showFileList: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                },
+             });
+            uploadObj.appendTo(document.getElementById('UploadFiles'));
+            let fileObj: File = new File(["Nice One"], "last.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.getFilesData().length).toEqual(1);
+            setTimeout(() => {
+                expect(uploadObj.filesData[0].status).toEqual('File uploaded successfully');
+                expect(uploadObj.filesData[0].statusCode).toBe('2');
+                done();
+            }, 1500)
+        });
+
+        it('getFilesData method with autoUpload false', (done) => {
+            uploadObj = new Uploader({
+                showFileList: false,
+                asyncSettings: {
+                    saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+                    removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove',
+                },
+                autoUpload: false
+             });
+            uploadObj.appendTo(document.getElementById('UploadFiles'));
+            let fileObj: File = new File(["Nice One"], "last.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            expect(uploadObj.getFilesData().length).toEqual(1);
+            setTimeout(() => {
+                expect(uploadObj.filesData[0].status).toEqual('Ready to upload');
+                expect(uploadObj.filesData[0].statusCode).toBe('1');
+                done();
+            }, 1500)
+        });
+    });
+
+    describe('File List Template UI', () => {
+        let uploadObj: any;
+        beforeAll((): void => {
+            let template: Element = createElement('div', { id: 'template' });
+            template.innerHTML = "<div class='wrapper'><table><tbody><tr><td><span class='file-name'>${name}</span></td><td><span class='file-size'>${size} bytes</span><span class='e-file-delete-btn e-spinner-pane' style='display:block;height:30px; width: 30px;'></span></td></tr></tbody></table></div>";
+            document.body.appendChild(template);
+            let element: HTMLElement = createElement('input', {id: 'upload'});
+            document.body.appendChild(element);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({ showFileList: false });
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterAll((): void => {
+            document.body.innerHTML = '';
+        });
+        it ('FilesData value when enabling showFileList', () => {
+            let fileObj1: File = new File(["2nd File"], "demo.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArg: any = { type: 'click', target: {files: [ fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArg);
+            let length: number = uploadObj.filesData.length;
+            expect(uploadObj.filesData.length).toBe(1);
+            uploadObj.removeFilesData(uploadObj.filesData[0], true);
+            expect(uploadObj.filesData.length).toBe(0);
+        });
+    })
+
 });
 

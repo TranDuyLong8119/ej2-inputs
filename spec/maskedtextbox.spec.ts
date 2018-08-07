@@ -1838,4 +1838,27 @@ describe('MaskedTextBox Component', () => {
             maskBox = undefined;
         });
     });
+    describe('Name attribute', () => {
+        let maskBox: MaskedTextBox;
+        beforeEach((): void => {
+            maskBox = undefined;
+            let ele: HTMLElement = createElement('input', { id: 'mask1' });
+            document.body.appendChild(ele);
+        });
+        afterEach((): void => {
+            if (maskBox) {
+                maskBox.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+        it('Name attribute testing', () => {
+            maskBox = new MaskedTextBox({
+                mask: '9999 9999 9999 9999',
+                placeholder: 'Enter card number'
+            });
+            maskBox.appendTo('#mask1');
+            maskBox.floatLabelType = "Never";
+            expect(maskBox.element.name).toBe("mask1");
+        });
+    });
 });

@@ -743,6 +743,12 @@ describe('ColorPicker', () => {
                 (colorPicker.container.querySelectorAll('.e-row')[0].children[0] as HTMLElement).click();
                 expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
             });
+
+            it('Value property as empty string', () => {
+                colorPicker = new ColorPicker({ value: '' }, '#color-picker');
+                colorPicker.toggle();
+                expect(colorPicker.value).toBe('#008000ff');
+            });
         });
     });
 

@@ -2055,13 +2055,11 @@
   // sass-lint:disable no-vendor-prefixes
   input.e-input#{$css}:-ms-input-placeholder {
     font-style: $input-font-style;
-    user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes
   textarea.e-input#{$css}:-ms-input-placeholder {
     font-style: $input-font-style;
-    user-select: none;
   }
 
   // sass-lint:disable no-vendor-prefixes

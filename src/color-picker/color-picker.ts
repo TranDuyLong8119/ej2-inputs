@@ -249,7 +249,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         attributes(this.element, { 'tabindex': '-1', 'spellcheck': 'false' });
         this.container = this.createElement('div', { className: CONTAINER });
         this.getWrapper().appendChild(this.container);
-        let value: string = this.value;
+        let value: string = this.value ? this.value : '#008000';
         this.element.value = value.slice(0, 7);
         if (this.mode === 'Picker') {
             value = this.roundValue(value);

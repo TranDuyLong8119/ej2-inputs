@@ -1177,11 +1177,18 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     }
 
     private removeFilesData(file: FileInfo, customTemplate: boolean): void {
-        if (customTemplate) { return; }
+        let index: number ;
+        if (customTemplate) {
+            if (!this.showFileList) {
+                index = this.filesData.indexOf(file);
+                this.filesData.splice(index, 1);
+            }
+            return;
+        }
         let selectedElement: HTMLElement = this.getLiElement(file);
         if (isNullOrUndefined(selectedElement)) { return; }
         detach(selectedElement);
-        let index: number = this.fileList.indexOf(selectedElement);
+        index = this.fileList.indexOf(selectedElement);
         this.fileList.splice(index, 1);
         this.filesData.splice(index, 1);
         if (this.fileList.length === 0 && !isNullOrUndefined(this.listParent)) {
@@ -1328,6 +1335,11 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             }
             if (!isNullOrUndefined(eventArgs.progressInterval) && eventArgs.progressInterval !== '') {
                 this.progressInterval = eventArgs.progressInterval;
+            }
+        } else {
+            this.filesData = this.filesData.concat(fileData);
+            if (this.autoUpload) {
+                this.upload(this.filesData, true);
             }
         }
     }
@@ -2394,6 +2406,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     public clearAll(): void {
         if (isNullOrUndefined(this.listParent)) {
             if (Browser.info.name !== 'msie') { this.element.value = ''; }
+            this.filesData = [];
             return;
         }
         let eventArgs: ClearingEventArgs = {

@@ -2,7 +2,7 @@
 
 A package of Essential JS 2 Input textbox components. It comes with a collection of form components which is useful to get different input values from the users such as text, numbers, patterns, color and file inputs.
 
-![ej2-inputs](./readMe_Images/readMe.gif)
+![ej2-inputs](https://ej2.syncfusion.com/products/images/input/readme.gif)
 
 > This is a commercial product and requires a paid license for possession or use. Syncfusion’s licensed software, including this component, is subject to the terms and conditions of Syncfusion's EULA (https://www.syncfusion.com/eula/es/). To acquire a license, you can purchase one at https://www.syncfusion.com/sales/products or start a free 30-day trial here (https://www.syncfusion.com/account/manage-trials/start-trials).
 

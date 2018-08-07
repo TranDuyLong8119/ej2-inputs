@@ -273,6 +273,9 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
                 addClass([this.element], INPUT);
             }
             this.createWrapper();
+            if (this.element.name === '') {
+                this.element.setAttribute('name', this.element.id);
+            }
             this.isInitial = true;
             this.resetMaskedTextBox();
             this.isInitial = false;

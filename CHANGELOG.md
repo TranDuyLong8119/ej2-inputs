@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## 16.2.47 (2018-08-07)
+
+### TextBox
+
+#### Bug Fixes
+
+- Resolved the issue with customizing the textbox background color with minimal CSS.
+
+### Uploader
+
+#### Bug Fixes
+
+- Resolved the issue with uploading a file while disable the `showFileList` API.
+
+### MaskedTextBox
+
+#### Bug Fixes
+
+- Issue in setting the background color of MaskedTextBox has been fixed.
+
+- Issue in adding name attribute in the input element while creating MaskedTextBox without name attribute has been resolved.
+
 ## 16.2.44 (2018-07-10)
 
 ### NumericTextBox

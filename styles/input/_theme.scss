@@ -14,6 +14,15 @@
     color: $input-font-color;
   }
 
+  .e-input-group input.e-input,
+  .e-input-group.e-control-wrapper input.e-input,
+  .e-float-input input,
+  .e-float-input.e-control-wrapper input,
+  .e-float-input textarea,
+  .e-float-input.e-control-wrapper textarea {
+    background: none;
+  }
+
   .e-input-group,
   .e-input-group.e-control-wrapper,
   .e-float-input,
