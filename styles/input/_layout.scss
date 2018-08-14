@@ -3540,4 +3540,108 @@
       border-width: $zero-value $zero-value 1px;
     }
   }
+
+  .e-float-input input:-webkit-autofill~label.e-float-text,
+  .e-float-input.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom {
+    font-size: $float-label-font-size;
+    @if $skin-name == 'material' {
+      top: -9px;
+      transform: translate3d(0, -6px, 0) scale(.92);
+    }
+    @else if $skin-name == 'fabric' or $skin-name == 'highcontrast' {
+      font-style: $input-font-normal;
+      padding-right: 0;
+      transform: translate3d(-10px, -43px, 0) scale(1);
+    }
+    @else if $skin-name == 'bootstrap' {
+      font-weight: bold;
+      padding-right: 0;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
+    user-select: text;
+  }
+
+  .e-bigger .e-float-input input:-webkit-autofill~label.e-float-text,
+  .e-bigger.e-float-input input:-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-bigger.e-float-input.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom,
+  .e-bigger.e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom {
+    font-size: $float-label-bigger-font-size;
+    @if $skin-name == 'material' {
+      top: -8px;
+      transform: translate3d(0, -6px, 0) scale(.86);
+    }
+    @else if $skin-name == 'fabric' or $skin-name == 'highcontrast' {
+      font-style: $input-font-normal;
+      padding-right: 0;
+      top: 14px;
+      transform: translate3d(-10px, -43px, 0) scale(1);
+    }
+    @else if $skin-name == 'bootstrap' {
+      font-weight: bold;
+      padding-right: 0;
+      top: 14px;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
+    user-select: text;
+  }
+
+  .e-small .e-float-input input:-webkit-autofill~label.e-float-text,
+  .e-small.e-float-input input:-webkit-autofill~label.e-float-text,
+  .e-small .e-float-input.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-small.e-float-input.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-small .e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom,
+  .e-small.e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom {
+    font-size: $float-label-small-font-size;
+    @if $skin-name == 'material' {
+      top: -8px;
+      transform: translate3d(0, -6px, 0) scale(.92);
+    }
+    @else if $skin-name == 'fabric' or $skin-name == 'highcontrast' {
+      font-style: $input-font-normal;
+      padding-right: 0;
+      top: 17px;
+      transform: translate3d(-10px, -43px, 0) scale(1);
+    }
+    @else if $skin-name == 'bootstrap' {
+      font-weight: bold;
+      padding-right: 0;
+      top: 17px;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
+    user-select: text;
+  }
+
+  .e-bigger .e-float-input.e-small input:-webkit-autofill~label.e-float-text,
+  .e-bigger.e-small .e-float-input input:-webkit-autofill~label.e-float-text,
+  .e-float-input.e-bigger.e-small input:-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input.e-small.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-bigger.e-small .e-float-input.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-float-input.e-bigger.e-small.e-control-wrapper.e-autofill input:-webkit-autofill~label.e-float-text,
+  .e-small.e-bigger .e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom,
+  .e-small.e-bigger.e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom,
+  .e-bigger .e-small.e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom,
+  .e-small .e-bigger.e-float-input.e-control-wrapper.e-autofill input:not(:focus):valid:-webkit-autofill ~ label.e-float-text.e-label-bottom {
+    font-size: $float-label-bigger-small-font-size;
+    @if $skin-name == 'material' {
+      top: -10px;
+      transform: translate3d(0, -6px, 0) scale(.92);
+    }
+    @else if $skin-name == 'fabric' or $skin-name == 'highcontrast' {
+      font-style: $input-font-normal;
+      padding-right: 0;
+      top: 16px;
+      transform: translate3d(-10px, -43px, 0) scale(1);
+    }
+
+    @else if $skin-name == 'bootstrap' {
+      font-weight: bold;
+      padding-right: 0;
+      top: 16px;
+      transform: translate3d(-10px, -39px, 0) scale(1);
+    }
+    user-select: text;
+  }
 }

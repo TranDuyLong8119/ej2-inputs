@@ -1390,4 +1390,23 @@
       border-color: $input-group-border-color-hover;
     }
   }
+
+  .e-float-input:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger.e-float-input:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-small .e-float-input:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-small.e-float-input:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input.e-small:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger.e-small .e-float-input:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-float-input.e-bigger.e-small:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-float-input.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger.e-float-input.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-small .e-float-input.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-small.e-float-input.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger .e-float-input.e-small.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-bigger.e-small .e-float-input.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text,
+  .e-float-input.e-bigger.e-small.e-control-wrapper.e-autofill:not(.e-error) input:not(:focus):-webkit-autofill~label.e-float-text {
+    color: $float-label-font-color;
+  }
 }

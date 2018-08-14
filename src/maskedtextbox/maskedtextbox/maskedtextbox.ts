@@ -46,6 +46,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
     private isFocus: boolean;
     private isInitial: boolean;
     private isIosInvalid: boolean;
+    private preEleVal: string;
 
     /**
      * Gets or sets the CSS classes to root element of the MaskedTextBox which helps to customize the
@@ -281,6 +282,7 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
             this.isInitial = false;
             this.setMaskPlaceholder(true, false);
             this.setWidth(this.width);
+            this.preEleVal = this.element.value;
         }
     }
 
@@ -332,17 +334,19 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
     }
 
     private createWrapper(): void {
-        this.inputObj = Input.createInput({
-            element: this.element,
-            floatLabelType: this.floatLabelType,
-            properties: {
-                enableRtl: this.enableRtl,
-                cssClass: this.cssClass,
-                enabled: this.enabled,
-                placeholder: this.placeholder,
-                showClearButton: this.showClearButton
-            }
-        });
+        this.inputObj = Input.createInput(
+            {
+                element: this.element,
+                floatLabelType: this.floatLabelType,
+                properties: {
+                    enableRtl: this.enableRtl,
+                    cssClass: this.cssClass,
+                    enabled: this.enabled,
+                    placeholder: this.placeholder,
+                    showClearButton: this.showClearButton
+                }
+            },
+            this.createElement);
         this.inputObj.container.setAttribute('class', ROOT + ' ' + this.inputObj.container.getAttribute('class'));
     }
 
@@ -379,13 +383,13 @@ export class MaskedTextBox extends Component<HTMLInputElement> implements INotif
                     this.resetMaskedTextBox();
                     break;
                 case 'showClearButton':
-                    Input.setClearButton(newProp.showClearButton, this.element, this.inputObj);
+                    Input.setClearButton(newProp.showClearButton, this.element, this.inputObj, undefined, this.createElement);
                     bindClearEvent.call(this);
                     break;
                 case 'floatLabelType':
                     this.floatLabelType = newProp.floatLabelType;
                     Input.removeFloating(this.inputObj);
-                    Input.addFloating(this.element, this.floatLabelType, this.placeholder);
+                    Input.addFloating(this.element, this.floatLabelType, this.placeholder, this.createElement);
                     break;
                 case 'mask':
                     let strippedValue: string = this.value;

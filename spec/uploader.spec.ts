@@ -2506,5 +2506,35 @@ describe('Uploader Control', () => {
         });
     })
 
+    describe('Form support', () => {
+        let uploadObj: any;
+        beforeAll((): void => {
+            let element: HTMLElement = createElement('input', {id: 'upload', attrs: {accept : '.png'}});            
+            let form: Element = createElement('form', {attrs: {id: 'form1'}});
+            let submitButton: HTMLElement = createElement('button',{attrs: {type: 'submit'}});
+            form.appendChild(element);
+            form.appendChild(submitButton);
+            document.body.appendChild(form);
+            element.setAttribute('type', 'file');
+            uploadObj = new Uploader({ autoUpload: false});
+            uploadObj.appendTo(document.getElementById('upload'));
+        })
+        afterAll((): void => {
+            uploadObj.destroy();
+            document.body.innerHTML = '';
+        });
+        it('Clearing values', () => {
+            let fileObj: File = new File(["Nice One"], "sample2.txt", {lastModified: 0, type: "overide/mimetype"});
+            let fileObj1: File = new File(["Nice One"], "sample2.txt", {lastModified: 0, type: "overide/mimetype"});
+            let eventArgs = { type: 'click', target: {files: [fileObj, fileObj1]}, preventDefault: (): void => { } };
+            uploadObj.onSelectFiles(eventArgs);
+            let element : HTMLFormElement = <HTMLFormElement>document.getElementById("form1");
+            expect(uploadObj.getFilesData().length).toEqual(2);
+            expect(uploadObj.fileList.length).toEqual(2);
+            uploadObj.uploadWrapper.querySelector('.e-file-remove-btn').click();
+            expect(uploadObj.getFilesData().length).toEqual(0);
+            expect(uploadObj.fileList.length).toEqual(0);
+        });
+    })
 });
 

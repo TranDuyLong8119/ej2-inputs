@@ -13,7 +13,7 @@ const SPINDOWN: string = 'e-spin-down';
 const ERROR: string = 'e-error';
 const INCREMENT: string = 'increment';
 const DECREMENT: string = 'decrement';
-const INTREGEXP: RegExp = new RegExp('/^(-)?(\d*)$/');
+const INTREGEXP: RegExp = new RegExp('^(-)?(\\d*)$');
 const DECIMALSEPARATOR: string = '.';
 const COMPONENT: string = 'e-numerictextbox';
 const CONTROL: string = 'e-control';
@@ -392,18 +392,21 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /* Wrapper creation */
     private createWrapper(): void {
-        let inputObj: InputObject = Input.createInput({
-            element: this.element,
-            floatLabelType: this.floatLabelType,
-            properties: {
-                readonly: this.readonly,
-                placeholder: this.placeholder,
-                cssClass: this.cssClass,
-                enableRtl: this.enableRtl,
-                showClearButton: this.showClearButton,
-                enabled: this.enabled
-            }
-        });
+        let inputObj: InputObject = Input.createInput(
+            {
+                element: this.element,
+                floatLabelType: this.floatLabelType,
+                properties: {
+                    readonly: this.readonly,
+                    placeholder: this.placeholder,
+                    cssClass: this.cssClass,
+                    enableRtl: this.enableRtl,
+                    showClearButton: this.showClearButton,
+                    enabled: this.enabled
+                }
+            },
+            this.createElement
+        );
         this.inputWrapper = inputObj;
         this.container = inputObj.container;
         this.container.setAttribute('class', ROOT + ' ' + this.container.getAttribute('class'));
@@ -418,12 +421,12 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
 
     /* Spinner creation */
     private spinBtnCreation(): void {
-        this.spinDown = Input.appendSpan(SPINICON + ' ' + SPINDOWN, this.container);
+        this.spinDown = Input.appendSpan(SPINICON + ' ' + SPINDOWN, this.container, this.createElement);
         attributes(this.spinDown, {
             'title': this.l10n.getConstant('decrementTitle'),
             'aria-label': this.l10n.getConstant('decrementTitle')
         });
-        this.spinUp = Input.appendSpan(SPINICON + ' ' + SPINUP, this.container);
+        this.spinUp = Input.appendSpan(SPINICON + ' ' + SPINUP, this.container, this.createElement);
         attributes(this.spinUp, {
             'title': this.l10n.getConstant('incrementTitle'),
             'aria-label': this.l10n.getConstant('incrementTitle')
@@ -647,7 +650,8 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     };
     private inputHandler(event: KeyboardEvent): void {
         let iOS: boolean = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-        if (iOS && Browser.isDevice) {
+        let fireFox: boolean = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        if ((fireFox || iOS) && Browser.isDevice) {
             this.preventHandler();
         }
     };
@@ -794,6 +798,11 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
     }
 
     private keyPressHandler(event: KeyboardEvent): boolean {
+        if (!Browser.isDevice && Browser.info.version === '11.0'  && event.keyCode === 13) {
+            let parsedInput: number = this.instance.getNumberParser({ format: 'n' })(this.element.value);
+            this.updateValue(parsedInput, event);
+            return true;
+         }
         if (event.which === 0 || event.metaKey || event.ctrlKey || event.keyCode === 8 || event.keyCode === 13) { return true; }
         let currentChar: string = String.fromCharCode(event.which);
         let text: string = this.element.value;
@@ -814,7 +823,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         if (decimalSeparator === DECIMALSEPARATOR) {
             decimalSeparator = '\\' + decimalSeparator;
         }
-        if (this.decimals === 0) {
+        if (this.decimals === 0 && this.validateDecimalOnType) {
             return INTREGEXP;
         }
         if (this.decimals && this.validateDecimalOnType) {
@@ -941,7 +950,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         Input.removeFloating(this.inputWrapper);
         let hiddenInput : HTMLElement = this.hiddenInput;
         this.hiddenInput.remove();
-        Input.addFloating(this.element, this.floatLabelType, this.placeholder);
+        Input.addFloating(this.element, this.floatLabelType, this.placeholder, this.createElement);
         this.container.insertBefore(hiddenInput, this.container.childNodes[1]);
     }
 
@@ -1052,7 +1061,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                     }
                     break;
                 case 'showClearButton':
-                        Input.setClearButton(newProp.showClearButton, this.element, this.inputWrapper);
+                        Input.setClearButton(newProp.showClearButton, this.element, this.inputWrapper, undefined, this.createElement);
                         this.bindClearEvent();
                     break;
                 case 'floatLabelType':

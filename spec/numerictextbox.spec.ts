@@ -4298,7 +4298,7 @@ describe('Numerictextbox Control', () => {
             let eventArgs: any = { keyCode: 46, which: 46, altKey: false, ctrlKey: false, shiftKey: false, preventDefault: function () { }, stopPropagation: function () { } };
             let ele: HTMLInputElement = <HTMLInputElement>createElement('input', { id: 'tsNumeric' });
             document.body.appendChild(ele);
-            numerictextbox = new NumericTextBox({ value: 5, decimals: 0 }, ele);
+            numerictextbox = new NumericTextBox({ value: 5, decimals: 0, validateDecimalOnType: true }, ele);
             expect((<HTMLInputElement>document.getElementById('tsNumeric')).value).toEqual('5.00');
             numerictextbox.focusIn();
             let result: boolean = numerictextbox.keyPressHandler(extend({}, {}, eventArgs));

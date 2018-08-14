@@ -2370,33 +2370,42 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     public remove(
         fileData?: FileInfo | FileInfo[], customTemplate?: boolean, removeDirectly?: boolean,
         args?: MouseEvent | TouchEvent | KeyboardEventArgs): void {
-        let removeFiles: FileInfo[] = [];
-        fileData = !isNullOrUndefined(fileData) ? fileData : this.filesData;
-        if (fileData instanceof Array) {
-            removeFiles = fileData;
-        } else {
-            removeFiles.push(fileData);
-        }
-        let eventArgs: RemovingEventArgs = {
-            event: args,
-            cancel: false,
-            filesData: removeFiles,
-            customFormData: [],
-            postRawFile: true
-        };
-        let removeUrl: string = this.asyncSettings.removeUrl;
-        let validUrl: boolean = (removeUrl === '' || isNullOrUndefined(removeUrl)) ? false : true;
-        for (let files of removeFiles) {
-            if (files.statusCode === '2' && validUrl) {
-                this.removeUploadedFile(files, eventArgs, removeDirectly, customTemplate);
-            } else {
-                if (!removeDirectly) {
-                    this.trigger('removing', eventArgs);
+            let eventArgs: RemovingEventArgs = {
+                event: args,
+                cancel: false,
+                filesData: [],
+                customFormData: [],
+                postRawFile: true
+            };
+            if (this.isForm) {
+                eventArgs.filesData = this.getFilesData();
+                this.trigger('removing', eventArgs);
+                if (!eventArgs.cancel) {
+                    this.clearAll();
                 }
-                if (eventArgs.cancel) { return; }
-                this.removeFilesData(files, customTemplate);
+                return;
             }
-        }
+            let removeFiles: FileInfo[] = [];
+            fileData = !isNullOrUndefined(fileData) ? fileData : this.filesData;
+            if (fileData instanceof Array) {
+                removeFiles = fileData;
+            } else {
+                removeFiles.push(fileData);
+            }
+            eventArgs.filesData = removeFiles;
+            let removeUrl: string = this.asyncSettings.removeUrl;
+            let validUrl: boolean = (removeUrl === '' || isNullOrUndefined(removeUrl)) ? false : true;
+            for (let files of removeFiles) {
+                if ((files.statusCode === '2' || files.statusCode === '4') && validUrl) {
+                    this.removeUploadedFile(files, eventArgs, removeDirectly, customTemplate);
+                } else {
+                    if (!removeDirectly) {
+                        this.trigger('removing', eventArgs);
+                    }
+                    if (eventArgs.cancel) { return; }
+                    this.removeFilesData(files, customTemplate);
+                }
+            }
     }
 
     /**

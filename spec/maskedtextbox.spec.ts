@@ -1816,7 +1816,8 @@ describe('MaskedTextBox Component', () => {
         it('Floating label MaskedTextBox: Always', () => {
             maskBox = new MaskedTextBox({
                 mask: '9999 9999 9999 9999',
-                placeholder: 'Enter card number'
+                placeholder: 'Enter card number',
+                value: "1",
             });
             maskBox.appendTo('#mask1');
             maskBox.floatLabelType = "Always";
@@ -1825,7 +1826,7 @@ describe('MaskedTextBox Component', () => {
             expect(input.parentElement.classList.contains('e-float-input')).toEqual(true);
             expect(input.parentElement.getElementsByTagName('label')[0].innerText === 'Enter card number').toEqual(true);
             expect(input.parentElement.getElementsByTagName('label')[0].classList.contains('e-label-top')).toEqual(true);
-            expect(input.value === '____ ____ ____ ____').toBe(true);
+            expect(input.value === '1___ ____ ____ ____').toBe(true);
         });
         it('Destroy method testing', () => {
             maskBox = new MaskedTextBox({
@@ -1859,6 +1860,37 @@ describe('MaskedTextBox Component', () => {
             maskBox.appendTo('#mask1');
             maskBox.floatLabelType = "Never";
             expect(maskBox.element.name).toBe("mask1");
+        });
+    });
+    describe('Event testing', () => {
+        let maskBox: MaskedTextBox;
+        let i: number = 0;
+        function clickFn(): void {
+            i++;
+        }
+        beforeEach((): void => {
+            maskBox = undefined;
+            let ele: HTMLElement = createElement('input', { id: 'mask1' });
+            document.body.appendChild(ele);
+        });
+        afterEach((): void => {
+            if (maskBox) {
+                maskBox.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+        it('Change event testing', () => {
+            maskBox = new MaskedTextBox({
+                mask: '9999 9999 9999 9999',
+                placeholder: 'Enter card number',
+                value: "123",
+                change: clickFn
+            });
+            maskBox.appendTo('#mask1');
+            expect(i).toEqual(0);
+            maskBox.value = '098';
+            maskBox.dataBind();
+            expect(i).toEqual(1);
         });
     });
 });

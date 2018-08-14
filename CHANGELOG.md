@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## 16.2.48 (2018-08-14)
+
+### Uploader
+
+#### Bug Fixes
+
+- In synchronous upload, while removing a particular file from file list will clear all the files now since couldn't manipulate each file details in input file element.
+
+### NumericTextBox
+
+#### Bug Fixes
+
+- Issue in entering the text in NumericTextBox from Firefox browser has been fixed.
+- Resolved the issue in NumericTextBox is not allowed to edit the value while using decimals count as 0.
+
+### MaskedTextBox
+
+#### Bug Fixes
+
+- Resolved the issue with MaskedTextBox change event is triggered for multiple times while changing value dynamically.
+
 ## 16.2.47 (2018-08-07)
 
 ### TextBox

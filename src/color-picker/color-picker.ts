@@ -619,15 +619,17 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         }) as HTMLInputElement;
         if (!this.isPicker()) { Input.setReadonly(true, hexInput); }
         container.appendChild(hexInput);
-        Input.createInput({
-            element: hexInput,
-            floatLabelType: 'Always',
-            properties: {
-                placeholder: 'HEX',
-                enableRtl: this.enableRtl,
-                enabled: !this.disabled
-            }
-        });
+        Input.createInput(
+            {
+                element: hexInput,
+                floatLabelType: 'Always',
+                properties: {
+                    placeholder: 'HEX',
+                    enableRtl: this.enableRtl,
+                    enabled: !this.disabled
+                }
+            },
+            this.createElement);
         Input.setValue(this.value.slice(0, 7), hexInput);
         let numericInput: NumericTextBox;
         let label: string = 'RGB';

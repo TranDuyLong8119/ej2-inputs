@@ -304,6 +304,8 @@ function maskInputPasteHandler(event: KeyboardEvent): void {
                     this.maskKeyPress = true;
                     do { validateValue.call(this, value[i], false, null); ++i; } while (i < value.length);
                     this.maskKeyPress = false;
+                } else {
+                    triggerMaskChangeEvent.call(this, event, oldValue);
                 }
             },
             1);
@@ -312,6 +314,7 @@ function maskInputPasteHandler(event: KeyboardEvent): void {
 
 function maskInputCutHandler(event: KeyboardEvent): void {
     if (this.mask) {
+        let preValue: string = this.element.value;
         let sIndex: number = this.element.selectionStart;
         let eIndex: number = this.element.selectionEnd;
         this.undoCollec.push({ value: this.element.value, startIndex: this.element.selectionStart, endIndex: this.element.selectionEnd });
@@ -321,6 +324,9 @@ function maskInputCutHandler(event: KeyboardEvent): void {
             () => {
                 setElementValue.call(this, value);
                 this.element.selectionStart = this.element.selectionEnd = sIndex;
+                if (this.element.value !== preValue) {
+                    triggerMaskChangeEvent.call(this, event, null);
+                }
             },
             0);
     }
@@ -354,6 +360,9 @@ function maskInputHandler(event: KeyboardEvent): void {
             this.maskKeyPress = false;
             let i: number = 0;
             do { validateValue.call(this, value[i], event.ctrlKey, event); ++i; } while (i < value.length);
+            if (this.element.value !== this.preEleVal) {
+                triggerMaskChangeEvent.call(this, event, null);
+            }
         }
         let val: string = strippedValue.call(this, this.element);
         this.prevValue = val;
@@ -441,6 +450,7 @@ function removeMaskInputValues(event: KeyboardEvent): void {
     if (isRemove || event.keyCode === 8 || event.keyCode === 46) {
         this.undoCollec.push({ value: this.element.value, startIndex: this.element.selectionStart, endIndex: endIndex });
         let multipleDel: boolean = false;
+        let preValue: string = this.element.value;
         if (startIndex > 0 || ((event.keyCode === 8 || event.keyCode === 46) && startIndex < this.element.value.length
             && ((this.element.selectionEnd - startIndex) !== this.element.value.length))) {
             let index: number = startIndex;
@@ -513,7 +523,9 @@ function removeMaskInputValues(event: KeyboardEvent): void {
             value: this.element.value, startIndex: this.element.selectionStart,
             endIndex: this.element.selectionEnd
         });
-        triggerMaskChangeEvent.call(this, event, oldEventVal);
+        if (this.element.value !== preValue) {
+            triggerMaskChangeEvent.call(this, event, oldEventVal);
+        }
     }
 }
 
@@ -537,12 +549,14 @@ function maskInputKeyPressHandler(event: KeyboardEvent): void {
                 event.preventDefault();
             }
         }
-        triggerMaskChangeEvent.call(this, event, oldValue);
+        if (this.element.value !== oldValue) {
+            triggerMaskChangeEvent.call(this, event, oldValue);
+        }
     }
 }
 
 function triggerMaskChangeEvent(event: KeyboardEvent, oldValue: string): void {
-    if (!isNullOrUndefined(this.changeEventArgs)) {
+    if (!isNullOrUndefined(this.changeEventArgs) && !this.isInitial) {
         let eventArgs: Object = {};
         this.changeEventArgs = { value: this.element.value, maskedValue: this.element.value, isInteraction: false };
         if (this.mask) {
@@ -555,6 +569,7 @@ function triggerMaskChangeEvent(event: KeyboardEvent, oldValue: string): void {
         merge(eventArgs, this.changeEventArgs);
         this.trigger('change', eventArgs);
     }
+    this.preEleVal = this.element.value;
     attributes(this.element, { 'aria-valuenow': this.element.value });
 }
 
@@ -745,7 +760,6 @@ function applySupportedValues(event: KeyboardEvent, startIndex: number, keyValue
         setElementValue.call(this, elementValue);
         this.element.selectionStart = this.element.selectionEnd = startIndex + 1;
     }
-    triggerMaskChangeEvent.call(this, event, eventOldVal);
 }
 
 function preventUnsupportedValues(event: KeyboardEvent, sIdx: number, idx: number, key: string, ctrl: boolean, chkSupport: boolean): void {
@@ -768,7 +782,6 @@ function preventUnsupportedValues(event: KeyboardEvent, sIdx: number, idx: numbe
                 this.element.value[idx] !== this.promptChar) ? sIdx : idx;
         }
         eventOldVal = this.element.value;
-        triggerMaskChangeEvent.call(this, event, eventOldVal);
         addMaskErrorClass.call(this);
     }
     if (key.length === 1 && !ctrl && !isNullOrUndefined(event)) {
@@ -856,7 +869,7 @@ function changeToLowerUpperCase(key: string, value: string): string {
  * To set updated values in the MaskedTextBox.
  */
 export function setMaskValue(val?: string): void {
-    if (this.mask && val !== undefined && (val === '' || this.prevValue !== val)) {
+    if (this.mask && val !== undefined && (this.prevValue === undefined || this.prevValue !== val)) {
         this.maskKeyPress = true;
         setElementValue.call(this, this.promptMask);
         if (val !== '') {
@@ -868,7 +881,10 @@ export function setMaskValue(val?: string): void {
                 validateValue.call(this, val[i], false, null);
             }
         }
-        this.value = strippedValue.call(this, this.element);
+        let newVal: string = strippedValue.call(this, this.element);
+        this.prevValue = newVal;
+        this.value = newVal;
+        triggerMaskChangeEvent.call(this, null, null);
         this.maskKeyPress = false;
         let labelElement: HTMLElement = <HTMLElement>this.element.parentNode.querySelector('.e-float-text');
         if (this.element.value === this.promptMask && this.floatLabelType === 'Auto' && this.placeholder &&
