@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 16.2.50 (2018-08-28)
+
+### Uploader
+
+#### Bug Fixes
+
+- Resolved the issue with adding the additional form data in IE browser.
+
 ## 16.2.48 (2018-08-14)
 
 ### Uploader
@@ -22,6 +30,8 @@
 #### Bug Fixes
 
 - Resolved the issue with MaskedTextBox change event is triggered for multiple times while changing value dynamically.
+
+- Issue in using chrome autofill functionality with MaskedTextBox component has been fixed.
 
 ## 16.2.47 (2018-08-07)
 

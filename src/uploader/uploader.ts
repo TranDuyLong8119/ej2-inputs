@@ -167,7 +167,13 @@ export interface MetaData {
 }
 
 export interface ValidationMessages {
+    /**
+     * Returns the minimum file size validation message, if selected file size is less than specified minFileSize property.
+     */
     minSize? : string;
+    /**
+     * Returns the maximum file size validation message, if selected file size is less than specified maxFileSize property.
+     */
     maxSize? : string;
 }
 
@@ -1234,7 +1240,10 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             for (let i: number = 0; i < customData.length; i++) {
                 let data: { [key: string]: Object } = customData[i];
                 // tslint:disable-next-line
-                formData.append(Object.keys(data)[0], (<any>Object).values(data)[0]);
+                let value: any = Object.keys(data).map(function(e) {
+                    return data[e];
+                });
+                formData.append(Object.keys(data)[0], value);
             }
         }
     }
