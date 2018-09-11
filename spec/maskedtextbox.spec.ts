@@ -2,8 +2,8 @@
  * MaskedTextBox spec document
  */
 
-import { createElement, KeyboardEvents, EventHandler, extend } from '@syncfusion/ej2-base';
-import { MaskedTextBox } from '../src/maskedtextbox/maskedtextbox/maskedtextbox';
+import { createElement, KeyboardEvents, EventHandler, extend  } from '@syncfusion/ej2-base';
+import { MaskedTextBox, MaskChangeEventArgs, MaskFocusEventArgs} from '../src/maskedtextbox/maskedtextbox/maskedtextbox';
 import { maskInput, setMaskValue, getVal, getMaskedVal, mobileRemoveFunction, maskInputDropHandler, maskInputBlurHandler } from '../src/maskedtextbox/base/mask-base';
 
 function eventObject(eventType: string, eventName: string): Object {
@@ -57,10 +57,63 @@ describe('MaskedTextBox Component', () => {
             expect(customElement.classList.contains('e-mask-container')).toEqual(true);
             expect(customParent.classList.contains('e-widget') && customParent.classList.contains('e-mask')).toEqual(true);
         });
+         it('Apply CssClass, rtl property during initialization', () => {
+            maskBox = new MaskedTextBox({
+                mask: "(999) 99-999",
+                cssClass: "e-custom-css",
+                enableRtl: true,
+                enabled: true,
+                locale: "en-US"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            expect(input.parentElement.classList.contains('e-custom-css')).toEqual(true);
+            expect(input.parentElement.classList.contains('e-rtl')).toEqual(true);
+            expect(input.classList.contains('e-disabled')).toEqual(false);
+            expect(input.hasAttribute('disabled') && input.hasAttribute('aria-disabled')).toEqual(false);
+        });
+        it('Apply enabled false during initialization', () => {
+            maskBox = new MaskedTextBox({
+                mask: "(999) 99-999",
+                enabled: false,
+                locale: "en-US"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            expect(input.parentElement.classList.contains('e-disabled')).toEqual(true);
+            expect(input.hasAttribute('disabled') && input.hasAttribute('aria-disabled')).toEqual(true);
+        });
         afterAll(() => {
             maskBox.getPersistData();
         });
     });
+
+     describe('Ensure element structure', () => {
+        let maskBox: any;
+        beforeEach((): void => {
+            maskBox = undefined;
+            let ele: HTMLElement = createElement('input', { id: 'mask1' });
+            document.body.appendChild(ele);
+        });
+        afterEach((): void => {
+            if (maskBox) {
+                maskBox.destroy();
+            }
+            document.body.innerHTML = '';
+        });
+        it('inner Element', () => {
+            maskBox = new MaskedTextBox({
+                mask: "99 999 9999"
+            });
+            maskBox.appendTo('#mask1');
+            expect(maskBox.inputObj.container.classList.contains('e-input-group')).toEqual(true);
+            expect(maskBox.inputObj.container.classList.contains('e-widget')).toEqual(true);
+            expect(maskBox.inputObj.container.nodeName).toBe("SPAN");
+            expect(maskBox.inputObj.container.children[0].nodeName).toBe("INPUT");
+            expect(maskBox.inputObj.container.children[0].classList.contains('e-maskedtextbox')).toBe(true);
+            expect(maskBox.element.getAttribute("name")).not.toBeNull();
+        });
+          });
     describe('Add mask in MaskedTextBox', () => {
         let maskBox: MaskedTextBox;
         beforeEach((): void => {
@@ -145,7 +198,7 @@ describe('MaskedTextBox Component', () => {
         });
     });
     describe('Edit values in MaskedTextBox through property', () => {
-        let maskBox: MaskedTextBox;
+        let maskBox: any;
         beforeEach((): void => {
             maskBox = undefined;
             let ele: HTMLElement = createElement('input', { id: 'mask1' });
@@ -169,6 +222,41 @@ describe('MaskedTextBox Component', () => {
             event.keyCode = 50;
             EventHandler.trigger(input, 'keypress', event);
             expect(input.value === '98 032 5679').toEqual(true);
+        });
+         it('Edit mask in MaskedTextBox through property', () => {
+            maskBox = new MaskedTextBox({
+                mask: "99 999 9999",
+                value: "980325679"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            expect(input.value === '98 032 5679').toEqual(true);
+            let event: any = eventObject('KeyboardEvent', 'keypress');
+            event.keyCode = 50;
+            EventHandler.trigger(input, 'keypress', event);
+            expect(input.value === '98 032 5679').toEqual(true);
+            maskBox.setProperties({ mask: "(999) 99 999" });
+            expect(input.value === '(980) 32 567').toEqual(true);
+        });
+         it('Enable ShowClearButton through property', () => {
+            maskBox = new MaskedTextBox({
+                mask: "99 999 9999",
+                value: "980325679"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            expect(input.value === '98 032 5679').toEqual(true);
+            expect(maskBox.inputObj.clearButton).toBeNull();
+            document.getElementById('mask1').focus();
+            expect(maskBox.inputObj.clearButton).toBeNull();
+            maskBox.setProperties({ showClearButton: true });
+            maskBox.dataBind();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
+            document.getElementById('mask1').focus();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon')).toBe(true);
+            maskBox.enabled = false;
+            maskBox.dataBind();
+            expect(input.hasAttribute('disabled') && input.hasAttribute('aria-disabled')).toEqual(true);
         });
         it('Edit values in MaskedTextBox through property(dynamic)', () => {
             maskBox = new MaskedTextBox({
@@ -234,6 +322,8 @@ describe('MaskedTextBox Component', () => {
             event.key = " ";
             EventHandler.trigger(input, 'keypress', event);
             event.key = "a";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "@";
             EventHandler.trigger(input, 'keypress', event);
             for (let i: number = 0; i < 9; i++) {
                 let event: any = eventObject('KeyboardEvent', 'keypress');
@@ -437,8 +527,113 @@ describe('MaskedTextBox Component', () => {
                 }
                 EventHandler.trigger(input, 'keypress', event);
             }
+            let event: any = eventObject('KeyboardEvent', 'keypress');
+            event.key = "A";
+            EventHandler.trigger(input, 'keypress', event);
             expect(input.value === '+-  65 4321').toEqual(true);
         });
+        it('Edit values in MaskedTextBox with "#" and "0"', () => {
+            maskBox = new MaskedTextBox({
+                mask: "###00000"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            input.selectionStart = input.selectionEnd = 0;
+            for (let i: number = 0; i < 9; i++) {
+                let event: any = eventObject('KeyboardEvent', 'keypress');
+                if (i == 0) {
+                    event.key = "+";
+                } else if (i == 1) {
+                    event.key = "-";
+                } else if (i == 2) {
+                    event.key = " ";
+                } else {
+                    event.key = (9 - i).toString();
+                }
+                EventHandler.trigger(input, 'keypress', event);
+            }
+            expect(input.value === '+- 65432').toEqual(true);
+        });
+          it('Edit values in MaskedTextBox', () => {
+            maskBox = new MaskedTextBox({
+                mask: "##>LL <LL"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+             let event: any = eventObject('KeyboardEvent', 'keypress');
+            event.key = "-";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "Z";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "+";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "9";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "A";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "b";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = " ";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "c";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "D";
+            EventHandler.trigger(input, 'keypress', event);
+            expect(input.value === '-+AB cd').toEqual(true);
+        });
+        it('Edit values in MaskedTextBox with masking element "&" and "L" ', () => {
+            maskBox = new MaskedTextBox({
+                mask: "&>LLL <LL"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            input.selectionStart = input.selectionEnd = 0;
+            let event: any = eventObject('KeyboardEvent', 'keypress');
+            event.key = "@";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "A";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "e";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "I";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = " ";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "o";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "U";
+            EventHandler.trigger(input, 'keypress', event);
+            expect(input.value === '@AEI ou').toEqual(true);
+        });
+         it('Edit values in MaskedTextBox with masking element "& , C" and "L" ', () => {
+            maskBox = new MaskedTextBox({
+                mask: "&>LLL?CC9"
+            });
+            maskBox.appendTo('#mask1');
+            let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            input.selectionStart = input.selectionEnd = 0;
+            let event: any = eventObject('KeyboardEvent', 'keypress');
+            event.key = "T";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "e";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "X";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "T";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = " ";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "B";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "O";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "X";
+            EventHandler.trigger(input, 'keypress', event);
+            event.key = "1";
+            EventHandler.trigger(input, 'keypress', event);
+            expect(input.value === 'TEXT BO1').toEqual(true);
+        });
+
         it('Edit values in MaskedTextBox -- Check error class', (done: Function) => {
             maskBox = new MaskedTextBox({
                 mask: "99 999 9999"
@@ -1034,7 +1229,7 @@ describe('MaskedTextBox Component', () => {
         });
     });
     describe('Floating label MaskedTextBox', () => {
-        let maskBox: MaskedTextBox;
+        let maskBox: any;
         beforeEach((): void => {
             maskBox = undefined;
             let ele: HTMLElement = createElement('input', { id: 'mask1' });
@@ -1074,7 +1269,9 @@ describe('MaskedTextBox Component', () => {
             maskBox = new MaskedTextBox({
                 mask: '9999 9999 9999 9999',
                 placeholder: 'Enter card number',
-                floatLabelType: "Never"
+                floatLabelType: "Never",
+                enabled: true,
+                showClearButton:true
             });
             maskBox.appendTo('#mask1');
             let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
@@ -1083,9 +1280,19 @@ describe('MaskedTextBox Component', () => {
             expect(input.value === '').toBe(true);
             input.focus();
             input.selectionStart = input.selectionEnd = 0;
-            expect(input.value === '____ ____ ____ ____').toBe(true);
-            input.blur();
-            expect(input.value === '').toBe(true);
+            expect(input.value === '____ ____ ____ ____').toBe(true);    
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
+            document.getElementById('mask1').focus();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon')).toBe(true);
+            maskBox.value = "12345678901234";
+            maskBox.dataBind();
+            maskBox.promptChar = "*";
+            maskBox.dataBind();
+            input.focus();
+            expect(input.value === '1234 5678 9012 34**').toBe(true);
+            maskBox.enabled = false;
+            maskBox.dataBind();
+            expect(input.hasAttribute('disabled') && input.hasAttribute('aria-disabled')).toEqual(true);
         });
         it('Floating label MaskedTextBox', () => {
             maskBox = new MaskedTextBox({
@@ -1122,11 +1329,12 @@ describe('MaskedTextBox Component', () => {
     });
 
     describe('MaskedTextBox - Through Set model', () => {
-        let maskBox: MaskedTextBox;
+        let maskBox: any;
         beforeEach((): void => {
-            maskBox = undefined;
-            let ele: HTMLElement = createElement('input', { id: 'mask1' });
+            let ele: HTMLElement = createElement('input', { id: 'mask1' });     
             document.body.appendChild(ele);
+            maskBox = new MaskedTextBox({});
+            maskBox.appendTo('#mask1');
         });
         afterEach((): void => {
             if (maskBox) {
@@ -1193,10 +1401,22 @@ describe('MaskedTextBox Component', () => {
                 mask: "(999) 99-999",
             });
             maskBox.appendTo('#mask1');
-            maskBox.setProperties({ width: "200px" });
+            maskBox.setProperties({ width: "200px", placeholder:"MaskedTextBox" });
             let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
             expect(input.style.width === '200px').toEqual(true);
+            maskBox.value = "12345678";
+            maskBox.enableRtl = true;
+            maskBox.dataBind();
+            expect(input.value === '(123) 45-678').toEqual(true);
             expect(input.parentElement.style.width === '200px').toEqual(true);
+            maskBox.showClearButton = true;
+            maskBox.dataBind();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
+            document.getElementById('mask1').focus();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon')).toBe(true);
+            maskBox.enabled = false;
+            maskBox.dataBind();
+            expect(input.hasAttribute('disabled') && input.hasAttribute('aria-disabled')).toEqual(true);
         });
         it('Apply CssClass property', () => {
             maskBox = new MaskedTextBox({
@@ -1205,6 +1425,8 @@ describe('MaskedTextBox Component', () => {
             maskBox.appendTo('#mask1');
             maskBox.setProperties({ cssClass: 'e-custom-css' });
             let input: HTMLInputElement = <HTMLInputElement>document.getElementById('mask1');
+            expect(input.parentElement.classList.contains('e-custom-css')).toEqual(true);
+            maskBox.setProperties({ enableRtl: true });
             expect(input.parentElement.classList.contains('e-custom-css')).toEqual(true);
             maskBox.setProperties({ cssClass: '' });
         });
@@ -1271,6 +1493,11 @@ describe('MaskedTextBox Component', () => {
             EventHandler.trigger(input, 'keydown', event);
             EventHandler.trigger(input, 'keydown', event);
             expect(input.value === '__ __').toEqual(true);
+            maskBox.showClearButton = true;
+            maskBox.dataBind();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon-hide')).toBe(true);
+            document.getElementById('mask1').focus();
+            expect(maskBox.inputObj.clearButton.classList.contains('e-clear-icon')).toBe(true);
         });
     });
     describe('Undo and Redo functionalities', () => {
@@ -1863,10 +2090,20 @@ describe('MaskedTextBox Component', () => {
         });
     });
     describe('Event testing', () => {
-        let maskBox: MaskedTextBox;
-        let i: number = 0;
-        function clickFn(): void {
+        let maskBox: any;
+        let i: number = 0, j: number = 0;
+        let selectEnd: number = 0 , selectStart: number = 0;
+        let name: any, maskedvalue: any ,value: any;
+        function clickFn(args:MaskChangeEventArgs): void {
             i++;
+            value= args.value;
+            maskedvalue= args.maskedValue;
+        }
+         function FocusFn(args: MaskFocusEventArgs): void {
+            j++;
+            selectStart = args.selectionStart;
+            selectEnd = args.selectionEnd;
+            name = args.name;
         }
         beforeEach((): void => {
             maskBox = undefined;
@@ -1884,13 +2121,31 @@ describe('MaskedTextBox Component', () => {
                 mask: '9999 9999 9999 9999',
                 placeholder: 'Enter card number',
                 value: "123",
-                change: clickFn
+                change: clickFn,
             });
             maskBox.appendTo('#mask1');
             expect(i).toEqual(0);
             maskBox.value = '098';
             maskBox.dataBind();
             expect(i).toEqual(1);
+            expect(maskedvalue).toEqual("098_ ____ ____ ____");
+            expect(value).toEqual("098");
+        });
+         it('FocusFn event testing', () => {
+            maskBox = new MaskedTextBox({
+                mask: '9999 9999 9999 9999',
+                placeholder: 'Enter card number',
+                value: "123",
+                change: clickFn,
+                focus: FocusFn
+            });
+            maskBox.appendTo('#mask1');
+            expect(j).toEqual(0);
+            document.getElementById('mask1').focus();
+            expect(j).toEqual(1);
+            expect(selectStart).toEqual(0);
+            expect(selectEnd).toEqual(19);
+            expect(name).toEqual("focus");
         });
     });
 });

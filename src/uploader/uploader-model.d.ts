@@ -1,4 +1,4 @@
-import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, detach, append, Animation } from '@syncfusion/ej2-base';import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';import { Collection, Complex, Browser, Ajax, BeforeSendEventArgs } from '@syncfusion/ej2-base';import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
+import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';import { NotifyPropertyChanges, INotifyPropertyChanged, detach, append, Animation } from '@syncfusion/ej2-base';import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';import { Collection, Complex, Browser, Ajax, BeforeSendEventArgs, getUniqueID } from '@syncfusion/ej2-base';import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
 import {SelectedEventArgs,RemovingEventArgs,ClearingEventArgs} from "./uploader";
 import {ComponentModel} from '@syncfusion/ej2-base';
 
@@ -181,7 +181,7 @@ export interface UploaderModel extends ComponentModel{
      * Specifies the drop target to handle the drag-and-drop upload.
      * By default, the component creates wrapper around file input that will act as drop target.
      * 
-     * > For more information, refer to the [drag-and-drop](./draganddrop.html) section from the documentation.
+     * > For more information, refer to the [drag-and-drop](./file-source.html#drag-and-drop) section from the documentation.
      * 
      * @default null
      */
@@ -208,6 +208,16 @@ export interface UploaderModel extends ComponentModel{
      * @default true
      */
     showFileList?: boolean;
+
+    /**
+     * Specifies a Boolean value that indicates whether the folder of files can be browsed in the uploader component.
+     * 
+     * > When enabled this property, it allows only files of folder to select or drop to upload and
+     * it cannot be allowed to select or drop files.
+     * 
+     * @default false
+     */
+    directoryUpload?: boolean;
 
     /**
      * Triggers when the component is created.

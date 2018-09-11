@@ -659,7 +659,7 @@ export class FormValidator extends Base<HTMLFormElement> implements INotifyPrope
     private getErrorElement(name: string): HTMLElement {
         this.infoElement = <HTMLElement>select(this.errorElement + '.' + this.errorClass, this.inputElement.parentElement);
         if (!this.infoElement) {
-            this.infoElement = <HTMLElement>select(this.errorElement + '.' + this.errorClass + '[for="' + name + '"]', this.element);
+            this.infoElement = <HTMLElement>select(this.errorElement + '.' + this.errorClass + '[for="' + name + '"]');
         }
         return this.infoElement;
     }

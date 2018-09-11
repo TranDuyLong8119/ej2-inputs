@@ -2,58 +2,66 @@
 
 ## [Unreleased]
 
-## 16.2.50 (2018-08-28)
+## 16.3.17 (2018-09-11)
 
 ### Uploader
 
-#### Bug Fixes
+#### New Features
 
-- Resolved the issue with adding the additional form data in IE browser.
+- Provided directory (folder) upload support that uploads all files of folder including sub-folder to server.
 
-## 16.2.48 (2018-08-14)
-
-### Uploader
+- Provided paste to upload support that helps to uploads any images which currently copied in the clipboard.
 
 #### Bug Fixes
+
+- The files with the wrong extension cannot be uploaded when filtering the files by all files in the file dialog.
+
+- The `clearAll` method removes upload element’s value along with file list.
+
+- Resolved the issue with uploading a file while disable the `showFileList` API.
 
 - In synchronous upload, while removing a particular file from file list will clear all the files now since couldn't manipulate each file details in input file element.
 
-### NumericTextBox
-
-#### Bug Fixes
-
-- Issue in entering the text in NumericTextBox from Firefox browser has been fixed.
-- Resolved the issue in NumericTextBox is not allowed to edit the value while using decimals count as 0.
-
-### MaskedTextBox
-
-#### Bug Fixes
-
-- Resolved the issue with MaskedTextBox change event is triggered for multiple times while changing value dynamically.
-
-- Issue in using chrome autofill functionality with MaskedTextBox component has been fixed.
-
-## 16.2.47 (2018-08-07)
+- Resolved the issue with adding the additional form data in IE browser.
 
 ### TextBox
+
+#### New Features
+
+- Included TextBox component as JavaScript component with floating functionality.
 
 #### Bug Fixes
 
 - Resolved the issue with customizing the textbox background color with minimal CSS.
 
-### Uploader
+- Resolved the issue with the floating label when choose the value using `autofill` option in chrome browser.
+
+## 16.2.48 (2018-08-14)
+
+### NumericTextBox
 
 #### Bug Fixes
 
-- Resolved the issue with uploading a file while disable the `showFileList` API.
+- Issue with entering the text in numeric text box from Firefox browser has been fixed.
+- Resolved the issue in numeric text box that did not allow editing the value while using decimal value as 0.
 
 ### MaskedTextBox
 
 #### Bug Fixes
 
-- Issue in setting the background color of MaskedTextBox has been fixed.
+- Resolved the issue with masked text box change event is triggered multiple times while changing the value dynamically.
 
-- Issue in adding name attribute in the input element while creating MaskedTextBox without name attribute has been resolved.
+- Issue occurs while using chrome autofill functionality with masked text box component has been fixed.
+
+## 16.2.47 (2018-08-07)
+
+### MaskedTextBox
+
+#### Bug Fixes
+
+- Issue with setting the background color for masked text box has been fixed.
+
+- Issue with adding name attribute in the input element while creating masked text box without name attribute has been resolved.
 
 ## 16.2.44 (2018-07-10)
 
@@ -61,35 +69,7 @@
 
 #### Bug Fixes
 
-- The data type of NumericTextBox min, max and value properties are changed to object due to all the data type support.
-
-### Form-validator
-
-#### Bug Fixes
-
-- Resolved status `updation` issue when optional validation rules passed.
-
-## 16.2.43 (2018-07-03)
-
-### ColorPicker
-
-#### Bug Fixes
-
-- IOS background scrolling issue fixed.
-
-### Form-validator
-
-#### Bug Fixes
-
-- Resolved status `updation` issue.
-
-### Uploader
-
-#### Bug Fixes
-
-- The files with the wrong extension cannot be uploaded when filtering the files by all files in the file dialog.
-
-- The `clearAll` method removes upload element’s value along with file list.
+- Unable to set higher values for min, max, and value properties of numeric text box issue has been fixed.
 
 ## 16.2.41 (2018-06-25)
 

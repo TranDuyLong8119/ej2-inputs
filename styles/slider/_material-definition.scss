@@ -1,3 +1,5 @@
+@import 'definition.scss';
+
 $skin-name: 'material';
 $slider-bg-color: rgba($grey-black, .26);
 $slider-disabled-bg-color: rgba($grey-black, .26);
@@ -24,6 +26,7 @@ $rtl-slider-v-handle-mobile-margin: -7px 0 0 0;
 $slider-range-bar-color: $accent;
 $slider-range-bar-hover-color: $accent;
 $slider-color: $accent;
+$slider-material-tooltip-content-color: $grey-white;
 $slider-handle-color: $grey-white;
 $slider-button-icon-color: $grey-white;
 $slider-handle-start-border-color: rgba($grey-black, .26);

@@ -1,4 +1,4 @@
-import { ColorPicker, ColorPickerEventArgs } from './../../../src/color-picker/color-picker';
+import { ColorPicker, ColorPickerEventArgs } from './../../../src/color-picker/index';
 import { enableRipple } from '@syncfusion/ej2-base';
 
 enableRipple(true);
@@ -34,13 +34,3 @@ colorPicker = new ColorPicker(
         }
     },
     '#color-palette-flat');
-
-document.getElementById('material').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/material.css');
-};
-document.getElementById('fabric').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/fabric.css');
-};
-document.getElementById('bootstrap').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/bootstrap.css');
-};

@@ -405,8 +405,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
     /**
      * It is used to denote the step value of Slider component which is the amount of Slider value change
      *  when increase / decrease button is clicked or press arrow keys or drag the thumb.
-     *  Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript#step here}
+     *  Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript#step)
      *  to know more about this property with demo.
      * 
      * {% codeBlock src="slider/step-api/index.ts" %}{% endcodeBlock %}
@@ -453,8 +452,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     /**
      * It is used to render the slider ticks options such as placement and step values.
-     * Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript here}
+     * Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript)
      *  to know more about this property with demo.
      * 
      * {% codeBlock src="slider/ticks-api/index.ts" %}{% endcodeBlock %}
@@ -465,8 +463,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     /**
      * It is used to limit the slider movement within certain limits.
-     * Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript here}
+     * Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript)
      *  to know more about this property with demo
      * 
      * {% codeBlock src="slider/limits-api/index.ts" %}{% endcodeBlock %}
@@ -502,8 +499,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
     /**
      * It is used to show or hide the increase and decrease button of Slider Component,
      *  which is used to change the slider value.
-     * Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#buttons here}
+     * Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#buttons)
      *  to know more about this property with demo.
      * 
      * {% codeBlock src="slider/showButtons-api/index.ts" %}{% endcodeBlock %}
@@ -521,8 +517,7 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
 
     /**
      * It is used to render Slider in either horizontal or vertical orientation.
-     *  Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#orientation here}
+     *  Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#orientation)
      *  to know more about this property with demo.
      * @default 'Horizontal'
      */
@@ -3087,16 +3082,17 @@ export class Slider extends Component<HTMLElement> implements INotifyPropertyCha
                     this.setCSSClass(oldProp.cssClass);
                     break;
                 case 'value':
-                    if (!isNullOrUndefined(oldProp.value) && !isNullOrUndefined(newProp.value)) {
-                        if (oldProp.value.toString() !== newProp.value.toString()) {
-                            this.setValue();
-                            this.refreshTooltip();
-                            if (this.type === 'Range') {
-                                if ((oldProp.value as number[])[0] === (newProp.value as number[])[0]) {
-                                    this.activeHandle = 2;
-                                } else {
-                                    this.activeHandle = 1;
-                                }
+                    let value: number | number[] = isNullOrUndefined(newProp.value) ?
+                        (this.type === 'Range' ? [this.min, this.max] : this.min) : newProp.value;
+                    this.setProperties({ 'value': value }, true);
+                    if (oldProp.value.toString() !== value.toString()) {
+                        this.setValue();
+                        this.refreshTooltip();
+                        if (this.type === 'Range') {
+                            if (isNullOrUndefined(newProp.value) || (oldProp.value as number[])[1] === (value as number[])[1]) {
+                                this.activeHandle = 1;
+                            } else {
+                                this.activeHandle = 2;
                             }
                         }
                     }

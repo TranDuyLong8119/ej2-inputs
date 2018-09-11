@@ -24,6 +24,10 @@ const DISABLED: string = 'e-disabled';
 const FORMATSWITCH: string = 'e-value-switch-btn';
 const HANDLER: string = 'e-handler';
 const HEX: string = 'e-hex';
+const HIDEHEX: string = 'e-hide-hex-value';
+const HIDERGBA: string = 'e-hide-switchable-value';
+const HIDEVALUE: string = 'e-hide-value';
+const HIDEVALUESWITCH: string = 'e-hide-valueswitcher';
 const HSVAREA: string = 'e-hsv-color';
 const HSVCONTAINER: string = 'e-hsv-container';
 const INPUTWRAPPER: string = 'e-selected-value';
@@ -35,10 +39,10 @@ const PICKERCONTENT: string = 'e-color-picker';
 const PREVIEW: string = 'e-preview-container';
 const PREVIOUS: string = 'e-previous';
 const RTL: string = 'e-rtl';
+const SHOWVALUE: string = 'e-show-value';
 const SELECT: string = 'e-selected';
 const SPLITPREVIEW: string = 'e-split-preview';
 const TILE: string = 'e-tile';
-const TOHSV: string = 'e-to-hsv';
 
 const presets: { [key: string]: string[] } = {
     default: ['#000000', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#ffeb3b',
@@ -75,6 +79,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     private tooltipEle: HTMLElement;
     private container: HTMLElement;
     private modal: HTMLElement;
+    private isRgb: boolean;
     private l10n: L10n;
     private tileRipple: Function;
     private ctrlBtnRipple: Function;
@@ -85,9 +90,9 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
 
     /**
      * It is used to set the color value for ColorPicker. It should be specified as Hex code.
-     * @default '#008000'
+     * @default '#008000ff'
      */
-    @Property('#008000')
+    @Property('#008000ff')
     public value: string;
 
     /**
@@ -148,7 +153,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     public columns: number;
 
     /**
-     * It is used to render the ColorPicker component as inline (flat).
+     * It is used to render the ColorPicker component as inline.
      * @default false
      */
     @Property(false)
@@ -219,6 +224,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     @Event()
     public beforeModeSwitch: EmitType<ModeSwitchEventArgs>;
 
+    /**
+     * Triggers once the component rendering is completed.
+     * @event
+     */
+    @Event()
+    public created: EmitType<Event>;
 
     constructor(options?: ColorPickerModel, element?: string | HTMLInputElement) {
         super(options, <HTMLInputElement | string>element);
@@ -249,11 +260,8 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         attributes(this.element, { 'tabindex': '-1', 'spellcheck': 'false' });
         this.container = this.createElement('div', { className: CONTAINER });
         this.getWrapper().appendChild(this.container);
-        let value: string = this.value ? this.value : '#008000';
+        let value: string = this.value ? this.roundValue(this.value).toLowerCase() : '#008000ff';
         this.element.value = value.slice(0, 7);
-        if (this.mode === 'Picker') {
-            value = this.roundValue(value);
-        }
         this.setProperties({ 'value': value }, true);
         if (this.enableRtl) {
             wrapper.classList.add(RTL);
@@ -281,10 +289,8 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 this.getDragHandler().focus();
             }
         }
-        let wrapper: Element = this.getWrapper();
-        if ((this.isPicker() && !wrapper.classList.contains('e-hide-value')) || wrapper.classList.contains('e-show-value')) {
-            this.createInput();
-        }
+        this.isRgb = true;
+        this.createInput();
         this.createCtrlBtn();
         if (!this.disabled) {
             this.wireEvents();
@@ -308,19 +314,20 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 enableRtl: this.enableRtl,
                 beforeOpen: this.beforeOpenFn.bind(this),
                 open: this.onOpen.bind(this),
-                beforeClose: this.popupClose.bind(this),
+                beforeClose: this.beforePopupClose.bind(this),
                 click: (args: ClickEventArgs) => {
                     this.trigger('change', <ColorPickerEventArgs>{
                         currentValue: { hex: this.value.slice(0, 7), rgba: this.convertToRgbString(this.hexToRgb(this.value)) },
                         previousValue: { hex: null, rgba: null }
                     });
                 }
-            },
-            splitButton);
+            });
+        this.splitBtn.createElement = this.createElement;
+        this.splitBtn.appendTo(splitButton);
         let preview: HTMLElement = this.createElement('span', { className: SPLITPREVIEW });
         select('.e-selected-color', splitButton).appendChild(preview);
         preview.style.backgroundColor = this.convertToRgbString(this.hexToRgb(this.value));
-        let popupEle: Element = this.getPopupEle();
+        let popupEle: HTMLElement = this.getPopupEle();
         addClass([popupEle], 'e-colorpicker-popup');
         if (this.cssClass) {
             addClass([popupEle], this.cssClass.split(' '));
@@ -332,6 +339,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             popupInst.targetType = 'container';
             popupInst.collision = { X: 'fit', Y: 'fit' };
             popupInst.offsetY = 4;
+            popupEle.style.zIndex = getZindexPartial(this.splitBtn.element).toString();
         }
     }
 
@@ -347,7 +355,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         let beforeOpenArgs: BeforeOpenCloseEventArgs = { element: this.container, event: args.event, cancel: false };
         this.trigger('beforeOpen', beforeOpenArgs);
         args.cancel = beforeOpenArgs.cancel;
-        if (!beforeOpenArgs.cancel) {
+        if (!args.cancel) {
             let popupEle: HTMLElement = this.getPopupEle();
             popupEle.style.display = 'block';
             this.createWidget();
@@ -359,32 +367,38 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 document.body.insertBefore(this.modal, popupEle);
                 document.body.className += ' e-colorpicker-overflow';
                 this.modal.style.display = 'block';
+                this.modal.style.zIndex = (Number(popupEle.style.zIndex) - 1).toString();
             }
         }
     }
 
-    private popupClose(args: BeforeOpenCloseMenuEventArgs): void {
-        let beforeCloseArgs: BeforeOpenCloseEventArgs = { element: this.container, event: args.event, cancel: false };
-        this.trigger('beforeClose', beforeCloseArgs);
-        args.cancel = beforeCloseArgs.cancel;
-        if (!beforeCloseArgs.cancel) {
-            if (args.event && Browser.isDevice && args.event.target === this.modal) {
-                args.cancel = true;
-            } else {
-                this.unWireEvents();
-                this.destroyOtherComp();
-                this.container.style.width = '';
-                (select('.' + SPLITPREVIEW, this.splitBtn.element) as HTMLElement).style.backgroundColor
-                    = this.convertToRgbString(this.hexToRgb(this.value));
-                this.container.innerHTML = '';
-                removeClass([this.container], [PICKERCONTENT, PALETTECONTENT]);
-                if (Browser.isDevice && this.modal) {
-                    removeClass([document.body], 'e-colorpicker-overflow');
-                    this.modal.style.display = 'none';
-                    this.modal.outerHTML = '';
-                    this.modal = null;
-                }
+    private beforePopupClose(args: BeforeOpenCloseMenuEventArgs): void {
+        if (!isNullOrUndefined(args.event)) {
+            let beforeCloseArgs: BeforeOpenCloseEventArgs = { element: this.container, event: args.event, cancel: false };
+            this.trigger('beforeClose', beforeCloseArgs);
+            if (Browser.isDevice && args.event.target === this.modal) {
+                beforeCloseArgs.cancel = true;
             }
+            args.cancel = beforeCloseArgs.cancel;
+            if (!args.cancel) {
+                this.onPopupClose();
+            }
+        }
+    }
+
+    private onPopupClose(): void {
+        this.unWireEvents();
+        this.destroyOtherComp();
+        this.container.style.width = '';
+        (select('.' + SPLITPREVIEW, this.splitBtn.element) as HTMLElement).style.backgroundColor
+            = this.convertToRgbString(this.hexToRgb(this.value));
+        this.container.innerHTML = '';
+        removeClass([this.container], [PICKERCONTENT, PALETTECONTENT]);
+        if (Browser.isDevice && this.modal) {
+            removeClass([document.body], 'e-colorpicker-overflow');
+            this.modal.style.display = 'none';
+            this.modal.outerHTML = '';
+            this.modal = null;
         }
     }
 
@@ -443,11 +457,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             });
             this.trigger('beforeTileRender', <PaletteTileEventArgs>{ element: tile, presetName: key, value: colors[i] });
             row.appendChild(tile);
-            if (this.value.slice(0, colors[i].length).toLowerCase() === colors[i].toLowerCase()) {
+            let roundedColor: string = this.roundValue(colors[i]).toLowerCase();
+            if (this.value === roundedColor) {
                 this.addTileSelection(tile);
                 palette.focus();
             }
-            tile.style.backgroundColor = colors[i];
+            tile.style.backgroundColor = this.convertToRgbString(this.hexToRgb(roundedColor));
         }
     }
 
@@ -522,8 +537,9 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 enableRtl: this.enableRtl,
                 enabled: !this.disabled,
                 change: this.hueChange.bind(this)
-            },
-            slider);
+            });
+        this.hueSlider.createElement = this.createElement;
+        this.hueSlider.appendTo(slider);
         slider = this.createElement('div', { className: 'e-opacity-slider' });
         sliderWrapper.appendChild(slider);
         this.opacitySlider = new Slider(
@@ -534,8 +550,9 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 enableRtl: this.enableRtl,
                 enabled: !this.disabled,
                 change: this.opacityChange.bind(this)
-            },
-            slider);
+            });
+        this.opacitySlider.createElement = this.createElement;
+        this.opacitySlider.appendTo(slider);
         let opacityBgTrack: HTMLElement = this.createElement('div', { className: 'e-opacity-empty-track' });
         slider.appendChild(opacityBgTrack);
         this.updateOpacitySliderBg();
@@ -559,7 +576,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         let pValue: string = this.rgbToHex(this.rgb);
         this.hsv[3] = value / 100; this.rgb[3] = value / 100;
         let cValue: string = this.rgbToHex(this.rgb);
-        if (!this.getWrapper().classList.contains('e-hide-value')) {
+        if (!this.getWrapper().classList.contains(HIDEVALUE)) {
             (getInstance(select('.e-opacity-value', this.container) as HTMLInputElement, NumericTextBox) as NumericTextBox).value = value;
         }
         let rgb: string = this.convertToRgbString(this.rgb);
@@ -587,8 +604,8 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         return this.container.parentElement;
     }
 
-    private getNumericTextBoxModel(value: number, label: string, max: number): NumericTextBoxModel {
-        return <NumericTextBoxModel>{
+    private createNumericInput(element: HTMLElement, value: number, label: string, max: number): void {
+        let numericInput: NumericTextBox = new NumericTextBox(<NumericTextBoxModel>{
             value: value,
             placeholder: label,
             min: 0,
@@ -604,46 +621,71 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                     this.inputHandler(args.event);
                 }
             }
-        };
+        });
+        numericInput.createElement = this.createElement;
+        numericInput.appendTo(element as HTMLInputElement);
     }
 
-    private createInput(child: number = 2): void {
-        let inputWrap: HTMLElement = this.createElement('div', { className: INPUTWRAPPER });
-        this.appendElement(inputWrap, child);
-        let container: HTMLElement = this.createElement('div', { className: 'e-input-container' });
-        inputWrap.appendChild(container);
-        inputWrap.appendChild(this.createElement('button', { className: 'e-icons e-btn e-flat e-icon-btn ' + FORMATSWITCH + ' ' + TOHSV }));
-        let hexInput: HTMLInputElement = this.createElement('input', {
-            className: HEX,
-            attrs: { 'maxlength': '7', 'spellcheck': 'false' }
-        }) as HTMLInputElement;
-        if (!this.isPicker()) { Input.setReadonly(true, hexInput); }
-        container.appendChild(hexInput);
-        Input.createInput(
-            {
-                element: hexInput,
-                floatLabelType: 'Always',
-                properties: {
-                    placeholder: 'HEX',
-                    enableRtl: this.enableRtl,
-                    enabled: !this.disabled
+    private createInput(): void {
+        let isPicker: boolean = this.isPicker();
+        let wrapper: HTMLElement = this.getWrapper();
+        if ((isPicker && !wrapper.classList.contains(HIDEVALUE)) || (!isPicker && wrapper.classList.contains(SHOWVALUE))) {
+            let inputWrap: HTMLElement = this.createElement('div', { className: INPUTWRAPPER });
+            isPicker ? this.appendElement(inputWrap, 2) : this.appendElement(inputWrap, 1);
+            let container: HTMLElement = this.createElement('div', { className: 'e-input-container' });
+            inputWrap.appendChild(container);
+            if (!wrapper.classList.contains(HIDEVALUESWITCH)) {
+                this.appendValueSwitchBtn(inputWrap);
+            }
+            if (!wrapper.classList.contains(HIDEHEX)) {
+                let hexInput: HTMLInputElement = this.createElement('input', {
+                    className: HEX,
+                    attrs: { 'maxlength': '7', 'spellcheck': 'false' }
+                }) as HTMLInputElement;
+                container.appendChild(hexInput);
+                Input.createInput(
+                    {
+                        element: hexInput,
+                        floatLabelType: 'Always',
+                        properties: {
+                            placeholder: 'HEX',
+                            enableRtl: this.enableRtl,
+                            enabled: !this.disabled,
+                            readonly: this.isPicker() ? false : true
+                        }
+                    },
+                    this.createElement);
+                Input.setValue(this.value.slice(0, 7), hexInput);
+                hexInput.addEventListener('input', this.inputHandler.bind(this));
+            }
+            if (!wrapper.classList.contains(HIDERGBA)) {
+                let label: string;
+                let value: number[];
+                if (this.isRgb) {
+                    label = 'RGB';
+                    value = this.rgb;
+                } else {
+                    label = 'HSV';
+                    value = this.hsv;
                 }
-            },
-            this.createElement);
-        Input.setValue(this.value.slice(0, 7), hexInput);
-        let numericInput: NumericTextBox;
-        let label: string = 'RGB';
-        let clsName: string[] = ['rh', 'gs', 'bv'];
-        for (let i: number = 0; i < 3; i++) {
-            numericInput = new NumericTextBox(
-                this.getNumericTextBoxModel(this.rgb[i], label[i], 255),
-                container.appendChild(this.createElement('input', { className: 'e-' + clsName[i] + '-value' }) as HTMLInputElement)
-            );
+                let clsName: string[] = ['rh', 'gs', 'bv'];
+                for (let i: number = 0; i < 3; i++) {
+                    this.createNumericInput(
+                        container.appendChild(this.createElement('input', { className: 'e-' + clsName[i] + '-value' })),
+                        value[i], label[i], 255);
+                }
+                this.createNumericInput(
+                    container.appendChild(this.createElement('input', { className: 'e-opacity-value' })), this.rgb[3] * 100, 'A', 100);
+            }
         }
-        numericInput = new NumericTextBox(
-            this.getNumericTextBoxModel(this.rgb[3] * 100, 'A', 100),
-            container.appendChild(this.createElement('input', { className: 'e-opacity-value' }) as HTMLInputElement)
-        );
+    }
+
+    private appendValueSwitchBtn(targetEle: Element): void {
+        let valueSwitchBtn: HTMLElement = this.createElement('button', { className: 'e-icons e-btn e-flat e-icon-btn ' + FORMATSWITCH });
+        targetEle.appendChild(valueSwitchBtn);
+        if (this.isPicker() && !this.getWrapper().classList.contains(HIDERGBA)) {
+            valueSwitchBtn.addEventListener('click', this.formatSwitchHandler.bind(this));
+        }
     }
 
     private createCtrlBtn(): void {
@@ -690,6 +732,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             },
             animation: { open: { effect: 'None' }, close: { effect: 'None' } }
         });
+        tooltip.createElement = this.createElement;
         tooltip.appendTo(this.container);
         tooltip.open(this.container);
         this.tooltipEle.style.zIndex = getZindexPartial(this.tooltipEle).toString();
@@ -738,12 +781,17 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private updateInput(value: string): void {
-        if (!this.getWrapper().classList.contains('e-hide-value')) {
-            Input.setValue(value.substr(0, 7), select('.' + HEX, this.container) as HTMLInputElement);
-            if (select('.' + FORMATSWITCH, this.container).classList.contains(TOHSV)) {
-                this.updateValue(this.rgb, false);
-            } else {
-                this.updateValue(this.hsv, false);
+        let wrapper: HTMLElement = this.getWrapper();
+        if (!wrapper.classList.contains(HIDEVALUE)) {
+            if (!wrapper.classList.contains(HIDEHEX)) {
+                Input.setValue(value.substr(0, 7), select('.' + HEX, this.container) as HTMLInputElement);
+            }
+            if (!wrapper.classList.contains(HIDERGBA)) {
+                if (this.isRgb) {
+                    this.updateValue(this.rgb, false);
+                } else {
+                    this.updateValue(this.hsv, false);
+                }
             }
         }
     }
@@ -778,7 +826,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     /**
      * To get color value in specified type.
      * @param value - Specify the color value.
-     * @param type - Specify the converted color value type.
+     * @param type - Specify the type to which the specified color needs to be converted.
      * @method getValue
      * @return {string}
      */
@@ -879,9 +927,6 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             if (this.modeSwitcher || this.showButtons) {
                 this.addCtrlSwitchEvent();
             }
-            if (!this.getWrapper().classList.contains('e-hide-value')) {
-                this.addvalueEventHandler();
-            }
             EventHandler.add(select('.' + PREVIOUS, this.container), 'click', this.previewHandler, this);
         } else {
             EventHandler.add(this.container, 'click', this.paletteClickHandler, this);
@@ -891,15 +936,6 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
 
     private addCtrlSwitchEvent(): void {
         EventHandler.add(select('.' + CTRLSWITCH, this.container), 'click', this.btnClickHandler, this);
-    }
-
-    private addInputEvent(): void {
-        EventHandler.add(select('.' + HEX, this.container), 'input', this.inputHandler, this);
-    }
-
-    private addvalueEventHandler(): void {
-        this.addInputEvent();
-        EventHandler.add(select('.' + FORMATSWITCH, this.container), 'click', this.formatSwitchHandler, this);
     }
 
     private pickerKeyDown(e: KeyboardEvent): void {
@@ -919,15 +955,24 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             case 13:
                 e.preventDefault();
                 let cValue: string = this.rgbToHex(this.rgb);
-                this.enterKeyHandler(cValue);
+                this.enterKeyHandler(cValue, e);
         }
     }
 
-    private enterKeyHandler(value: string): void {
+    private enterKeyHandler(value: string, e: MouseEvent | KeyboardEvent): void {
         this.triggerChangeEvent(value);
         if (!this.inline) {
-            this.toggle();
+            this.closePopup(e);
             this.splitBtn.element.focus();
+        }
+    }
+
+    private closePopup(e: MouseEvent | KeyboardEvent): void {
+        let beforeCloseArgs: BeforeOpenCloseEventArgs = { element: this.container, event: e, cancel: false };
+        this.trigger('beforeClose', beforeCloseArgs);
+        if (!beforeCloseArgs.cancel) {
+            this.toggle();
+            this.onPopupClose();
         }
     }
 
@@ -1026,18 +1071,18 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             dragHandler.classList.remove('e-hide-handler');
         }
         if (!this.inline && !this.showButtons) {
-            this.toggle();
+            this.closePopup(e);
         }
     }
 
-    private btnClickHandler(e: MouseEvent | KeyboardEvent): void {
+    private btnClickHandler(e: MouseEvent): void {
         let target: HTMLElement = (e.target as HTMLElement);
         if (closest(target, '.' + MODESWITCH)) {
             e.stopPropagation();
             this.switchToPalette();
         } else {
             if (target.classList.contains(APPLY) || target.classList.contains(CANCEL)) {
-                this.ctrlBtnClick(target);
+                this.ctrlBtnClick(target, e);
             }
         }
     }
@@ -1047,15 +1092,13 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         this.unWireEvents();
         this.destroyOtherComp();
         detach(select('.e-slider-preview', this.container));
-        if (!this.getWrapper().classList.contains('e-hide-value')) {
-            detach(select('.' + INPUTWRAPPER, this.container));
+        if (!this.getWrapper().classList.contains(HIDEVALUE)) {
+            remove(select('.' + INPUTWRAPPER, this.container));
         }
         detach(this.getHsvContainer());
         this.createPalette();
         this.firstPaletteFocus();
-        if (this.getWrapper().classList.contains('e-show-value')) {
-            this.createInput(1);
-        }
+        this.createInput();
         this.refreshPopupPos();
         this.wireEvents();
     }
@@ -1070,13 +1113,13 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private formatSwitchHandler(e: MouseEvent | KeyboardEvent): void {
-        let target: HTMLElement = e.target as HTMLElement;
-        if (target.classList.contains(TOHSV)) {
+        let target: HTMLElement = (e.target as HTMLElement).parentElement;
+        if (this.isRgb) {
             this.updateValue(this.hsv, true, 3, [360, 100, 100]);
-            target.classList.remove(TOHSV);
+            this.isRgb = false;
         } else {
             this.updateValue(this.rgb, true, 2);
-            target.classList.add(TOHSV);
+            this.isRgb = true;
         }
     }
 
@@ -1120,7 +1163,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         this.triggerEvent(cValue, pValue, this.convertToRgbString(this.rgb));
     }
 
-    private paletteClickHandler(e: MouseEvent | KeyboardEvent): void {
+    private paletteClickHandler(e: MouseEvent): void {
         e.preventDefault();
         let target: HTMLElement = e.target as HTMLElement;
         if (target.classList.contains(TILE)) {
@@ -1133,22 +1176,22 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 let pValue: string = this.rgbToHex(this.rgb);
                 this.rgb = this.hexToRgb(this.roundValue(cValue));
                 this.hsv = this.rgbToHsv.apply(this, this.rgb);
-                if (this.getWrapper().classList.contains('e-show-value')) {
+                if (this.getWrapper().classList.contains(SHOWVALUE)) {
                     this.updateInput(cValue);
                 }
                 this.triggerEvent(cValue, pValue, this.convertToRgbString(this.rgb));
             }
             if (!this.inline && !this.showButtons) {
-                this.toggle();
+                this.closePopup(e);
             }
         } else {
             if (closest(target, '.' + MODESWITCH)) {
                 this.switchToPicker();
             } else {
                 if (target.classList.contains(APPLY) || target.classList.contains(CANCEL)) {
-                    this.ctrlBtnClick(target);
+                    this.ctrlBtnClick(target, e);
                 } else {
-                    if (this.getWrapper().classList.contains('e-show-value') && closest(target, '.' + FORMATSWITCH)) {
+                    if (this.getWrapper().classList.contains(SHOWVALUE) && closest(target, '.' + FORMATSWITCH)) {
                         this.formatSwitchHandler(e);
                     }
                 }
@@ -1170,7 +1213,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         ([].slice.call(selectAll('.' + PALETTES, this.container))).forEach((ele: HTMLElement) => {
             detach(ele);
         });
-        if (wrapper.classList.contains('e-show-value')) {
+        if (wrapper.classList.contains(SHOWVALUE)) {
             detach(select('.' + INPUTWRAPPER, this.container));
         }
         this.container.style.width = '';
@@ -1180,20 +1223,18 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         }
         this.createPicker();
         this.getDragHandler().focus();
-        if (!wrapper.classList.contains('e-hide-value')) {
-            this.createInput();
-        }
+        this.createInput();
         this.refreshPopupPos();
         this.wireEvents();
     }
 
-    private ctrlBtnClick(ele: HTMLElement): void {
+    private ctrlBtnClick(ele: HTMLElement, e: MouseEvent): void {
         if (ele.classList.contains(APPLY)) {
             let cValue: string = this.rgbToHex(this.rgb);
             this.triggerChangeEvent(cValue);
         }
         if (!this.inline) {
-            this.toggle();
+            this.closePopup(e);
             this.splitBtn.element.focus();
         }
     }
@@ -1242,7 +1283,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 e.preventDefault();
                 if (prevSelectedEle) {
                     let cValue: string = prevSelectedEle.getAttribute('aria-label');
-                    this.enterKeyHandler(cValue ? cValue : '');
+                    this.enterKeyHandler(cValue ? cValue : '', e);
                 }
         }
     }
@@ -1257,7 +1298,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             let pValue: string = this.rgbToHex(this.rgb);
             this.rgb = this.hexToRgb(cValue);
             this.hsv = this.rgbToHsv.apply(this, this.rgb);
-            if (this.getWrapper().classList.contains('e-show-value')) {
+            if (this.getWrapper().classList.contains(SHOWVALUE)) {
                 this.updateInput(cValue);
             }
             this.triggerEvent(cValue, pValue, this.convertToRgbString(this.rgb), true);
@@ -1424,15 +1465,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
 
     protected unWireEvents(): void {
         if (this.isPicker()) {
+            let wrapper: HTMLElement = this.getWrapper();
             let dragHandler: HTMLElement = this.getDragHandler();
             EventHandler.remove(dragHandler, 'keydown', this.pickerKeyDown);
             EventHandler.remove(this.getHsvContainer(), 'mousedown touchstart', this.handlerDown);
             if (this.modeSwitcher || this.showButtons) {
                 EventHandler.remove(select('.' + CTRLSWITCH, this.container), 'click', this.btnClickHandler);
-            }
-            if (!this.getWrapper().classList.contains('e-hide-value')) {
-                EventHandler.remove(select('.' + FORMATSWITCH, this.container), 'click', this.formatSwitchHandler);
-                EventHandler.remove(select('.' + HEX, this.container), 'input', this.inputHandler);
             }
             EventHandler.remove(select('.' + PREVIOUS, this.container), 'click', this.previewHandler);
         } else {
@@ -1688,28 +1726,19 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                     }
                     break;
                 case 'cssClass':
-                    if (this.isPicker()) {
-                        if (wrapper.classList.contains('e-hide-value')) {
-                            this.createInput();
-                            this.addvalueEventHandler();
-                        }
-                        newProp.cssClass.split(' ').forEach((cls: string) => {
-                            if (cls === 'e-hide-value') {
-                                remove(select('.' + INPUTWRAPPER, this.container));
-                            }
-                        });
-                    } else {
-                        if (wrapper.classList.contains('e-show-value')) {
-                            remove(select('.' + INPUTWRAPPER, this.container));
-                        }
-                        newProp.cssClass.split(' ').forEach((cls: string) => {
-                            if (cls === 'e-show-value') {
-                                this.createInput(1);
-                                this.addInputEvent();
-                            }
-                        });
-                    }
                     this.changeCssClassProps(newProp.cssClass, oldProp.cssClass);
+                    let props: string[] = newProp.cssClass.split(' ').concat(oldProp.cssClass.split(' '));
+                    props = props.reduce((a: string[], b: string): string[] => { if (a.indexOf(b) < 0) { a.push(b); } return a; }, []);
+                    let count: number = 0;
+                    props.forEach((cls: string) => {
+                        if (count === 0 &&
+                            (cls === HIDEVALUE || cls === HIDEVALUESWITCH || cls === SHOWVALUE || cls === HIDEHEX || cls === HIDERGBA)) {
+                            let inputWrap: Element = select('.' + INPUTWRAPPER, this.container);
+                            if (inputWrap) { remove(select('.' + INPUTWRAPPER, this.container)); }
+                            this.createInput();
+                            count++;
+                        }
+                    });
                     break;
                 case 'enableRtl':
                     if (this.isPicker()) {
@@ -1760,7 +1789,6 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
 
 /**
  * Interface for change / select event.
- * @private
  */
 export interface ColorPickerEventArgs extends BaseEventArgs {
     currentValue: { hex: string, rgba: string };
@@ -1769,7 +1797,6 @@ export interface ColorPickerEventArgs extends BaseEventArgs {
 
 /**
  * Interface for before change event.
- * @private
  */
 export interface PaletteTileEventArgs extends BaseEventArgs {
     element: HTMLElement;
@@ -1779,7 +1806,6 @@ export interface PaletteTileEventArgs extends BaseEventArgs {
 
 /**
  * Interface for before open / close event.
- * @private
  */
 export interface BeforeOpenCloseEventArgs extends BaseEventArgs {
     element: HTMLElement;
@@ -1789,7 +1815,6 @@ export interface BeforeOpenCloseEventArgs extends BaseEventArgs {
 
 /**
  * Interface for open event.
- * @private
  */
 export interface OpenEventArgs extends BaseEventArgs {
     element: HTMLElement;
@@ -1797,7 +1822,6 @@ export interface OpenEventArgs extends BaseEventArgs {
 
 /**
  * Interface for mode switching event.
- * @private
  */
 export interface ModeSwitchEventArgs extends BaseEventArgs {
     element: HTMLElement;

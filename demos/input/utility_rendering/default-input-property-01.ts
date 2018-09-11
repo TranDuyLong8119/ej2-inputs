@@ -172,29 +172,29 @@ document.getElementById('valuehold').addEventListener("click", () => {
 });
 
 document.getElementById('setenable').addEventListener("click", () => {
-    Input.setEnabled(true, element);
-    Input.setEnabled(true, element1);
-    Input.setEnabled(true, element2);
-    Input.setEnabled(true, element3);
-    Input.setEnabled(true, element5);
-    Input.setEnabled(true, element6);
-    Input.setEnabled(true, element7);
-    Input.setEnabled(true, element8);
-    Input.setEnabled(true, element21);
-    Input.setEnabled(true, element22);
+    Input.setEnabled(true, element, 'Always', inputObj.container);
+    Input.setEnabled(true, element1, 'Always', inputObj1.container);
+    Input.setEnabled(true, element2, 'Always', inputObj2.container);
+    Input.setEnabled(true, element3, 'Always', inputObj3.container);
+    Input.setEnabled(true, element5, 'Always', inputObj5.container);
+    Input.setEnabled(true, element6, 'Always', inputObj6.container);
+    Input.setEnabled(true, element7, 'Always', inputObj7.container);
+    Input.setEnabled(true, element8, 'Always', inputObj8.container);
+    Input.setEnabled(true, element21, 'Always', inputObj21.container);
+    Input.setEnabled(true, element22, 'Always', inputObj22.container);
 });
 
 document.getElementById('clearenable').addEventListener("click", () => {
-    Input.setEnabled(false, element);
-    Input.setEnabled(false, element1);
-    Input.setEnabled(false, element2);
-    Input.setEnabled(false, element3);
-    Input.setEnabled(false, element5);
-    Input.setEnabled(false, element6);
-    Input.setEnabled(false, element7);
-    Input.setEnabled(false, element8);
-    Input.setEnabled(false, element21);
-    Input.setEnabled(false, element22);
+    Input.setEnabled(false, element, 'Always', inputObj.container);
+    Input.setEnabled(false, element1, 'Always', inputObj1.container);
+    Input.setEnabled(false, element2, 'Always', inputObj2.container);
+    Input.setEnabled(false, element3, 'Always', inputObj3.container);
+    Input.setEnabled(false, element5, 'Always', inputObj5.container);
+    Input.setEnabled(false, element6, 'Always', inputObj6.container);
+    Input.setEnabled(false, element7, 'Always', inputObj7.container);
+    Input.setEnabled(false, element8, 'Always', inputObj8.container);
+    Input.setEnabled(false, element21, 'Always', inputObj21.container);
+    Input.setEnabled(false, element22, 'Always', inputObj22.container);
 });
 
 document.getElementById('setread').addEventListener("click", () => {

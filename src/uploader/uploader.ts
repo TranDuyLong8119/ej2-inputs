@@ -1,7 +1,7 @@
 import { Component, Property, Event, EmitType, EventHandler, classList, L10n, compile, isNullOrUndefined } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, detach, append, Animation } from '@syncfusion/ej2-base';
 import { addClass, removeClass, KeyboardEvents, KeyboardEventArgs, setValue, getValue, ChildProperty } from '@syncfusion/ej2-base';
-import { Collection, Complex, Browser, Ajax, BeforeSendEventArgs } from '@syncfusion/ej2-base';
+import { Collection, Complex, Browser, Ajax, BeforeSendEventArgs, getUniqueID } from '@syncfusion/ej2-base';
 import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
 import { UploaderModel, AsyncSettingsModel, ButtonsPropsModel, FilesPropModel } from './uploader-model';
 
@@ -19,8 +19,8 @@ const CLEAR_BUTTONS: string = 'e-file-clear-btn e-css e-btn e-flat';
 const FILE_NAME: string = 'e-file-name';
 const FILE_TYPE: string = 'e-file-type';
 const FILE_SIZE: string = 'e-file-size';
-const CLEAR_ICON: string = 'e-file-remove-btn';
-const REMOVE_ICON: string = 'e-file-delete-btn';
+const REMOVE_ICON: string = 'e-file-remove-btn';
+const DELETE_ICON: string = 'e-file-delete-btn';
 const ABORT_ICON: string = 'e-file-abort-btn';
 const RETRY_ICON: string = 'e-file-reload-btn';
 const DRAG_HOVER: string = 'e-upload-drag-hover';
@@ -139,7 +139,7 @@ export interface FileInfo {
      */
     size: number;
     /**
-     * Returns the status of file.
+     * Returns the status of the file.
      */
     status: string;
     /**
@@ -154,6 +154,10 @@ export interface FileInfo {
      * Returns the current state of the file such as Failed, Canceled, Selected, Uploaded, or Uploading.
      */
     statusCode: string;
+    /**
+     * Returns where the file selected from, to upload.
+     */
+    fileSource?: string;
 }
 
 export interface MetaData {
@@ -181,7 +185,7 @@ export interface SelectedEventArgs {
     /**
      * Returns the original event arguments.
      */
-    event: MouseEvent | TouchEvent | DragEvent;
+    event: MouseEvent | TouchEvent | DragEvent | ClipboardEvent;
     /**
      * Defines whether the current action can be prevented.
      */
@@ -338,6 +342,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     private pauseButton: HTMLElement;
     private formElement: HTMLElement;
     private dropAreaWrapper: HTMLElement;
+    private filesEntries: WebKitFileEntry[];
     private filesData: FileInfo[] = [];
     private uploadedFilesData: FileInfo[] = [];
     private dropZoneElement: HTMLElement;
@@ -354,6 +359,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     private localeText: { [key: string]: Object };
     private pausedData: MetaData[] = [];
     private uploadMetaData: MetaData[] = [];
+    private tabIndex: string = '0';
     /**
      * Configures the save and remove URL to perform the upload operations in the server asynchronously.
      * @default { saveUrl: '', removeUrl: '' }
@@ -441,7 +447,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
      * Specifies the drop target to handle the drag-and-drop upload.
      * By default, the component creates wrapper around file input that will act as drop target.
      * 
-     * > For more information, refer to the [drag-and-drop](./draganddrop.html) section from the documentation.
+     * > For more information, refer to the [drag-and-drop](./file-source.html#drag-and-drop) section from the documentation.
      * 
      * @default null
      */
@@ -472,7 +478,18 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     @Property(true)
     public showFileList: boolean;
 
-    /** 
+    /**
+     * Specifies a Boolean value that indicates whether the folder of files can be browsed in the uploader component.
+     * 
+     * > When enabled this property, it allows only files of folder to select or drop to upload and
+     * it cannot be allowed to select or drop files.
+     * 
+     * @default false
+     */
+    @Property(false)
+    public directoryUpload: boolean;
+
+    /**
      * Triggers when the component is created.
      * @event 
      */
@@ -610,6 +627,9 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 case 'files':
                     this.renderPreLoadFiles();
                     break;
+                case 'directoryUpload':
+                    this.updateDirectoryAttributes();
+                    break;
                 case 'minFileSize':
                 case 'maxFileSize':
                 case 'template':
@@ -656,15 +676,24 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 this.filesData[i].status = this.localizedTexts(this.getKeyValue(this.filesData[i].status));
                 /* istanbul ignore next */
                 if (this.fileList[i].classList.contains(UPLOAD_SUCCESS)) {
-                    this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('remove'));
-                } else {
                     this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('delete'));
+                }
+                if (this.fileList[i].querySelector('.e-file-play-btn')) {
+                    this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('resume'));
+                }
+                if (this.fileList[i].querySelector('.e-file-remove-btn')) {
+                    this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('remove'));
+                }
+                if (this.fileList[i].querySelector('.e-file-reload-btn')) {
+                    this.fileList[i].querySelector('.e-icons').setAttribute('title', this.localizedTexts('retry'));
                 }
                 if (!this.autoUpload) {
                     this.uploadButton.innerText = (this.buttons.upload === 'Upload') ?
                     this.localizedTexts('Upload') : <string>this.buttons.upload;
+                    this.uploadButton.setAttribute('title', this.localizedTexts('Upload'));
                     this.clearButton.innerText = (this.buttons.clear === 'Clear') ?
                     this.localizedTexts('Clear') : <string>this.buttons.clear;
+                    this.clearButton.setAttribute('title', this.localizedTexts('Clear'));
                 }
             }
         }
@@ -742,11 +771,15 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         if (!this.element.hasAttribute('type')) {
             this.element.setAttribute('type', 'file');
         }
+        this.updateDirectoryAttributes();
         this.keyConfigs = {
             previous: 'shift+tab',
             enter: 'enter',
             next: 'tab'
         };
+        if (this.element.hasAttribute('tabindex')) {
+            this.tabIndex = this.element.getAttribute('tabindex');
+        }
     }
 
     protected getPersistData(): string {
@@ -758,6 +791,16 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
      */
     public getModuleName(): string {
         return 'uploader';
+    }
+
+    private updateDirectoryAttributes(): void {
+        if (this.directoryUpload) {
+            this.element.setAttribute('directory', 'true');
+            this.element.setAttribute('webkitdirectory', 'true');
+        } else {
+            this.element.removeAttribute('directory');
+            this.element.removeAttribute('webkitdirectory');
+        }
     }
 
     /**
@@ -777,6 +820,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
 
     private renderBrowseButton(): void {
         this.browseButton = this.createElement('button', { className: 'e-css e-btn', attrs: {'type': 'button'}});
+        this.browseButton.setAttribute('tabindex', this.tabIndex);
         if (typeof(this.buttons.browse) === 'string') {
             this.browseButton.innerText = (this.buttons.browse === 'Browse...') ?
             this.localizedTexts('Browse') : this.buttons.browse;
@@ -1132,6 +1176,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             EventHandler.add(this.dropZoneElement, 'drop', this.dropElement, this);
             EventHandler.add(this.dropZoneElement, 'dragover', this.dragHover, this);
             EventHandler.add(this.dropZoneElement, 'dragleave', this.onDragLeave, this);
+            EventHandler.add(this.dropZoneElement, 'paste', this.onPasteFile, this);
         }
     }
 
@@ -1161,6 +1206,16 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         e.stopPropagation();
     }
 
+    /* istanbul ignore next */
+    private onPasteFile(event: ClipboardEvent): void {
+        let item: DataTransferItemList = event.clipboardData.items;
+        if (item.length !== 1) { return; }
+        let pasteFile: DataTransferItem = [].slice.call(item)[0];
+        if ((pasteFile.kind === 'file') && pasteFile.type.match('^image/')) {
+            this.renderSelectedFiles(event, [pasteFile.getAsFile()], false, true);
+        }
+    }
+
     private removeFiles(args: MouseEvent | TouchEvent | KeyboardEventArgs): void {
         if (!this.enabled) { return; }
         let selectedElement: HTMLElement = (<HTMLInputElement>args.target).parentElement;
@@ -1168,7 +1223,6 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let liElement: HTMLElement = this.fileList[index];
         let fileData: FileInfo = this.filesData[index];
         if ((<HTMLInputElement>args.target).classList.contains(ABORT_ICON)) {
-            if ((<HTMLInputElement>args.target).classList.contains(DISABLED)) { return; }
             fileData.statusCode = '5';
             if (!isNullOrUndefined(liElement)) {
                 let spinnerTarget: HTMLElement = liElement.querySelector('.' + ABORT_ICON) as HTMLElement;
@@ -1211,10 +1265,19 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let name: string = this.element.getAttribute('name');
         let ajax: Ajax = new Ajax(this.asyncSettings.removeUrl, 'POST', true, null);
         let formData: FormData = new FormData();
+        let liElement: HTMLElement = this.getLiElement(file);
         ajax.beforeSend = (e: BeforeSendEventArgs) => {
             eventArgs.currentRequest = ajax.httpRequest;
             if (!removeDirectly) { this.trigger('removing', eventArgs); }
-            if (eventArgs.cancel) { e.cancel = true; }
+            if (eventArgs.cancel) { e.cancel = true; return; }
+            if (!isNullOrUndefined(liElement) && (!isNullOrUndefined(liElement.querySelector('.' + DELETE_ICON)) ||
+            !isNullOrUndefined(liElement.querySelector('.' + REMOVE_ICON)))) {
+                let spinnerTarget: HTMLElement;
+                spinnerTarget = liElement.querySelector('.' + DELETE_ICON) ? liElement.querySelector('.' + DELETE_ICON) as HTMLElement :
+                liElement.querySelector('.' + REMOVE_ICON) as HTMLElement;
+                createSpinner({ target: spinnerTarget , width: '20px' });
+                showSpinner(spinnerTarget);
+            }
             if (eventArgs.postRawFile && !isNullOrUndefined(selectedFiles.rawFile) && selectedFiles.rawFile !== '') {
                 formData.append(name, selectedFiles.rawFile);
             } else {
@@ -1222,16 +1285,10 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             }
             this.updateFormData(formData, eventArgs.customFormData);
         };
-        let liElement: HTMLElement = this.getLiElement(file);
         ajax.onLoad = (e: Event): object => { this.removeCompleted(e, selectedFiles, custom); return {}; };
         /* istanbul ignore next */
         ajax.onError = (e: Event): object => { this.removeFailed(e, selectedFiles, custom); return {}; };
         ajax.send(formData);
-        if (!isNullOrUndefined(liElement) && !isNullOrUndefined(liElement.querySelector('.' + REMOVE_ICON))) {
-            let spinnerTarget: HTMLElement = liElement.querySelector('.' + REMOVE_ICON) as HTMLElement;
-            createSpinner({ target: spinnerTarget , width: '20px' });
-            showSpinner(spinnerTarget);
-        }
     }
 
     /* istanbul ignore next */
@@ -1275,31 +1332,88 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         }
         this.trigger('failure', args);
         let liElement: HTMLElement = this.getLiElement(files);
-        if (!isNullOrUndefined(liElement) && !isNullOrUndefined(liElement.querySelector('.' + REMOVE_ICON))) {
-            let spinnerTarget: HTMLElement = liElement.querySelector('.' + REMOVE_ICON) as HTMLElement;
+        if (!isNullOrUndefined(liElement) && !isNullOrUndefined(liElement.querySelector('.' + DELETE_ICON))) {
+            let spinnerTarget: HTMLElement = liElement.querySelector('.' + DELETE_ICON) as HTMLElement;
             hideSpinner(spinnerTarget);
             detach(liElement.querySelector('.e-spinner-pane'));
         }
     }
 
-    private onSelectFiles(args: MouseEvent | TouchEvent | DragEvent): void {
+    /* istanbul ignore next */
+    private getFilesFromFolder(event: MouseEvent | TouchEvent | DragEvent | ClipboardEvent): void {
+        this.filesEntries = [];
+        let items: DataTransferItem[] | DataTransferItemList;
+        items = this.multiple ? (<DragEvent>event).dataTransfer.items : [(<DragEvent>event).dataTransfer.items[0]];
+        for (let i: number = 0; i < items.length; i++) {
+            let item: WebKitEntry = items[i].webkitGetAsEntry();
+            if (item.isFile) {
+                this.renderSelectedFiles(event, [(<DragEvent>event).dataTransfer.files[i]]);
+            } else if (item.isDirectory) {
+                this.traverseFileTree(item, event);
+            }
+        }
+    }
+    // tslint:disable
+    /* istanbul ignore next */
+    public traverseFileTree(item: any, event?: MouseEvent | TouchEvent | DragEvent | ClipboardEvent): void {
+        if (typeof (item) === 'boolean') {
+            let files: { [key: string]: Object }[] = [];
+            for (let i: number = 0; i < this.filesEntries.length; i++) {
+                this.filesEntries[i].file( (fileObj: any) => {
+                    let path: string = this.filesEntries[i].fullPath;
+                    files.push({'path': path, 'file': fileObj});
+                });
+            }
+            this.renderSelectedFiles(event, files, true);
+        } else if (item.isFile) {
+            this.filesEntries.push(item);
+        } else if (item.isDirectory) {
+            let directoryReader: WebKitDirectoryReader = item.createReader();
+            directoryReader.readEntries( (entries: any) => {
+                for (let i: number = 0; i < entries.length; i++) {
+                    this.traverseFileTree(entries[i]);
+                };
+                this.traverseFileTree(true);
+                this.filesEntries = [];
+            });
+        }
+    }
+    // tslint:enable
+    private onSelectFiles(args: MouseEvent | TouchEvent | DragEvent | ClipboardEvent): void {
         if (!this.enabled) { return; }
-        let fileData: FileInfo[] = [];
         let targetFiles: File[];
         if (args.type === 'drop') {
-           let files: FileList = (<DragEvent>args).dataTransfer.files;
-           targetFiles = this.multiple ? this.sortFileList(files) : [files[0]];
+            /* istanbul ignore next */
+            if (this.directoryUpload) {
+                this.getFilesFromFolder(args);
+            } else {
+                let files: FileList = (<DragEvent>args).dataTransfer.files;
+                targetFiles = this.multiple ? this.sortFileList(files) : [files[0]];
+                this.renderSelectedFiles(args, targetFiles);
+            }
         } else {
             targetFiles = [].slice.call((<HTMLInputElement>args.target).files);
+            this.renderSelectedFiles(args, targetFiles);
         }
+    }
+
+    private renderSelectedFiles(
+        args: MouseEvent | TouchEvent | DragEvent | ClipboardEvent,
+        // tslint:disable-next-line
+        targetFiles: any, directory?: boolean, paste?: boolean): void {
+        if (targetFiles.length < 1) { return; }
+        let fileData: FileInfo[] = [];
         if (!this.multiple) {
             this.clearData(true);
             targetFiles = [targetFiles[0]];
         }
         for (let i: number = 0; i < targetFiles.length; i++) {
-            let file: File = targetFiles[i];
+            let file: File = directory ? targetFiles[i].file : targetFiles[i];
+            let fileName: string = directory ? targetFiles[i].path.substring(1, targetFiles[i].path.length) : paste ?
+            getUniqueID(file.name.substring(0, file.name.lastIndexOf('.'))) + '.' + this.getFileType(file.name) :
+            this.directoryUpload ? targetFiles[i].webkitRelativePath : file.name;
             let eventArgs: FileInfo = {
-                name: file.name,
+                name: fileName,
                 rawFile: file,
                 size: file.size,
                 status: this.localizedTexts('readyToUploadMessage'),
@@ -1307,6 +1421,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 validationMessages: this.validatedFileSize(file.size),
                 statusCode: '1'
             };
+            if (paste) { eventArgs.fileSource = 'paste'; }
             eventArgs.status = eventArgs.validationMessages.minSize !== '' ? this.localizedTexts('invalidMinFileSize') :
             eventArgs.validationMessages.maxSize !== '' ? this.localizedTexts('invalidMaxFileSize') : eventArgs.status;
             if (eventArgs.validationMessages.minSize !== '' || eventArgs.validationMessages.maxSize !== '') {
@@ -1397,9 +1512,13 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         } else { this.createFileList(filesData); }
     }
 
+    private isBlank(str: string): boolean {
+        return (!str || /^\s*$/.test(str));
+    }
+
     private checkExtension(files: FileInfo[]): FileInfo[] {
         let dropFiles: FileInfo[] = files;
-        if (this.allowedExtensions !== '') {
+        if (!this.isBlank(this.allowedExtensions)) {
             let allowedExtensions: string[] = [];
             let extensions: string[] = this.allowedExtensions.split(',');
             for (let extension of extensions) {
@@ -1485,7 +1604,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 EventHandler.add(iconElement, 'click', this.removeFiles, this);
                 if (listItem.statusCode === '2') {
                     statusElement.classList.add(UPLOAD_SUCCESS);
-                    iconElement.classList.add(REMOVE_ICON);
+                    iconElement.classList.add(DELETE_ICON);
                     iconElement.setAttribute('title', this.localizedTexts('delete'));
                 } else if (listItem.statusCode !== '1') {
                     statusElement.classList.remove(UPLOAD_SUCCESS);
@@ -1494,8 +1613,8 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 if (this.autoUpload && listItem.statusCode === '1' && this.asyncSettings.saveUrl !== '') {
                     statusElement.innerHTML = '';
                 }
-                if (!iconElement.classList.contains(REMOVE_ICON)) {
-                    iconElement.classList.add(CLEAR_ICON);
+                if (!iconElement.classList.contains(DELETE_ICON)) {
+                    iconElement.classList.add(REMOVE_ICON);
                 }
                 this.listParent.appendChild(liElement);
                 this.fileList.push(liElement);
@@ -1564,7 +1683,12 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     }
 
     private getLiElement(files : FileInfo) : HTMLElement {
-        let index: number = this.filesData.indexOf(files);
+        let index: number;
+        for (let i: number = 0; i < this.filesData.length; i++) {
+            if (this.filesData[i].name === files.name) {
+                index = i;
+            }
+        }
         return this.fileList[index];
     }
 
@@ -1602,36 +1726,11 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
 
     private uploadInProgress (e: ProgressEventInit , files : FileInfo, customUI?: boolean, request?: Ajax) : void {
         let li : HTMLElement = this.getLiElement(files);
-        if (isNullOrUndefined(li)  &&  (!customUI || isNullOrUndefined(customUI)) ) { return; }
+        if (isNullOrUndefined(li)  &&  (!customUI)) { return; }
         if (!isNullOrUndefined(li)) {
             /* istanbul ignore next */
             if (files.statusCode === '5') {
-                let eventArgs: CancelEventArgs = {
-                    event: e,
-                    fileData: files,
-                    cancel: false
-                };
-                this.trigger('canceling', eventArgs);
-                if (eventArgs.cancel) {
-                    files.statusCode = '3';
-                    let spinnerTarget: HTMLElement = li.querySelector('.' + ABORT_ICON) as HTMLElement;
-                    if (!isNullOrUndefined(li) && !isNullOrUndefined(spinnerTarget)) {
-                        hideSpinner(spinnerTarget);
-                        detach(li.querySelector('.e-spinner-pane'));
-                    }
-                    return;
-                }
-                request.emitError = false;
-                request.httpRequest.abort();
-                let formData : FormData = new FormData();
-                if (files.statusCode === '5') {
-                    let name: string = this.element.getAttribute('name');
-                    formData.append(name, files.name);
-                    formData.append('cancel-uploading', files.name);
-                    let ajax: Ajax = new Ajax(this.asyncSettings.removeUrl, 'POST', true, null);
-                    ajax.onLoad = (e: Event): object => { this.removecanceledFile(e, files); return {}; };
-                    ajax.send(formData);
-                }
+                this.cancelUploadingFile(files, e, request, li);
             }
             if (!(li.querySelectorAll('.' + PROGRESS_WRAPPER).length > 0) && li.querySelector('.' + STATUS)) {
                 li.querySelector('.' + STATUS).classList.add(UPLOAD_INPROGRESS);
@@ -1640,15 +1739,51 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 li.querySelector('.' + STATUS).classList.remove(UPLOAD_FAILED);
             }
             this.updateProgressbar(e, <Element>li);
-            let iconEle: HTMLElement = li.querySelector('.' + CLEAR_ICON);
+            let iconEle: HTMLElement = li.querySelector('.' + REMOVE_ICON) as HTMLElement;
             if (!isNullOrUndefined(iconEle)) {
                 iconEle.classList.add(ABORT_ICON, UPLOAD_INPROGRESS);
                 iconEle.setAttribute('title', this.localizedTexts('abort'));
-                iconEle.classList.remove(CLEAR_ICON);
+                iconEle.classList.remove(REMOVE_ICON);
             }
+        } else {
+            this.cancelUploadingFile(files, e, request);
         }
         let args : object = {e, operation: 'upload', file: this.updateStatus(files, this.localizedTexts('inProgress'), '3')};
         this.trigger('progress', args);
+    }
+
+    /* istanbul ignore next */
+    private cancelUploadingFile(files: FileInfo, e: ProgressEventInit, request?: Ajax, li?: HTMLElement): void {
+        if (files.statusCode === '5') {
+            let eventArgs: CancelEventArgs = {
+                event: e,
+                fileData: files,
+                cancel: false
+            };
+            this.trigger('canceling', eventArgs);
+            if (eventArgs.cancel) {
+                files.statusCode = '3';
+                if (!isNullOrUndefined(li)) {
+                    let spinnerTarget: HTMLElement = li.querySelector('.' + ABORT_ICON) as HTMLElement;
+                    if (!isNullOrUndefined(spinnerTarget)) {
+                        hideSpinner(spinnerTarget);
+                        detach(li.querySelector('.e-spinner-pane'));
+                    }
+                }
+                return;
+            }
+            request.emitError = false;
+            request.httpRequest.abort();
+            let formData : FormData = new FormData();
+            if (files.statusCode === '5') {
+                let name: string = this.element.getAttribute('name');
+                formData.append(name, files.name);
+                formData.append('cancel-uploading', files.name);
+                let ajax: Ajax = new Ajax(this.asyncSettings.removeUrl, 'POST', true, null);
+                ajax.onLoad = (e: Event): object => { this.removecanceledFile(e, files); return {}; };
+                ajax.send(formData);
+            }
+        }
     }
 
     private removecanceledFile(e: Event, file: FileInfo): void {
@@ -1656,7 +1791,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         if (liElement.querySelector('.' + RETRY_ICON) || isNullOrUndefined(liElement.querySelector('.' + ABORT_ICON))) { return; }
         this.updateStatus(file, this.localizedTexts('fileUploadCancel'), '5');
         this.renderFailureState(e, file, liElement);
-        let spinnerTarget: HTMLElement = liElement.querySelector('.' + CLEAR_ICON ) as HTMLElement;
+        let spinnerTarget: HTMLElement = liElement.querySelector('.' + REMOVE_ICON ) as HTMLElement;
         if (!isNullOrUndefined(liElement)) {
             hideSpinner(spinnerTarget);
             detach(liElement.querySelector('.e-spinner-pane'));
@@ -1674,24 +1809,26 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let deleteIcon: Element = liElement.querySelector('.' + ABORT_ICON);
         if (isNullOrUndefined(deleteIcon)) { return; }
         deleteIcon.classList.remove(ABORT_ICON, UPLOAD_INPROGRESS);
-        deleteIcon.classList.add(CLEAR_ICON);
+        deleteIcon.classList.add(REMOVE_ICON);
         deleteIcon.setAttribute('title', this.localizedTexts('remove'));
         this.pauseButton = this.createElement('span', {className: 'e-icons e-file-reload-btn', attrs: { 'tabindex': '-1'}});
         liElement.insertBefore(this.pauseButton, deleteIcon);
         this.pauseButton.setAttribute('title', this.localizedTexts('retry'));
-        let retryElement: HTMLElement = liElement.querySelector('.' + RETRY_ICON);
+        let retryElement: HTMLElement = liElement.querySelector('.' + RETRY_ICON) as HTMLElement;
         /* istanbul ignore next */
-        retryElement.addEventListener('click', (e: Event) => { this.reloadcanceledFile(e, file, liElement); }, false);
+        retryElement.addEventListener('click', (e: Event) => { this.reloadcanceledFile(e, file, liElement, false); }, false);
     }
 
-    private reloadcanceledFile(e: Event, file: FileInfo, liElement: HTMLElement): void {
+    private reloadcanceledFile(e: Event, file: FileInfo, liElement?: HTMLElement, custom?: boolean): void {
         file.statusCode = '1';
         file.status = this.localizedTexts('readyToUploadMessage');
-        liElement.querySelector('.' + STATUS).classList.remove(UPLOAD_FAILED);
-        if (!isNullOrUndefined(liElement.querySelector('.' + RETRY_ICON))) {
-            detach(liElement.querySelector('.' + RETRY_ICON));
+        if (!custom) {
+            liElement.querySelector('.' + STATUS).classList.remove(UPLOAD_FAILED);
+            if (!isNullOrUndefined(liElement.querySelector('.' + RETRY_ICON))) {
+                detach(liElement.querySelector('.' + RETRY_ICON));
+            }
+            this.pauseButton = null;
         }
-        this.pauseButton = null;
         this.upload([file]);
     }
 
@@ -1706,7 +1843,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                 this.removeProgressbar(li, 'success');
                 let iconEle: Element = li.querySelector('.' + ABORT_ICON);
                 if (!isNullOrUndefined(iconEle)) {
-                    iconEle.classList.add(REMOVE_ICON);
+                    iconEle.classList.add(DELETE_ICON);
                     iconEle.setAttribute('title', this.localizedTexts('delete'));
                     iconEle.classList.remove(ABORT_ICON);
                     iconEle.classList.remove(UPLOAD_INPROGRESS);
@@ -1892,7 +2029,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         eventArgs.fileData.statusCode = '5';
         eventArgs.fileData.status = this.localizedTexts('fileUploadCancel');
         this.pauseButton = this.createElement('span', {className: 'e-icons e-file-reload-btn', attrs: { 'tabindex': '-1'}});
-        liElement.insertBefore(this.pauseButton, liElement.querySelector('.' + CLEAR_ICON));
+        liElement.insertBefore(this.pauseButton, liElement.querySelector('.' + REMOVE_ICON));
         this.pauseButton.setAttribute('title', this.localizedTexts('retry'));
         /* istanbul ignore next */
         this.pauseButton.addEventListener('click', (e: Event) => { this.reloadcanceledFile(e, file, liElement); }, false);
@@ -1980,7 +2117,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             this.updateProgressBarClasses(liElement, UPLOAD_FAILED);
             this.removeProgressbar(liElement, 'failure');
             deleteIcon.classList.remove(ABORT_ICON);
-            deleteIcon.classList.add(CLEAR_ICON);
+            deleteIcon.classList.add(REMOVE_ICON);
             deleteIcon.setAttribute('title', this.localizedTexts('remove'));
             let pauseIcon: Element = liElement.querySelector('.' + PAUSE_UPLOAD);
             pauseIcon.classList.add(RETRY_ICON);
@@ -2016,6 +2153,9 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             targetElement.classList.remove(PAUSE_UPLOAD);
             targetElement.classList.add(RESUME_UPLOAD);
             targetElement.setAttribute('title', this.localizedTexts('resume'));
+            targetElement.nextElementSibling.classList.add(REMOVE_ICON);
+            targetElement.nextElementSibling.classList.remove(ABORT_ICON);
+            targetElement.nextElementSibling.setAttribute('title', this.localizedTexts('remove'));
         }
         for (let i: number = 0; i < this.pausedData.length; i++) {
             if (this.pausedData[i].file.name === metaData.file.name) {
@@ -2035,6 +2175,9 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             targetElement.classList.remove(RESUME_UPLOAD);
             targetElement.classList.add(PAUSE_UPLOAD);
             targetElement.setAttribute('title', this.localizedTexts('pause'));
+            targetElement.nextElementSibling.classList.remove(REMOVE_ICON);
+            targetElement.nextElementSibling.classList.add(ABORT_ICON);
+            targetElement.nextElementSibling.setAttribute('title', this.localizedTexts('abort'));
         }
         metaData.file.status = this.localizedTexts('inProgress');
         metaData.file.statusCode = '3';
@@ -2078,7 +2221,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             this.removeProgressbar(liElement, 'success');
             let cancelButton: Element = liElement.querySelector('.' + ABORT_ICON);
             if (!isNullOrUndefined(cancelButton)) {
-                cancelButton.classList.add(REMOVE_ICON);
+                cancelButton.classList.add(DELETE_ICON);
                 cancelButton.setAttribute('title', this.localizedTexts('delete'));
                 cancelButton.classList.remove(ABORT_ICON, UPLOAD_INPROGRESS);
             }
@@ -2096,9 +2239,18 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             file: metaData.file,
             chunkIndex: metaData.chunkIndex,
             totalChunk: chunkCount,
-            chunkSize: this.asyncSettings.chunkSize
+            chunkSize: this.asyncSettings.chunkSize,
+            cancel: false
         };
         this.trigger('chunkFailure', eventArgs);
+        /* tslint:disable */
+        let eventArgsData: { [key: string]: Object } = eventArgs as any;
+        let values: any = Object.keys(eventArgsData).map(function(e) {
+            return eventArgsData[e];
+        });
+        /* tslint:enable */
+        // To prevent triggering of failure event
+        if (!values[values.length - 2]) {
         if (metaData.retryCount < this.asyncSettings.retryCount) {
             setTimeout(() => { this.retryRequest(liElement, metaData, custom); }, this.asyncSettings.retryAfterDelay);
         } else {
@@ -2118,10 +2270,10 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                     detach(liElement.querySelector('.' + PAUSE_UPLOAD));
                 }
                 if (metaData.start > 0) {
-                    iconElement.classList.add(REMOVE_ICON);
+                    iconElement.classList.add(DELETE_ICON);
                     iconElement.setAttribute('title', this.localizedTexts('delete'));
                 } else {
-                    iconElement.classList.add(CLEAR_ICON);
+                    iconElement.classList.add(REMOVE_ICON);
                     iconElement.setAttribute('title', this.localizedTexts('remove'));
                 }
             }
@@ -2130,6 +2282,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
             let args: Object = {e, operation: 'upload', file: this.updateStatus(file, this.localizedTexts('uploadFailedMessage'), '0') };
             this.trigger('failure', args);
         }
+    }
     }
 
     private retryRequest(liElement: HTMLElement, metaData: MetaData, custom?: boolean): void {
@@ -2148,10 +2301,8 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         let metaData: MetaData = this.getCurrentMetaData(fileData);
         if (targetElement.classList.contains(PAUSE_UPLOAD)) {
             this.pauseUpload(metaData, e);
-            targetElement.nextElementSibling.classList.add(DISABLED);
         } else if (targetElement.classList.contains(RESUME_UPLOAD)) {
             this.resumeUpload(metaData, e);
-            targetElement.nextElementSibling.classList.remove(DISABLED);
         } else if (targetElement.classList.contains(RETRY_ICON)) {
             if (metaData.file.status === this.localizedTexts('fileUploadCancel')) {
                 this.retryUpload(metaData, false);
@@ -2161,7 +2312,7 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         }
     }
 
-    private retryUpload(metaData: MetaData, fromcanceledStage?: boolean): void {
+    private retryUpload(metaData: MetaData, fromcanceledStage: boolean): void {
         if (fromcanceledStage) {
             metaData.end = metaData.end + this.asyncSettings.chunkSize;
             metaData.start = metaData.start + this.asyncSettings.chunkSize;
@@ -2198,12 +2349,12 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
                     this.createProgressBar(liElement);
                     this.updateProgressBarClasses(liElement, UPLOAD_INPROGRESS);
                 }
-                let clearIcon: Element = liElement.querySelector('.' + CLEAR_ICON) ? liElement.querySelector('.' + CLEAR_ICON) :
-                liElement.querySelector('.' + REMOVE_ICON);
+                let clearIcon: Element = liElement.querySelector('.' + REMOVE_ICON) ? liElement.querySelector('.' + REMOVE_ICON) :
+                liElement.querySelector('.' + DELETE_ICON);
                 if (!isNullOrUndefined(clearIcon)) {
                     clearIcon.classList.add(ABORT_ICON);
                     clearIcon.setAttribute('title', this.localizedTexts('abort'));
-                    clearIcon.classList.remove(CLEAR_ICON);
+                    clearIcon.classList.remove(REMOVE_ICON);
                 }
             }
             if (!isNaN(Math.round((e.loaded / e.total) * 100)) && isNullOrUndefined(this.template) && metaData.file.statusCode !== '4' ) {
@@ -2379,42 +2530,42 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
     public remove(
         fileData?: FileInfo | FileInfo[], customTemplate?: boolean, removeDirectly?: boolean,
         args?: MouseEvent | TouchEvent | KeyboardEventArgs): void {
-            let eventArgs: RemovingEventArgs = {
-                event: args,
-                cancel: false,
-                filesData: [],
-                customFormData: [],
-                postRawFile: true
-            };
-            if (this.isForm) {
-                eventArgs.filesData = this.getFilesData();
-                this.trigger('removing', eventArgs);
-                if (!eventArgs.cancel) {
-                    this.clearAll();
-                }
-                return;
+        let eventArgs: RemovingEventArgs = {
+            event: args,
+            cancel: false,
+            filesData: [],
+            customFormData: [],
+            postRawFile: true
+        };
+        if (this.isForm) {
+            eventArgs.filesData = this.getFilesData();
+            this.trigger('removing', eventArgs);
+            if (!eventArgs.cancel) {
+                this.clearAll();
             }
-            let removeFiles: FileInfo[] = [];
-            fileData = !isNullOrUndefined(fileData) ? fileData : this.filesData;
-            if (fileData instanceof Array) {
-                removeFiles = fileData;
+            return;
+        }
+        let removeFiles: FileInfo[] = [];
+        fileData = !isNullOrUndefined(fileData) ? fileData : this.filesData;
+        if (fileData instanceof Array) {
+            removeFiles = fileData;
+        } else {
+            removeFiles.push(fileData);
+        }
+        eventArgs.filesData = removeFiles;
+        let removeUrl: string = this.asyncSettings.removeUrl;
+        let validUrl: boolean = (removeUrl === '' || isNullOrUndefined(removeUrl)) ? false : true;
+        for (let files of removeFiles) {
+            if ((files.statusCode === '2' || files.statusCode === '4') && validUrl) {
+                this.removeUploadedFile(files, eventArgs, removeDirectly, customTemplate);
             } else {
-                removeFiles.push(fileData);
-            }
-            eventArgs.filesData = removeFiles;
-            let removeUrl: string = this.asyncSettings.removeUrl;
-            let validUrl: boolean = (removeUrl === '' || isNullOrUndefined(removeUrl)) ? false : true;
-            for (let files of removeFiles) {
-                if ((files.statusCode === '2' || files.statusCode === '4') && validUrl) {
-                    this.removeUploadedFile(files, eventArgs, removeDirectly, customTemplate);
-                } else {
-                    if (!removeDirectly) {
-                        this.trigger('removing', eventArgs);
-                    }
-                    if (eventArgs.cancel) { return; }
-                    this.removeFilesData(files, customTemplate);
+                if (!removeDirectly) {
+                    this.trigger('removing', eventArgs);
                 }
+                if (eventArgs.cancel) { return; }
+                this.removeFilesData(files, customTemplate);
             }
+        }
     }
 
     /**
@@ -2499,20 +2650,23 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
      * @param { boolean } fromcanceledStage - Set true to retry from canceled stage and set false to retry from initial stage.
      * @returns void
      */
-    public retry(fileData: FileInfo | FileInfo[], fromcanceledStage?: boolean): void {
+    public retry(fileData: FileInfo | FileInfo[], fromcanceledStage?: boolean, custom?: boolean): void {
         let  fileDataFiles:  FileInfo[]  =  this.validateFileType(fileData);
-        this.retryFailedFiles(fileDataFiles, fromcanceledStage);
+        this.retryFailedFiles(fileDataFiles, fromcanceledStage, custom);
     }
 
-    private retryFailedFiles(fileData: FileInfo[], fromcanceledStage?: boolean): void {
+    private retryFailedFiles(fileData: FileInfo[], fromcanceledStage: boolean, custom: boolean): void {
         let files: FileInfo[] = this.getFiles(fileData);
         for (let i: number = 0; i < files.length; i++) {
             if (files[i].statusCode === '5' || files[i].statusCode === '0') {
                 if (this.asyncSettings.chunkSize > 0) {
                     this.retryUpload(this.getCurrentMetaData(files[i], null), fromcanceledStage);
                 } else {
-                    let liElement: HTMLElement = this.fileList[this.filesData.indexOf(files[i])];
-                    this.reloadcanceledFile(null, files[i], liElement);
+                    let liElement: HTMLElement;
+                    if (!custom) {
+                    liElement = this.fileList[this.filesData.indexOf(files[i])];
+                    }
+                    this.reloadcanceledFile(null, files[i], liElement, custom);
                 }
             }
         }
@@ -2525,25 +2679,39 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
      * @returns void
      */
     public cancel(fileData: FileInfo[]): void {
-        let  fileDataFiles:  FileInfo[]  =  this.validateFileType(fileData);
-        this.cancelUpload(fileDataFiles);
+        let cancelingFiles:  FileInfo[]  =  this.validateFileType(fileData);
+        this.cancelUpload(cancelingFiles);
     }
 
     private cancelUpload(fileData: FileInfo[]): void {
         let files: FileInfo[] = this.getFiles(fileData);
-        for (let i: number = 0; i < files.length; i++) {
-            if (files[i].statusCode === '3') {
-                let metaData: MetaData = this.getCurrentMetaData(files[i], null);
-                metaData.file.statusCode = '5';
-                metaData.file.status = this.localizedTexts('fileUploadCancel');
-                this.updateMetaData(metaData);
-                let liElement: HTMLElement = this.getLiElement(files[i]);
-                if (!isNullOrUndefined(liElement) && isNullOrUndefined(this.template)) {
-                    let spinnerTarget: HTMLElement = liElement.querySelector('.' + ABORT_ICON) as HTMLElement;
-                    createSpinner({ target: spinnerTarget , width: '20px' });
-                    showSpinner(spinnerTarget);
+        if (this.asyncSettings.chunkSize > 0) {
+            for (let i: number = 0; i < files.length; i++) {
+                if (files[i].statusCode === '3') {
+                    let metaData: MetaData = this.getCurrentMetaData(files[i], null);
+                    metaData.file.statusCode = '5';
+                    metaData.file.status = this.localizedTexts('fileUploadCancel');
+                    this.updateMetaData(metaData);
+                    this.showHideUploadSpinner(files[i]);
                 }
             }
+        } else {
+            for (let i: number = 0; i < files.length; i++) {
+                if (files[i].statusCode === '3') {
+                    files[i].statusCode = '5';
+                    files[i].status = this.localizedTexts('fileUploadCancel');
+                    this.showHideUploadSpinner(files[i]);
+                }
+            }
+        }
+    }
+
+    private showHideUploadSpinner(files: FileInfo): void {
+        let liElement: HTMLElement = this.getLiElement(files);
+        if (!isNullOrUndefined(liElement) && isNullOrUndefined(this.template)) {
+            let spinnerTarget: HTMLElement = liElement.querySelector('.' + ABORT_ICON) as HTMLElement;
+            createSpinner({ target: spinnerTarget , width: '20px' });
+            showSpinner(spinnerTarget);
         }
     }
 }

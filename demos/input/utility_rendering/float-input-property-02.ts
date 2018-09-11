@@ -230,33 +230,33 @@ document.getElementById('placehold').addEventListener("click", () => {
 });
 
 document.getElementById('setenable').addEventListener("click", () => {
-    Input.setEnabled(true, element10);
-    Input.setEnabled(true, element11);
-    Input.setEnabled(true, element12);
-    Input.setEnabled(true, element13);
-    Input.setEnabled(true, element15);
-    Input.setEnabled(true, element16);
-    Input.setEnabled(true, element17);
-    Input.setEnabled(true, element18);
-    Input.setEnabled(true, element22);
-    Input.setEnabled(true, element23);
-    Input.setEnabled(true, element14);
-    Input.setEnabled(true, element19);
+    Input.setEnabled(true, element10, 'Auto', inputObj10.container);
+    Input.setEnabled(true, element11, 'Auto', inputObj11.container);
+    Input.setEnabled(true, element12, 'Auto', inputObj12.container);
+    Input.setEnabled(true, element13, 'Auto', inputObj13.container);
+    Input.setEnabled(true, element15, 'Auto', inputObj15.container);
+    Input.setEnabled(true, element16, 'Auto', inputObj16.container);
+    Input.setEnabled(true, element17, 'Auto', inputObj17.container);
+    Input.setEnabled(true, element18, 'Auto', inputObj18.container);
+    Input.setEnabled(true, element22, 'Auto', inputObj22.container);
+    Input.setEnabled(true, element23, 'Auto', inputObj23.container);
+    Input.setEnabled(true, element14, 'Auto', inputObj14.container);
+    Input.setEnabled(true, element19, 'Auto', inputObj19.container);
 });
 
 document.getElementById('clearenable').addEventListener("click", () => {
-    Input.setEnabled(false, element10);
-    Input.setEnabled(false, element11);
-    Input.setEnabled(false, element12);
-    Input.setEnabled(false, element13);
-    Input.setEnabled(false, element15);
-    Input.setEnabled(false, element16);
-    Input.setEnabled(false, element17);
-    Input.setEnabled(false, element18);
-    Input.setEnabled(false, element22);
-    Input.setEnabled(false, element23);
-    Input.setEnabled(false, element14);
-    Input.setEnabled(false, element19);
+    Input.setEnabled(false, element10, 'Auto', inputObj10.container);
+    Input.setEnabled(false, element11, 'Auto', inputObj11.container);
+    Input.setEnabled(false, element12, 'Auto', inputObj12.container);
+    Input.setEnabled(false, element13, 'Auto', inputObj13.container);
+    Input.setEnabled(false, element15, 'Auto', inputObj15.container);
+    Input.setEnabled(false, element16, 'Auto', inputObj16.container);
+    Input.setEnabled(false, element17, 'Auto', inputObj17.container);
+    Input.setEnabled(false, element18, 'Auto', inputObj18.container);
+    Input.setEnabled(false, element22, 'Auto', inputObj22.container);
+    Input.setEnabled(false, element23, 'Auto', inputObj23.container);
+    Input.setEnabled(false, element14, 'Auto', inputObj14.container);
+    Input.setEnabled(false, element19, 'Auto', inputObj19.container);
 });
 
 document.getElementById('setread').addEventListener("click", () => {

@@ -15,9 +15,6 @@
   .e-input-group.e-control-wrapper textarea.e-input {
     border: $input-border;
     border-width: $input-box-border-width;
-    font-family: $input-font-family;
-    font-size: $input-font-size;
-    font-weight: 400;
     height: auto;
     line-height: inherit;
     margin: $zero-value;
@@ -26,6 +23,29 @@
     padding: $input-padding;
     text-indent: $input-text-indent;
     width: 100%;
+  }
+
+  input.e-input#{$css},
+  textarea.e-input#{$css},
+  .e-input-group,
+  .e-input-group.e-control-wrapper {
+    font-family: $input-font-family;
+    font-size: $input-font-size;
+    font-weight: 400;
+  }
+
+  .e-input-group.e-disabled,
+  .e-input-group.e-control-wrapper.e-disabled {
+    font-family: $input-font-family;
+    font-size: $input-font-size;
+    font-weight: 400;
+  }
+
+  .e-input-group input.e-input,
+  .e-input-group.e-control-wrapper input.e-input,
+  .e-input-group textarea.e-input,
+  .e-input-group.e-control-wrapper textarea.e-input {
+    font: inherit;
   }
 
   input.e-input#{$css},
@@ -122,23 +142,37 @@
 
   input.e-input.e-bigger#{$css},
   textarea.e-input.e-bigger#{$css},
+  .e-bigger input.e-input#{$css},
+  .e-bigger textarea.e-input#{$css},
+  .e-input-group.e-bigger,
+  .e-bigger .e-input-group,
+  .e-input-group.e-control-wrapper.e-bigger,
+  .e-bigger .e-input-group.e-control-wrapper,
+  .e-input-group.e-bigger.e-disabled,
+  .e-bigger .e-input-group.e-disabled,
+  .e-input-group.e-control-wrapper.e-bigger.e-disabled,
+  .e-bigger .e-input-group.e-control-wrapper.e-disabled {
+    font-size: $input-bigger-font-size;
+  }
+
+  .e-input-group.e-bigger .e-input,
+  .e-input-group.e-bigger.e-control-wrapper .e-input,
+  .e-bigger .e-input-group .e-input,
+  .e-bigger .e-input-group.e-control-wrapper .e-input {
+    font: inherit;
+  }
+
+  input.e-input.e-bigger#{$css},
+  textarea.e-input.e-bigger#{$css},
   .e-input-group.e-bigger .e-input,
   .e-input-group.e-bigger.e-control-wrapper .e-input,
   .e-bigger input.e-input#{$css},
   .e-bigger textarea.e-input#{$css},
   .e-bigger .e-input-group .e-input,
   .e-bigger .e-input-group.e-control-wrapper .e-input {
-    font-size: $input-bigger-font-size;
     line-height: inherit;
     margin-bottom: $input-bigger-margin-bottom;
     padding: $input-bigger-padding;
-  }
-
-  .e-input-group.e-bigger,
-  .e-bigger .e-input-group,
-  .e-input-group.e-control-wrapper.e-bigger,
-  .e-bigger .e-input-group.e-control-wrapper {
-    margin-bottom: $input-bigger-margin-bottom;
   }
 
   .e-input-group.e-bigger .e-input:focus,
@@ -621,10 +655,31 @@
     }
   }
 
+  input.e-input.e-small#{$css},
+  textarea.e-input.e-small#{$css},
+  .e-small input.e-input#{$css},
+  .e-small textarea.e-input#{$css},
+  .e-input-group.e-small,
+  .e-small .e-input-group,
+  .e-input-group.e-control-wrapper.e-small,
+  .e-small .e-input-group.e-control-wrapper,
+  .e-input-group.e-small.e-disabled,
+  .e-small .e-input-group.e-disabled,
+  .e-input-group.e-control-wrapper.e-small.e-disabled,
+  .e-small .e-input-group.e-control-wrapper.e-disabled {
+    font-size: $input-small-font-size;
+  }
+
+  .e-input-group.e-small .e-input,
+  .e-input-group.e-small.e-control-wrapper .e-input,
+  .e-small .e-input-group .e-input,
+  .e-small .e-input-group.e-control-wrapper .e-input {
+    font: inherit;
+  }
+
   .e-input#{$css}.e-small,
   .e-input-group.e-small .e-input,
   .e-input-group.e-control-wrapper.e-small .e-input {
-    font-size: $input-small-font-size;
     line-height: inherit;
     padding: $input-small-padding;
   }
@@ -635,14 +690,45 @@
   }
 
   .e-input.e-small.e-bigger#{$css},
+  .e-input-group.e-small.e-bigger,
+  .e-small.e-bigger .e-input-group,
+  .e-input-group.e-control-wrapper.e-small.e-bigger,
+  .e-small.e-bigger .e-input-group.e-control-wrapper,
+  .e-bigger .e-input#{$css}.e-small,
+  .e-small .e-input#{$css}.e-bigger,
+  .e-bigger .e-input-group.e-small,
+  .e-bigger .e-input-group.e-control-wrapper.e-small,
+  .e-small .e-input-group.e-bigger,
+  .e-small .e-input-group.e-control-wrapper.e-bigger {
+    font-size: $input-bigger-small-font-size;
+  }
+
+  .e-input-group.e-small.e-bigger.e-disabled,
+  .e-small.e-bigger .e-input-group.e-disabled,
+  .e-input-group.e-control-wrapper.e-small.e-bigger.e-disabled,
+  .e-small.e-bigger .e-input-group.e-control-wrapper.e-disabled,
+  .e-bigger .e-input#{$css}.e-small.e-disabled,
+  .e-small .e-input#{$css}.e-bigger.e-disabled,
+  .e-bigger .e-input-group.e-small.e-disabled,
+  .e-bigger .e-input-group.e-control-wrapper.e-small.e-disabled,
+  .e-small .e-input-group.e-bigger.e-disabled,
+  .e-small .e-input-group.e-control-wrapper.e-bigger.e-disabled {
+    font-size: $input-bigger-small-font-size;
+  }
+
+  .e-input.e-small.e-bigger#{$css},
+  .e-bigger .e-input#{$css}.e-small,
+  .e-small .e-input#{$css}.e-bigger {
+    padding: $input-bigger-small-padding;
+  }
+
   .e-input-group.e-small.e-bigger .e-input,
   .e-input-group.e-small .e-input.e-bigger,
   .e-input-group.e-control-wrapper.e-small.e-bigger .e-input,
   .e-input-group.e-control-wrapper.e-small .e-input.e-bigger,
-  .e-bigger .e-input#{$css}.e-small,
   .e-bigger .e-input-group.e-small .e-input,
   .e-bigger .e-input-group.e-control-wrapper.e-small .e-input {
-    font-size: $input-bigger-small-font-size;
+    font: inherit;
     padding: $input-bigger-small-padding;
   }
 
@@ -652,7 +738,6 @@
   .e-input-group.e-control-wrapper.e-small.e-bigger .e-input:focus,
   .e-input-group.e-control-wrapper.e-small .e-input.e-bigger:focus,
   .e-bigger .e-input-group.e-control-wrapper.e-small .e-input:focus {
-    font-size: $input-bigger-small-font-size;
     padding: $input-bigger-small-padding;
   }
 
@@ -1266,6 +1351,17 @@
     margin-top: $zero-value;
   }
 
+  .e-float-input,
+  .e-float-input.e-control-wrapper,
+  .e-float-input.e-disabled,
+  .e-float-input.e-control-wrapper.e-disabled,
+  .e-float-input.e-input-group.e-disabled,
+  .e-float-input.e-input-group.e-control-wrapper.e-disabled {
+    font-family: $input-font-family;
+    font-size: $input-font-size;
+    font-weight: 400;
+  }
+
   .e-float-input input,
   .e-float-input textarea,
   .e-float-input.e-control-wrapper input,
@@ -1273,9 +1369,7 @@
     border: $float-input-border;
     border-width: $float-input-border-width;
     display: block;
-    font-family: $input-font-family;
-    font-size: $input-font-size;
-    font-weight: 400;
+    font: inherit;
     width: 100%;
   }
 
@@ -1294,6 +1388,24 @@
     text-indent: $input-text-indent;
   }
 
+  .e-float-input.e-bigger,
+  .e-bigger .e-float-input,
+  .e-float-input.e-control-wrapper.e-bigger,
+  .e-bigger .e-float-input.e-control-wrapper {
+    font-size: $input-bigger-font-size;
+  }
+
+  .e-float-input.e-bigger.e-disabled,
+  .e-bigger .e-float-input.e-disabled,
+  .e-float-input.e-control-wrapper.e-bigger.e-disabled,
+  .e-bigger .e-float-input.e-control-wrapper.e-disabled,
+  .e-float-input.e-input-group.e-bigger.e-disabled,
+  .e-bigger .e-float-input.e-input-group.e-disabled,
+  .e-float-input.e-input-group.e-control-wrapper.e-bigger.e-disabled,
+  .e-bigger .e-float-input.e-input-group.e-control-wrapper.e-disabled {
+    font-size: $input-bigger-font-size;
+  }
+
   .e-float-input.e-bigger input,
   .e-float-input input.e-bigger,
   .e-bigger .e-float-input input,
@@ -1306,18 +1418,66 @@
   .e-float-input.e-control-wrapper.e-bigger textarea,
   .e-float-input.e-control-wrapper textarea.e-bigger,
   .e-bigger .e-float-input.e-control-wrapper textarea {
-    font-size: $input-bigger-font-size;
+    font: inherit;
     line-height: inherit;
     padding: $float-input-bigger-padding;
+  }
+
+  .e-float-input.e-small,
+  .e-small .e-float-input,
+  .e-float-input.e-control-wrapper.e-small,
+  .e-small .e-float-input.e-control-wrapper {
+    font-size: $input-small-font-size;
+  }
+
+  .e-float-input.e-small.e-disabled,
+  .e-small .e-float-input.e-disabled,
+  .e-float-input.e-control-wrapper.e-small.e-disabled,
+  .e-small .e-float-input.e-control-wrapper.e-disabled,
+  .e-float-input.e-input-group.e-small.e-disabled,
+  .e-small .e-float-input.e-input-group.e-disabled,
+  .e-float-input.e-input-group.e-control-wrapper.e-small.e-disabled,
+  .e-small .e-float-input.e-input-group.e-control-wrapper.e-disabled {
+    font-size: $input-small-font-size;
   }
 
   .e-float-input.e-small input,
   .e-float-input.e-small textarea,
   .e-float-input.e-control-wrapper.e-small input,
   .e-float-input.e-control-wrapper.e-small textarea {
-    font-size: $input-small-font-size;
+    font: inherit;
     line-height: inherit;
     padding: $float-input-small-padding;
+  }
+
+  .e-float-input.e-small.e-bigger,
+  .e-small.e-bigger .e-float-input,
+  .e-bigger .e-float-input.e-small,
+  .e-small .e-float-input.e-bigger,
+  .e-float-input.e-control-wrapper.e-small.e-bigger,
+  .e-small.e-bigger .e-float-input.e-control-wrapper,
+  .e-bigger .e-float-input.e-control-wrapper.e-small,
+  .e-small .e-float-input.e-control-wrapper.e-bigger {
+    font-size: $input-bigger-small-font-size;
+  }
+
+  .e-float-input.e-small.e-bigger.e-disabled,
+  .e-small.e-bigger .e-float-input.e-disabled,
+  .e-bigger .e-float-input.e-small.e-disabled,
+  .e-small .e-float-input.e-bigger.e-disabled,
+  .e-float-input.e-control-wrapper.e-small.e-bigger.e-disabled,
+  .e-small.e-bigger .e-float-input.e-control-wrapper.e-disabled,
+  .e-bigger .e-float-input.e-control-wrapper.e-small.e-disabled,
+  .e-small .e-float-input.e-control-wrapper.e-bigger.e-disabled,
+  .e-float-input.e-input-group.e-small.e-bigger.e-disabled,
+  .e-small.e-bigger .e-float-input.e-input-group.e-disabled,
+  .e-bigger .e-float-input.e-input-group.e-small.e-disabled,
+  .e-small .e-float-input.e-input-group.e-bigger.e-disabled,
+  .e-float-input.e-input-group.e-control-wrapper.e-small.e-bigger.e-disabled,
+  .e-small.e-bigger .e-float-input.e-input-group.e-control-wrapper.e-disabled,
+  .e-bigger .e-float-input.e-input-group.e-control-wrapper.e-small.e-disabled,
+  .e-small .e-float-input.e-input-group.e-control-wrapper.e-bigger.e-disabled {
+    font-size: $input-bigger-small-font-size;
   }
 
   .e-float-input.e-small.e-bigger input,
@@ -1332,7 +1492,7 @@
   .e-float-input.e-control-wrapper.e-small.e-bigger textarea,
   .e-float-input.e-control-wrapper.e-small textarea.e-bigger,
   .e-bigger .e-float-input.e-control-wrapper.e-small textarea {
-    font-size: $input-bigger-small-font-size;
+    font: inherit;
     line-height: inherit;
     padding: $float-input-bigger-small-padding;
   }
@@ -1875,6 +2035,8 @@
   .e-input-group.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error).e-disabled .e-input-in-wrap,
   .e-input-group.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error):not(.e-float-icon-left).e-disabled,
   .e-input-group.e-control-wrapper.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error).e-disabled .e-input-in-wrap {
+    background: $input-disable-bg-color;
+    color: $input-disable-font-color;
     @if $skin-name == 'material' {
       background-image: linear-gradient(90deg, $input-disable-border-color 0, $input-disable-border-color 33%, transparent 0);
       background-position: bottom -1px left 0;

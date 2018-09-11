@@ -1,18 +1,22 @@
 /**
  * Default Uploader sample
  */
-import { Uploader, FileInfo, AsyncSettings } from '../../src/uploader/uploader';
-import { Event } from '@syncfusion/ej2-base';
+import { Uploader } from '../../src/uploader/uploader';
 
 let uploadObj: Uploader = new Uploader({
     asyncSettings: {
-        saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save',
-        removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'
+        saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+        removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
     },
     enableRtl: true,
-    autoUpload: false
+    autoUpload: false,
+    removing: onRemoveFiles
 
 });
-uploadObj.appendTo('#fileupload')
+uploadObj.appendTo('#fileupload');
+
+function onRemoveFiles(args: any) {
+    args.postRawFile = false;
+}
 
 

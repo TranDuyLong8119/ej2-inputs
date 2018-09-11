@@ -1,6 +1,7 @@
 @include export-module('color-picker-layout') {
   .e-colorpicker-wrapper {
     display: inline-block;
+    line-height: 0;
     outline: none;
     user-select: none;
 
@@ -12,7 +13,7 @@
     }
 
     & .e-split-btn-wrapper {
-      & .e-split-btn {
+      & .e-split-colorpicker.e-split-btn {
         font-family: initial;
         line-height: $split-line-height;
         padding: $split-btn-padding;
@@ -33,7 +34,7 @@
       }
 
       &.e-rtl {
-        & .e-split-btn {
+        & .e-split-colorpicker.e-split-btn {
           padding: $split-btn-padding;
         }
       }
@@ -68,8 +69,14 @@
     }
   }
 
+  .e-colorpicker-popup {
+    line-height: 0;
+  }
+
+  // sass-lint:disable no-vendor-prefixes
   .e-colorpicker {
     &.e-modal {
+      -webkit-overflow-scrolling: touch;
       background-color: $colorpicker-overlay;
       height: 100%;
       left: 0;
@@ -78,7 +85,6 @@
       position: fixed;
       top: 0;
       width: 100%;
-      z-index: 999;
     }
   }
 
@@ -91,7 +97,7 @@
   .e-bigger .e-colorpicker-wrapper,
   .e-bigger.e-colorpicker-wrapper {
     & .e-split-btn-wrapper {
-      & .e-split-btn {
+      & .e-split-colorpicker.e-split-btn {
         line-height: $bigger-split-line-height;
         padding: $bigger-split-btn-padding;
 
@@ -102,7 +108,7 @@
       }
 
       &.e-rtl {
-        & .e-split-btn {
+        & .e-split-colorpicker.e-split-btn {
           padding: $bigger-split-btn-padding;
         }
       }
@@ -272,15 +278,11 @@
           }
         }
 
-        & .e-hue-slider,
-        & .e-opacity-slider {
+        & .e-slider.e-hue-slider,
+        & .e-slider.e-opacity-slider {
           & .e-handle,
           & .e-handle-start {
             box-shadow: $slider-handler-box-shadow;
-
-            &.e-hide-handler {
-              box-shadow: none;
-            }
           }
         }
       }
@@ -324,31 +326,9 @@
       width: 100%;
 
       & .e-input-container {
-        display: inline-block;
-        width: $input-container;
-
         & .e-float-input {
-          display: inline-block;
-          margin-right: $label-margin;
-          vertical-align: baseline;
-          width: $hex-label-width;
-
           & input {
-            height: $input-height;
             padding-left: 0;
-            text-align: center;
-          }
-
-          &.e-numeric {
-            height: $input-height;
-            width: $label-width;
-
-            & input {
-              height: $numeric-input-height;
-            }
-          }
-
-          & .e-float-text {
             text-align: center;
           }
         }
@@ -360,6 +340,38 @@
         line-height: 16px;
         margin-top: $value-switch-btn-margin;
         padding: $switch-btn-padding;
+      }
+    }
+
+    & .e-input-container {
+      display: inline-block;
+      width: $input-container;
+
+      & .e-float-input {
+        display: inline-block;
+        margin-right: $label-margin;
+        vertical-align: baseline;
+
+        &:first-child {
+          width: $hex-label-width;
+
+          & input {
+            height: $input-height;
+          }
+        }
+
+        &.e-numeric {
+          height: $input-height;
+          width: $label-width;
+
+          & input {
+            height: $numeric-input-height;
+          }
+        }
+
+        & .e-float-text {
+          text-align: center;
+        }
       }
     }
 
@@ -388,7 +400,9 @@
       }
 
       & .e-mode-switch-btn {
-        background-size: contain;
+        background-origin: border-box;
+        background-position: center;
+        background-size: cover;
         float: left;
         margin-top: $type-switch-margin;
         overflow: hidden;
@@ -434,6 +448,44 @@
 
         +.e-switch-ctrl-btn {
           padding: $palette-ctrl-btn-padding;
+        }
+      }
+    }
+  }
+
+  .e-hide-hex-value .e-container {
+    & .e-float-input {
+      &.e-numeric {
+        width: $hex-hidden-width;
+      }
+    }
+  }
+
+  .e-hide-valueswitcher {
+    & .e-container {
+      & .e-input-container {
+        width: 100%;
+      }
+
+      & .e-float-input {
+        &:first-child {
+          width: $value-hidden-hex-label-width;
+        }
+
+        &.e-numeric {
+          width: $value-hidden-label-width;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &.e-hide-hex-value .e-container {
+      & .e-float-input {
+        &.e-numeric {
+          width: $value-hex-hidden-width;
         }
       }
     }
@@ -491,85 +543,100 @@
         }
       }
     }
+
+    &.e-hide-valueswitcher {
+      & .e-container {
+        & .e-float-input {
+          &:last-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
   }
 
-  .e-bigger .e-container {
-    &.e-color-picker {
-      width: $bigger-container-width;
-    }
-
-    & .e-palette {
-      & .e-tile {
-        height: $bigger-tile-size;
-        width: $bigger-tile-size;
-      }
-    }
-
-    & .e-hsv-container {
-      & .e-hsv-color {
-        height: $bigger-container-height;
-      }
-    }
-
-    & .e-custom-palette {
-      &.e-palette-group {
-        height: $bigger-container-width;
-      }
-    }
-
-    & .e-slider-preview {
-      padding: $bigger-slider-wrapper-padding;
-
-      & .e-preview-container {
-        margin-left: $bigger-preview-margin-left;
-        top: 0;
-        vertical-align: super;
-        width: $bigger-preview-size;
+  .e-bigger {
+    & .e-container {
+      &.e-color-picker {
+        width: $bigger-container-width;
       }
 
-      & .e-colorpicker-slider {
-        width: $bigger-slider-container-width;
+      & .e-palette {
+        & .e-tile {
+          height: $bigger-tile-size;
+          width: $bigger-tile-size;
+        }
+      }
 
-        & .e-slider-container {
-          height: $bigger-slider-container-height;
+      & .e-hsv-container {
+        & .e-hsv-color {
+          height: $bigger-container-height;
+        }
+      }
 
-          & .e-handle {
-            border-radius: $bigger-slider-handle-radius;
-            height: $bigger-slider-handle-size;
-            top: $bigger-slider-handle-top;
-            width: $bigger-slider-handle-size;
+      & .e-custom-palette {
+        &.e-palette-group {
+          height: $bigger-container-width;
+        }
+      }
+
+      & .e-slider-preview {
+        padding: $bigger-slider-wrapper-padding;
+
+        & .e-preview-container {
+          margin-left: $bigger-preview-margin-left;
+          top: 0;
+          vertical-align: super;
+          width: $bigger-preview-size;
+        }
+
+        & .e-colorpicker-slider {
+          width: $bigger-slider-container-width;
+
+          & .e-slider-container {
+            height: $bigger-slider-container-height;
+
+            & .e-handle {
+              border-radius: $bigger-slider-handle-radius;
+              height: $bigger-slider-handle-size;
+              top: $bigger-slider-handle-top;
+              width: $bigger-slider-handle-size;
+            }
+          }
+        }
+
+        & .e-switch-ctrl-btn {
+          & .e-ctrl-btn {
+            width: 90.6%;
           }
         }
       }
 
-      & .e-switch-ctrl-btn {
-        & .e-ctrl-btn {
-          width: 90.6%;
+      &.e-color-palette {
+        & .e-palette {
+          +.e-switch-ctrl-btn {
+            padding: $bigger-palette-ctrl-btn-padding;
+          }
         }
       }
-    }
 
-    &.e-color-palette {
-      & .e-palette {
-        +.e-switch-ctrl-btn {
-          padding: $bigger-palette-ctrl-btn-padding;
-        }
-      }
-    }
-
-    & .e-selected-value {
       & .e-input-container {
         width: $bigger-input-container;
 
         & .e-float-input {
           margin-right: $bigger-label-margin;
 
-          & input {
-            height: $bigger-input-height;
+          &:first-child {
+            width: $bigger-hex-label-width;
+
+            & input {
+              height: $bigger-input-height;
+            }
           }
 
           &.e-numeric {
             height: $bigger-input-height;
+            width: $bigger-label-width;
 
             & input {
               height: $bigger-numeric-input-height;
@@ -577,18 +644,59 @@
           }
         }
       }
+
+      & .e-value-switch-btn,
+      & .e-mode-switch-btn {
+        font-size: 18px;
+        line-height: 18px;
+        padding: $bigger-switch-btn-padding;
+        width: $bigger-switch-btn-width;
+      }
+
+      & .e-mode-switch-btn {
+        margin-top: $bigger-type-switch-btn-margin;
+      }
     }
 
-    & .e-value-switch-btn,
-    & .e-mode-switch-btn {
-      font-size: 18px;
-      line-height: 18px;
-      padding: $bigger-switch-btn-padding;
-      width: $bigger-switch-btn-width;
+    &.e-hide-hex-value,
+    & .e-hide-hex-value {
+      & .e-container {
+        & .e-float-input {
+          &.e-numeric {
+            width: $bigger-hex-hidden-width;
+          }
+        }
+      }
     }
 
-    & .e-mode-switch-btn {
-      margin-top: $bigger-type-switch-btn-margin;
+    &.e-hide-valueswitcher,
+    & .e-hide-valueswitcher {
+      & .e-container {
+        & .e-input-container {
+          width: 100%;
+        }
+
+        & .e-float-input {
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &.e-numeric {
+            width: $bigger-value-hidden-label-width;
+          }
+        }
+      }
+
+      &.e-hide-hex-value,
+      & .e-hide-hex-value {
+        & .e-container {
+          & .e-float-input {
+            &.e-numeric {
+              width: $bigger-value-hex-hidden-width;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -609,9 +717,31 @@
         }
       }
     }
+
+    &.e-hide-valueswitcher {
+      & .e-container {
+        & .e-float-input {
+          &:last-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
   }
 
-  .e-tooltip-wrap {
+  .e-hide-switchable-value,
+  .e-bigger.e-hide-switchable-value,
+  .e-bigger .e-hide-switchable-value {
+    & .e-container {
+      & .e-input-container {
+        & .e-float-input {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .e-popup.e-tooltip-wrap {
     &.e-color-picker-tooltip {
       border-bottom-left-radius: 50%;
       border-bottom-right-radius: 0%;
@@ -644,8 +774,8 @@
     width: 100%;
   }
 
-  .e-bigger .e-tooltip-wrap,
-  .e-bigger.e-tooltip-wrap {
+  .e-bigger .e-popup.e-tooltip-wrap,
+  .e-bigger.e-popup.e-tooltip-wrap {
     &.e-color-picker-tooltip {
       min-width: 32px;
 

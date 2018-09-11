@@ -6,8 +6,8 @@ import { Event } from '@syncfusion/ej2-base';
 
 let uploadObj: Uploader = new Uploader({
     asyncSettings: {
-        saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save',
-        removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'
+        saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+        removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
     },
     multiple : false
 });

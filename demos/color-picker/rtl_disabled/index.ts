@@ -1,4 +1,4 @@
-import { ColorPicker } from './../../../src/color-picker/color-picker';
+import { ColorPicker } from './../../../src/color-picker/index';
 import { enableRipple } from '@syncfusion/ej2-base';
 import { L10n } from '@syncfusion/ej2-base';
 

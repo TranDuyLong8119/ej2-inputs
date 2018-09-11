@@ -189,7 +189,6 @@
   // For Desktop view
 
   .e-upload {
-    float: left;
     width: 100%;
 
     .e-file-select-wrap {
@@ -380,8 +379,8 @@
     }
 
     & .e-upload-actions {
-      float: right;
       position: relative;
+      text-align: right;
 
       .e-file-upload-btn,
       .e-file-clear-btn {
@@ -407,7 +406,7 @@
       }
 
       & .e-upload-actions {
-        float: $float-left;
+        text-align: $float-left;
       }
 
       & .e-upload-files {

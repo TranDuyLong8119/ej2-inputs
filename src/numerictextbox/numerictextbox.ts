@@ -823,7 +823,7 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
         if (decimalSeparator === DECIMALSEPARATOR) {
             decimalSeparator = '\\' + decimalSeparator;
         }
-        if (this.decimals === 0 && this.validateDecimalOnType) {
+        if (this.decimals === 0  && this.validateDecimalOnType ) {
             return INTREGEXP;
         }
         if (this.decimals && this.validateDecimalOnType) {

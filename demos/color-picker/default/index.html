@@ -7,40 +7,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Typescript UI Controls" />
     <meta name="author" content="Syncfusion" />
-    <link id="theme" href="./../../../styles/color-picker/material.css" rel="stylesheet" />
+    <link id="theme" href="./../theme-files/material.css" rel="stylesheet" />
+    <script>
+        window.require = {
+            config: function (json) {
+                window.rsConfig = json;
+                window.rsConfig.baseUrl = '';
+            }
+        };
+    </script>
+    <script src="./../demo-config.js"></script>
     <script src="./../../../node_modules/requirejs/require.js" data-main="index"></script>
     <script>
-        require.config({
-            packages: [{
-                    name: '@syncfusion/ej2-base',
-                    location: './../../../node_modules/@syncfusion/ej2-base/dist',
-                    main: 'ej2-base.umd.min.js'
-                },
-                {
-                    name: '@syncfusion/ej2-buttons',
-                    location: './../../../node_modules/@syncfusion/ej2-buttons/dist',
-                    main: 'ej2-buttons.umd.min.js'
-                },
-                {
-                    name: '@syncfusion/ej2-popups',
-                    location: './../../../node_modules/@syncfusion/ej2-popups/dist',
-                    main: 'ej2-popups.umd.min.js'
-                },
-                {
-                    name: '@syncfusion/ej2-splitbuttons',
-                    location: './../../../node_modules/@syncfusion/ej2-splitbuttons/dist',
-                    main: 'ej2-splitbuttons.umd.min.js'
-                }
-            ]
-        });
+        require.config(window.rsConfig);
     </script>
     <style>
-        #colorpicker-sample {
-            text-align: center;
-            min-height: 500px;
+        body {
+            overflow: scroll;
+        }
+        .control-section {
+            min-height: 550px;
         }
 
+        #colorpicker-sample {
+            width: 135px;
+            margin: 5% auto;
+        }
+
+        .e-colorpicker-wrapper {
+            margin: 0 25%;
+        }
+
+        @media only screen and (max-width: 500px) {
+            body {
+                overflow: scroll;
+            }
+            table {
+                width: 100%;
+            }
+            table tr td {
+                width: 49%;
+                display: inline-block;
+                text-align: center;
+            }
+            table tr td button {
+                margin: 5px;
+            }
+            #colorpicker-sample {
+                width: 135px;
+                margin-top: 40%;
+            }
+        }
+        
         h4 {
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+            font-size: 14px;
             text-transform: uppercase;
         }
     </style>

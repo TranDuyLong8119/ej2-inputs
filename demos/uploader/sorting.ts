@@ -8,8 +8,8 @@ let initial: boolean = true;
 
 let uploadObj: Uploader = new Uploader({
     asyncSettings: {
-        saveUrl: 'http://104.238.131.174:8984/api/uploadbox/Save',
-        removeUrl: 'http://104.238.131.174:8984/api/uploadbox/Remove'
+        saveUrl: 'http://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+        removeUrl: 'http://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
     },
     autoUpload: false,
     selected: onSelect

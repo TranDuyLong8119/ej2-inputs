@@ -158,8 +158,7 @@ export interface SliderModel extends ComponentModel{
     /**
      * It is used to denote the step value of Slider component which is the amount of Slider value change
      *  when increase / decrease button is clicked or press arrow keys or drag the thumb.
-     *  Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript#step here}
+     *  Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript#step)
      *  to know more about this property with demo.
      * 
      * {% codeBlock src="slider/step-api/index.ts" %}{% endcodeBlock %}
@@ -201,8 +200,7 @@ export interface SliderModel extends ComponentModel{
 
     /**
      * It is used to render the slider ticks options such as placement and step values.
-     * Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript here}
+     * Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/ticks.html?lang=typescript)
      *  to know more about this property with demo.
      * 
      * {% codeBlock src="slider/ticks-api/index.ts" %}{% endcodeBlock %}
@@ -212,8 +210,7 @@ export interface SliderModel extends ComponentModel{
 
     /**
      * It is used to limit the slider movement within certain limits.
-     * Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript here}
+     * Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/limits.html?lang=typescript)
      *  to know more about this property with demo
      * 
      * {% codeBlock src="slider/limits-api/index.ts" %}{% endcodeBlock %}
@@ -244,8 +241,7 @@ export interface SliderModel extends ComponentModel{
     /**
      * It is used to show or hide the increase and decrease button of Slider Component,
      *  which is used to change the slider value.
-     * Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#buttons here}
+     * Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#buttons)
      *  to know more about this property with demo.
      * 
      * {% codeBlock src="slider/showButtons-api/index.ts" %}{% endcodeBlock %}
@@ -261,8 +257,7 @@ export interface SliderModel extends ComponentModel{
 
     /**
      * It is used to render Slider in either horizontal or vertical orientation.
-     *  Refer the documentation
-     *  {@link http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#orientation here}
+     *  Refer the documentation [here](http://ej2.syncfusion.com/documentation/slider/getting-started.html?lang=typescript#orientation)
      *  to know more about this property with demo.
      * @default 'Horizontal'
      */

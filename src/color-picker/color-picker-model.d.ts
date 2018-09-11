@@ -9,7 +9,7 @@ export interface ColorPickerModel extends ComponentModel{
 
     /**
      * It is used to set the color value for ColorPicker. It should be specified as Hex code.
-     * @default '#008000'
+     * @default '#008000ff'
      */
     value?: string;
 
@@ -63,7 +63,7 @@ export interface ColorPickerModel extends ComponentModel{
     columns?: number;
 
     /**
-     * It is used to render the ColorPicker component as inline (flat).
+     * It is used to render the ColorPicker component as inline.
      * @default false
      */
     inline?: boolean;
@@ -123,5 +123,11 @@ export interface ColorPickerModel extends ComponentModel{
      * @event
      */
     beforeModeSwitch?: EmitType<ModeSwitchEventArgs>;
+
+    /**
+     * Triggers once the component rendering is completed.
+     * @event
+     */
+    created?: EmitType<Event>;
 
 }

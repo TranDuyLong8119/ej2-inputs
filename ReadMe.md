@@ -24,7 +24,7 @@ Following list of components are available in the package.
 
 * **ColorPicker** - Color picker is a user interface that is used to select and adjust color values.
   * [Getting Started](https://ej2.syncfusion.com/documentation/color-picker/getting-started.html?lang=typescript&utm_source=npm&utm_campaign=button)
-  * [View Online Demos](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=colorpicker#/material/colorpicker/default.html)
+  * [View Online Demos](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=color-picker#/material/color-picker/default.html)
   * [Product Page](https://www.syncfusion.com/products/javascript/color-picker)
 
 * **FormValidator** - The FormValidator is used to validate the form elements before submitting to the server.
@@ -77,10 +77,10 @@ Input component is also offered in following list of frameworks.
 ## Key Features
 
 ### 1. ColorPicker
-- [**Color specification**](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=colorpicker#/material/colorpicker/default.html) - Supports `Red Green Blue`, `Hue Saturation Value` and `Hex` codes.
+- [**Color specification**](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=color-picker#/material/color-picker/default.html) - Supports `Red Green Blue`, `Hue Saturation Value` and `Hex` codes.
 - [**Mode**](https://ej2.syncfusion.com/documentation/color-picker/mode-and-value.html?lang=typescript#mode-and-value) - Supports `Picker` and `Palette` mode.
-- [**Inline**](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=colorpicker#/material/colorpicker/inline.html) - Supports inline type rendering of color picker.
-- [**Custom palettes**](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=colorpicker#/material/colorpicker/custom.html) - Allows you to customize palettes and supports multiple palette groups rendering.
+- [**Inline**](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=color-picker#/material/color-picker/inline.html) - Supports inline type rendering of color picker.
+- [**Custom palettes**](https://ej2.syncfusion.com/demos/?utm_source=npm&utm_campaign=color-picker#/material/color-picker/custom.html) - Allows you to customize palettes and supports multiple palette groups rendering.
 - [**Opacity**](https://ej2.syncfusion.com/documentation/color-picker/mode-and-value.html?lang=typescript#color-value) - Allows to set and change the `opacity` of the selected color.
 - [**Accessibility**](https://ej2.syncfusion.com/documentation/color-picker/accessibility.html?lang=typescript#accessibility) - Built-in accessibility features to access color picker using the keyboard, screen readers, or other assistive technology devices.
 

@@ -1,6 +1,27 @@
-import { ColorPicker, ColorPickerEventArgs, BeforeOpenCloseEventArgs } from '../src/color-picker/color-picker';
-import { Input } from './../src/input/index';
-import { createElement, Browser, classList, select, L10n, enableRtl } from '@syncfusion/ej2-base';
+import { ColorPicker, ColorPickerEventArgs, BeforeOpenCloseEventArgs, OpenEventArgs, PaletteTileEventArgs } from '../src/color-picker/color-picker';
+import { createElement, Browser, select, L10n, setStyleAttribute } from '@syncfusion/ej2-base';
+
+function triggerMouseEvent(node: HTMLElement, eventType: string, x?: number, y?: number) {
+    let mouseEve: MouseEvent = document.createEvent("MouseEvents");
+    if (x && y) {
+        mouseEve.initMouseEvent(eventType, true, true, window, 0, 0, 0, x, y, false, false, false, false, 0, null);
+    } else {
+        mouseEve.initEvent(eventType, true, true);
+    }
+    node.dispatchEvent(mouseEve);
+}
+
+function setStyles(element: HTMLElement) {
+    setStyleAttribute(element, { 'width': '200px' });
+    setStyleAttribute(element.querySelector('.e-hsv-color'), { 'width': '200px', 'height': '150px' });
+}
+
+
+function triggerTouchEvent(node: HTMLElement, eventType: string, x?: number, y?: number) {
+    let touchEvent: UIEvent = document.createEvent('UIEvent');
+    touchEvent.initUIEvent(eventType, true, true, window, null);
+    node.dispatchEvent(touchEvent);
+}
 
 /**
  * @param  {} 'ColorPicker'
@@ -9,6 +30,7 @@ import { createElement, Browser, classList, select, L10n, enableRtl } from '@syn
 describe('ColorPicker', () => {
     let colorPicker: any;
     let element: HTMLInputElement = createElement('input', { id: 'color-picker', attrs: { 'type': 'color' } }) as HTMLInputElement;
+    let target: HTMLElement;
 
     describe('Dom', () => {
         let ele: Element;
@@ -85,10 +107,13 @@ describe('ColorPicker', () => {
 
         it('Value testing', () => {
             colorPicker = new ColorPicker({ mode: 'Palette', value: '#5f2796' }, '#color-picker');
-            expect(colorPicker.value).toEqual('#5f2796');
+            expect(colorPicker.value).toEqual('#5f2796ff');
             colorPicker.destroy();
             //ColorPicker with no value
             colorPicker = new ColorPicker({}, '#color-picker');
+            expect(colorPicker.value).toEqual('#008000ff');
+            //ColorPicker with null value
+            colorPicker = new ColorPicker({ value: '' }, '#color-picker');
             expect(colorPicker.value).toEqual('#008000ff');
         });
 
@@ -164,7 +189,7 @@ describe('ColorPicker', () => {
         it('noColor Testing', () => {
             colorPicker = new ColorPicker({ mode: 'Palette', modeSwitcher: false, noColor: true }, '#color-picker');
             colorPicker.toggle();
-            let target: HTMLElement = colorPicker.container.querySelectorAll('.e-row')[0].children[0];
+            target = colorPicker.container.querySelectorAll('.e-row')[0].children[0];
             expect(target.classList.contains('e-nocolor-item')).toBeTruthy();
         });
     });
@@ -198,8 +223,8 @@ describe('ColorPicker', () => {
             expect(colorPicker.getValue('#ff39a532', 'A')).toEqual('0.2');
             expect(colorPicker.getValue('#ff39a532', 'HEX_CODE')).toEqual('null');
             expect(colorPicker.getValue()).toEqual('#008000');
-            expect(colorPicker.getValue('','rgb')).toEqual('rgb(0,128,0)');
-            expect(colorPicker.getValue('','hsva')).toEqual('hsva(120,100,50.2,1)');
+            expect(colorPicker.getValue('', 'rgb')).toEqual('rgb(0,128,0)');
+            expect(colorPicker.getValue('', 'hsva')).toEqual('hsva(120,100,50.2,1)');
             // For covering the method.
             colorPicker.getPersistData();
         });
@@ -290,22 +315,27 @@ describe('ColorPicker', () => {
             colorPicker.dataBind();
             expect(element.parentElement.classList.contains('e-hide-value')).toBeTruthy();
             expect(colorPicker.container.querySelector('.e-selected-value')).toBeNull();
-            colorPicker.cssClass = 'cssclass';
-            colorPicker.dataBind();
-            expect(element.parentElement.classList.contains('cssclass')).toBeTruthy();
+            colorPicker.cssClass = 'e-hide-value e-show-value';
             colorPicker.inline = false;
             colorPicker.dataBind();
-            colorPicker.cssClass = 'e-show-value';
             colorPicker.toggle();
+            expect(colorPicker.container.parentElement.classList.contains('e-show-value')).toBeTruthy();
             (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
+            expect(colorPicker.container.querySelector('.e-selected-value')).toBeDefined();
+            colorPicker.cssClass = 'e-show-value';
             colorPicker.dataBind();
             expect(colorPicker.container.children[1].classList.contains('e-selected-value')).toBeTruthy();
             colorPicker.cssClass = '';
             colorPicker.dataBind();
             expect(colorPicker.container.querySelector('.e-selected-value')).toBeNull();
             colorPicker.toggle();
-            colorPicker.cssClass = 'cssclass';
+            colorPicker.cssClass = 'e-hide-valueswitcher e-hide-hex-value';
             colorPicker.dataBind();
+            colorPicker.toggle();
+            expect(colorPicker.container.querySelector('.e-selected-value .e-hex')).toBeNull();
+            colorPicker.cssClass = 'e-hide-switchable-value';
+            colorPicker.dataBind();
+            expect(colorPicker.container.querySelector('.e-selected-value .e-numeric')).toBeNull();
         });
 
         it('enableRtl property changes', () => {
@@ -416,7 +446,7 @@ describe('ColorPicker', () => {
             colorPicker.toggle();
             colorPicker.noColor = true;
             colorPicker.dataBind();
-            let target: HTMLElement = colorPicker.container.querySelectorAll('.e-row')[0].children[0];
+            target = colorPicker.container.querySelectorAll('.e-row')[0].children[0];
             expect(target.classList.contains('e-nocolor-item')).toBeTruthy();
             target.click();
             colorPicker.container.querySelector('.e-apply').click();
@@ -434,7 +464,6 @@ describe('ColorPicker', () => {
 
     describe('Click Events', () => {
         describe('For Palette type', () => {
-            let target: HTMLElement;
             beforeEach((): void => {
                 document.body.appendChild(element);
             });
@@ -444,13 +473,13 @@ describe('ColorPicker', () => {
             });
 
             it('noColor Testing', () => {
-                colorPicker = new ColorPicker({ mode: 'Palette', noColor: true, value: '#9C27B0' }, '#color-picker');
+                colorPicker = new ColorPicker({ mode: 'Palette', modeSwitcher: false, showButtons: false, noColor: true, value: '#9C27B0' }, '#color-picker');
                 colorPicker.toggle();
                 target = colorPicker.container.querySelectorAll('.e-row')[0].children[0] as HTMLElement;
-                expect(colorPicker.value).toEqual('#9C27B0');
+                expect(colorPicker.value).toEqual('#9c27b0ff');
                 target.click();
                 expect(colorPicker.splitBtn.element.style.backgroundColor).toEqual('');
-                //expect(colorPicker.value).toEqual('');
+                expect(colorPicker.value).toEqual('');
             });
 
             it('Tiles with no selected value', () => {
@@ -476,7 +505,8 @@ describe('ColorPicker', () => {
                 target = colorPicker.container.children[0].children[0].children[3] as HTMLElement;
                 target.click();
                 (colorPicker.container.querySelector('.e-apply') as HTMLElement).click();
-                colorPicker.splitBtn.toggle();
+                colorPicker.toggle();
+                target = colorPicker.container.children[0].children[0].children[3] as HTMLElement;
                 expect(target.classList.contains('e-selected')).toBeTruthy();
                 expect(target.getAttribute('aria-selected')).toEqual('true');
                 expect(target.getAttribute('aria-label').toLowerCase() + 'ff').toBe(colorPicker.value);
@@ -484,22 +514,38 @@ describe('ColorPicker', () => {
 
             it('Cancel button click', () => {
                 colorPicker = new ColorPicker({ mode: 'Palette', value: '#9575CD' }, '#color-picker');
-                colorPicker.splitBtn.toggle();
+                colorPicker.toggle();
                 colorPicker.paletteClickHandler({
                     preventDefault: (): void => { /** NO Code */ },
                     target: colorPicker.container.querySelector('.e-switch-ctrl-btn') as HTMLElement
                 });
                 (colorPicker.container.querySelector('.e-cancel') as HTMLElement).click();
-                colorPicker.splitBtn.toggle();
+                colorPicker.toggle();
                 target = colorPicker.container.children[0].children[0].children[3] as HTMLElement;
                 target.click();
                 (colorPicker.container.querySelector('.e-cancel') as HTMLElement).click();
                 expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
             });
+
+            it('Palette with opacity', () => {
+                colorPicker = new ColorPicker({
+                    inline: true,
+                    mode: 'Palette',
+                    showButtons: false,
+                    value: '#0234c2',
+                    presetColors: {
+                        'custom': ['#0450c21a', '#0234c2', '#0450c24D', '#0450c266', '#045af2', '#0450c299', '#0450c2B3', '#0450c2CC', '#0450c2E6', '#0450c2FF',
+                            '#0080001a', '#00800033', '#00832d', '#00800066', '#00800080', '#00800099', '#008000B3', '#008000CC', '#00832a', '#008000FF']
+                    }
+                }, '#color-picker');
+                target = colorPicker.container.querySelectorAll('.e-row')[0].children[1] as HTMLElement;
+                expect(target.classList.contains('e-selected')).toBeTruthy();
+                expect(target.getAttribute('aria-selected')).toEqual('true');
+                expect(colorPicker.value).toEqual('#0234c2ff');
+            });
         });
 
         describe('For Picker type', () => {
-            let target: HTMLElement;
             beforeEach((): void => {
                 document.body.appendChild(element);
             });
@@ -508,88 +554,109 @@ describe('ColorPicker', () => {
                 document.body.innerHTML = '';
             });
 
-            let EventArgs: any = {
-                preventDefault: (): void => { /** NO Code */ },
-                type: 'mousedown',
-                pageX: 10,
-                pageY: 15,
-                target: null
-            };
-
             it('Mouse down in hsvArea', () => {
                 colorPicker = new ColorPicker({ mode: 'Picker', showButtons: false, value: '#7B1FA2' }, '#color-picker');
-                colorPicker.splitBtn.toggle();
-                expect(colorPicker.value).toBe('#7B1FA2ff');
-                target = colorPicker.container.querySelector('.e-hsv-color') as HTMLElement;
-                EventArgs.target = target;
-                colorPicker.handlerDown(EventArgs);
-                //expect(colorPicker.value).toBe('#af8ebdff');
-                colorPicker.handlerEnd(EventArgs);
+                colorPicker.toggle();
+                expect(colorPicker.value).toBe('#7b1fa2ff');
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 70, 50);
+                expect(colorPicker.value).toBe('#eabaffff');
+                triggerMouseEvent(target, 'mouseup');
             });
 
             it('Mouse down in hsvArea - RTL', () => {
-                colorPicker = new ColorPicker({ mode: 'Picker', enableRtl: true, showButtons: false, value: '#7B1FA2' }, '#color-picker');
-                colorPicker.splitBtn.toggle();
-                expect(colorPicker.value).toBe('#7B1FA2ff');
-                target = colorPicker.container.querySelector('.e-hsv-color') as HTMLElement;
-                EventArgs.target = target;
-                colorPicker.handlerDown(EventArgs);
-                //expect(colorPicker.value).toBe('#af8ebdff');
-                colorPicker.handlerEnd(EventArgs);
+                colorPicker = new ColorPicker({ mode: 'Picker', showButtons: false, enableRtl: true, value: '#7B1FA2' }, '#color-picker');
+                colorPicker.toggle();
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 50, 100);
+                expect(colorPicker.value).toBe('#c640ffff');
+                triggerMouseEvent(target, 'mouseup');
             });
 
             it('Mouse move in hsvArea', () => {
                 colorPicker = new ColorPicker({ mode: 'Picker', showButtons: false, value: '#7B1FA2' }, '#color-picker');
                 colorPicker.splitBtn.toggle();
-                expect(colorPicker.value).toBe('#7B1FA2ff');
-                EventArgs.target = colorPicker.container.querySelector('.e-hsv-color') as HTMLElement;
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 120, 70);
+                expect(colorPicker.value).toBe('#d77affff');
+                triggerMouseEvent(target, 'mousemove', 40, 30);
+                expect(colorPicker.value).toBe('#f6e0ffff');
+                triggerMouseEvent(target, 'mouseup');
+            });
+
+            it('Device mode Touch start and move in hsvArea', () => {
+                let androidUserAgent: string = 'Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JWR66Y) ' +
+                    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.92 Safari/537.36';
+                Browser.userAgent = androidUserAgent;
+                colorPicker = new ColorPicker({ value: '#4391a6', showButtons: false }, '#color-picker');
+                colorPicker.toggle();
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                let EventArgs: any = {
+                    preventDefault: (): void => { /** NO Code */ },
+                    type: 'touchstart',
+                    pageXOffset: 0,
+                    pageYOffset: 0,
+                    target: target,
+                    changedTouches: [{ pageX: 20, pageY: 80 }]
+                };
                 colorPicker.handlerDown(EventArgs);
-                // expect(colorPicker.value).toBe('#af8ebdff');
-                EventArgs.type = 'mousemove';
-                EventArgs.pageX = 30; EventArgs.pageY = 20;
+                expect(colorPicker.value).toBe('#fafeffff');
+                EventArgs.type = 'touchmove';
+                EventArgs.changedTouches = [{ pageX: 93, pageY: 36 }];
                 colorPicker.handlerMove(EventArgs);
-                //expect(colorPicker.value).toBe('#9a6dadff');
+                EventArgs.type = 'touchend';
                 colorPicker.handlerEnd(EventArgs);
+                expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
+                expect(colorPicker.value).toBe('#9deaffff');
             });
 
             it('Apply button click', () => {
-                colorPicker = new ColorPicker({ mode: 'Picker', inline: true, value: '#7B1FA2' }, '#color-picker');
-                EventArgs.target = colorPicker.container.querySelector('.e-hsv-color') as HTMLElement;
-                EventArgs.type = 'mousedown';
-                colorPicker.handlerDown(EventArgs);
-                expect(colorPicker.value).toBe('#7B1FA2ff');
+                colorPicker = new ColorPicker({ mode: 'Picker', value: '#7B1FA2' }, '#color-picker');
+                colorPicker.toggle();
+                expect(colorPicker.value).toBe('#7b1fa2ff');
+                (colorPicker.container.querySelector('.e-apply') as HTMLElement).click();
+                expect(colorPicker.value).toBe('#7b1fa2ff');
+                colorPicker.toggle();
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 50, 90);
+                triggerMouseEvent(target, 'mouseup');
                 (colorPicker.container.querySelector('.e-switch-ctrl-btn') as HTMLElement).click();
                 (colorPicker.container.querySelector('.e-apply') as HTMLElement).click();
-                //expect(colorPicker.value).toBe('#785587ff');
-                colorPicker.handlerEnd(EventArgs);
+                expect(colorPicker.value).toBe('#f2d4ffff');
+                expect(colorPicker.getPopupEle().classList.contains('e-popup-close')).toBeTruthy();
             });
 
             it('Cancel button click', () => {
-                colorPicker = new ColorPicker({ mode: 'Picker', value: '#7B1FA2' }, '#color-picker');
-                colorPicker.splitBtn.toggle();
+                colorPicker = new ColorPicker({ mode: 'Picker', value: '#a273f1' }, '#color-picker');
+                colorPicker.toggle();
+                expect(colorPicker.value).toBe('#a273f1ff');
                 (colorPicker.container.querySelector('.e-cancel') as HTMLElement).click();
-                colorPicker.splitBtn.toggle();
-                colorPicker.handlerDown(EventArgs);
+                expect(colorPicker.value).toBe('#a273f1ff');
+                colorPicker.toggle();
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 45, 33);
+                triggerMouseEvent(target, 'mouseup');
                 (colorPicker.container.querySelector('.e-cancel') as HTMLElement).click();
-                colorPicker.splitBtn.toggle();
-                expect(colorPicker.value).toBe('#7B1FA2ff');
-                colorPicker.handlerEnd(EventArgs);
-                colorPicker.handlerDown(EventArgs);
-                (colorPicker.container.querySelector('.e-value-switch-btn') as HTMLElement).click();
-                colorPicker.handlerEnd(EventArgs);
+                expect(colorPicker.value).toBe('#a273f1ff');
             });
 
             it('In Preview area testing', () => {
                 colorPicker = new ColorPicker({ mode: 'Picker', value: '#7B1FA2' }, '#color-picker');
-                colorPicker.splitBtn.toggle();
+                colorPicker.toggle();
                 target = colorPicker.container.querySelector('.e-previous') as HTMLElement;
                 target.click();
-                expect(colorPicker.value).toEqual('#7B1FA2ff');
+                expect(colorPicker.value).toEqual('#7b1fa2ff');
+                triggerMouseEvent(document.body, 'mousedown');
             });
         });
 
         describe('For Both type', () => {
-            let target: HTMLElement;
             beforeEach((): void => {
                 document.body.appendChild(element);
             });
@@ -600,19 +667,19 @@ describe('ColorPicker', () => {
 
             it('Custom value Testing', () => {
                 colorPicker = new ColorPicker({ value: '7B1' }, '#color-picker');
-                expect(colorPicker.value).toEqual('#77BB11ff');
+                expect(colorPicker.value).toEqual('#77bb11ff');
                 colorPicker.value = '#7B1';
                 colorPicker.refresh();
-                expect(colorPicker.value).toEqual('#77BB11ff');
+                expect(colorPicker.value).toEqual('#77bb11ff');
                 colorPicker.value = '#7B1F';
                 colorPicker.refresh();
-                expect(colorPicker.value).toEqual('#77BB11FF');
+                expect(colorPicker.value).toEqual('#77bb11ff');
                 colorPicker.value = '#7B1FA2';
                 colorPicker.refresh();
-                expect(colorPicker.value).toEqual('#7B1FA2ff');
-                colorPicker.value = '#7B1FA2ff';
+                expect(colorPicker.value).toEqual('#7b1fa2ff');
+                colorPicker.value = '#7B1FA2f1a';
                 colorPicker.refresh();
-                expect(colorPicker.value).toEqual('#7B1FA2ff');
+                expect(colorPicker.value).toEqual('#7b1fa2f1a');
             });
 
             it('Device mode Popup open/close Testing', () => {
@@ -628,15 +695,15 @@ describe('ColorPicker', () => {
                 expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
             });
 
-            it('Color Format Switching', () => {
+            it('Color Value Switching', () => {
                 colorPicker = new ColorPicker({ value: '#7B1FA2' }, '#color-picker');
                 colorPicker.splitBtn.toggle();
                 target = colorPicker.container.querySelector('.e-value-switch-btn') as HTMLElement;
-                expect(target.classList.contains('e-to-hsv')).toBeTruthy();
+                expect(colorPicker.isRgb).toBeTruthy();
                 target.click();
-                expect(target.classList.contains('e-to-hsv')).toBeFalsy();
+                expect(colorPicker.isRgb).toBeFalsy();
                 target.click();
-                expect(target.classList.contains('e-to-hsv')).toBeTruthy();
+                expect(colorPicker.isRgb).toBeTruthy();
             });
 
             it('Type Switching', () => {
@@ -652,103 +719,259 @@ describe('ColorPicker', () => {
                 expect(colorPicker.container.children[1].classList.contains('e-slider-preview')).toBeTruthy();
             });
 
-            it('SplitButton Primary click Testing', () => {
-                colorPicker = new ColorPicker(
-                    {
-                        value: '#7B1FA2',
-                        change: (args: ColorPickerEventArgs) => {
-                            expect(args.currentValue.hex).toBe('#7B1FA2');
-                            expect(args.currentValue.rgba).toBe('rgba(123,31,162,1)');
-                        }
-                    },
-                    '#color-picker');
-                colorPicker.splitBtn.element.click();
-            });
-
-            it('beforeOpen EventArgs Testing', () => {
-                colorPicker = new ColorPicker(
-                    {
-                        value: '#7B1FA2',
-                        beforeOpen: (args: BeforeOpenCloseEventArgs) => {
-                            args.cancel = true;
-                        }
-                    },
-                    '#color-picker');
-                expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
-                colorPicker.splitBtn.element.nextElementSibling.click();
-                expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
-            });
-
-            it('beforeClose EventArgs Testing', () => {
-                colorPicker = new ColorPicker(
-                    {
-                        value: '#7B1FA2',
-                        beforeClose: (args: BeforeOpenCloseEventArgs) => {
-                            args.cancel = true;
-                        }
-                    },
-                    '#color-picker');
-                colorPicker.splitBtn.element.nextElementSibling.click();
-                expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
-                colorPicker.splitBtn.element.nextElementSibling.click();
-                expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
-                expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeFalsy();
-            });
-
-            it('Hide input values using cssClass', () => {
-                colorPicker = new ColorPicker({ cssClass: 'e-hide-value', showButtons: false }, '#color-picker');
-                colorPicker.toggle();
-                expect(colorPicker.container.querySelector('.e-selected-value')).toBeNull();
-                (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
-                expect(colorPicker.container.classList.contains('e-color-palette')).toBeTruthy();
-                expect(colorPicker.container.children[0].classList.contains('e-palette')).toBeTruthy();
-                (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
-                expect(colorPicker.container.classList.contains('e-color-picker')).toBeTruthy();
-                let mouseEve: MouseEvent = document.createEvent('MouseEvents');
-                mouseEve.initEvent('mousedown', true, true);
-                let target: HTMLElement = (colorPicker.container.querySelector('.e-hsv-container') as HTMLElement);
-                target.dispatchEvent(mouseEve);
-                colorPicker.handlerEnd({ type: 'mouseup', preventDefault: (): void => { /** NO Code */ } });
-            });
-
-            it('Show input values in palette using cssClass', () => {
-                colorPicker = new ColorPicker({ cssClass: 'e-show-value' }, '#color-picker');
-                colorPicker.toggle();
-                (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
-                expect(colorPicker.container.classList.contains('e-color-palette')).toBeTruthy();
-                expect(colorPicker.container.children[0].classList.contains('e-palette')).toBeTruthy();
-                expect(colorPicker.container.children[1].classList.contains('e-selected-value')).toBeTruthy();
-                target = (colorPicker.container.querySelectorAll('.e-row')[0].children[0] as HTMLElement);
-                target.click();
-                expect(target.classList.contains('e-selected')).toBeTruthy();
-                (colorPicker.container.querySelector('.e-value-switch-btn') as HTMLElement).click();
-                (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
-                expect(colorPicker.container.classList.contains('e-color-picker')).toBeTruthy();
-
-            });
-
             it('Without showButtons closing', () => {
                 colorPicker = new ColorPicker({ showButtons: false }, '#color-picker');
                 colorPicker.toggle();
                 expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
-                var mouseEve = document.createEvent('MouseEvents');
-                mouseEve.initEvent('mousedown', true, true);
-                var target = colorPicker.container.querySelector('.e-hsv-container');
-                target.dispatchEvent(mouseEve);
-                colorPicker.handlerEnd({ type: 'mouseup', preventDefault: (): void => { /** NO Code */ } });
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 102, 27);
+                triggerMouseEvent(target, 'mouseup');
                 expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
                 colorPicker.toggle();
+                expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
                 (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
                 expect(colorPicker.container.children[0].classList.contains('e-palette')).toBeTruthy();
                 (colorPicker.container.querySelectorAll('.e-row')[0].children[0] as HTMLElement).click();
                 expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
             });
 
-            it('Value property as empty string', () => {
-                colorPicker = new ColorPicker({ value: '' }, '#color-picker');
-                colorPicker.toggle();
-                expect(colorPicker.value).toBe('#008000ff');
+            it('Device mode close Testing', () => {
+                let androidUserAgent: string = 'Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JWR66Y) ' +
+                    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.92 Safari/537.36';
+                Browser.userAgent = androidUserAgent;
+                colorPicker = new ColorPicker({ value: '#7B1FA2' }, '#color-picker');
+                colorPicker.splitBtn.element.nextElementSibling.click();
+                triggerTouchEvent(document.body.querySelector('.e-modal') as HTMLElement, 'touchstart');
+                expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
             });
+        });
+    });
+
+    describe('Public events', () => {
+        beforeEach((): void => {
+            document.body.appendChild(element);
+        });
+
+        afterEach(() => {
+            colorPicker.destroy();
+            document.body.innerHTML = '';
+        });
+
+        it('SplitButton Primary click Testing', () => {
+            colorPicker = new ColorPicker(
+                {
+                    value: '#7B1FA2',
+                    change: (args: ColorPickerEventArgs) => {
+                        expect(args.name).toBe('change');
+                        expect(args.currentValue.hex).toBe('#7b1fa2');
+                        expect(args.currentValue.rgba).toBe('rgba(123,31,162,1)');
+                        expect(args.previousValue.hex).toBeNull();
+                        expect(args.previousValue.rgba).toBeNull();
+                    }
+                },
+                '#color-picker');
+            colorPicker.splitBtn.element.click();
+        });
+
+        it('select and change event testing', () => {
+            colorPicker = new ColorPicker(
+                {
+                    value: '#7e57c2',
+                    mode: 'Palette',
+                    select: (args: ColorPickerEventArgs) => {
+                        expect(args.name).toBe('select');
+                        expect(args.currentValue.hex).toBe('#9c27b0');
+                        expect(args.currentValue.rgba).toBe('rgba(156,39,176,1)');
+                        expect(args.previousValue.hex).toBe('#7e57c2');
+                        expect(args.previousValue.rgba).toBe('rgba(126,87,194,1)');
+                    },
+                    change: (args: ColorPickerEventArgs) => {
+                        expect(args.name).toBe('change');
+                        expect(args.currentValue.hex).toBe('#9c27b0');
+                        expect(args.currentValue.rgba).toBe('rgba(156,39,176,1)');
+                        expect(args.previousValue.hex).toBe('#7e57c2');
+                        expect(args.previousValue.rgba).toBe('rgba(126,87,194,1)');
+                    }
+                },
+                '#color-picker');
+            colorPicker.toggle();
+            // Selecting new tile.
+            (colorPicker.container.querySelectorAll('.e-row')[0].children[3] as HTMLElement).click();
+            // Applying the newly selected tile color.
+            (colorPicker.container.querySelector('.e-apply') as HTMLElement).click();
+        });
+
+        it('change event testing without control buttons', () => {
+            colorPicker = new ColorPicker(
+                {
+                    inline: true,
+                    value: '#1e1ed5',
+                    showButtons: false,
+                    change: (args: ColorPickerEventArgs) => {
+                        expect(args.name).toBe('change');
+                        expect(args.currentValue.hex).toBe('#fafaff');
+                        expect(args.currentValue.rgba).toBe('rgba(250,250,255,1)');
+                        expect(args.previousValue.hex).toBe('#1e1ed5');
+                        expect(args.previousValue.rgba).toBe('rgba(30,30,213,1)');
+                    }
+                },
+                '#color-picker');
+                setStyles(colorPicker.container);
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                triggerMouseEvent(target, 'mousedown', 20, 54);
+                triggerMouseEvent(target, 'mouseup');
+        });
+        
+        it('beforeTileRender event testing', () => {
+            let count: number = 0;
+            let presets: { [key: string]: string[] } = {
+                    custom: ['#f0d0c9', '#e2a293', '#d4735e', '#65281a',
+                    '#eddfda', '#dcc0b6', '#cba092', '#7b4b3a']
+                };
+            colorPicker = new ColorPicker(
+                {
+                    value: '#dcc0b6',
+                    inline: true,
+                    mode: 'Palette',
+                    modeSwitcher: false,
+                    showButtons: false,
+                    presetColors: presets,
+                    beforeTileRender: (args: PaletteTileEventArgs) => {
+                        expect(args.name).toBe('beforeTileRender');
+                        expect(args.element.getAttribute('aria-label')).toBe(presets.custom[count]);
+                        expect(args.presetName).toBe('custom');
+                        expect(args.value).toBe(presets.custom[count]);
+                        count++;
+                    }
+                },
+                '#color-picker');
+        });
+
+        it('beforeOpen event testing', () => {
+            colorPicker = new ColorPicker(
+                {
+                    value: '#7B1FA2',
+                    beforeOpen: (args: BeforeOpenCloseEventArgs) => {
+                        expect(args.name).toBe('beforeOpen');
+                        expect(args.element).toBe(colorPicker.container);
+                        expect(args.event.target).toBe(target);
+                        expect(args.cancel).toBeFalsy();
+                        args.cancel = true;
+                    }
+                },
+                '#color-picker');
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
+            target = colorPicker.splitBtn.element.nextElementSibling;
+            target.click();
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeTruthy();
+        });
+
+        it('open event testing', () => {
+            colorPicker = new ColorPicker(
+                {
+                    value: '#7B1FA2',
+                    open: (args: OpenEventArgs) => {
+                        expect(args.name).toBe('open');
+                        expect(args.element).toBe(colorPicker.container);
+                    }
+                },
+                '#color-picker');
+            colorPicker.splitBtn.element.nextElementSibling.click();
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
+        });
+
+        it('beforeClose event testing', () => {
+            colorPicker = new ColorPicker(
+                {
+                    value: '#7B1FA2',
+                    beforeClose: (args: BeforeOpenCloseEventArgs) => {
+                        expect(args.name).toBe('beforeClose');
+                        expect(args.element).toBe(colorPicker.container);
+                        expect(args.event.target).toBe(target);
+                        expect(args.cancel).toBeFalsy();
+                        args.cancel = true;
+                    }
+                },
+                '#color-picker');
+            target = colorPicker.splitBtn.element.nextElementSibling;
+            target.click();
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
+            target.click();
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-open')).toBeTruthy();
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeFalsy();
+            target = colorPicker.container.querySelector('.e-cancel') as HTMLElement;
+            target.click();
+            expect(colorPicker.container.parentElement.classList.contains('e-popup-close')).toBeFalsy();
+        });
+    });
+
+    describe('Input area customization using cssClass property', () => {
+        beforeEach((): void => {
+            document.body.appendChild(element);
+        });
+        afterEach(() => {
+            colorPicker.destroy();
+            document.body.innerHTML = '';
+        });
+
+        it('Hide inputs', () => {
+            colorPicker = new ColorPicker({ cssClass: 'e-hide-value', showButtons: false }, '#color-picker');
+            colorPicker.toggle();
+            setStyles(colorPicker.container);
+            target = (colorPicker.container.querySelector('.e-hsv-container') as HTMLElement);
+            triggerMouseEvent(target, 'mousedown', 1, 2);
+            expect(colorPicker.container.querySelector('.e-selected-value')).toBeNull();
+            triggerMouseEvent(target, 'mouseup');
+            colorPicker.toggle();
+            setStyles(colorPicker.container);
+            target = colorPicker.opacitySlider.element;
+            target.style.width = '100%';
+            target.style.height = '20px';
+            triggerMouseEvent(target, 'mousedown', 10, 1);
+            triggerMouseEvent(target, 'mouseup');
+            (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
+            expect(colorPicker.container.classList.contains('e-color-palette')).toBeTruthy();
+        });
+
+        it('Show inputs in palette', () => {
+            colorPicker = new ColorPicker({ cssClass: 'e-show-value' }, '#color-picker');
+            colorPicker.toggle();
+            (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
+            expect(colorPicker.container.classList.contains('e-color-palette')).toBeTruthy();
+            expect(colorPicker.container.children[0].classList.contains('e-palette')).toBeTruthy();
+            expect(colorPicker.container.children[1].classList.contains('e-selected-value')).toBeTruthy();
+            target = (colorPicker.container.querySelectorAll('.e-row')[0].children[0] as HTMLElement);
+            target.click();
+            expect(target.classList.contains('e-selected')).toBeTruthy();
+            (colorPicker.container.querySelector('.e-value-switch-btn') as HTMLElement).click();
+            (colorPicker.container.querySelector('.e-mode-switch-btn') as HTMLElement).click();
+            expect(colorPicker.container.classList.contains('e-color-picker')).toBeTruthy();
+        });
+
+        it('Hide hex input', () => {
+            colorPicker = new ColorPicker({ cssClass: 'e-hide-hex-value' }, '#color-picker');
+            colorPicker.toggle();
+            target = (colorPicker.container.querySelector('.e-hsv-container') as HTMLElement);
+            triggerMouseEvent(target, 'mousedown', 1, 2);
+            expect(colorPicker.container.querySelector('.e-selected-value')).toBeTruthy();
+            expect(colorPicker.container.querySelector('.e-selected-value .e-hex')).toBeNull();
+            triggerMouseEvent(target, 'mouseup');
+        });
+
+        it('Hide switable inputs', () => {
+            colorPicker = new ColorPicker({ cssClass: 'e-hide-switchable-value' }, '#color-picker');
+            colorPicker.toggle();
+            target = (colorPicker.container.querySelector('.e-hsv-container') as HTMLElement);
+            triggerMouseEvent(target, 'mousedown', 1, 2);
+            expect(colorPicker.container.querySelector('.e-selected-value')).toBeTruthy();
+            expect(colorPicker.container.querySelector('.e-selected-value .e-numeric')).toBeNull();
+            triggerMouseEvent(target, 'mouseup');
+        });
+
+        it('Hide value switcher', () => {
+            colorPicker = new ColorPicker({ cssClass: 'e-hide-valueswitcher', inline: true }, '#color-picker');
+            expect(colorPicker.container.querySelector('.e-value-switch-btn')).toBeNull();
         });
     });
 
@@ -892,11 +1115,23 @@ describe('ColorPicker', () => {
                 expect(colorPicker.value).toBe('#16bc4eff');
             });
 
+            it('Right and up arrow Testing with saturation and value exceeds the limit', () => {
+                colorPicker = new ColorPicker({ value: '#00ff00' }, '#color-picker');
+                colorPicker.toggle();
+                EventArgs.keyCode = 38;
+                EventArgs.target = element.nextElementSibling.querySelector('.e-handler');
+                expect(colorPicker.value).toBe('#00ff00ff');
+                colorPicker.pickerKeyDown(EventArgs);
+                expect(colorPicker.value).toBe('#00ff00ff');
+                EventArgs.keyCode = 39;
+                colorPicker.pickerKeyDown(EventArgs);
+                expect(colorPicker.value).toBe('#00ff00ff');
+            });
+
             it('Right and Left arrow Rtl Testing', () => {
                 colorPicker = new ColorPicker({ mode: 'Picker', enableRtl: true, inline: true, showButtons: false, value: '#1cbc513b' }, '#color-picker');
                 EventArgs.target = element.nextElementSibling.querySelector('.e-handler');
                 expect(colorPicker.value).toBe('#1cbc513b');
-                EventArgs.keyCode = 39;
                 colorPicker.pickerKeyDown(EventArgs);
                 EventArgs.keyCode = 13;
                 colorPicker.pickerKeyDown(EventArgs);
@@ -1103,16 +1338,34 @@ describe('ColorPicker', () => {
 
             it('Enter key action', () => {
                 colorPicker = new ColorPicker({ mode: 'Palette', value: '#009688', showButtons: false }, '#color-picker');
-                colorPicker.splitBtn.toggle();
+                colorPicker.toggle();
                 EventArgs.target = colorPicker.container.querySelector('.e-palette');
                 EventArgs.keyCode = 13;
                 colorPicker.paletteKeyDown(EventArgs);
+                colorPicker.toggle();
                 selectedEle = (EventArgs.target as HTMLElement).querySelectorAll('.e-row')[0].children[8];
                 EventArgs.keyCode = 40;
                 colorPicker.paletteKeyDown(EventArgs);
                 EventArgs.keyCode = 13;
                 colorPicker.paletteKeyDown(EventArgs);
-                expect(colorPicker.value).toEqual('#e0f2f1');
+                expect(colorPicker.value).toEqual('#f57f17');
+                EventArgs.target = colorPicker.container;
+                colorPicker.paletteKeyDown(EventArgs);
+            });
+
+            it('Right Arrow navigation with no color enabled', () => {
+                colorPicker = new ColorPicker({ mode: 'Palette', modeSwitcher: false, showButtons: false, noColor: true }, '#color-picker');
+                colorPicker.toggle();
+                EventArgs.target = colorPicker.container.querySelector('.e-palette');
+                EventArgs.keyCode = 39;
+                colorPicker.paletteKeyDown(EventArgs);
+                selectedEle = (EventArgs.target as HTMLElement).querySelectorAll('.e-row')[0].children[0];
+                expect(selectedEle.classList.contains('e-nocolor-item')).toBeTruthy();
+                expect(selectedEle.classList.contains('e-selected')).toBeTruthy();
+                expect(selectedEle.getAttribute('aria-selected')).toEqual('true');
+                EventArgs.keyCode = 13;
+                colorPicker.paletteKeyDown(EventArgs);
+                expect(colorPicker.value).toEqual('');
             });
         });
     });

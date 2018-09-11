@@ -99,7 +99,7 @@
           width: 100%;
 
           &.e-material-tooltip-show {
-            color: $grey-white;
+            color: $slider-material-tooltip-content-color;
           }
 
           &.e-material-tooltip-hide {
@@ -198,7 +198,7 @@
           width: 100%;
 
           &.e-material-tooltip-show {
-            color: $grey-white;
+            color: $slider-material-tooltip-content-color;
           }
 
           &.e-material-tooltip-hide {
@@ -431,7 +431,7 @@
               -ms-transform: scale(0);
               -webkit-transform: scale(0);
               background: transparent;
-              border: 7px solid $grey-white;
+              border: 7px solid $slider-material-tooltip-content-color;
               border-radius: 50%;
               box-sizing: border-box;
               content: '';

@@ -7,32 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Typescript UI Controls" />
     <meta name="author" content="Syncfusion" />
-    <link id="theme" href="./../../../styles/color-picker/material.css" rel="stylesheet" />
+    <link id="theme" href="./../theme-files/material.css" rel="stylesheet" />
+    <script>
+        window.require = {
+            config: function (json) {
+                window.rsConfig = json;
+                window.rsConfig.baseUrl = '';
+            }
+        };
+    </script>
+    <script src="./../demo-config.js"></script>
     <script src="./../../../node_modules/requirejs/require.js" data-main="index"></script>
     <script>
-        require.config({
-            packages: [{
-                    name: '@syncfusion/ej2-base',
-                    location: './../../../node_modules/@syncfusion/ej2-base/dist',
-                    main: 'ej2-base.umd.min.js'
-                },
-                {
-                    name: '@syncfusion/ej2-buttons',
-                    location: './../../../node_modules/@syncfusion/ej2-buttons/dist',
-                    main: 'ej2-buttons.umd.min.js'
-                },
-                {
-                    name: '@syncfusion/ej2-popups',
-                    location: './../../../node_modules/@syncfusion/ej2-popups/dist',
-                    main: 'ej2-popups.umd.min.js'
-                },
-                {
-                    name: '@syncfusion/ej2-splitbuttons',
-                    location: './../../../node_modules/@syncfusion/ej2-splitbuttons/dist',
-                    main: 'ej2-splitbuttons.umd.min.js'
-                }
-            ]
-        });
+        require.config(window.rsConfig);
     </script>
     <style>
         .control-section {
@@ -49,21 +36,6 @@
 
 <body>
     <div id="colorpicker-sample">
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <button class="e-btn" id="material">Material</button>
-                    </td>
-                    <td>
-                        <button class="e-btn" id="fabric">Fabric</button>
-                    </td>
-                    <td>
-                        <button class="e-btn" id="bootstrap">Bootstrap</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <div class="control-section">
             <div class="colorpicker-demo">
                 <h4>Select background color</h4>

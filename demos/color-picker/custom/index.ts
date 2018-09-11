@@ -1,4 +1,4 @@
-import { ColorPicker, ColorPickerEventArgs, PaletteTileEventArgs } from './../../../src/color-picker/color-picker';
+import { ColorPicker, ColorPickerEventArgs, PaletteTileEventArgs } from './../../../src/color-picker/index';
 import { createElement, enableRipple } from '@syncfusion/ej2-base';
 
 enableRipple(true);
@@ -65,24 +65,3 @@ colorPicker = new ColorPicker(
         }
     },
     '#color-palette-flat');
-
-document.getElementById('material').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/material.css');
-    document.body.style.backgroundColor = 'white';
-    document.body.style.color = 'black';
-};
-document.getElementById('fabric').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/fabric.css');
-    document.body.style.backgroundColor = 'white';
-    document.body.style.color = 'black';
-};
-document.getElementById('bootstrap').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/bootstrap.css');
-    document.body.style.backgroundColor = 'white';
-    document.body.style.color = 'black';
-};
-document.getElementById('highcontrast').onclick = (e: Event) => {
-    document.getElementById('theme').setAttribute('href', './../../../styles/color-picker/highcontrast.css');
-    document.body.style.backgroundColor = 'black';
-    document.body.style.color = 'white';
-};

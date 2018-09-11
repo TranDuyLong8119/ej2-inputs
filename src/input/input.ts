@@ -150,6 +150,9 @@ export namespace Input {
                 updateLabelState(args.element.value, floatLabelElement);
             });
         }
+        if (!isNullOrUndefined(args.element.getAttribute('id'))) {
+            floatLabelElement.setAttribute('for', args.element.getAttribute('id'));
+        }
     }
     function setPropertyValue(args: InputArgs, inputObject: InputObject): InputObject {
       if (!isNullOrUndefined(args.properties)) {
@@ -159,7 +162,7 @@ export namespace Input {
               setCssClass(args.properties.cssClass, [inputObject.container]);
               break;
             case 'enabled':
-              setEnabled(args.properties.enabled, args.element);
+              setEnabled(args.properties.enabled, args.element, args.floatLabelType, inputObject.container);
               break;
             case 'enableRtl':
               setEnableRtl(args.properties.enableRtl, [inputObject.container]);
@@ -220,6 +223,7 @@ export namespace Input {
         }
         addClass([button], CLASSNAMES.CLEARICONHIDE);
         wireClearBtnEvents(element, button, container);
+        button.setAttribute('aria-label', 'close');
         return button;
     }
 
@@ -387,14 +391,22 @@ export namespace Input {
     * @param element
     * - Element to be enabled or disabled.
     */
-    export function setEnabled(isEnable: boolean, element: HTMLInputElement, floatLabelType ?: string ): void {
+    export function setEnabled(isEnable: boolean, element: HTMLInputElement, floatLabelType ?: string ,
+                               inputContainer?: HTMLElement ): void {
         let disabledAttrs: { [key: string]: string } = { 'disabled': 'disabled', 'aria-disabled': 'true' };
+        let considerWrapper: boolean = isNullOrUndefined(inputContainer) ? false : true;
         if (isEnable) {
             element.classList.remove(CLASSNAMES.DISABLE);
             removeAttributes(disabledAttrs, element);
+            if (considerWrapper) {
+                removeClass( [inputContainer], CLASSNAMES.DISABLE);
+            }
         } else {
             element.classList.add(CLASSNAMES.DISABLE);
             addAttributes(disabledAttrs, element);
+            if (considerWrapper) {
+                addClass( [inputContainer], CLASSNAMES.DISABLE);
+            }
         }
         if (!isNullOrUndefined(floatLabelType)) {
           validateLabel(element, floatLabelType);

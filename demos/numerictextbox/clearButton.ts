@@ -2,11 +2,23 @@ import { NumericTextBox } from '../../src/numerictextbox/numerictextbox';
 /**
  * Default NumericTextBox sample
  */
-let numeric: NumericTextBox = new NumericTextBox({
+
+let numeric1: NumericTextBox = new NumericTextBox({
     value: 10,
     floatLabelType: "Auto",
-	showClearButton: true
+	showClearButton: true,
 });
-numeric.appendTo('#numeric');
+numeric1.appendTo('#numeric1');
+
+let numeric2: NumericTextBox = new NumericTextBox({
+    value: 10,
+    floatLabelType: "Auto",
+	showClearButton: true,
+	showSpinButton: false
+});
+numeric2.appendTo('#numeric2');
+
+
+
 
 
