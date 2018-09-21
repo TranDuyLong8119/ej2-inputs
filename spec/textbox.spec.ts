@@ -187,8 +187,10 @@ describe('TexxtBox ', () => {
         it('placeholder api', () => {
             expect(inputObj.placeholder).toBe(null);
             inputObj.placeholder = 'Enter a name';
+            inputObj.value = '';
             inputObj.dataBind();
             expect(inputObj.placeholder).not.toBe(null);
+            expect(inputObj.element.value).toBe('');
         });
         it('showClearButton api', () => {
             expect(isNullOrUndefined(inputObj.element.parentElement.querySelector('.e-clear-icon'))).toBe(true);

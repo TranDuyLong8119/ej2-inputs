@@ -81,6 +81,12 @@ export interface ColorPickerModel extends ComponentModel{
     enablePersistence?: boolean;
 
     /**
+     * It is used to enable / disable the opacity option of ColorPicker component.
+     * @default true
+     */
+    enableOpacity?: boolean;
+
+    /**
      * Triggers while selecting the color in picker / palette, when showButtons property is enabled.
      * @event
      */

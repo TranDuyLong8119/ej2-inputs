@@ -87,6 +87,12 @@
     color: inherit;
   }
 
+  /*! Added color to textbox for disbaled state */
+  .e-float-input:not(.e-disabled) input[disabled],
+  .e-float-input.e-control-wrapper:not(.e-disabled) input[disabled] {
+    color: $input-disable-font-color;
+  }
+
   .e-input-group.e-disabled .e-input-group-icon,
   .e-input-group.e-control-wrapper.e-disabled .e-input-group-icon {
     background: $input-disabled-group-bg-color;

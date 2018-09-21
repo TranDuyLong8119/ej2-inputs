@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-## 16.3.17 (2018-09-11)
+## 16.3.21 (2018-09-22)
+
+### ColorPicker
+
+#### Bug Fixes
+
+- ColorPicker collision issue fixed.
+
+## 16.3.17 (2018-09-12)
 
 ### Uploader
 
@@ -10,7 +18,7 @@
 
 - Provided directory (folder) upload support that uploads all files of folder including sub-folder to server.
 
-- Provided paste to upload support that helps to uploads any images which currently copied in the clipboard.
+- Provided paste to upload support that helps to uploads any images to a server on pasting images from clipboard.
 
 #### Bug Fixes
 

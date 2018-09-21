@@ -1344,14 +1344,31 @@ export class Uploader extends Component<HTMLInputElement> implements INotifyProp
         this.filesEntries = [];
         let items: DataTransferItem[] | DataTransferItemList;
         items = this.multiple ? (<DragEvent>event).dataTransfer.items : [(<DragEvent>event).dataTransfer.items[0]];
+        let validDirectoryUpload: boolean = this.checkDirectoryUpload(items);
+        if (!validDirectoryUpload) { return; }
         for (let i: number = 0; i < items.length; i++) {
             let item: WebKitEntry = items[i].webkitGetAsEntry();
             if (item.isFile) {
-                this.renderSelectedFiles(event, [(<DragEvent>event).dataTransfer.files[i]]);
+                let files: { [key: string]: Object }[] = [];
+                // tslint:disable-next-line
+                (<WebKitFileEntry>item).file( (fileObj: any) => {
+                    let path: string = item.fullPath;
+                    files.push({'path': path, 'file': fileObj});
+                });
+                this.renderSelectedFiles(event, files, true);
             } else if (item.isDirectory) {
                 this.traverseFileTree(item, event);
             }
         }
+    }
+
+    /* istanbul ignore next */
+    private checkDirectoryUpload(items: DataTransferItem[] | DataTransferItemList): boolean {
+        for (let i: number = 0; i < items.length; i++) {
+            let item: WebKitEntry = items[i].webkitGetAsEntry();
+            if (item.isDirectory) { return true; }
+        }
+        return false;
     }
     // tslint:disable
     /* istanbul ignore next */

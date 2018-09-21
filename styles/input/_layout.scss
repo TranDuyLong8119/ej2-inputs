@@ -1626,6 +1626,51 @@
     padding-right: $float-label-padding;
   }
 
+  .e-float-input.e-bigger.e-rtl label.e-float-text,
+  .e-float-input.e-rtl.e-bigger label.e-float-text.e-label-bottom,
+  .e-rtl .e-float-input.e-bigger label.e-float-text
+  .e-float-input.e-control-wrapper.e-rtl.e-bigger label.e-float-text,
+  .e-float-input.e-rtl.e-control-wrapper.e-bigger label.e-float-text.e-label-bottom,
+  .e-rtl .e-float-input.e-control-wrapper.e-bigger label.e-float-text,
+  .e-bigger .e-float-input.e-rtl label.e-float-text,
+  .e-bigger .e-float-input.e-rtl label.e-float-text.e-label-bottom,
+  .e-rtl.e-bigger .e-float-input label.e-float-text
+  .e-bigger .e-float-input.e-control-wrapper.e-rtl label.e-float-text,
+  .e-bigger .e-float-input.e-rtl.e-control-wrapper label.e-float-text.e-label-bottom,
+  .e-rtl.e-bigger .e-float-input.e-control-wrapper label.e-float-text {
+    padding-right: $float-label-padding;
+  }
+
+  .e-float-input.e-small.e-rtl label.e-float-text,
+  .e-float-input.e-rtl.e-small label.e-float-text.e-label-bottom,
+  .e-rtl .e-float-input.e-small label.e-float-text
+  .e-float-input.e-control-wrapper.e-rtl.e-small label.e-float-text,
+  .e-float-input.e-rtl.e-control-wrapper.e-small label.e-float-text.e-label-bottom,
+  .e-rtl .e-float-input.e-control-wrapper.e-small label.e-float-text,
+  .e-small .e-float-input.e-rtl label.e-float-text,
+  .e-small .e-float-input.e-rtl label.e-float-text.e-label-bottom,
+  .e-rtl.e-small .e-float-input label.e-float-text
+  .e-small .e-float-input.e-control-wrapper.e-rtl label.e-float-text,
+  .e-small .e-float-input.e-rtl.e-control-wrapper label.e-float-text.e-label-bottom,
+  .e-rtl.e-small .e-float-input.e-control-wrapper label.e-float-text {
+    padding-right: $float-label-padding;
+  }
+
+  .e-float-input.e-small.e-bigger.e-rtl label.e-float-text,
+  .e-float-input.e-rtl.e-small.e-bigger label.e-float-text.e-label-bottom,
+  .e-rtl .e-float-input.e-small.e-bigger label.e-float-text
+  .e-float-input.e-control-wrapper.e-rtl.e-small.e-bigger label.e-float-text,
+  .e-float-input.e-rtl.e-control-wrapper.e-small.e-bigger label.e-float-text.e-label-bottom,
+  .e-rtl .e-float-input.e-control-wrapper.e-small.e-bigger label.e-float-text,
+  .e-small.e-bigger .e-float-input.e-rtl label.e-float-text,
+  .e-small.e-bigger .e-float-input.e-rtl label.e-float-text.e-label-bottom,
+  .e-rtl.e-small.e-bigger .e-float-input label.e-float-text
+  .e-small.e-bigger .e-float-input.e-control-wrapper.e-rtl label.e-float-text,
+  .e-small.e-bigger .e-float-input.e-rtl.e-control-wrapper label.e-float-text.e-label-bottom,
+  .e-rtl.e-small.e-bigger .e-float-input.e-control-wrapper label.e-float-text {
+    padding-right: $float-label-padding;
+  }
+
   .e-input-group.e-corner.e-rtl .e-input:first-child,
   .e-input-group.e-corner.e-rtl .e-input-group-icon:first-child,
   .e-input-group.e-control-wrapper.e-corner.e-rtl .e-input:first-child,

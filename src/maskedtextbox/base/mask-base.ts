@@ -431,14 +431,28 @@ export function mobileRemoveFunction(): void {
     }
 }
 
+function autoFillMaskInputValues(isRemove: boolean, oldEventVal: string, event: KeyboardEvent): boolean {
+    if (event.type === 'input') {
+        isRemove = false;
+        oldEventVal = this.element.value;
+        setElementValue.call(this, this.promptMask);
+        setMaskValue.call(this, oldEventVal);
+    }
+    return isRemove;
+}
+
 function removeMaskInputValues(event: KeyboardEvent): void {
     let isRemove: boolean = false;
     let oldEventVal: string;
     let isDeleted: boolean = false;
     if (this.element.value.length < this.promptMask.length) {
         isRemove = true;
-        mobileRemoveFunction.call(this);
         oldEventVal = this.element.value;
+        isRemove = autoFillMaskInputValues.call(this, isRemove, oldEventVal, event);
+        mobileRemoveFunction.call(this);
+    }
+    if (this.element.value.length >= this.promptMask.length && event.type === 'input') {
+        isRemove = autoFillMaskInputValues.call(this, isRemove, oldEventVal, event);
     }
     let initStartIndex: number = this.element.selectionStart;
     let initEndIndex: number = this.element.selectionEnd;

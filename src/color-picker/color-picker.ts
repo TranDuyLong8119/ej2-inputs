@@ -25,6 +25,7 @@ const FORMATSWITCH: string = 'e-value-switch-btn';
 const HANDLER: string = 'e-handler';
 const HEX: string = 'e-hex';
 const HIDEHEX: string = 'e-hide-hex-value';
+const HIDEOPACITY: string = 'e-hide-opacity';
 const HIDERGBA: string = 'e-hide-switchable-value';
 const HIDEVALUE: string = 'e-hide-value';
 const HIDEVALUESWITCH: string = 'e-hide-valueswitcher';
@@ -33,6 +34,7 @@ const HSVCONTAINER: string = 'e-hsv-container';
 const INPUTWRAPPER: string = 'e-selected-value';
 const MODESWITCH: string = 'e-mode-switch-btn';
 const NOCOLOR: string = 'e-nocolor-item';
+const OPACITY: string = 'e-opacity-value';
 const PALETTES: string = 'e-palette';
 const PALETTECONTENT: string = 'e-color-palette';
 const PICKERCONTENT: string = 'e-color-picker';
@@ -174,6 +176,13 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     public enablePersistence: boolean;
 
     /**
+     * It is used to enable / disable the opacity option of ColorPicker component.
+     * @default true
+     */
+    @Property(true)
+    public enableOpacity: boolean;
+
+    /**
      * Triggers while selecting the color in picker / palette, when showButtons property is enabled.
      * @event
      */
@@ -250,6 +259,9 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             this.createWidget();
         } else {
             this.createSplitBtn();
+        }
+        if (!this.enableOpacity) {
+            addClass([this.container.parentElement], HIDEOPACITY);
         }
     }
 
@@ -357,6 +369,8 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         args.cancel = beforeOpenArgs.cancel;
         if (!args.cancel) {
             let popupEle: HTMLElement = this.getPopupEle();
+            popupEle.style.top = formatUnit(0 + pageYOffset);
+            popupEle.style.left = formatUnit(0 + pageXOffset);
             popupEle.style.display = 'block';
             this.createWidget();
             popupEle.style.display = '';
@@ -444,7 +458,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         } else {
             this.appendElement(palette);
         }
-        let row: HTMLElement; let tile: HTMLElement;
+        let row: HTMLElement; let tile: HTMLElement; let roundedColor: string;
         for (let i: number = 0, len: number = colors.length; i < len; i++) {
             if (i === 0 || i % this.columns === 0) {
                 row = this.createElement('div', {
@@ -452,12 +466,12 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 });
                 palette.appendChild(row);
             }
+            roundedColor = this.roundValue(colors[i]).toLowerCase();
             tile = this.createElement('span', {
-                className: TILE, attrs: { 'role': 'gridcell', 'aria-label': colors[i], 'aria-selected': 'false' }
+                className: TILE, attrs: { 'role': 'gridcell', 'aria-label': roundedColor, 'aria-selected': 'false' }
             });
             this.trigger('beforeTileRender', <PaletteTileEventArgs>{ element: tile, presetName: key, value: colors[i] });
             row.appendChild(tile);
-            let roundedColor: string = this.roundValue(colors[i]).toLowerCase();
             if (this.value === roundedColor) {
                 this.addTileSelection(tile);
                 palette.focus();
@@ -540,8 +554,14 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             });
         this.hueSlider.createElement = this.createElement;
         this.hueSlider.appendTo(slider);
-        slider = this.createElement('div', { className: 'e-opacity-slider' });
-        sliderWrapper.appendChild(slider);
+        if (this.enableOpacity) {
+            slider = this.createElement('div', { className: 'e-opacity-slider' });
+            sliderWrapper.appendChild(slider);
+            this.createOpacitySlider(slider);
+        }
+    }
+
+    private createOpacitySlider(slider: HTMLElement): void {
         this.opacitySlider = new Slider(
             {
                 value: this.rgb[3] * 100,
@@ -577,7 +597,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         this.hsv[3] = value / 100; this.rgb[3] = value / 100;
         let cValue: string = this.rgbToHex(this.rgb);
         if (!this.getWrapper().classList.contains(HIDEVALUE)) {
-            (getInstance(select('.e-opacity-value', this.container) as HTMLInputElement, NumericTextBox) as NumericTextBox).value = value;
+            (getInstance(select('.' + OPACITY, this.container) as HTMLInputElement, NumericTextBox) as NumericTextBox).value = value;
         }
         let rgb: string = this.convertToRgbString(this.rgb);
         this.updatePreview(rgb);
@@ -674,10 +694,16 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                         container.appendChild(this.createElement('input', { className: 'e-' + clsName[i] + '-value' })),
                         value[i], label[i], 255);
                 }
-                this.createNumericInput(
-                    container.appendChild(this.createElement('input', { className: 'e-opacity-value' })), this.rgb[3] * 100, 'A', 100);
+                if (this.enableOpacity) {
+                    this.appendOpacityValue(container);
+                }
             }
         }
+    }
+
+    private appendOpacityValue(container: HTMLElement): void {
+        this.createNumericInput(
+            container.appendChild(this.createElement('input', { className: OPACITY })), this.rgb[3] * 100, 'A', 100);
     }
 
     private appendValueSwitchBtn(targetEle: Element): void {
@@ -797,7 +823,9 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     }
 
     private updatePreview(value: string): void {
-        this.updateOpacitySliderBg();
+        if (this.enableOpacity) {
+            this.updateOpacitySliderBg();
+        }
         (select('.e-tip-transparent', this.tooltipEle) as HTMLElement).style.backgroundColor = value;
         (select('.' + PREVIEW + ' .' + CURRENT, this.container) as HTMLElement).style.backgroundColor = value;
         (select('.' + PREVIEW + ' .' + PREVIOUS, this.container) as HTMLElement).style.backgroundColor
@@ -1106,8 +1134,8 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     private refreshPopupPos(): void {
         if (!this.inline) {
             let popupEle: HTMLElement = this.getPopupEle();
-            popupEle.style.left = '0px';
-            popupEle.style.top = '0px';
+            popupEle.style.left = formatUnit(0 + pageXOffset);
+            popupEle.style.top = formatUnit(0 + pageYOffset);
             this.getPopupInst().refreshPosition(this.splitBtn.element.parentElement);
         }
     }
@@ -1151,11 +1179,11 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             this.hueSlider.refresh();
         }
         this.setHsvContainerBg(hsv[0]);
-        if (hsv[3] !== this.hsv[3]) {
+        if (this.enableOpacity && hsv[3] !== this.hsv[3]) {
             this.opacitySlider.setProperties({ 'value': hsv[3] * 100 }, true);
             this.opacitySlider.refresh();
+            this.updateOpacitySliderBg();
         }
-        this.updateOpacitySliderBg();
         this.hsv = hsv;
         this.setHandlerPosition();
         this.updateInput(cValue);
@@ -1449,9 +1477,8 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
     private destroyOtherComp(): void {
         if (this.isPicker()) {
             this.hueSlider.destroy();
-            this.opacitySlider.destroy();
+            if (this.enableOpacity) { this.opacitySlider.destroy(); this.opacitySlider = null; }
             this.hueSlider = null;
-            this.opacitySlider = null;
             let tooltipInst: Tooltip = this.getTooltipInst();
             tooltipInst.close();
             tooltipInst.destroy();
@@ -1633,11 +1660,10 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
             detach(closest(this.hueSlider.element, '.e-slider-preview'));
             this.createSlider();
             this.setHsvContainerBg();
-            this.updateOpacitySliderBg();
             this.updateInput(newProp);
         } else {
             this.removeTileSelection();
-            this.addTileSelection(select('span[aria-label="' + newProp + '"]', this.container));
+            this.addTileSelection(select('span[aria-label="' + this.roundValue(newProp) + '"]', this.container));
         }
         this.element.value = newProp.slice(0, 7);
     }
@@ -1685,6 +1711,26 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
         detach(this.container.children[0]);
         this.container.style.width = '';
         this.createPalette();
+    }
+
+    private changeOpacityProps(newProp: boolean): void {
+        let wrapper: HTMLElement = this.getWrapper();
+        if (newProp) {
+            removeClass([this.container.parentElement], HIDEOPACITY);
+            this.createOpacitySlider(
+                select('.e-colorpicker-slider', this.container).appendChild(this.createElement('div', { className: 'e-opacity-slider' })));
+            if (!wrapper.classList.contains(HIDEVALUE) && !wrapper.classList.contains(HIDERGBA)) {
+                this.appendOpacityValue(select('.e-input-container', this.container) as HTMLElement);
+            }
+        } else {
+            addClass([this.container.parentElement], HIDEOPACITY);
+            this.opacitySlider.destroy();
+            remove(this.opacitySlider.element);
+            this.opacitySlider = null;
+            if (!wrapper.classList.contains(HIDEVALUE) && !wrapper.classList.contains(HIDERGBA)) {
+                remove(select('.' + OPACITY, this.container).parentElement);
+            }
+        }
     }
 
     /**
@@ -1743,7 +1789,7 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                 case 'enableRtl':
                     if (this.isPicker()) {
                         this.hueSlider.enableRtl = newProp.enableRtl;
-                        this.opacitySlider.enableRtl = newProp.enableRtl;
+                        if (this.enableOpacity) { this.opacitySlider.enableRtl = newProp.enableRtl; }
                         this.setInputEleProps(newProp.enableRtl);
                     }
                     this.changeRtlProps(newProp.enableRtl);
@@ -1781,6 +1827,9 @@ export class ColorPicker extends Component<HTMLInputElement> implements INotifyP
                     } else {
                         this.changePaletteProps();
                     }
+                    break;
+                case 'enableOpacity':
+                    this.changeOpacityProps(newProp.enableOpacity);
                     break;
             }
         }

@@ -195,6 +195,12 @@ export class TextBox extends Component<HTMLInputElement> implements INotifyPrope
                     Input.setEnabled(this.enabled, this.element, this.floatLabelType, this.textboxWrapper.container);
                     break;
                 case 'value':
+                    let prevOnChange: boolean = this.isProtectedOnChange;
+                    this.isProtectedOnChange = true;
+                    if (!this.isBlank(this.value)) {
+                        this.value = this.value.toString();
+                    }
+                    this.isProtectedOnChange = prevOnChange;
                     Input.setValue(this.value, this.element, this.floatLabelType, this.showClearButton);
                     this.raiseChangeEvent();
                     break;
@@ -234,6 +240,10 @@ export class TextBox extends Component<HTMLInputElement> implements INotifyPrope
      */
     public getModuleName(): string {
         return 'textbox';
+    }
+
+    private isBlank(str: string): boolean {
+        return (!str || /^\s*$/.test(str));
     }
 
     protected preRender(): void {

@@ -453,10 +453,42 @@
     }
   }
 
-  .e-hide-hex-value .e-container {
+  .e-hide-opacity .e-container {
+    & .e-slider-preview {
+      & .e-colorpicker-slider {
+        vertical-align: super;
+      }
+
+      & .e-preview-container {
+        top: 0;
+      }
+    }
+
     & .e-float-input {
+      &:first-child {
+        width: $opacity-hidden-hex-width;
+      }
+
       &.e-numeric {
-        width: $hex-hidden-width;
+        width: $opacity-hidden-numeric-width;
+      }
+    }
+  }
+
+  .e-hide-hex-value {
+    & .e-container {
+      & .e-float-input {
+        &.e-numeric {
+          width: $hex-hidden-width;
+        }
+      }
+    }
+
+    &.e-hide-opacity .e-container {
+      & .e-float-input {
+        &.e-numeric {
+          width: $hex-opacity-hidden-width;
+        }
       }
     }
   }
@@ -482,10 +514,32 @@
       }
     }
 
-    &.e-hide-hex-value .e-container {
+    &.e-hide-opacity .e-container {
       & .e-float-input {
+        &:first-child {
+          width: $value-opacity-hide-hex-label-width;
+        }
+
         &.e-numeric {
-          width: $value-hex-hidden-width;
+          width: $value-opacity-hide-label-width;
+        }
+      }
+    }
+
+    &.e-hide-hex-value {
+      & .e-container {
+        & .e-float-input {
+          &.e-numeric {
+            width: $value-hex-hidden-width;
+          }
+        }
+      }
+
+      &.e-hide-opacity .e-container {
+        & .e-float-input {
+          &.e-numeric {
+            width: $value-opacity-hex-hidden-width;
+          }
         }
       }
     }
@@ -658,12 +712,43 @@
       }
     }
 
+    & .e-hide-opacity,
+    &.e-hide-opacity {
+      & .e-container {
+        & .e-slider-preview {
+          padding: $bigger-slider-wrapper-padding;
+
+          & .e-preview-container {
+            vertical-align: initial;
+          }
+        }
+
+        & .e-float-input {
+          &:first-child {
+            width: $opacity-hidden-hex-width;
+          }
+
+          &.e-numeric {
+            width: $bigger-opacity-hidden-numeric-width;
+          }
+        }
+      }
+    }
+
     &.e-hide-hex-value,
     & .e-hide-hex-value {
       & .e-container {
         & .e-float-input {
           &.e-numeric {
             width: $bigger-hex-hidden-width;
+          }
+        }
+      }
+
+      &.e-hide-opacity .e-container {
+        & .e-float-input {
+          &.e-numeric {
+            width: $bigger-hex-opacity-hidden-width;
           }
         }
       }
@@ -687,12 +772,32 @@
         }
       }
 
+      &.e-hide-opacity .e-container {
+        & .e-float-input {
+          &:first-child {
+            width: $value-opacity-hide-hex-label-width;
+          }
+
+          &.e-numeric {
+            width: $bigger-value-opacity-hide-label-width;
+          }
+        }
+      }
+
       &.e-hide-hex-value,
       & .e-hide-hex-value {
         & .e-container {
           & .e-float-input {
             &.e-numeric {
               width: $bigger-value-hex-hidden-width;
+            }
+          }
+        }
+
+        &.e-hide-opacity .e-container {
+          & .e-float-input {
+            &.e-numeric {
+              width: $bigger-value-opacity-hex-hidden-width;
             }
           }
         }
@@ -734,7 +839,7 @@
   .e-bigger .e-hide-switchable-value {
     & .e-container {
       & .e-input-container {
-        & .e-float-input {
+        & .e-float-input:first-child {
           width: 100%;
         }
       }

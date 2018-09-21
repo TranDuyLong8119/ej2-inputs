@@ -121,7 +121,7 @@ describe('ColorPicker', () => {
             colorPicker = new ColorPicker({ mode: 'Palette', presetColors: { 'custom': ['#EF5350', '#D81B60'] } }, '#color-picker');
             expect(colorPicker.presetColors).toEqual({ 'custom': ['#EF5350', '#D81B60'] });
             (colorPicker.splitBtn.element.nextElementSibling as HTMLElement).click();
-            expect(colorPicker.container.querySelectorAll('.e-palette')[0].children[0].children[0].getAttribute('aria-label')).toBe('#EF5350');
+            expect(colorPicker.container.querySelectorAll('.e-palette')[0].children[0].children[0].getAttribute('aria-label')).toBe('#ef5350ff');
             colorPicker.destroy();
             //Palettes with multiple custom tiles.
             colorPicker = new ColorPicker(
@@ -131,7 +131,7 @@ describe('ColorPicker', () => {
                     presetColors: { 'custom1': ['#EF5350', '#D81B60'], 'custom2': ['#5f2796'] }
                 },
                 '#color-picker');
-            expect(colorPicker.container.querySelectorAll('.e-palette')[1].children[0].children[0].getAttribute('aria-label')).toBe('#5f2796');
+            expect(colorPicker.container.querySelectorAll('.e-palette')[1].children[0].children[0].getAttribute('aria-label')).toBe('#5f2796ff');
         });
 
         it('cssClass testing', () => {
@@ -191,6 +191,12 @@ describe('ColorPicker', () => {
             colorPicker.toggle();
             target = colorPicker.container.querySelectorAll('.e-row')[0].children[0];
             expect(target.classList.contains('e-nocolor-item')).toBeTruthy();
+        });
+
+        it('enableOpacity Property changes', () => {
+            colorPicker = new ColorPicker({ enableOpacity: false }, '#color-picker');
+            expect(colorPicker.enableOpacity).toBeFalsy();
+            expect(colorPicker.container.parentElement.classList.contains('e-hide-opacity')).toBeTruthy();
         });
     });
 
@@ -460,6 +466,32 @@ describe('ColorPicker', () => {
             target = colorPicker.container.querySelectorAll('.e-row')[0].children[0];
             expect(target.classList.contains('e-nocolor-item')).toBeFalsy();
         });
+
+        it('enableOpacity Property changes', () => {
+            colorPicker = new ColorPicker({}, '#color-picker');
+            colorPicker.toggle();
+            expect(colorPicker.container.querySelector('.e-opacity-slider')).toBeDefined();
+            expect(colorPicker.container.querySelector('.e-opacity-value')).toBeDefined();
+            colorPicker.enableOpacity = false;
+            colorPicker.dataBind();
+            expect(colorPicker.container.querySelector('.e-opacity-slider')).toBeNull();
+            expect(colorPicker.container.querySelector('.e-opacity-value')).toBeNull();
+            colorPicker.enableOpacity = true;
+            colorPicker.dataBind();
+            expect(colorPicker.container.querySelector('.e-opacity-slider')).toBeDefined();
+            expect(colorPicker.container.querySelector('.e-opacity-value')).toBeDefined();
+            colorPicker.cssClass = 'e-hide-value';
+            colorPicker.enableOpacity = false;
+            colorPicker.dataBind();
+            expect(colorPicker.container.querySelector('.e-opacity-slider')).toBeNull();
+            expect(colorPicker.container.querySelector('.e-selected-value')).toBeNull();
+            colorPicker.cssClass = 'e-hide-switchable-value';
+            colorPicker.enableOpacity = true;
+            colorPicker.dataBind();
+            expect(colorPicker.container.querySelector('.e-opacity-slider')).toBeDefined();
+            expect(colorPicker.container.querySelector('.e-opacity-value')).toBeNull();
+
+        });
     });
 
     describe('Click Events', () => {
@@ -509,7 +541,7 @@ describe('ColorPicker', () => {
                 target = colorPicker.container.children[0].children[0].children[3] as HTMLElement;
                 expect(target.classList.contains('e-selected')).toBeTruthy();
                 expect(target.getAttribute('aria-selected')).toEqual('true');
-                expect(target.getAttribute('aria-label').toLowerCase() + 'ff').toBe(colorPicker.value);
+                expect(target.getAttribute('aria-label').toLowerCase()).toBe(colorPicker.value);
             });
 
             it('Cancel button click', () => {
@@ -651,8 +683,34 @@ describe('ColorPicker', () => {
                 colorPicker.toggle();
                 target = colorPicker.container.querySelector('.e-previous') as HTMLElement;
                 target.click();
-                expect(colorPicker.value).toEqual('#7b1fa2ff');
                 triggerMouseEvent(document.body, 'mousedown');
+                expect(colorPicker.value).toEqual('#7b1fa2ff');
+                colorPicker.toggle();
+                target = colorPicker.container.querySelector('.e-previous') as HTMLElement;
+                colorPicker.hueSlider.value = 20;
+                colorPicker.hueSlider.dataBind();
+                expect(colorPicker.hsv[0]).toEqual(20);
+                target.click();
+                expect(colorPicker.hsv[0]).toEqual(282);
+                expect(colorPicker.value).toEqual('#7b1fa2ff');
+                colorPicker.opacitySlider.value = 35;
+                colorPicker.opacitySlider.dataBind();
+                expect(colorPicker.rgb[3]).toEqual(0.35);
+                target.click();
+                expect(colorPicker.rgb[3]).toEqual(1);
+                expect(colorPicker.value).toEqual('#7b1fa2ff');
+            });
+
+            it('Preview without opacity testing', () => {
+                colorPicker = new ColorPicker({ value: '#8321a4', enableOpacity: false }, '#color-picker');
+                colorPicker.toggle();
+                target = colorPicker.container.querySelector('.e-hsv-container') as HTMLElement;
+                setStyles(colorPicker.container);
+                triggerMouseEvent(target, 'mousedown', 17, 53);
+                triggerMouseEvent(target, 'mouseup');
+                target = colorPicker.container.querySelector('.e-previous') as HTMLElement;
+                target.click();
+                expect(colorPicker.value).toEqual('#8321a4ff');
             });
         });
 
@@ -839,7 +897,7 @@ describe('ColorPicker', () => {
                     presetColors: presets,
                     beforeTileRender: (args: PaletteTileEventArgs) => {
                         expect(args.name).toBe('beforeTileRender');
-                        expect(args.element.getAttribute('aria-label')).toBe(presets.custom[count]);
+                        expect(args.element.getAttribute('aria-label')).toBe(presets.custom[count] + 'ff');
                         expect(args.presetName).toBe('custom');
                         expect(args.value).toBe(presets.custom[count]);
                         count++;
@@ -959,7 +1017,7 @@ describe('ColorPicker', () => {
             triggerMouseEvent(target, 'mouseup');
         });
 
-        it('Hide switable inputs', () => {
+        it('Hide switchable inputs', () => {
             colorPicker = new ColorPicker({ cssClass: 'e-hide-switchable-value' }, '#color-picker');
             colorPicker.toggle();
             target = (colorPicker.container.querySelector('.e-hsv-container') as HTMLElement);
@@ -972,6 +1030,7 @@ describe('ColorPicker', () => {
         it('Hide value switcher', () => {
             colorPicker = new ColorPicker({ cssClass: 'e-hide-valueswitcher', inline: true }, '#color-picker');
             expect(colorPicker.container.querySelector('.e-value-switch-btn')).toBeNull();
+            (colorPicker.container.querySelector('.e-cancel') as HTMLElement).click();
         });
     });
 
@@ -1348,7 +1407,7 @@ describe('ColorPicker', () => {
                 colorPicker.paletteKeyDown(EventArgs);
                 EventArgs.keyCode = 13;
                 colorPicker.paletteKeyDown(EventArgs);
-                expect(colorPicker.value).toEqual('#f57f17');
+                expect(colorPicker.value).toEqual('#f57f17ff');
                 EventArgs.target = colorPicker.container;
                 colorPicker.paletteKeyDown(EventArgs);
             });
