@@ -6,7 +6,7 @@ import { FormValidatorModel } from './form-validator-model';
 /**
  * global declarations
  */
-const VALIDATE_EMAIL: RegExp = new RegExp('^[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,5}' +
+const VALIDATE_EMAIL: RegExp = new RegExp('^[A-Za-z0-9._%+-]{3,}@[a-zA-Z0-9]{3,}([.]{1}[a-zA-Z]{2,5}' +
     '|[.]{1}[a-zA-Z]{2,4}[.]{1}[a-zA-Z]{2,4})$');
 const VALIDATE_URL: RegExp = new RegExp('^((ftp|http|https):\/\/)?www\.([A-z]{2,})\.([A-z]{2,})$');
 const VALIDATE_DATE_ISO: RegExp = new RegExp('^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$');

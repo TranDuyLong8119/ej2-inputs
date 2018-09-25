@@ -1425,8 +1425,18 @@ describe('FormValidator # ', () => {
                 expect(formObj.validate('mailElement')).toEqual(false);
             });
 
-            it('testing for valid email # ', () => {
+            it('testing for valid email #1 ', () => {
                 setInputValue(formObj, 'mailElement', 'abc@sample.com');
+                expect(formObj.validate('mailElement')).toEqual(true);
+            });
+
+            it('testing for valid email #2 ', () => {
+                setInputValue(formObj, 'mailElement', 'abc@123sample.com');
+                expect(formObj.validate('mailElement')).toEqual(true);
+            });
+
+            it('testing for valid email #3 ', () => {
+                setInputValue(formObj, 'mailElement', 'abc@123.com');
                 expect(formObj.validate('mailElement')).toEqual(true);
             });
 

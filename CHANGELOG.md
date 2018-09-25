@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## 16.3.22 (2018-09-25)
+
+### FormValidator
+
+#### Bug Fixes
+
+- Form validator for number contain email domain name issue has been fixed.
+
+### NumericTextBox
+
+#### Bug Fixes
+
+- Validation is not working properly for "NumericTextBox" in focus out, issue has been fixed
+
 ## 16.3.21 (2018-09-22)
 
 ### ColorPicker

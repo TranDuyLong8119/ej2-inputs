@@ -1,6 +1,6 @@
 import { Component, EventHandler, Property, Event, Browser, L10n, EmitType } from '@syncfusion/ej2-base';
 import { NotifyPropertyChanges, INotifyPropertyChanged, BaseEventArgs } from '@syncfusion/ej2-base';
-import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach } from '@syncfusion/ej2-base';
+import { createElement, attributes, addClass, removeClass, setStyleAttribute, detach, closest } from '@syncfusion/ej2-base';
 import { isNullOrUndefined, getValue, formatUnit, setValue, merge } from '@syncfusion/ej2-base';
 import { Internationalization, NumberFormatOptions, getNumericObject } from '@syncfusion/ej2-base';
 import { NumericTextBoxModel } from './numerictextbox-model';
@@ -896,6 +896,13 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
             if (!Browser.isDevice) {
                 EventHandler.remove(this.element, 'mousewheel DOMMouseScroll', this.mouseWheel);
             }
+        }
+        let formElement: Element = closest(this.element, 'form');
+        if (formElement) {
+            let element: Element = this.element.nextElementSibling;
+            let focusEvent: FocusEvent = document.createEvent('FocusEvent');
+            focusEvent.initEvent('focusout', true, true);
+            element.dispatchEvent(focusEvent);
         }
     };
 
