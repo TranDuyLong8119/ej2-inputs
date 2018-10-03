@@ -862,7 +862,12 @@ export class NumericTextBox extends Component<HTMLInputElement> implements INoti
                 let delay: number = (Browser.isDevice && Browser.isIos) ? 600 : 0;
                 setTimeout(
                     () => {
-                        this.element.setSelectionRange(0, formatValue.length);
+                       try {
+                            this.element.setSelectionRange(0, formatValue.length);
+                         }catch(e){
+                            this.element.focus();
+                            this.element.select();
+                        }
                     },
                     delay);
             }
